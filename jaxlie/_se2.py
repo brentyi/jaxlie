@@ -16,6 +16,7 @@ from ._utils import get_epsilon, register_lie_group
 class SE2(MatrixLieGroup):
 
     # SE2-specific
+
     xy_unit_complex: Vector
 
     @staticmethod
@@ -109,8 +110,10 @@ class SE2(MatrixLieGroup):
     @staticmethod
     @overrides
     def exp(tangent: TangentVector) -> "SE2":
-        # See Gallier and Xu:
-        # > https:///pdfs.semanticscholar.org/cfe3/e4b39de63c8cabd89bf3feff7f5449fc981d.pdf
+        # Mostly plagiarized from Sophus:
+        # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
+        # Also see:
+        # > http://ethaneade.com/lie.pdf
 
         assert tangent.shape == (3,)
 
@@ -144,8 +147,10 @@ class SE2(MatrixLieGroup):
 
     @overrides
     def log(self: "SE2") -> TangentVector:
-        # See Gallier and Xu:
-        # > https:///pdfs.semanticscholar.org/cfe3/e4b39de63c8cabd89bf3feff7f5449fc981d.pdf
+        # Mostly plagiarized from Sophus:
+        # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
+        # Also see:
+        # > http://ethaneade.com/lie.pdf
 
         theta = self.rotation().log()[0]
 

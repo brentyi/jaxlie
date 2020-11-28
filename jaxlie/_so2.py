@@ -14,6 +14,7 @@ from ._utils import register_lie_group
 class SO2(MatrixLieGroup):
 
     # SO2-specific
+
     unit_complex: Vector
 
     @staticmethod
