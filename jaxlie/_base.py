@@ -1,11 +1,5 @@
 import abc
-import dataclasses
-from typing import Tuple, Type, TypeVar
-
-import jax
-import numpy as onp
-from jax import numpy as jnp
-from overrides import overrides
+from typing import Type, TypeVar, overload
 
 from ._types import Matrix, TangentVector, Vector
 
@@ -16,7 +10,29 @@ class MatrixLieGroup(abc.ABC):
 
     # Shared implementations
 
+    @overload
+    def __matmul__(self: T, other: T) -> T:
+        ...
+
+    @overload
+    def __matmul__(self: T, other: Vector) -> Vector:
+        ...
+
+    def __matmul__(self, other):
+        """Operator overload, for composing transformations and/or applying them to
+        points.
+        """
+        if type(self) is type(other):
+            return self.product(T)
+        elif isinstance(other, Vector):
+            return self.apply(target=other)
+        else:
+            assert False, "Invalid argument"
+
+    # Abstract factory
+
     @classmethod
+    @abc.abstractmethod
     def identity(cls: Type[T]) -> T:
         """Returns identity element.
 
@@ -25,35 +41,12 @@ class MatrixLieGroup(abc.ABC):
         Returns:
             Matrix: Identity.
         """
-        return cls.from_matrix(onp.eye(cls.get_matrix_dim()))
 
-    def __matmul__(a: T, b: T) -> T:
-        """Operator override: `a @ b` computes `a.product(b)`.
-
-        Args:
-            a (T): a
-            b (T): b
-
-        Returns:
-            T: a @ b
-        """
-        return a.product(b)
-
-    # Abstract methods
-
-    @property
-    @abc.abstractmethod
-    def matrix(self) -> Matrix:
-        """Get value as a matrix."""
-
-    @property
-    @abc.abstractmethod
-    def compact(self) -> Vector:
-        """Get compact representation."""
+    # Abstract accessors
 
     @staticmethod
     @abc.abstractmethod
-    def get_matrix_dim() -> int:
+    def matrix_dim() -> int:
         """Get dimension of (square) matrix representation.
 
         Returns:
@@ -62,18 +55,7 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def get_tangent_dim() -> int:
-        """Get dimensionality of tangent space.
-
-        Args:
-
-        Returns:
-            int: Tangent space dimension.
-        """
-
-    @staticmethod
-    @abc.abstractmethod
-    def get_compact_dim() -> int:
+    def compact_dim() -> int:
         """Get dimensionality of compact representation.
 
         Args:
@@ -82,15 +64,35 @@ class MatrixLieGroup(abc.ABC):
             int: Compact representation dimension.
         """
 
-    @classmethod
+    @staticmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[T], matrix: Matrix) -> T:
-        """Factory for creating a group member from its full square matrix representation."""
+    def tangent_dim() -> int:
+        """Get dimensionality of tangent space.
 
-    @classmethod
+        Returns:
+            int: Tangent space dimension.
+        """
+
     @abc.abstractmethod
-    def from_compact(cls: Type[T], vector: Vector) -> T:
-        """Factory for creating a group member from its compact representation."""
+    def matrix(self) -> Matrix:
+        """Get value as a matrix."""
+
+    @abc.abstractmethod
+    def compact(self) -> Matrix:
+        """Get compact representation."""
+
+    # Operations
+
+    @abc.abstractmethod
+    def apply(self: T, target: Vector) -> Vector:
+        """Applies transformation to a vector.
+
+        Args:
+            target (Vector): Vector to transform.
+
+        Returns:
+            Vector: Transformed vector.
+        """
 
     @abc.abstractmethod
     def product(self: T, other: T) -> T:
@@ -105,7 +107,7 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def exp(cls: Type[T], tangent: TangentVector) -> T:
+    def exp(tangent: TangentVector) -> T:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -137,4 +139,12 @@ class MatrixLieGroup(abc.ABC):
 
         Returns:
             Matrix: Output.
+        """
+
+    @abc.abstractmethod
+    def normalize(self: T) -> T:
+        """Normalize/projects values and returns.
+
+        Returns:
+            T: Normalized group member.
         """
