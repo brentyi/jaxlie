@@ -6,11 +6,11 @@ Supports (exp, log, product, inverse, identity) operations for:
 
 -[ ] Groups
     - [x] SO(2)
-    - [ ] SE(2)
+    - [x] SE(2)
     - [ ] SO(3)
     - [ ] SE(3)
 - [ ] Tests
-    - [ ] Identity smoke test
+    - [x] Identity smoke test
     - [ ] log/exp
     - [ ] Inverse
     - [ ] Product

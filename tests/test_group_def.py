@@ -13,3 +13,6 @@ def test_identity():
         onp.testing.assert_allclose(a @ x, x)
         onp.testing.assert_allclose(a.inverse() @ x, x)
         onp.testing.assert_allclose(Group.exp(a.log()) @ x, x)
+        onp.testing.assert_allclose(
+            Group.from_matrix(a.matrix()).compact(), a.compact()
+        )

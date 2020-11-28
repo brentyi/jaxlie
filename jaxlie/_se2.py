@@ -39,10 +39,18 @@ class SE2(MatrixLieGroup):
 
     # Factory
 
-    @classmethod
+    @staticmethod
     @overrides
-    def identity(cls: Type["SE2"]) -> "SE2":
+    def identity() -> "SE2":
         return SE2(xy_unit_complex=jnp.array([0.0, 0.0, 1.0, 0.0]))
+
+    @staticmethod
+    @overrides
+    def from_matrix(matrix: Matrix) -> "SE2":
+        assert matrix.shape == (3, 3)
+        return SE2.from_rotation_and_translation(
+            rotation=SO2.from_matrix(matrix[:2, :2]), translation=matrix[:2, 2]
+        )
 
     # Accessors
 

@@ -31,15 +31,25 @@ class MatrixLieGroup(abc.ABC):
 
     # Abstract factory
 
-    @classmethod
+    @staticmethod
     @abc.abstractmethod
-    def identity(cls: Type[T]) -> T:
+    def identity() -> T:
         """Returns identity element.
-
-        Args:
 
         Returns:
             Matrix: Identity.
+        """
+
+    @staticmethod
+    @abc.abstractmethod
+    def from_matrix(matrix: Matrix) -> T:
+        """Get group member from matrix representation.
+
+        Args:
+            matrix (jnp.ndarray): Matrix representaiton.
+
+        Returns:
+            T: Group member.
         """
 
     # Abstract accessors
@@ -57,8 +67,6 @@ class MatrixLieGroup(abc.ABC):
     @abc.abstractmethod
     def compact_dim() -> int:
         """Get dimensionality of compact representation.
-
-        Args:
 
         Returns:
             int: Compact representation dimension.

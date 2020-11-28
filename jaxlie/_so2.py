@@ -24,10 +24,16 @@ class SO2(MatrixLieGroup):
 
     # Factory
 
-    @classmethod
+    @staticmethod
     @overrides
-    def identity(cls: Type["SO2"]) -> "SO2":
+    def identity() -> "SO2":
         return SO2(unit_complex=jnp.array([1.0, 0.0]))
+
+    @staticmethod
+    @overrides
+    def from_matrix(matrix: Matrix) -> "SO2":
+        assert matrix.shape == (2, 2)
+        return SO2(unit_complex=matrix[:, 0])
 
     # Accessors
 
