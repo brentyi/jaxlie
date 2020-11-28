@@ -1,5 +1,4 @@
 import dataclasses
-from typing import Type
 
 from jax import numpy as jnp
 from overrides import overrides
@@ -9,7 +8,7 @@ from ._types import Matrix, TangentVector, Vector
 from ._utils import register_lie_group
 
 
-@register_lie_group
+@register_lie_group(matrix_dim=2, parameters_dim=2, tangent_dim=1)
 @dataclasses.dataclass(frozen=True)
 class SO2(MatrixLieGroup):
 
@@ -38,23 +37,8 @@ class SO2(MatrixLieGroup):
 
     # Accessors
 
-    @staticmethod
     @overrides
-    def matrix_dim() -> int:
-        return 2
-
-    @staticmethod
-    @overrides
-    def compact_dim() -> int:
-        return 2
-
-    @staticmethod
-    @overrides
-    def tangent_dim() -> int:
-        return 1
-
-    @overrides
-    def matrix(self) -> Matrix:
+    def as_matrix(self) -> Matrix:
         cos, sin = self.unit_complex
         return jnp.array(
             [
@@ -63,8 +47,9 @@ class SO2(MatrixLieGroup):
             ]
         )
 
+    @property  # type: ignore
     @overrides
-    def compact(self) -> Vector:
+    def parameters(self) -> Vector:
         return self.unit_complex
 
     # Operations
@@ -72,11 +57,11 @@ class SO2(MatrixLieGroup):
     @overrides
     def apply(self: "SO2", target: Vector) -> Vector:
         assert target.shape == (2,)
-        return self.matrix() @ target
+        return self.as_matrix() @ target
 
     @overrides
     def product(self: "SO2", other: "SO2") -> "SO2":
-        return SO2(self.matrix() @ other.unit_complex)
+        return SO2(self.as_matrix() @ other.unit_complex)
 
     @staticmethod
     @overrides

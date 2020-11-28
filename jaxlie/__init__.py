@@ -8,5 +8,6 @@ __all__ = [
     "types",
     "MatrixLieGroup",
     "SO2",
+    "SE2",
     "register_lie_group",
 ]

@@ -1,5 +1,5 @@
 import abc
-from typing import Type, TypeVar, overload
+from typing import TypeVar, overload
 
 from ._types import Matrix, TangentVector, Vector
 
@@ -7,6 +7,11 @@ T = TypeVar("T", bound="MatrixLieGroup")
 
 
 class MatrixLieGroup(abc.ABC):
+
+    # These will be set in `_utils.register_lie_group()`
+    matrix_dim: int
+    parameters_dim: int
+    tangent_dim: int
 
     # Shared implementations
 
@@ -29,7 +34,7 @@ class MatrixLieGroup(abc.ABC):
         else:
             assert False, "Invalid argument"
 
-    # Abstract factory
+    # Factory
 
     @staticmethod
     @abc.abstractmethod
@@ -52,42 +57,16 @@ class MatrixLieGroup(abc.ABC):
             T: Group member.
         """
 
-    # Abstract accessors
-
-    @staticmethod
-    @abc.abstractmethod
-    def matrix_dim() -> int:
-        """Get dimension of (square) matrix representation.
-
-        Returns:
-            int: Matrix dimensionality.
-        """
-
-    @staticmethod
-    @abc.abstractmethod
-    def compact_dim() -> int:
-        """Get dimensionality of compact representation.
-
-        Returns:
-            int: Compact representation dimension.
-        """
-
-    @staticmethod
-    @abc.abstractmethod
-    def tangent_dim() -> int:
-        """Get dimensionality of tangent space.
-
-        Returns:
-            int: Tangent space dimension.
-        """
+    # Accessors
 
     @abc.abstractmethod
-    def matrix(self) -> Matrix:
+    def as_matrix(self) -> Matrix:
         """Get value as a matrix."""
 
+    @property
     @abc.abstractmethod
-    def compact(self) -> Vector:
-        """Get compact representation."""
+    def parameters(self) -> Vector:
+        """Get underlying representation."""
 
     # Operations
 

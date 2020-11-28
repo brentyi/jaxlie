@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Tuple, Type
+from typing import Tuple
 
 import jax
 from jax import numpy as jnp
@@ -11,7 +11,7 @@ from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
 
-@register_lie_group
+@register_lie_group(matrix_dim=3, parameters_dim=4, tangent_dim=3)
 @dataclasses.dataclass(frozen=True)
 class SE2(MatrixLieGroup):
 
@@ -32,9 +32,11 @@ class SE2(MatrixLieGroup):
         xy_unit_complex = xy_unit_complex.at[2:].set(rotation.unit_complex)
         return SE2(xy_unit_complex=xy_unit_complex)
 
+    @property
     def rotation(self) -> SO2:
         return SO2(unit_complex=self.xy_unit_complex[2:])
 
+    @property
     def translation(self) -> Vector:
         return self.xy_unit_complex[:2]
 
@@ -55,23 +57,13 @@ class SE2(MatrixLieGroup):
 
     # Accessors
 
-    @staticmethod
+    @property  # type: ignore
     @overrides
-    def matrix_dim() -> int:
-        return 3
-
-    @staticmethod
-    @overrides
-    def compact_dim() -> int:
-        return 4
-
-    @staticmethod
-    @overrides
-    def tangent_dim() -> int:
-        return 3
+    def parameters(self) -> Vector:
+        return self.xy_unit_complex
 
     @overrides
-    def matrix(self) -> Matrix:
+    def as_matrix(self) -> Matrix:
         x, y, cos, sin = self.xy_unit_complex
         return jnp.array(
             [
@@ -81,15 +73,11 @@ class SE2(MatrixLieGroup):
             ]
         )
 
-    @overrides
-    def compact(self) -> Vector:
-        return self.xy_unit_complex
-
     # Operations
 
     @overrides
     def apply(self: "SE2", target: Vector) -> Vector:
-        return self.rotation() @ target + self.translation()
+        return self.rotation @ target + self.translation
 
     @overrides
     def product(self: "SE2", other: "SE2") -> "SE2":
@@ -97,12 +85,12 @@ class SE2(MatrixLieGroup):
 
         # Compute translation terms
         xy_unit_complex = xy_unit_complex.at[:2].set(
-            self.rotation() @ other.translation() + self.translation()
+            self.rotation @ other.translation + self.translation
         )
 
         # Compute rotation terms
         xy_unit_complex = xy_unit_complex.at[2:].set(
-            (self.rotation() @ other.rotation()).unit_complex
+            (self.rotation @ other.rotation).unit_complex
         )
 
         return SE2(xy_unit_complex=xy_unit_complex)
@@ -152,7 +140,7 @@ class SE2(MatrixLieGroup):
         # Also see:
         # > http://ethaneade.com/lie.pdf
 
-        theta = self.rotation().log()[0]
+        theta = self.rotation.log()[0]
 
         cos = jnp.cos(theta)
         cos_minus_one = cos - 1.0
@@ -174,17 +162,17 @@ class SE2(MatrixLieGroup):
         )
 
         tangent = jnp.zeros(3)
-        tangent = tangent.at[:2].set(V_inv @ self.translation())
+        tangent = tangent.at[:2].set(V_inv @ self.translation)
         tangent = tangent.at[2].set(theta)
         return tangent
 
     @overrides
     def inverse(self: "SE2") -> "SE2":
-        R_inv = self.rotation().inverse()
-        return SE2.from_rotation_and_translation(R_inv, -(R_inv @ self.translation()))
+        R_inv = self.rotation.inverse()
+        return SE2.from_rotation_and_translation(R_inv, -(R_inv @ self.translation))
 
     @overrides
     def normalize(self: "SE2") -> "SE2":
         return SE2.from_rotation_and_translation(
-            self.rotation().normalize(), self.translation()
+            self.rotation.normalize(), self.translation
         )
