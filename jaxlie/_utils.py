@@ -10,6 +10,15 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="MatrixLieGroup")
 
 
+def get_epsilon(x: jnp.ndarray) -> float:
+    if x.dtype is jnp.dtype("float32"):
+        return 1e-5
+    elif x.dtype is jnp.dtype("float64"):
+        return 1e-10
+    else:
+        assert False, f"Unexpected array type: {x.dtype}"
+
+
 def register_lie_group(cls):
     """Decorator for defining immutable dataclasses."""
 

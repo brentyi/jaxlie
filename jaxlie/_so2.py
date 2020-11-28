@@ -79,12 +79,10 @@ class SO2(MatrixLieGroup):
         sin = jnp.sin(tangent[0])
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    @staticmethod
     @overrides
     def log(self: "SO2") -> TangentVector:
         return jnp.arctan2(self.unit_complex[1, None], self.unit_complex[0, None])
 
-    @staticmethod
     @overrides
     def inverse(self: "SO2") -> "SO2":
         return SO2(unit_complex=self.unit_complex.at[1].set(-self.unit_complex[1]))

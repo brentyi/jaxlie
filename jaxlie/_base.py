@@ -23,7 +23,7 @@ class MatrixLieGroup(abc.ABC):
         points.
         """
         if type(self) is type(other):
-            return self.product(T)
+            return self.product(other=other)
         elif isinstance(other, Vector):
             return self.apply(target=other)
         else:
@@ -117,7 +117,6 @@ class MatrixLieGroup(abc.ABC):
             Matrix: Output.
         """
 
-    @staticmethod
     @abc.abstractmethod
     def log(self: T) -> TangentVector:
         """Computes `logm(vee(tangent))`.
@@ -129,7 +128,6 @@ class MatrixLieGroup(abc.ABC):
             TangentVector: Output.
         """
 
-    @staticmethod
     @abc.abstractmethod
     def inverse(self: T) -> T:
         """Computes the inverse of x.
