@@ -75,7 +75,7 @@ class SO2(MatrixLieGroup):
 
     @overrides
     def product(self: "SO2", other: "SO2") -> "SO2":
-        return SO2(self.matrix() @ self.unit_complex)
+        return SO2(self.matrix() @ other.unit_complex)
 
     @staticmethod
     @overrides

@@ -26,7 +26,7 @@ def register_lie_group(cls):
     cls.__hash__ = object.__hash__
 
     jax.tree_util.register_pytree_node(
-        cls, _flatten_group, jax.partial(_unflatten_group, cls=cls)
+        cls, _flatten_group, jax.partial(_unflatten_group, dataclass_type=cls)
     )
     return cls
 
@@ -45,7 +45,7 @@ def _flatten_group(v: "MatrixLieGroup") -> Tuple[Tuple[jnp.ndarray, ...], Tuple]
 
 
 def _unflatten_group(
-    cls, treedef: Tuple, children: Tuple[jnp.ndarray, ...]
+    dataclass_type, treedef: Tuple, children: Tuple[jnp.ndarray, ...]
 ) -> "MatrixLieGroup":
     """Unflatten a dataclass for use as a PyTree."""
     array_keys = treedef[: len(children)]
@@ -53,7 +53,7 @@ def _unflatten_group(
     aux_keys = aux[: len(aux) // 2]
     aux_values = aux[len(aux) // 2 :]
 
-    return cls(
+    return dataclass_type(
         **dict(zip(array_keys, children)),
         **dict(zip(aux_keys, aux_values)),
     )

@@ -33,7 +33,7 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def identity() -> T:
+    def identity() -> "MatrixLieGroup":
         """Returns identity element.
 
         Returns:
@@ -42,7 +42,7 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def from_matrix(matrix: Matrix) -> T:
+    def from_matrix(matrix: Matrix) -> "MatrixLieGroup":
         """Get group member from matrix representation.
 
         Args:
@@ -86,7 +86,7 @@ class MatrixLieGroup(abc.ABC):
         """Get value as a matrix."""
 
     @abc.abstractmethod
-    def compact(self) -> Matrix:
+    def compact(self) -> Vector:
         """Get compact representation."""
 
     # Operations
@@ -115,7 +115,7 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def exp(tangent: TangentVector) -> T:
+    def exp(tangent: TangentVector) -> "MatrixLieGroup":
         """Computes `expm(wedge(tangent))`.
 
         Args:
