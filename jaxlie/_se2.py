@@ -18,6 +18,7 @@ class SE2(MatrixLieGroup):
     # SE2-specific
 
     xy_unit_complex: Vector
+    """Internal parameterization: `(x, y, cos, sin)`."""
 
     @staticmethod
     def from_xy_theta(x: float, y: float, theta: float) -> "SE2":
@@ -27,10 +28,9 @@ class SE2(MatrixLieGroup):
 
     @staticmethod
     def from_rotation_and_translation(rotation: SO2, translation: jnp.array) -> "SE2":
-        xy_unit_complex = jnp.zeros(4)
-        xy_unit_complex = xy_unit_complex.at[:2].set(translation)
-        xy_unit_complex = xy_unit_complex.at[2:].set(rotation.unit_complex)
-        return SE2(xy_unit_complex=xy_unit_complex)
+        return SE2(
+            xy_unit_complex=jnp.concatenate([translation, rotation.unit_complex])
+        )
 
     @property
     def rotation(self) -> SO2:
@@ -52,7 +52,8 @@ class SE2(MatrixLieGroup):
     def from_matrix(matrix: Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
         return SE2.from_rotation_and_translation(
-            rotation=SO2.from_matrix(matrix[:2, :2]), translation=matrix[:2, 2]
+            rotation=SO2.from_matrix(matrix[:2, :2]),
+            translation=matrix[:2, 2],
         )
 
     # Accessors
@@ -81,24 +82,20 @@ class SE2(MatrixLieGroup):
 
     @overrides
     def product(self: "SE2", other: "SE2") -> "SE2":
-        xy_unit_complex = jnp.zeros(4)
+        # Apply rotation to both the rotation and translation terms of `other`
+        xy_unit_complex = jax.vmap(self.rotation.apply)(
+            other.xy_unit_complex.reshape((2, 2))
+        ).flatten()
 
-        # Compute translation terms
-        xy_unit_complex = xy_unit_complex.at[:2].set(
-            self.rotation @ other.translation + self.translation
-        )
-
-        # Compute rotation terms
-        xy_unit_complex = xy_unit_complex.at[2:].set(
-            (self.rotation @ other.rotation).unit_complex
-        )
+        # Apply translation
+        xy_unit_complex = xy_unit_complex.at[:2].add(self.translation)
 
         return SE2(xy_unit_complex=xy_unit_complex)
 
     @staticmethod
     @overrides
     def exp(tangent: TangentVector) -> "SE2":
-        # Mostly plagiarized from Sophus:
+        # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
         # Also see:
         # > http://ethaneade.com/lie.pdf
@@ -131,11 +128,14 @@ class SE2(MatrixLieGroup):
                 [one_minus_cos_over_theta, sin_over_theta],
             ]
         )
-        return SE2.from_rotation_and_translation(SO2.from_theta(theta), V @ tangent[:2])
+        return SE2.from_rotation_and_translation(
+            rotation=SO2.from_theta(theta),
+            translation=V @ tangent[:2],
+        )
 
     @overrides
     def log(self: "SE2") -> TangentVector:
-        # Mostly plagiarized from Sophus:
+        # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
         # > http://ethaneade.com/lie.pdf
@@ -161,18 +161,20 @@ class SE2(MatrixLieGroup):
             ]
         )
 
-        tangent = jnp.zeros(3)
-        tangent = tangent.at[:2].set(V_inv @ self.translation)
-        tangent = tangent.at[2].set(theta)
+        tangent = jnp.concatenate([V_inv @ self.translation, theta[None]])
         return tangent
 
     @overrides
     def inverse(self: "SE2") -> "SE2":
         R_inv = self.rotation.inverse()
-        return SE2.from_rotation_and_translation(R_inv, -(R_inv @ self.translation))
+        return SE2.from_rotation_and_translation(
+            rotation=R_inv,
+            translation=-(R_inv @ self.translation),
+        )
 
     @overrides
     def normalize(self: "SE2") -> "SE2":
         return SE2.from_rotation_and_translation(
-            self.rotation.normalize(), self.translation
+            rotation=self.rotation.normalize(),
+            translation=self.translation,
         )

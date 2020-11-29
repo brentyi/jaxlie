@@ -15,6 +15,7 @@ class SO2(MatrixLieGroup):
     # SO2-specific
 
     unit_complex: Vector
+    """Internal parameterization: `(cos, sin)`."""
 
     @staticmethod
     def from_theta(theta: float) -> "SO2":
@@ -61,7 +62,7 @@ class SO2(MatrixLieGroup):
 
     @overrides
     def product(self: "SO2", other: "SO2") -> "SO2":
-        return SO2(self.as_matrix() @ other.unit_complex)
+        return SO2(unit_complex=self.as_matrix() @ other.unit_complex)
 
     @staticmethod
     @overrides

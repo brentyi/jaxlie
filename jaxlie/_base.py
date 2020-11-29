@@ -8,7 +8,9 @@ T = TypeVar("T", bound="MatrixLieGroup")
 
 class MatrixLieGroup(abc.ABC):
 
-    # These will be set in `_utils.register_lie_group()`
+    # Class properties
+    # > These will be set in `_utils.register_lie_group()`
+
     matrix_dim: int
     parameters_dim: int
     tangent_dim: int
@@ -106,7 +108,7 @@ class MatrixLieGroup(abc.ABC):
 
     @abc.abstractmethod
     def log(self: T) -> TangentVector:
-        """Computes `logm(vee(tangent))`.
+        """Computes `vee(logm(transformation matrix))`.
 
         Args:
             x (Matrix): Input.
