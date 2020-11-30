@@ -60,7 +60,7 @@ class SO3(MatrixLieGroup):
         return SO3.log(jnp.array([0.0, 0.0, theta]))
 
     @staticmethod
-    def from_rpy(roll, pitch, yaw) -> "SO3":
+    def from_rpy_radians(roll, pitch, yaw) -> "SO3":
         """Generates a transform from a set of Euler angles.
         Uses the ZYX mobile robot convention.
 

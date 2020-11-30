@@ -1,17 +1,18 @@
 from typing import Type
 
 import jax
-import jaxlie
 import numpy as onp
 from jax import numpy as jnp
 from jax.config import config
+
+import jaxlie
 
 config.update("jax_enable_x64", True)
 
 
 def test_identity():
     Group: Type[jaxlie.MatrixLieGroup]
-    for Group in (jaxlie.SO2, jaxlie.SE2, jaxlie.SO3):
+    for Group in (jaxlie.SO2, jaxlie.SE2, jaxlie.SO3, jaxlie.SE3):
         T_a = Group.identity()
         T_b = Group.identity()
         onp.testing.assert_allclose((T_a @ T_b).parameters, T_b.parameters)
@@ -37,7 +38,7 @@ def test_identity():
 
 
 def test_generator():
-    for Group in (jaxlie.SO2, jaxlie.SE2, jaxlie.SO3):
+    for Group in (jaxlie.SO2, jaxlie.SE2, jaxlie.SO3, jaxlie.SE3):
         for i in range(10):
             tangent = onp.random.randn(Group.tangent_dim)
             if i == 0:
@@ -47,7 +48,7 @@ def test_generator():
             elif i == 2:
                 tangent = tangent * -1e-10
 
-            if jnp.linalg.norm(tangent) > jnp.pi:
+            if jnp.linalg.norm(tangent) >= jnp.pi:
                 # Somewhat sketchy logic for making sure our exp/log operations are
                 # bijective for rotations
                 tangent = tangent / jnp.linalg.norm(tangent) * jnp.pi
@@ -60,23 +61,25 @@ def test_generator():
             )
 
             onp.testing.assert_allclose(
-                T.inverse().as_matrix(), jnp.linalg.inv(T.as_matrix())
+                T.inverse().as_matrix(), jnp.linalg.inv(T.as_matrix()), atol=1e-6
             )
 
             x = onp.random.randn(Group.space_dim)
             if Group.matrix_dim == Group.space_dim:
-                onp.testing.assert_allclose(T @ x, T.as_matrix() @ x)
+                onp.testing.assert_allclose(T @ x, T.as_matrix() @ x, atol=1e-6)
             else:
                 # Homogeneous
                 assert Group.matrix_dim == Group.space_dim + 1
                 onp.testing.assert_allclose(
                     T @ x,
                     (T.as_matrix() @ jnp.ones(Group.matrix_dim).at[:-1].set(x))[:-1],
+                    atol=1e-6,
                 )
 
             onp.testing.assert_allclose(
                 Group.exp(Group.from_matrix(T.as_matrix()).log()).parameters,
                 T.parameters,
+                atol=1e-6,
             )
 
             assert not jnp.any(jnp.isnan(T.parameters))

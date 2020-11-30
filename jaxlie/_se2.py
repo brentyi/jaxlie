@@ -33,6 +33,7 @@ class SE2(MatrixLieGroup):
 
     @staticmethod
     def from_rotation_and_translation(rotation: SO2, translation: jnp.array) -> "SE2":
+        assert translation.shape == (2,)
         return SE2(
             xy_unit_complex=jnp.concatenate([translation, rotation.unit_complex])
         )
@@ -56,6 +57,7 @@ class SE2(MatrixLieGroup):
     @overrides
     def from_matrix(matrix: Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
+        # Currently assumes bottom row is [0, 0, 1]
         return SE2.from_rotation_and_translation(
             rotation=SO2.from_matrix(matrix[:2, :2]),
             translation=matrix[:2, 2],
