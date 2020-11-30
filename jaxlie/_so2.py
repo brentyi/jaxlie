@@ -23,7 +23,7 @@ class SO2(MatrixLieGroup):
     """Internal parameterization: `(cos, sin)`."""
 
     @staticmethod
-    def from_theta(theta: float) -> "SO2":
+    def from_radians(theta: float) -> "SO2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))

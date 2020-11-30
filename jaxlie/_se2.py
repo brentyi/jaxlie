@@ -134,7 +134,7 @@ class SE2(MatrixLieGroup):
             ]
         )
         return SE2.from_rotation_and_translation(
-            rotation=SO2.from_theta(theta),
+            rotation=SO2.from_radians(theta),
             translation=V @ tangent[:2],
         )
 

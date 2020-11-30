@@ -23,6 +23,61 @@ class SO3(MatrixLieGroup):
     wxyz: Vector
     """Internal parameters; wxyz quaternion."""
 
+    @staticmethod
+    def from_x_radians(theta) -> "SO3":
+        """Generates a x-axis rotation.
+
+        Args:
+            angle: X rotation, in radians.
+
+        Returns:
+            SO3: Output.
+        """
+        return SO3.log(jnp.array([theta, 0.0, 0.0]))
+
+    @staticmethod
+    def from_y_radians(theta) -> "SO3":
+        """Generates a y-axis rotation.
+
+        Args:
+            angle: Y rotation, in radians.
+
+        Returns:
+            SO3: Output.
+        """
+        return SO3.log(jnp.array([0.0, theta, 0.0]))
+
+    @staticmethod
+    def from_z_radians(theta) -> "SO3":
+        """Generates a z-axis rotation.
+
+        Args:
+            angle: Z rotation, in radians.
+
+        Returns:
+            SO3: Output.
+        """
+        return SO3.log(jnp.array([0.0, 0.0, theta]))
+
+    @staticmethod
+    def from_rpy(roll, pitch, yaw) -> "SO3":
+        """Generates a transform from a set of Euler angles.
+        Uses the ZYX mobile robot convention.
+
+        Args:
+            roll: X rotation, in radians. Applied first.
+            pitch: Y rotation, in radians. Applied second.
+            yaw: Z rotation, in radians. Applied last.
+
+        Returns:
+            SO3: Output.
+        """
+        return (
+            SO3.from_z_radians(yaw)
+            @ SO3.from_y_radians(pitch)
+            @ SO3.from_x_radians(roll)
+        )
+
     # Factory
 
     @staticmethod
