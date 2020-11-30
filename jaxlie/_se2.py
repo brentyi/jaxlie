@@ -46,6 +46,11 @@ class SE2(MatrixLieGroup):
     def translation(self) -> Vector:
         return self.xy_unit_complex[:2]
 
+    def __repr__(self):
+        xy = jnp.round(self.xy_unit_complex[..., :2], 5)
+        unit_complex = jnp.round(self.xy_unit_complex[..., 2:], 5)
+        return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"
+
     # Factory
 
     @staticmethod

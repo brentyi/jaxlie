@@ -1,13 +1,3 @@
-# jaxlie
-
-Matrix Lie groups for rigid body transformations in Jax. Supports (exp, log,
-product, inverse, identity) operations for SO(2), SO(3), SE(2), and SE(3).
-Borrows heavily from the C++ library
-[Sophus](https://github.com/strasdat/Sophus).
-
-Example usage:
-
-```python
 import numpy as onp
 from jax import numpy as jnp
 
@@ -51,4 +41,3 @@ print(identity)
 # Recover our twist a la `vee(logm(T_w_b.as_matrix()))`:
 twist = T_w_b.log()
 print(twist)
-```

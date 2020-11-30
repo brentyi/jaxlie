@@ -10,6 +10,19 @@ from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
 
+def _skew(omega: jnp.ndarray) -> jnp.ndarray:
+    """Returns the skew-symmetric form of a length-3 vector. """
+
+    wx, wy, wz = omega
+    return jnp.array(
+        [
+            [0.0, -wz, wy],
+            [wz, 0.0, -wx],
+            [-wy, wx, 0.0],
+        ]
+    )
+
+
 @register_lie_group(
     matrix_dim=4,
     parameters_dim=7,
@@ -36,6 +49,11 @@ class SE3(MatrixLieGroup):
     @property
     def translation(self) -> Vector:
         return self.xyz_wxyz[:3]
+
+    def __repr__(self):
+        trans = jnp.round(self.xyz_wxyz[..., :3], 5)
+        quat = jnp.round(self.xyz_wxyz[..., 3:], 5)
+        return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"
 
     # Factory
 
@@ -105,16 +123,7 @@ class SE3(MatrixLieGroup):
             theta = jnp.sqrt(theta_squared)
 
             rotation = SO3.exp(tangent[3:])
-
-            wx, wy, wz = tangent[3:]
-            skew_omega = jnp.array(
-                [
-                    [0.0, -wz, wy],
-                    [wz, 0.0, -wx],
-                    [-wy, wx, 0.0],
-                ]
-            )
-
+            skew_omega = _skew(tangent[3:])
             V = (
                 jnp.eye(3)
                 + (1.0 - jnp.cos(theta)) / (theta_squared) * skew_omega
@@ -141,14 +150,7 @@ class SE3(MatrixLieGroup):
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation.log()
         theta_squared = omega @ omega
-        wx, wy, wz = omega
-        skew_omega = jnp.array(
-            [
-                [0.0, -wz, wy],
-                [wz, 0.0, -wx],
-                [-wy, wx, 0.0],
-            ]
-        )
+        skew_omega = _skew(omega)
 
         def compute_small_theta(args):
             skew_omega, theta_squared = args
