@@ -150,7 +150,7 @@ class SO3(MatrixLieGroup):
 
         theta_squared = tangent @ tangent
         real_factor, imaginary_factor = jax.lax.cond(
-            theta_squared < get_epsilon(tangent) ** 2,
+            theta_squared < get_epsilon(tangent.dtype) ** 2,
             true_fun=compute_taylor,
             false_fun=compute_exact,
             operand=theta_squared,
@@ -181,7 +181,7 @@ class SO3(MatrixLieGroup):
             f, norm_sq = operand
             norm = jnp.sqrt(norm_sq)
             return jax.lax.cond(
-                jnp.abs(w) < get_epsilon(w),
+                jnp.abs(w) < get_epsilon(w.dtype),
                 true_fun=lambda w_norm: jax.lax.cond(
                     w_norm[0] > 0,
                     lambda norm: jnp.pi / norm,
@@ -195,7 +195,7 @@ class SO3(MatrixLieGroup):
             )
 
         atan_factor = jax.lax.cond(
-            norm_sq < get_epsilon(norm_sq) ** 2,
+            norm_sq < get_epsilon(norm_sq.dtype) ** 2,
             true_fun=compute_taylor,
             false_fun=compute_exact,
             operand=(w, norm_sq),

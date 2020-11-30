@@ -121,7 +121,7 @@ class SE2(MatrixLieGroup):
 
         theta = tangent[2]
         sin_over_theta, one_minus_cos_over_theta = jax.lax.cond(
-            jnp.abs(theta) < get_epsilon(tangent),
+            jnp.abs(theta) < get_epsilon(tangent.dtype),
             compute_taylor,
             compute_exact,
             operand=theta,
@@ -151,7 +151,7 @@ class SE2(MatrixLieGroup):
         cos_minus_one = cos - 1.0
         half_theta = theta / 2.0
         half_theta_over_tan_half_theta = jax.lax.cond(
-            jnp.abs(cos_minus_one) < get_epsilon(theta),
+            jnp.abs(cos_minus_one) < get_epsilon(theta.dtype),
             # First-order Taylor approximation
             lambda args: 1.0 - (args[0] ** 2) / 12.0,
             # Default

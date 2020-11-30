@@ -8,13 +8,13 @@ if TYPE_CHECKING:
     from ._base import MatrixLieGroup
 
 
-def get_epsilon(x: jnp.ndarray) -> float:
-    if x.dtype is jnp.dtype("float32"):
+def get_epsilon(dtype: jnp.dtype) -> float:
+    if dtype is jnp.dtype("float32"):
         return 1e-5
-    elif x.dtype is jnp.dtype("float64"):
+    elif dtype is jnp.dtype("float64"):
         return 1e-10
     else:
-        assert False, f"Unexpected array type: {x.dtype}"
+        assert False, f"Unexpected array type: {dtype}"
 
 
 def register_lie_group(
