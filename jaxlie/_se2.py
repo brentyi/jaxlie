@@ -25,6 +25,12 @@ class SE2(MatrixLieGroup):
     xy_unit_complex: Vector
     """Internal parameterization: `(x, y, cos, sin)`."""
 
+    @overrides
+    def __repr__(self):
+        xy = jnp.round(self.xy_unit_complex[..., :2], 5)
+        unit_complex = jnp.round(self.xy_unit_complex[..., 2:], 5)
+        return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"
+
     @staticmethod
     def from_xy_theta(x: float, y: float, theta: float) -> "SE2":
         cos = jnp.cos(theta)
@@ -45,11 +51,6 @@ class SE2(MatrixLieGroup):
     @property
     def translation(self) -> Vector:
         return self.xy_unit_complex[:2]
-
-    def __repr__(self):
-        xy = jnp.round(self.xy_unit_complex[..., :2], 5)
-        unit_complex = jnp.round(self.xy_unit_complex[..., 2:], 5)
-        return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"
 
     # Factory
 

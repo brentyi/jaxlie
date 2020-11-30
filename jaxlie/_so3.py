@@ -23,6 +23,11 @@ class SO3(MatrixLieGroup):
     wxyz: Vector
     """Internal parameters; wxyz quaternion."""
 
+    @overrides
+    def __repr__(self):
+        wxyz = jnp.round(self.wxyz, 5)
+        return f"{self.__class__.__name__}(wxyz={wxyz})"
+
     @staticmethod
     def from_x_radians(theta) -> "SO3":
         """Generates a x-axis rotation.

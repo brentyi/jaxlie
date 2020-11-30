@@ -22,6 +22,11 @@ class SO2(MatrixLieGroup):
     unit_complex: Vector
     """Internal parameterization: `(cos, sin)`."""
 
+    @overrides
+    def __repr__(self):
+        unit_complex = jnp.round(self.unit_complex, 5)
+        return f"{self.__class__.__name__}(unit_complex={unit_complex})"
+
     @staticmethod
     def from_radians(theta: float) -> "SO2":
         cos = jnp.cos(theta)

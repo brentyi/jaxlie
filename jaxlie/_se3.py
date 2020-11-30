@@ -37,6 +37,12 @@ class SE3(MatrixLieGroup):
     xyz_wxyz: Vector
     """Internal parameters; length-3 translation followed by wxyz quaternion."""
 
+    @overrides
+    def __repr__(self):
+        trans = jnp.round(self.xyz_wxyz[..., :3], 5)
+        quat = jnp.round(self.xyz_wxyz[..., 3:], 5)
+        return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"
+
     @staticmethod
     def from_rotation_and_translation(rotation: SO3, translation: jnp.array) -> "SE3":
         assert translation.shape == (3,)
@@ -49,11 +55,6 @@ class SE3(MatrixLieGroup):
     @property
     def translation(self) -> Vector:
         return self.xyz_wxyz[:3]
-
-    def __repr__(self):
-        trans = jnp.round(self.xyz_wxyz[..., :3], 5)
-        quat = jnp.round(self.xyz_wxyz[..., 3:], 5)
-        return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"
 
     # Factory
 
