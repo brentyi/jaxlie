@@ -11,9 +11,10 @@ class MatrixLieGroup(abc.ABC):
     # Class properties
     # > These will be set in `_utils.register_lie_group()`
 
-    matrix_dim: int
-    parameters_dim: int
-    tangent_dim: int
+    matrix_dim: int = 0
+    parameters_dim: int = 0
+    tangent_dim: int = 0
+    space_dim: int = 0
 
     # Shared implementations
 

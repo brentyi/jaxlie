@@ -17,7 +17,13 @@ def get_epsilon(x: jnp.ndarray) -> float:
         assert False, f"Unexpected array type: {x.dtype}"
 
 
-def register_lie_group(*, matrix_dim: int, parameters_dim: int, tangent_dim: int):
+def register_lie_group(
+    *,
+    matrix_dim: int,
+    parameters_dim: int,
+    tangent_dim: int,
+    space_dim: int,
+):
     """Decorator for defining immutable dataclasses."""
 
     def _wrap(cls):
@@ -28,6 +34,7 @@ def register_lie_group(*, matrix_dim: int, parameters_dim: int, tangent_dim: int
         cls.matrix_dim = matrix_dim
         cls.parameters_dim = parameters_dim
         cls.tangent_dim = tangent_dim
+        cls.space_dim = space_dim
 
         # Register as a PyTree node to make JIT compilation, etc easier in Jax
         def _flatten_group(

@@ -8,7 +8,12 @@ from ._types import Matrix, TangentVector, Vector
 from ._utils import register_lie_group
 
 
-@register_lie_group(matrix_dim=2, parameters_dim=2, tangent_dim=1)
+@register_lie_group(
+    matrix_dim=2,
+    parameters_dim=2,
+    tangent_dim=1,
+    space_dim=2,
+)
 @dataclasses.dataclass(frozen=True)
 class SO2(MatrixLieGroup):
 

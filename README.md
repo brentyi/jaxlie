@@ -7,6 +7,6 @@ Supports (exp, log, product, inverse, identity) operations for:
 - [ ] Groups
   - [x] SO(2)
   - [x] SE(2)
-  - [ ] SO(3)
+  - [x] SO(3)
   - [ ] SE(3)
 - [ ] Better tests + CI

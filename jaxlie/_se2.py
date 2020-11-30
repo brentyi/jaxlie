@@ -11,7 +11,12 @@ from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
 
-@register_lie_group(matrix_dim=3, parameters_dim=4, tangent_dim=3)
+@register_lie_group(
+    matrix_dim=3,
+    parameters_dim=4,
+    tangent_dim=3,
+    space_dim=2,
+)
 @dataclasses.dataclass(frozen=True)
 class SE2(MatrixLieGroup):
 
