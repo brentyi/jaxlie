@@ -14,7 +14,7 @@ print(T_w_b.rotation)
 # Or translation:
 print(T_w_b.translation)
 
-# Transform points with the `@` operator, `.apply()`, or the matrix form:
+# Transform points with the `@` operator, `.apply()`, or a homogeneous matrix:
 p_w = T_w_b @ p_b
 print(p_w)
 

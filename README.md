@@ -1,9 +1,14 @@
 # jaxlie
 
-Matrix Lie groups for rigid body transformations in Jax. Supports (exp, log,
-product, inverse, identity) operations for SO(2), SO(3), SE(2), and SE(3).
-Borrows heavily from the C++ library
-[Sophus](https://github.com/strasdat/Sophus).
+![build](https://github.com/brentyi/jaxlie/workflows/build/badge.svg)
+![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg?branch=master)
+![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
+[![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
+
+Matrix Lie groups for rigid body transformations in Jax. Implements
+pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with support for
+(exp, log, product, inverse, identity) operations. Borrows heavily from the C++
+library [Sophus](https://github.com/strasdat/Sophus).
 
 Example usage:
 
@@ -24,7 +29,7 @@ print(T_w_b.rotation)
 # Or translation:
 print(T_w_b.translation)
 
-# Transform points with the `@` operator, `.apply()`, or the matrix form:
+# Transform points with the `@` operator, `.apply()`, or a homogeneous matrix:
 p_w = T_w_b @ p_b
 print(p_w)
 
