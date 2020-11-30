@@ -90,30 +90,28 @@ class SO3(MatrixLieGroup):
     def from_matrix(matrix: Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
 
-        # Reference:
+        # Modified from:
         # > "Converting a Rotation Matrix to a Quaternion" from Mike Day
         # > https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
-        #
-        # Note that we use the wxyz convention here, rather than xyzw.
 
         def case0(m):
             t = 1 + m[0, 0] - m[1, 1] - m[2, 2]
-            q = jnp.array([m[1, 2] - m[2, 1], t, m[0, 1] + m[1, 0], m[2, 0] + m[0, 2]])
+            q = jnp.array([m[2, 1] - m[1, 2], t, m[1, 0] + m[0, 1], m[0, 2] + m[2, 0]])
             return t, q
 
         def case1(m):
             t = 1 - m[0, 0] + m[1, 1] - m[2, 2]
-            q = jnp.array([m[2, 0] - m[0, 2], m[0, 1] + m[1, 0], t, m[2, 1] + m[2, 1]])
+            q = jnp.array([m[0, 2] - m[2, 0], m[1, 0] + m[0, 1], t, m[2, 1] + m[1, 2]])
             return t, q
 
         def case2(m):
             t = 1 - m[0, 0] - m[1, 1] + m[2, 2]
-            q = jnp.array([m[0, 1] - m[1, 0], m[2, 0] + m[0, 2], m[1, 2] + m[2, 1], t])
+            q = jnp.array([m[1, 0] - m[0, 1], m[0, 2] + m[2, 0], m[2, 1] + m[1, 2], t])
             return t, q
 
         def case3(m):
             t = 1 + m[0, 0] + m[1, 1] + m[2, 2]
-            q = jnp.array([t, m[1, 2] - m[2, 1], m[2, 0] - m[0, 2], m[0, 1] - m[1, 0]])
+            q = jnp.array([t, m[2, 1] - m[1, 2], m[0, 2] - m[2, 0], m[1, 0] - m[0, 1]])
             return t, q
 
         t, q = jax.lax.cond(

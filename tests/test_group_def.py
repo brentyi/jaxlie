@@ -38,7 +38,7 @@ def test_identity():
 
 def test_generator():
     for Group in (jaxlie.SO2, jaxlie.SE2, jaxlie.SO3):
-        for i in range(5):
+        for i in range(10):
             tangent = onp.random.randn(Group.tangent_dim)
             if i == 0:
                 tangent = tangent * 0
@@ -52,7 +52,7 @@ def test_generator():
                 # bijective for rotations
                 tangent = tangent / jnp.linalg.norm(tangent) * jnp.pi
 
-            T = jax.jit(Group.exp)(tangent)
+            T = Group.exp(tangent)
             onp.testing.assert_allclose(T.log(), tangent, atol=1e-6)
 
             onp.testing.assert_allclose(
@@ -73,6 +73,11 @@ def test_generator():
                     T @ x,
                     (T.as_matrix() @ jnp.ones(Group.matrix_dim).at[:-1].set(x))[:-1],
                 )
+
+            onp.testing.assert_allclose(
+                Group.exp(Group.from_matrix(T.as_matrix()).log()).parameters,
+                T.parameters,
+            )
 
             assert not jnp.any(jnp.isnan(T.parameters))
             assert not jnp.any(jnp.isnan(T.as_matrix()))

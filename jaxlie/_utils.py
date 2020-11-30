@@ -24,17 +24,29 @@ def register_lie_group(
     tangent_dim: int,
     space_dim: int,
 ):
-    """Decorator for defining immutable dataclasses."""
+    """Process a Lie group dataclass:
+    - Sets static dimensionality attributes
+    - Makes the group hashable
+    - Marks all functions for JIT compilation
+    - Adds flattening/unflattening ops for use as a PyTree node
+    """
 
     def _wrap(cls):
-        # Hash based on object ID, rather than contents (arrays are not hashable)
-        cls.__hash__ = object.__hash__
-
         # Register dimensions as class attributes
         cls.matrix_dim = matrix_dim
         cls.parameters_dim = parameters_dim
         cls.tangent_dim = tangent_dim
         cls.space_dim = space_dim
+
+        # Hash based on object ID, rather than contents (arrays are not hashable)
+        cls.__hash__ = object.__hash__
+
+        # JIT for all functions
+        for f in filter(
+            lambda f: not f.startswith("_") and callable(getattr(cls, f)),
+            dir(cls),
+        ):
+            setattr(cls, f, jax.jit(getattr(cls, f)))
 
         # Register as a PyTree node to make JIT compilation, etc easier in Jax
         def _flatten_group(
