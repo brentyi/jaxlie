@@ -1,5 +1,5 @@
 import dataclasses
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Callable, Tuple, TypeVar
 
 import jax
 from jax import numpy as jnp
@@ -17,13 +17,16 @@ def get_epsilon(dtype: jnp.dtype) -> float:
         assert False, f"Unexpected array type: {dtype}"
 
 
+T = TypeVar("T", bound="MatrixLieGroup")
+
+
 def register_lie_group(
     *,
     matrix_dim: int,
     parameters_dim: int,
     tangent_dim: int,
     space_dim: int,
-):
+) -> Callable[[T], T]:
     """Process a Lie group dataclass:
     - Sets static dimensionality attributes
     - Makes the group hashable
@@ -31,7 +34,7 @@ def register_lie_group(
     - Adds flattening/unflattening ops for use as a PyTree node
     """
 
-    def _wrap(cls):
+    def _wrap(cls: "MatrixLieGroup"):
         # Register dimensions as class attributes
         cls.matrix_dim = matrix_dim
         cls.parameters_dim = parameters_dim

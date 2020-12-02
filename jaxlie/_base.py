@@ -1,7 +1,13 @@
 import abc
-from typing import TypeVar, overload
+from typing import TYPE_CHECKING, TypeVar, overload
 
 from ._types import Matrix, TangentVector, Vector
+
+if TYPE_CHECKING:
+    from ._se2 import SE2
+    from ._se3 import SE3
+    from ._so2 import SO2
+    from ._so3 import SO3
 
 T = TypeVar("T", bound="MatrixLieGroup")
 
@@ -12,11 +18,38 @@ class MatrixLieGroup(abc.ABC):
     # > These will be set in `_utils.register_lie_group()`
 
     matrix_dim: int = 0
+    """Dimension of square matrix output from `.as_matrix()`."""
+
     parameters_dim: int = 0
+    """Dimension of underlying parameters, `.parameters`."""
+
     tangent_dim: int = 0
+    """Dimension of tangent space."""
+
     space_dim: int = 0
+    """Dimension of coordinates that can be transformed."""
 
     # Shared implementations
+
+    @overload
+    def __matmul__(self: "SO2", other: "SE2") -> "SE2":
+        # Upcast SO2 -> SE2
+        ...
+
+    @overload
+    def __matmul__(self: "SE2", other: "SO2") -> "SE2":
+        # Upcast SO2 -> SE2
+        ...
+
+    @overload
+    def __matmul__(self: "SO3", other: "SE3") -> "SE3":
+        # Upcast SO3 -> SE3
+        ...
+
+    @overload
+    def __matmul__(self: "SE3", other: "SO3") -> "SE3":
+        # Upcast SO3 -> SE3
+        ...
 
     @overload
     def __matmul__(self: T, other: T) -> T:
@@ -30,10 +63,10 @@ class MatrixLieGroup(abc.ABC):
         """Operator overload, for composing transformations and/or applying them to
         points.
         """
-        if type(self) is type(other):
-            return self.product(other=other)
-        elif isinstance(other, Vector):
+        if isinstance(other, Vector):
             return self.apply(target=other)
+        if isinstance(other, MatrixLieGroup):
+            return self.product(other=other)
         else:
             assert False, "Invalid argument"
 
@@ -64,7 +97,7 @@ class MatrixLieGroup(abc.ABC):
 
     @abc.abstractmethod
     def as_matrix(self) -> Matrix:
-        """Get value as a matrix."""
+        """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @property
     @abc.abstractmethod
@@ -111,19 +144,13 @@ class MatrixLieGroup(abc.ABC):
     def log(self: T) -> TangentVector:
         """Computes `vee(logm(transformation matrix))`.
 
-        Args:
-            x (Matrix): Input.
-
         Returns:
             TangentVector: Output.
         """
 
     @abc.abstractmethod
     def inverse(self: T) -> T:
-        """Computes the inverse of x.
-
-        Args:
-            x (Matrix): Input.
+        """Computes the inverse of our transform.
 
         Returns:
             Matrix: Output.

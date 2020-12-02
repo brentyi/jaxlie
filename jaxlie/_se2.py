@@ -1,11 +1,12 @@
 import dataclasses
-from typing import Tuple
+from typing import Optional, Tuple
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from ._base import MatrixLieGroup
+from . import _base
 from ._so2 import SO2
 from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
@@ -18,7 +19,7 @@ from ._utils import get_epsilon, register_lie_group
     space_dim=2,
 )
 @dataclasses.dataclass(frozen=True)
-class SE2(MatrixLieGroup):
+class SE2(_base.MatrixLieGroup):
 
     # SE2-specific
 
@@ -38,8 +39,16 @@ class SE2(MatrixLieGroup):
         return SE2(xy_unit_complex=jnp.array([x, y, cos, sin]))
 
     @staticmethod
-    def from_rotation_and_translation(rotation: SO2, translation: jnp.array) -> "SE2":
+    def from_rotation_and_translation(
+        rotation: Optional[SO2] = None,
+        translation: Vector = onp.zeros(2),
+    ) -> "SE2":
         assert translation.shape == (2,)
+
+        if rotation is None:
+            # We don't put this in the arglist to avoid JIT compilation during import
+            rotation = SO2.identity()
+
         return SE2(
             xy_unit_complex=jnp.concatenate([translation, rotation.unit_complex])
         )

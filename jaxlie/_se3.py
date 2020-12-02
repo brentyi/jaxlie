@@ -1,10 +1,12 @@
 import dataclasses
+from typing import Optional
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from ._base import MatrixLieGroup
+from . import _base
 from ._so3 import SO3
 from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
@@ -30,7 +32,7 @@ def _skew(omega: jnp.ndarray) -> jnp.ndarray:
     space_dim=3,
 )
 @dataclasses.dataclass(frozen=True)
-class SE3(MatrixLieGroup):
+class SE3(_base.MatrixLieGroup):
 
     # SE3-specific
 
@@ -44,8 +46,16 @@ class SE3(MatrixLieGroup):
         return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"
 
     @staticmethod
-    def from_rotation_and_translation(rotation: SO3, translation: jnp.array) -> "SE3":
+    def from_rotation_and_translation(
+        rotation: Optional[SO3] = None,
+        translation: Vector = onp.zeros(3),
+    ) -> "SE3":
         assert translation.shape == (3,)
+
+        if rotation is None:
+            # We don't put this in the arglist to avoid JIT compilation during import
+            rotation = SO3.identity()
+
         return SE3(xyz_wxyz=jnp.concatenate([translation, rotation.wxyz]))
 
     @property
@@ -61,7 +71,7 @@ class SE3(MatrixLieGroup):
     @staticmethod
     @overrides
     def identity() -> "SE3":
-        return SE3(xyz_wxyz=jnp.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]))
+        return SE3(xyz_wxyz=onp.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides

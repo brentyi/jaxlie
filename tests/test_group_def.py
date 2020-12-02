@@ -1,11 +1,10 @@
 from typing import Type
 
 import jax
+import jaxlie
 import numpy as onp
 from jax import numpy as jnp
 from jax.config import config
-
-import jaxlie
 
 config.update("jax_enable_x64", True)
 

@@ -1,10 +1,11 @@
 import dataclasses
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from ._base import MatrixLieGroup
+from . import _base
 from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
@@ -16,7 +17,7 @@ from ._utils import get_epsilon, register_lie_group
     space_dim=3,
 )
 @dataclasses.dataclass(frozen=True)
-class SO3(MatrixLieGroup):
+class SO3(_base.MatrixLieGroup):
 
     # SO3-specific
 
@@ -88,7 +89,7 @@ class SO3(MatrixLieGroup):
     @staticmethod
     @overrides
     def identity() -> "SO3":
-        return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
+        return SO3(wxyz=onp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -264,7 +265,7 @@ class SO3(MatrixLieGroup):
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
-        return SO3(wxyz=self.wxyz.at[1:].set(-self.wxyz[1:]))
+        return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))
 
     @overrides
     def normalize(self: "SO3") -> "SO3":
