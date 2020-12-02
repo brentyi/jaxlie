@@ -3,12 +3,6 @@ from typing import TYPE_CHECKING, TypeVar, overload
 
 from ._types import Matrix, TangentVector, Vector
 
-if TYPE_CHECKING:
-    from ._se2 import SE2
-    from ._se3 import SE3
-    from ._so2 import SO2
-    from ._so3 import SO3
-
 T = TypeVar("T", bound="MatrixLieGroup")
 
 
@@ -30,26 +24,6 @@ class MatrixLieGroup(abc.ABC):
     """Dimension of coordinates that can be transformed."""
 
     # Shared implementations
-
-    @overload
-    def __matmul__(self: "SO2", other: "SE2") -> "SE2":
-        # Upcast SO2 -> SE2
-        ...
-
-    @overload
-    def __matmul__(self: "SE2", other: "SO2") -> "SE2":
-        # Upcast SO2 -> SE2
-        ...
-
-    @overload
-    def __matmul__(self: "SO3", other: "SE3") -> "SE3":
-        # Upcast SO3 -> SE3
-        ...
-
-    @overload
-    def __matmul__(self: "SE3", other: "SO3") -> "SE3":
-        # Upcast SO3 -> SE3
-        ...
 
     @overload
     def __matmul__(self: T, other: T) -> T:

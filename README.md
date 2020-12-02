@@ -16,7 +16,6 @@ library [Sophus](https://github.com/strasdat/Sophus).
 
 ```python
 import numpy as onp
-from jax import numpy as jnp
 
 from jaxlie import SE3
 
@@ -25,12 +24,12 @@ from jaxlie import SE3
 #############################
 
 # We can compute a w<-b transform by integrating over an se(3) screw, equivalent
-# to `SE3.from_matrix(expm(wedge(twist)))`:
+# to `SE3.from_matrix(expm(wedge(twist)))`
 twist = onp.array([1.0, 0.0, 0.2, 0.0, 0.5, 0.0])
 T_w_b = SE3.exp(twist)
 p_b = onp.random.randn(3)
 
-# We can print the (quaternion) rotation term; this is an `SO3` object:
+# We can print the (quaternion) rotation term; this is a `SO3` object:
 print(T_w_b.rotation)
 
 # Or print the translation; this is a simple array with shape (3,):
@@ -66,7 +65,7 @@ p_w = T_w_b.apply(p_b)
 print(p_w)
 
 # or the homogeneous matrix form:
-p_w = (T_w_b.as_matrix() @ jnp.append(p_b, 1.0))[:-1]
+p_w = (T_w_b.as_matrix() @ onp.append(p_b, 1.0))[:-1]
 print(p_w)
 
 
