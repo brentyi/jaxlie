@@ -1,5 +1,5 @@
 import abc
-from typing import TYPE_CHECKING, TypeVar, overload
+from typing import TypeVar, overload
 
 from ._types import Matrix, TangentVector, Vector
 

@@ -1,14 +1,12 @@
-from typing import List, Type
+from typing import Type
 
-import jax
+import jaxlie
 import numpy as onp
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
 from jax.config import config
-
-import jaxlie
 
 # Run all tests with double-precision
 config.update("jax_enable_x64", True)
@@ -21,21 +19,17 @@ config.update("jax_enable_x64", True)
 
 def sample_transform(Group: Type[jaxlie.MatrixLieGroup]) -> jaxlie.MatrixLieGroup:
     """Sample a random transform from a group."""
-    i = onp.random.randint(0, 3)
-    if i == 0:
-        tangent = onp.random.randn(Group.tangent_dim) * 1e-8
-    else:
-        tangent = onp.random.randn(Group.tangent_dim)
+    tangent = onp.random.randn(Group.tangent_dim)
     return Group.exp(tangent)
 
 
 def general_group_test(f):
     """Decorator for defining tests that run on all group types."""
     # Disable timing consistency tests (first, JITed run will be faster)
-    f = settings(deadline=None)(f)
+    f = settings(deadline=None, max_examples=10)(f)
 
     # Add _random_module parameter
-    f = given(_random_module=st.randoms())(f)
+    f = given(_random_module=st.random_module())(f)
 
     # Parametrize tests wtih each group type
     f = pytest.mark.parametrize(
@@ -51,14 +45,27 @@ def general_group_test(f):
 
 
 def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
-    """Make sure two matrices are equivalent."""
+    """Make sure two transforms are equivalent."""
+    # Check matrix representation
     assert_arrays_close(a.as_matrix(), b.as_matrix())
-    assert_arrays_close(a.parameters, b.parameters)
+
+    # Flip signs for quaternions
+    p1 = a.parameters
+    p2 = b.parameters
+    if isinstance(a, jaxlie.SO3):
+        p1 = p1 * jnp.sign(jnp.sum(p1))
+        p2 = p2 * jnp.sign(jnp.sum(p2))
+    elif isinstance(a, jaxlie.SE3):
+        p1 = a.parameters.at[3:].mul(jnp.sign(jnp.sum(p1[3:])))
+        p2 = b.parameters.at[3:].mul(jnp.sign(jnp.sum(p2[3:])))
+
+    # Make sure parameters are equal
+    assert_arrays_close(p1, p2)
 
 
 def assert_arrays_close(*arrays: jnp.array):
     """Make sure two arrays are close. (and not NaN)"""
-    for array1, array2 in zip(arrays[1:], arrays[:-1]):
+    for array1, array2 in zip(arrays[:-1], arrays[1:]):
         onp.testing.assert_allclose(array1, array2, rtol=1e-8, atol=1e-8)
         assert not onp.any(onp.isnan(array1))
         assert not onp.any(onp.isnan(array2))
@@ -72,7 +79,6 @@ def assert_arrays_close(*arrays: jnp.array):
 @general_group_test
 def test_closure(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check closure property."""
-
     transform_a = sample_transform(Group)
     transform_b = sample_transform(Group)
 
@@ -89,7 +95,6 @@ def test_closure(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 @general_group_test
 def test_identity(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check inverse property."""
-
     transform = sample_transform(Group)
     identity = Group.identity()
     assert_transforms_close(transform, identity @ transform)
@@ -105,7 +110,6 @@ def test_identity(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 @general_group_test
 def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check inverse property."""
-
     transform = sample_transform(Group)
     identity = Group.identity()
     assert_transforms_close(identity, transform @ transform.inverse())
@@ -125,7 +129,6 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 @general_group_test
 def test_associative(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check associativity property."""
-
     transform_a = sample_transform(Group)
     transform_b = sample_transform(Group)
     transform_c = sample_transform(Group)
@@ -158,6 +161,13 @@ def test_inverse_bijective(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check inverse of inverse."""
     transform = sample_transform(Group)
     assert_transforms_close(transform, transform.inverse().inverse())
+
+
+@general_group_test
+def test_matrix_recovery(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+    """Check that we can convert to and from matrices."""
+    transform = sample_transform(Group)
+    assert_transforms_close(transform, Group.from_matrix(transform.as_matrix()))
 
 
 ##############
@@ -199,6 +209,12 @@ def test_product(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Check product interfaces."""
     T_w_b = sample_transform(Group)
     T_b_a = sample_transform(Group)
+    assert_arrays_close(
+        T_w_b.as_matrix() @ T_w_b.inverse().as_matrix(), onp.eye(Group.matrix_dim)
+    )
+    assert_arrays_close(
+        T_w_b.as_matrix() @ jnp.linalg.inv(T_w_b.as_matrix()), onp.eye(Group.matrix_dim)
+    )
     assert_transforms_close(T_w_b @ T_b_a, Group.product(T_w_b, T_b_a))
 
 
@@ -207,7 +223,7 @@ def test_product(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 ##############
 
 
-@given(_random_module=st.randoms())
+@given(_random_module=st.random_module())
 def test_se2_translation(_random_module):
     """Simple test for SE(2) translation terms."""
     translation = onp.random.randn(2)
@@ -218,7 +234,7 @@ def test_se2_translation(_random_module):
     assert_arrays_close(T @ translation, translation * 2)
 
 
-@given(_random_module=st.randoms())
+@given(_random_module=st.random_module())
 def test_se3_translation(_random_module):
     """Simple test for SE(3) translation terms."""
     translation = onp.random.randn(3)
@@ -247,5 +263,17 @@ def test_se3_rotation():
         translation=onp.zeros(3),
     )
     p_b = onp.array([0.0, 1.0, 0.0])
-    p_w = onp.array([0.0, 0.0, -1.0])
+    p_w = onp.array([0.0, 0.0, 1.0])
     assert_arrays_close(T_w_b @ p_b, p_w)
+
+
+@settings(deadline=None)
+@given(_random_module=st.random_module())
+def test_se3_compose(_random_module):
+    """Compare SE3 composition in matrix form vs compact form."""
+    T1 = sample_transform(jaxlie.SE3)
+    T2 = sample_transform(jaxlie.SE3)
+    assert_arrays_close(T1.as_matrix() @ T2.as_matrix(), (T1 @ T2).as_matrix())
+    assert_transforms_close(
+        jaxlie.SE3.from_matrix(T1.as_matrix() @ T2.as_matrix()), T1 @ T2
+    )

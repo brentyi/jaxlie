@@ -12,5 +12,6 @@ __all__ = [
     "SO2",
     "SE2",
     "SO3",
+    "SE3",
     "register_lie_group",
 ]
