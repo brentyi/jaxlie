@@ -25,5 +25,5 @@ jobs:
           pip install -e .
       - name: Test with pytest
         run: |
-          pip install pytest
+          pip install -r tests/requirements.txt
           pytest
