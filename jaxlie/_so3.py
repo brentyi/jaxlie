@@ -39,7 +39,7 @@ class SO3(_base.MatrixLieGroup):
         Returns:
             SO3: Output.
         """
-        return SO3.log(jnp.array([theta, 0.0, 0.0]))
+        return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
     @staticmethod
     def from_y_radians(theta) -> "SO3":
@@ -51,7 +51,7 @@ class SO3(_base.MatrixLieGroup):
         Returns:
             SO3: Output.
         """
-        return SO3.log(jnp.array([0.0, theta, 0.0]))
+        return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
     @staticmethod
     def from_z_radians(theta) -> "SO3":
@@ -63,7 +63,7 @@ class SO3(_base.MatrixLieGroup):
         Returns:
             SO3: Output.
         """
-        return SO3.log(jnp.array([0.0, 0.0, theta]))
+        return SO3.exp(jnp.array([0.0, 0.0, theta]))
 
     @staticmethod
     def from_rpy_radians(roll, pitch, yaw) -> "SO3":
@@ -148,9 +148,9 @@ class SO3(_base.MatrixLieGroup):
         q = jnp.outer(q, q)
         return jnp.array(
             [
-                [1.0 - q[2, 2] - q[3, 3], q[1, 2] - q[3, 0], q[1, 3] + q[2, 0]],
-                [q[1, 2] + q[3, 0], 1.0 - q[1, 1] - q[3, 3], q[2, 3] - q[1, 0]],
-                [q[1, 3] - q[2, 0], q[2, 3] + q[1, 0], 1.0 - q[1, 1] - q[2, 2]],
+                [1.0 - q[2, 2] - q[3, 3], q[1, 2] + q[3, 0], q[1, 3] - q[2, 0]],
+                [q[1, 2] - q[3, 0], 1.0 - q[1, 1] - q[3, 3], q[2, 3] + q[1, 0]],
+                [q[1, 3] + q[2, 0], q[2, 3] - q[1, 0], 1.0 - q[1, 1] - q[2, 2]],
             ]
         )
 
@@ -167,7 +167,7 @@ class SO3(_base.MatrixLieGroup):
 
         # Compute using quaternion products
         padded_target = jnp.zeros(4).at[1:].set(target)
-        return (self.inverse() @ SO3(wxyz=padded_target) @ self).wxyz[1:]
+        return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
     @overrides
     def product(self: "SO3", other: "SO3") -> "SO3":
