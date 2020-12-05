@@ -1,0 +1,155 @@
+:orphan:
+
+:mod:`jaxlie._se2`
+==================
+
+.. py:module:: jaxlie._se2
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie._se2.SE2
+
+
+
+.. py:class:: SE2
+
+   Bases: :class:`jaxlie.MatrixLieGroup`
+
+   .. autoapi-inheritance-diagram:: jaxlie._se2.SE2
+      :parts: 1
+
+   Special Euclidean group for proper rigid transforms in 2D.
+
+   .. attribute:: xy_unit_complex
+      :annotation: :types.Vector
+
+      Internal parameters. ``(x, y, cos, sin)``.
+
+
+   .. method:: __repr__(self)
+
+      Return repr(self).
+
+
+   .. method:: from_xy_theta(x: float, y: float, theta: float) -> 'SE2'
+      :staticmethod:
+
+
+   .. method:: from_rotation_and_translation(rotation: Optional[SO2] = None, translation: types.Vector = onp.zeros(2)) -> 'SE2'
+      :staticmethod:
+
+
+   .. method:: rotation(self) -> SO2
+      :property:
+
+
+   .. method:: translation(self) -> types.Vector
+      :property:
+
+
+   .. method:: identity() -> 'SE2'
+      :staticmethod:
+
+      Returns identity element.
+
+      :returns: *types.Matrix* -- Identity.
+
+
+   .. method:: from_matrix(matrix: types.Matrix) -> 'SE2'
+      :staticmethod:
+
+      Get group member from matrix representation.
+
+      :param matrix: types.Matrix representaiton.
+      :type matrix: jnp.ndarray
+
+      :returns: *T* -- Group member.
+
+
+   .. method:: parameters(self) -> types.Vector
+      :property:
+
+      Get underlying representation.
+
+
+   .. method:: as_matrix(self) -> types.Matrix
+
+      Get transformation as a matrix. Homogeneous for SE groups.
+
+
+   .. method:: apply(self: SE2, target: types.Vector) -> types.Vector
+
+      Applies the group action.
+
+      :param target: types.Vector to transform.
+      :type target: types.Vector
+
+      :returns: *types.Vector* -- Transformed vector.
+
+
+   .. method:: multiply(self: SE2, other: SE2) -> 'SE2'
+
+      Left-multiplies this transformations with another.
+
+      :param other: other
+      :type other: T
+
+      :returns: *T* -- self @ other
+
+
+   .. method:: exp(tangent: types.TangentVector) -> 'SE2'
+      :staticmethod:
+
+      Computes ``expm(wedge(tangent))``.
+
+      :param tangent: Input.
+      :type tangent: types.TangentVector
+
+      :returns: *MatrixLieGroup* -- Output.
+
+
+   .. method:: log(self: SE2) -> types.TangentVector
+
+      Computes ``vee(logm(transformation matrix))``.
+
+      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+
+
+   .. method:: adjoint(self: SE2) -> types.Matrix
+
+      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+
+      More precisely, for a transform ``T``\ :
+
+      .. code-block::
+
+         T @ exp(omega) = exp(Adj_T @ omega) @ T
+
+      For robotics, typically used for converting twists, wrenches, and Jacobians
+      between our spatial and body representations.
+
+      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+
+
+   .. method:: inverse(self: SE2) -> 'SE2'
+
+      Computes the inverse of our transform.
+
+      :returns: *types.Matrix* -- Output.
+
+
+   .. method:: normalize(self: SE2) -> 'SE2'
+
+      Normalize/projects values and returns.
+
+      :returns: *T* -- Normalized group member.
+
+
+

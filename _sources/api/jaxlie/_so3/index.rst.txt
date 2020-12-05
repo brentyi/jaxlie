@@ -1,0 +1,182 @@
+:orphan:
+
+:mod:`jaxlie._so3`
+==================
+
+.. py:module:: jaxlie._so3
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie._so3.SO3
+
+
+
+.. py:class:: SO3
+
+   Bases: :class:`jaxlie.MatrixLieGroup`
+
+   .. autoapi-inheritance-diagram:: jaxlie._so3.SO3
+      :parts: 1
+
+   Special orthogonal group for 3D rotations.
+
+   .. attribute:: wxyz
+      :annotation: :types.Vector
+
+      Internal parameters. ``(w, x, y, z)`` quaternion.
+
+
+   .. method:: __repr__(self)
+
+      Return repr(self).
+
+
+   .. method:: from_x_radians(theta) -> 'SO3'
+      :staticmethod:
+
+      Generates a x-axis rotation.
+
+      :param angle: X rotation, in radians.
+
+      :returns: *SO3* -- Output.
+
+
+   .. method:: from_y_radians(theta) -> 'SO3'
+      :staticmethod:
+
+      Generates a y-axis rotation.
+
+      :param angle: Y rotation, in radians.
+
+      :returns: *SO3* -- Output.
+
+
+   .. method:: from_z_radians(theta) -> 'SO3'
+      :staticmethod:
+
+      Generates a z-axis rotation.
+
+      :param angle: Z rotation, in radians.
+
+      :returns: *SO3* -- Output.
+
+
+   .. method:: from_rpy_radians(roll, pitch, yaw) -> 'SO3'
+      :staticmethod:
+
+      Generates a transform from a set of Euler angles.
+      Uses the ZYX mobile robot convention.
+
+      :param roll: X rotation, in radians. Applied first.
+      :param pitch: Y rotation, in radians. Applied second.
+      :param yaw: Z rotation, in radians. Applied last.
+
+      :returns: *SO3* -- Output.
+
+
+   .. method:: identity() -> 'SO3'
+      :staticmethod:
+
+      Returns identity element.
+
+      :returns: *types.Matrix* -- Identity.
+
+
+   .. method:: from_matrix(matrix: types.Matrix) -> 'SO3'
+      :staticmethod:
+
+      Get group member from matrix representation.
+
+      :param matrix: types.Matrix representaiton.
+      :type matrix: jnp.ndarray
+
+      :returns: *T* -- Group member.
+
+
+   .. method:: as_matrix(self) -> types.Matrix
+
+      Get transformation as a matrix. Homogeneous for SE groups.
+
+
+   .. method:: parameters(self) -> types.Vector
+      :property:
+
+      Get underlying representation.
+
+
+   .. method:: apply(self: SO3, target: types.Vector) -> types.Vector
+
+      Applies the group action.
+
+      :param target: types.Vector to transform.
+      :type target: types.Vector
+
+      :returns: *types.Vector* -- Transformed vector.
+
+
+   .. method:: multiply(self: SO3, other: SO3) -> 'SO3'
+
+      Left-multiplies this transformations with another.
+
+      :param other: other
+      :type other: T
+
+      :returns: *T* -- self @ other
+
+
+   .. method:: exp(tangent: types.TangentVector) -> 'SO3'
+      :staticmethod:
+
+      Computes ``expm(wedge(tangent))``.
+
+      :param tangent: Input.
+      :type tangent: types.TangentVector
+
+      :returns: *MatrixLieGroup* -- Output.
+
+
+   .. method:: log(self: SO3) -> types.TangentVector
+
+      Computes ``vee(logm(transformation matrix))``.
+
+      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+
+
+   .. method:: adjoint(self: SO3) -> types.Matrix
+
+      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+
+      More precisely, for a transform ``T``\ :
+
+      .. code-block::
+
+         T @ exp(omega) = exp(Adj_T @ omega) @ T
+
+      For robotics, typically used for converting twists, wrenches, and Jacobians
+      between our spatial and body representations.
+
+      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+
+
+   .. method:: inverse(self: SO3) -> 'SO3'
+
+      Computes the inverse of our transform.
+
+      :returns: *types.Matrix* -- Output.
+
+
+   .. method:: normalize(self: SO3) -> 'SO3'
+
+      Normalize/projects values and returns.
+
+      :returns: *T* -- Normalized group member.
+
+
+

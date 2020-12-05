@@ -1,0 +1,143 @@
+:orphan:
+
+:mod:`jaxlie._so2`
+==================
+
+.. py:module:: jaxlie._so2
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie._so2.SO2
+
+
+
+.. py:class:: SO2
+
+   Bases: :class:`jaxlie.MatrixLieGroup`
+
+   .. autoapi-inheritance-diagram:: jaxlie._so2.SO2
+      :parts: 1
+
+   Special orthogonal group for 2D rotations.
+
+   .. attribute:: unit_complex
+      :annotation: :types.Vector
+
+      Internal parameters. ``(cos, sin)``.
+
+
+   .. method:: __repr__(self)
+
+      Return repr(self).
+
+
+   .. method:: from_radians(theta: float) -> 'SO2'
+      :staticmethod:
+
+
+   .. method:: identity() -> 'SO2'
+      :staticmethod:
+
+      Returns identity element.
+
+      :returns: *types.Matrix* -- Identity.
+
+
+   .. method:: from_matrix(matrix: types.Matrix) -> 'SO2'
+      :staticmethod:
+
+      Get group member from matrix representation.
+
+      :param matrix: types.Matrix representaiton.
+      :type matrix: jnp.ndarray
+
+      :returns: *T* -- Group member.
+
+
+   .. method:: as_matrix(self) -> types.Matrix
+
+      Get transformation as a matrix. Homogeneous for SE groups.
+
+
+   .. method:: parameters(self) -> types.Vector
+      :property:
+
+      Get underlying representation.
+
+
+   .. method:: apply(self: SO2, target: types.Vector) -> types.Vector
+
+      Applies the group action.
+
+      :param target: types.Vector to transform.
+      :type target: types.Vector
+
+      :returns: *types.Vector* -- Transformed vector.
+
+
+   .. method:: multiply(self: SO2, other: SO2) -> 'SO2'
+
+      Left-multiplies this transformations with another.
+
+      :param other: other
+      :type other: T
+
+      :returns: *T* -- self @ other
+
+
+   .. method:: exp(tangent: types.TangentVector) -> 'SO2'
+      :staticmethod:
+
+      Computes ``expm(wedge(tangent))``.
+
+      :param tangent: Input.
+      :type tangent: types.TangentVector
+
+      :returns: *MatrixLieGroup* -- Output.
+
+
+   .. method:: log(self: SO2) -> types.TangentVector
+
+      Computes ``vee(logm(transformation matrix))``.
+
+      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+
+
+   .. method:: adjoint(self: SO2) -> types.Matrix
+
+      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+
+      More precisely, for a transform ``T``\ :
+
+      .. code-block::
+
+         T @ exp(omega) = exp(Adj_T @ omega) @ T
+
+      For robotics, typically used for converting twists, wrenches, and Jacobians
+      between our spatial and body representations.
+
+      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+
+
+   .. method:: inverse(self: SO2) -> 'SO2'
+
+      Computes the inverse of our transform.
+
+      :returns: *types.Matrix* -- Output.
+
+
+   .. method:: normalize(self: SO2) -> 'SO2'
+
+      Normalize/projects values and returns.
+
+      :returns: *T* -- Normalized group member.
+
+
+

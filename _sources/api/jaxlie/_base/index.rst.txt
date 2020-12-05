@@ -1,0 +1,176 @@
+:orphan:
+
+:mod:`jaxlie._base`
+===================
+
+.. py:module:: jaxlie._base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie._base.MatrixLieGroup
+
+
+
+.. data:: T
+   
+
+   
+
+.. py:class:: MatrixLieGroup
+
+   Bases: :class:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: jaxlie._base.MatrixLieGroup
+      :parts: 1
+
+   Interface definition for matrix Lie groups.
+
+   .. attribute:: matrix_dim
+      :annotation: :int = 0
+
+      Dimension of square matrix output from ``.as_matrix()``.
+
+
+   .. attribute:: parameters_dim
+      :annotation: :int = 0
+
+      Dimension of underlying parameters, ``.parameters``.
+
+
+   .. attribute:: tangent_dim
+      :annotation: :int = 0
+
+      Dimension of tangent space.
+
+
+   .. attribute:: space_dim
+      :annotation: :int = 0
+
+      Dimension of coordinates that can be transformed.
+
+
+   .. method:: __matmul__(self: T, other: T) -> T
+               __matmul__(self: T, other: types.Vector) -> types.Vector
+
+      Overload for the ``@`` operator.
+
+      Switches between the group action (\ ``.apply()``\ ) and multiplication
+      (\ ``.multiply()``\ ) based on the type of ``other``.
+
+
+   .. method:: identity() -> 'MatrixLieGroup'
+      :staticmethod:
+      :abstractmethod:
+
+      Returns identity element.
+
+      :returns: *types.Matrix* -- Identity.
+
+
+   .. method:: from_matrix(matrix: types.Matrix) -> 'MatrixLieGroup'
+      :staticmethod:
+      :abstractmethod:
+
+      Get group member from matrix representation.
+
+      :param matrix: types.Matrix representaiton.
+      :type matrix: jnp.ndarray
+
+      :returns: *T* -- Group member.
+
+
+   .. method:: as_matrix(self) -> types.Matrix
+      :abstractmethod:
+
+      Get transformation as a matrix. Homogeneous for SE groups.
+
+
+   .. method:: parameters(self) -> types.Vector
+      :property:
+
+      Get underlying representation.
+
+
+   .. method:: apply(self: T, target: types.Vector) -> types.Vector
+      :abstractmethod:
+
+      Applies the group action.
+
+      :param target: types.Vector to transform.
+      :type target: types.Vector
+
+      :returns: *types.Vector* -- Transformed vector.
+
+
+   .. method:: multiply(self: T, other: T) -> T
+      :abstractmethod:
+
+      Left-multiplies this transformations with another.
+
+      :param other: other
+      :type other: T
+
+      :returns: *T* -- self @ other
+
+
+   .. method:: exp(tangent: types.TangentVector) -> 'MatrixLieGroup'
+      :staticmethod:
+      :abstractmethod:
+
+      Computes ``expm(wedge(tangent))``.
+
+      :param tangent: Input.
+      :type tangent: types.TangentVector
+
+      :returns: *MatrixLieGroup* -- Output.
+
+
+   .. method:: log(self: T) -> types.TangentVector
+      :abstractmethod:
+
+      Computes ``vee(logm(transformation matrix))``.
+
+      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+
+
+   .. method:: adjoint(self: T) -> types.Matrix
+      :abstractmethod:
+
+      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+
+      More precisely, for a transform ``T``\ :
+
+      .. code-block::
+
+         T @ exp(omega) = exp(Adj_T @ omega) @ T
+
+      For robotics, typically used for converting twists, wrenches, and Jacobians
+      between our spatial and body representations.
+
+      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+
+
+   .. method:: inverse(self: T) -> T
+      :abstractmethod:
+
+      Computes the inverse of our transform.
+
+      :returns: *types.Matrix* -- Output.
+
+
+   .. method:: normalize(self: T) -> T
+      :abstractmethod:
+
+      Normalize/projects values and returns.
+
+      :returns: *T* -- Normalized group member.
+
+
+

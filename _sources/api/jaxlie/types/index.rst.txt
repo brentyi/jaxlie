@@ -1,0 +1,57 @@
+:mod:`jaxlie.types`
+===================
+
+.. py:module:: jaxlie.types
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.types.Matrix
+   jaxlie.types.Vector
+   jaxlie.types.TangentVector
+
+
+
+.. py:class:: Matrix(shape, dtype=float, buffer=None, offset=0, strides=None, order=None)
+
+   Bases: :class:`jax.numpy.ndarray`
+
+   .. autoapi-inheritance-diagram:: jaxlie.types.Matrix
+      :parts: 1
+
+   Type alias for ``jnp.ndarray``. Should not be instantiated.
+
+   Refers to a square matrix, typically with shape ``(Group.matrix_dim, Group.matrix_dim)``.
+   For adjoints, shape should be ``(Group.tangent_dim, Group.tangent_dim)``.
+
+
+.. py:class:: Vector(shape, dtype=float, buffer=None, offset=0, strides=None, order=None)
+
+   Bases: :class:`jax.numpy.ndarray`
+
+   .. autoapi-inheritance-diagram:: jaxlie.types.Vector
+      :parts: 1
+
+   Type alias for ``jnp.ndarray``. Should not be instantiated.
+
+   Refers to a general 1D array.
+
+
+.. py:class:: TangentVector(shape, dtype=float, buffer=None, offset=0, strides=None, order=None)
+
+   Bases: :class:`jax.numpy.ndarray`
+
+   .. autoapi-inheritance-diagram:: jaxlie.types.TangentVector
+      :parts: 1
+
+   Type alias for ``jnp.ndarray``. Should not be instantiated.
+
+   Refers to a 1D array with shape ``(Group.tangent_dim,)``.
+
+

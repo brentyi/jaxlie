@@ -1,0 +1,5 @@
+<map id="inheritance122bbc4208" name="inheritance122bbc4208">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,247,31"/>
+<area shape="rect" id="node3" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="295,5,367,31"/>
+</map>

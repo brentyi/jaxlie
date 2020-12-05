@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jaxlie._base &mdash; jaxlie  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../" class="icon icon-home" alt="Documentation Home"> jaxlie
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
+</ul>
+<p class="caption"><span class="caption-text">Example usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">jaxlie</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../">Module code</a> &raquo;</li>
+        
+      <li>jaxlie._base</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for jaxlie._base</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">types</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MatrixLieGroup"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup">[docs]</a><span class="k">class</span> <span class="nc">MatrixLieGroup</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Interface definition for matrix Lie groups.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Class properties</span>
+    <span class="c1"># &gt; These will be set in `_utils.register_lie_group()`</span>
+
+    <span class="n">matrix_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;Dimension of square matrix output from `.as_matrix()`.&quot;&quot;&quot;</span>
+
+    <span class="n">parameters_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;Dimension of underlying parameters, `.parameters`.&quot;&quot;&quot;</span>
+
+    <span class="n">tangent_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;Dimension of tangent space.&quot;&quot;&quot;</span>
+
+    <span class="n">space_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;Dimension of coordinates that can be transformed.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Shared implementations</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="MatrixLieGroup.__matmul__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.__matmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Overload for the `@` operator.</span>
+
+<span class="sd">        Switches between the group action (`.apply()`) and multiplication</span>
+<span class="sd">        (`.multiply()`) based on the type of `other`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Invalid argument&quot;</span></div>
+
+    <span class="c1"># Factory</span>
+
+<div class="viewcode-block" id="MatrixLieGroup.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.identity">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Returns identity element.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            types.Matrix: Identity.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get group member from matrix representation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            matrix (jnp.ndarray): types.Matrix representaiton.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            T: Group member.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="c1"># Accessors</span>
+
+<div class="viewcode-block" id="MatrixLieGroup.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.as_matrix">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get transformation as a matrix. Homogeneous for SE groups.&quot;&quot;&quot;</span></div>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get underlying representation.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Operations</span>
+
+<div class="viewcode-block" id="MatrixLieGroup.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Applies the group action.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            target (types.Vector): types.Vector to transform.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            types.Vector: Transformed vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.multiply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Left-multiplies this transformations with another.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other (T): other</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            T: self @ other</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.exp">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Computes `expm(wedge(tangent))`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tangent (types.TangentVector): Input.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            MatrixLieGroup: Output.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.log">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Computes `vee(logm(transformation matrix))`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            types.TangentVector: Output. Shape should be `(tangent_dim,)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.adjoint">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Computes the adjoint, which transforms tangent vectors between tangent spaces.</span>
+
+<span class="sd">        More precisely, for a transform `T`:</span>
+<span class="sd">        ```</span>
+<span class="sd">        T @ exp(omega) = exp(Adj_T @ omega) @ T</span>
+<span class="sd">        ```</span>
+
+<span class="sd">        For robotics, typically used for converting twists, wrenches, and Jacobians</span>
+<span class="sd">        between our spatial and body representations.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            types.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.inverse"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.inverse">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Computes the inverse of our transform.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            types.Matrix: Output.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.normalize"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.normalize">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Normalize/projects values and returns.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            T: Normalized group member.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
