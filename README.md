@@ -5,10 +5,12 @@
 ![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
 
-Matrix Lie groups for rigid body transformations in Jax. Implements
-pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with support for
-(exp, log, adjoint, product, inverse, identity) operations. Borrows heavily from
-the C++ library [Sophus](https://github.com/strasdat/Sophus).
+**[ [API reference](https://brentyi.github.io/jaxlie) ]**
+
+`jaxlie` is a Lie theory library for rigid body transformations in Jax.
+Implements pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with
+support for (exp, log, adjoint, multiply, inverse, identity) operations. Borrows
+heavily from the C++ library [Sophus](https://github.com/strasdat/Sophus).
 
 ---
 
@@ -78,8 +80,8 @@ T_b_a = SE3.identity()
 T_w_a = T_w_b @ T_b_a
 print(T_w_a)
 
-# or `.product()`:
-T_w_a = T_w_b.product(T_b_a)
+# or `.multiply()`:
+T_w_a = T_w_b.multiply(T_b_a)
 print(T_w_a)
 
 

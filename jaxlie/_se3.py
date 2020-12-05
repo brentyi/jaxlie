@@ -6,9 +6,8 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base
+from . import _base, types
 from ._so3 import SO3
-from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
 
@@ -33,11 +32,12 @@ def _skew(omega: jnp.ndarray) -> jnp.ndarray:
 )
 @dataclasses.dataclass(frozen=True)
 class SE3(_base.MatrixLieGroup):
+    """Special Euclidean group for proper rigid transforms in 3D."""
 
     # SE3-specific
 
-    xyz_wxyz: Vector
-    """Internal parameters; length-3 translation followed by wxyz quaternion."""
+    xyz_wxyz: types.Vector
+    """Internal parameters. Length-3 translation followed by wxyz quaternion."""
 
     @overrides
     def __repr__(self):
@@ -48,7 +48,7 @@ class SE3(_base.MatrixLieGroup):
     @staticmethod
     def from_rotation_and_translation(
         rotation: Optional[SO3] = None,
-        translation: Vector = onp.zeros(3),
+        translation: types.Vector = onp.zeros(3),
     ) -> "SE3":
         assert translation.shape == (3,)
 
@@ -63,7 +63,7 @@ class SE3(_base.MatrixLieGroup):
         return SO3(wxyz=self.xyz_wxyz[3:])
 
     @property
-    def translation(self) -> Vector:
+    def translation(self) -> types.Vector:
         return self.xyz_wxyz[:3]
 
     # Factory
@@ -75,7 +75,7 @@ class SE3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: Matrix) -> "SE3":
+    def from_matrix(matrix: types.Matrix) -> "SE3":
         assert matrix.shape == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1]
         return SE3.from_rotation_and_translation(
@@ -86,7 +86,7 @@ class SE3(_base.MatrixLieGroup):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> Matrix:
+    def as_matrix(self) -> types.Matrix:
         return (
             jnp.eye(4)
             .at[:3, :3]
@@ -97,18 +97,18 @@ class SE3(_base.MatrixLieGroup):
 
     @property  # type: ignore
     @overrides
-    def parameters(self) -> Vector:
+    def parameters(self) -> types.Vector:
         return self.xyz_wxyz
 
     # Operations
 
     @overrides
-    def apply(self: "SE3", target: Vector) -> Vector:
+    def apply(self: "SE3", target: types.Vector) -> types.Vector:
         assert target.shape == (3,)
         return self.rotation @ target + self.translation
 
     @overrides
-    def product(self: "SE3", other: "SE3") -> "SE3":
+    def multiply(self: "SE3", other: "SE3") -> "SE3":
         return SE3.from_rotation_and_translation(
             rotation=self.rotation @ other.rotation,
             translation=(self.rotation @ other.translation) + self.translation,
@@ -116,7 +116,7 @@ class SE3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def exp(tangent: TangentVector) -> "SE3":
+    def exp(tangent: types.TangentVector) -> "SE3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
         assert tangent.shape == (6,)
@@ -156,7 +156,7 @@ class SE3(_base.MatrixLieGroup):
         )
 
     @overrides
-    def log(self: "SE3") -> TangentVector:
+    def log(self: "SE3") -> types.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation.log()
@@ -190,7 +190,7 @@ class SE3(_base.MatrixLieGroup):
         return jnp.concatenate([V_inv @ self.translation, omega])
 
     @overrides
-    def adjoint(self: "SE3") -> Matrix:
+    def adjoint(self: "SE3") -> types.Matrix:
         R = self.rotation.as_matrix()
         return jnp.block(
             [

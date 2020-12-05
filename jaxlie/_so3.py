@@ -5,8 +5,7 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base
-from ._types import Matrix, TangentVector, Vector
+from . import _base, types
 from ._utils import get_epsilon, register_lie_group
 
 
@@ -18,11 +17,12 @@ from ._utils import get_epsilon, register_lie_group
 )
 @dataclasses.dataclass(frozen=True)
 class SO3(_base.MatrixLieGroup):
+    """Special orthogonal group for 3D rotations."""
 
     # SO3-specific
 
-    wxyz: Vector
-    """Internal parameters; wxyz quaternion."""
+    wxyz: types.Vector
+    """Internal parameters. `(w, x, y, z)` quaternion."""
 
     @overrides
     def __repr__(self):
@@ -93,11 +93,11 @@ class SO3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: Matrix) -> "SO3":
+    def from_matrix(matrix: types.Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
 
         # Modified from:
-        # > "Converting a Rotation Matrix to a Quaternion" from Mike Day
+        # > "Converting a Rotation types.Matrix to a Quaternion" from Mike Day
         # > https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
 
         def case0(m):
@@ -142,7 +142,7 @@ class SO3(_base.MatrixLieGroup):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> Matrix:
+    def as_matrix(self) -> types.Matrix:
         norm = self.wxyz @ self.wxyz
         q = self.wxyz * jnp.sqrt(2.0 / norm)
         q = jnp.outer(q, q)
@@ -156,21 +156,21 @@ class SO3(_base.MatrixLieGroup):
 
     @property  # type: ignore
     @overrides
-    def parameters(self) -> Vector:
+    def parameters(self) -> types.Vector:
         return self.wxyz
 
     # Operations
 
     @overrides
-    def apply(self: "SO3", target: Vector) -> Vector:
+    def apply(self: "SO3", target: types.Vector) -> types.Vector:
         assert target.shape == (3,)
 
-        # Compute using quaternion products
+        # Compute using quaternion multiplys
         padded_target = jnp.zeros(4).at[1:].set(target)
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
     @overrides
-    def product(self: "SO3", other: "SO3") -> "SO3":
+    def multiply(self: "SO3", other: "SO3") -> "SO3":
         w0, x0, y0, z0 = self.wxyz
         w1, x1, y1, z1 = other.wxyz
         return SO3(
@@ -186,7 +186,7 @@ class SO3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def exp(tangent: TangentVector) -> "SO3":
+    def exp(tangent: types.TangentVector) -> "SO3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583
 
@@ -225,7 +225,7 @@ class SO3(_base.MatrixLieGroup):
         )
 
     @overrides
-    def log(self: "SO3") -> TangentVector:
+    def log(self: "SO3") -> types.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
@@ -263,7 +263,7 @@ class SO3(_base.MatrixLieGroup):
         return atan_factor * self.wxyz[1:]
 
     @overrides
-    def adjoint(self: "SO3") -> Matrix:
+    def adjoint(self: "SO3") -> types.Matrix:
         return self.as_matrix()
 
     @overrides

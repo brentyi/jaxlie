@@ -1,0 +1,6 @@
+sphinx
+sphinx_rtd_theme
+sphinx_math_dollar
+sphinx-autoapi==1.5.0
+graphviz
+m2r

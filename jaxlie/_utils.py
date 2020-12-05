@@ -27,11 +27,24 @@ def register_lie_group(
     tangent_dim: int,
     space_dim: int,
 ) -> Callable[[Type[T]], Type[T]]:
-    """Process a Lie group dataclass:
+    """Decorator for registering Lie group dataclasses.
     - Sets static dimensionality attributes
     - Makes the group hashable
     - Marks all functions for JIT compilation
     - Adds flattening/unflattening ops for use as a PyTree node
+
+    Example:
+    ```
+    @register_lie_group(
+        matrix_dim=2,
+        parameters_dim=2,
+        tangent_dim=1,
+        space_dim=2,
+    )
+    @dataclasses.dataclass(frozen=True)
+    class SO2(_base.MatrixLieGroup):
+        ...
+    ```
     """
 
     def _wrap(cls: Type[T]) -> Type[T]:

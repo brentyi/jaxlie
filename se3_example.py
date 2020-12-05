@@ -61,8 +61,8 @@ T_b_a = SE3.identity()
 T_w_a = T_w_b @ T_b_a
 print(T_w_a)
 
-# or `.product()`:
-T_w_a = T_w_b.product(T_b_a)
+# or `.multiply()`:
+T_w_a = T_w_b.multiply(T_b_a)
 print(T_w_a)
 
 

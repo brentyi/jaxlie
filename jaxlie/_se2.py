@@ -6,9 +6,8 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base
+from . import _base, types
 from ._so2 import SO2
-from ._types import Matrix, TangentVector, Vector
 from ._utils import get_epsilon, register_lie_group
 
 
@@ -20,11 +19,12 @@ from ._utils import get_epsilon, register_lie_group
 )
 @dataclasses.dataclass(frozen=True)
 class SE2(_base.MatrixLieGroup):
+    """Special Euclidean group for proper rigid transforms in 2D."""
 
     # SE2-specific
 
-    xy_unit_complex: Vector
-    """Internal parameterization: `(x, y, cos, sin)`."""
+    xy_unit_complex: types.Vector
+    """Internal parameters. `(x, y, cos, sin)`."""
 
     @overrides
     def __repr__(self):
@@ -41,7 +41,7 @@ class SE2(_base.MatrixLieGroup):
     @staticmethod
     def from_rotation_and_translation(
         rotation: Optional[SO2] = None,
-        translation: Vector = onp.zeros(2),
+        translation: types.Vector = onp.zeros(2),
     ) -> "SE2":
         assert translation.shape == (2,)
 
@@ -58,7 +58,7 @@ class SE2(_base.MatrixLieGroup):
         return SO2(unit_complex=self.xy_unit_complex[2:])
 
     @property
-    def translation(self) -> Vector:
+    def translation(self) -> types.Vector:
         return self.xy_unit_complex[:2]
 
     # Factory
@@ -70,7 +70,7 @@ class SE2(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: Matrix) -> "SE2":
+    def from_matrix(matrix: types.Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
         # Currently assumes bottom row is [0, 0, 1]
         return SE2.from_rotation_and_translation(
@@ -82,11 +82,11 @@ class SE2(_base.MatrixLieGroup):
 
     @property  # type: ignore
     @overrides
-    def parameters(self) -> Vector:
+    def parameters(self) -> types.Vector:
         return self.xy_unit_complex
 
     @overrides
-    def as_matrix(self) -> Matrix:
+    def as_matrix(self) -> types.Matrix:
         x, y, cos, sin = self.xy_unit_complex
         return jnp.array(
             [
@@ -99,11 +99,11 @@ class SE2(_base.MatrixLieGroup):
     # Operations
 
     @overrides
-    def apply(self: "SE2", target: Vector) -> Vector:
+    def apply(self: "SE2", target: types.Vector) -> types.Vector:
         return self.rotation @ target + self.translation
 
     @overrides
-    def product(self: "SE2", other: "SE2") -> "SE2":
+    def multiply(self: "SE2", other: "SE2") -> "SE2":
         # Apply rotation to both the rotation and translation terms of `other`
         xy_unit_complex = jax.vmap(self.rotation.apply)(
             other.xy_unit_complex.reshape((2, 2))
@@ -116,7 +116,7 @@ class SE2(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def exp(tangent: TangentVector) -> "SE2":
+    def exp(tangent: types.TangentVector) -> "SE2":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
         # Also see:
@@ -156,7 +156,7 @@ class SE2(_base.MatrixLieGroup):
         )
 
     @overrides
-    def log(self: "SE2") -> TangentVector:
+    def log(self: "SE2") -> types.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
@@ -187,7 +187,7 @@ class SE2(_base.MatrixLieGroup):
         return tangent
 
     @overrides
-    def adjoint(self: "SE2") -> Matrix:
+    def adjoint(self: "SE2") -> types.Matrix:
         x, y, cos, sin = self.xy_unit_complex
         return jnp.array(
             [

@@ -87,9 +87,9 @@ def test_closure(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     assert_transforms_close(composed, composed.normalize())
     composed = transform_b @ transform_a
     assert_transforms_close(composed, composed.normalize())
-    composed = Group.product(transform_a, transform_b)
+    composed = Group.multiply(transform_a, transform_b)
     assert_transforms_close(composed, composed.normalize())
-    composed = Group.product(transform_b, transform_a)
+    composed = Group.multiply(transform_b, transform_a)
     assert_transforms_close(composed, composed.normalize())
 
 
@@ -115,8 +115,8 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     identity = Group.identity()
     assert_transforms_close(identity, transform @ transform.inverse())
     assert_transforms_close(identity, transform.inverse() @ transform)
-    assert_transforms_close(identity, Group.product(transform, transform.inverse()))
-    assert_transforms_close(identity, Group.product(transform.inverse(), transform))
+    assert_transforms_close(identity, Group.multiply(transform, transform.inverse()))
+    assert_transforms_close(identity, Group.multiply(transform.inverse(), transform))
     assert_arrays_close(
         onp.eye(Group.matrix_dim),
         transform.as_matrix() @ transform.inverse().as_matrix(),
@@ -196,7 +196,7 @@ def test_repr(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 @general_group_test
 def test_apply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
-    """Check product interfaces."""
+    """Check multiply interfaces."""
     T_w_b = sample_transform(Group)
     p_b = onp.random.randn(Group.space_dim)
 
@@ -217,8 +217,8 @@ def test_apply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_product(Group: Type[jaxlie.MatrixLieGroup], _random_module):
-    """Check product interfaces."""
+def test_multiply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+    """Check multiply interfaces."""
     T_w_b = sample_transform(Group)
     T_b_a = sample_transform(Group)
     assert_arrays_close(
@@ -227,7 +227,7 @@ def test_product(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     assert_arrays_close(
         T_w_b.as_matrix() @ jnp.linalg.inv(T_w_b.as_matrix()), onp.eye(Group.matrix_dim)
     )
-    assert_transforms_close(T_w_b @ T_b_a, Group.product(T_w_b, T_b_a))
+    assert_transforms_close(T_w_b @ T_b_a, Group.multiply(T_w_b, T_b_a))
 
 
 ##############

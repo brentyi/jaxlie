@@ -1,12 +1,13 @@
 import abc
 from typing import TypeVar, overload
 
-from ._types import Matrix, TangentVector, Vector
+from . import types
 
 T = TypeVar("T", bound="MatrixLieGroup")
 
 
 class MatrixLieGroup(abc.ABC):
+    """Interface definition for matrix Lie groups."""
 
     # Class properties
     # > These will be set in `_utils.register_lie_group()`
@@ -30,17 +31,19 @@ class MatrixLieGroup(abc.ABC):
         ...
 
     @overload
-    def __matmul__(self: T, other: Vector) -> Vector:
+    def __matmul__(self: T, other: types.Vector) -> types.Vector:
         ...
 
     def __matmul__(self, other):
-        """Operator overload, for composing transformations and/or applying them to
-        points.
+        """Overload for the `@` operator.
+
+        Switches between the group action (`.apply()`) and multiplication
+        (`.multiply()`) based on the type of `other`.
         """
-        if isinstance(other, Vector):
+        if isinstance(other, types.Vector):
             return self.apply(target=other)
         if isinstance(other, MatrixLieGroup):
-            return self.product(other=other)
+            return self.multiply(other=other)
         else:
             assert False, "Invalid argument"
 
@@ -52,16 +55,16 @@ class MatrixLieGroup(abc.ABC):
         """Returns identity element.
 
         Returns:
-            Matrix: Identity.
+            types.Matrix: Identity.
         """
 
     @staticmethod
     @abc.abstractmethod
-    def from_matrix(matrix: Matrix) -> "MatrixLieGroup":
+    def from_matrix(matrix: types.Matrix) -> "MatrixLieGroup":
         """Get group member from matrix representation.
 
         Args:
-            matrix (jnp.ndarray): Matrix representaiton.
+            matrix (jnp.ndarray): types.Matrix representaiton.
 
         Returns:
             T: Group member.
@@ -70,29 +73,29 @@ class MatrixLieGroup(abc.ABC):
     # Accessors
 
     @abc.abstractmethod
-    def as_matrix(self) -> Matrix:
+    def as_matrix(self) -> types.Matrix:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @property
     @abc.abstractmethod
-    def parameters(self) -> Vector:
+    def parameters(self) -> types.Vector:
         """Get underlying representation."""
 
     # Operations
 
     @abc.abstractmethod
-    def apply(self: T, target: Vector) -> Vector:
-        """Applies transformation to a vector.
+    def apply(self: T, target: types.Vector) -> types.Vector:
+        """Applies the group action.
 
         Args:
-            target (Vector): Vector to transform.
+            target (types.Vector): types.Vector to transform.
 
         Returns:
-            Vector: Transformed vector.
+            types.Vector: Transformed vector.
         """
 
     @abc.abstractmethod
-    def product(self: T, other: T) -> T:
+    def multiply(self: T, other: T) -> T:
         """Left-multiplies this transformations with another.
 
         Args:
@@ -104,26 +107,26 @@ class MatrixLieGroup(abc.ABC):
 
     @staticmethod
     @abc.abstractmethod
-    def exp(tangent: TangentVector) -> "MatrixLieGroup":
+    def exp(tangent: types.TangentVector) -> "MatrixLieGroup":
         """Computes `expm(wedge(tangent))`.
 
         Args:
-            tangent (TangentVector): Input.
+            tangent (types.TangentVector): Input.
 
         Returns:
             MatrixLieGroup: Output.
         """
 
     @abc.abstractmethod
-    def log(self: T) -> TangentVector:
+    def log(self: T) -> types.TangentVector:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
-            TangentVector: Output. Shape should be `(tangent_dim,)`.
+            types.TangentVector: Output. Shape should be `(tangent_dim,)`.
         """
 
     @abc.abstractmethod
-    def adjoint(self: T) -> Matrix:
+    def adjoint(self: T) -> types.Matrix:
         """Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
         More precisely, for a transform `T`:
@@ -135,7 +138,7 @@ class MatrixLieGroup(abc.ABC):
         between our spatial and body representations.
 
         Returns:
-            Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
+            types.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
         """
 
     @abc.abstractmethod
@@ -143,7 +146,7 @@ class MatrixLieGroup(abc.ABC):
         """Computes the inverse of our transform.
 
         Returns:
-            Matrix: Output.
+            types.Matrix: Output.
         """
 
     @abc.abstractmethod

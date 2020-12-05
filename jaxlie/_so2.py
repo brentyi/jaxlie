@@ -4,8 +4,7 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base
-from ._types import Matrix, TangentVector, Vector
+from . import _base, types
 from ._utils import register_lie_group
 
 
@@ -17,11 +16,12 @@ from ._utils import register_lie_group
 )
 @dataclasses.dataclass(frozen=True)
 class SO2(_base.MatrixLieGroup):
+    """Special orthogonal group for 2D rotations."""
 
     # SO2-specific
 
-    unit_complex: Vector
-    """Internal parameterization: `(cos, sin)`."""
+    unit_complex: types.Vector
+    """Internal parameters. `(cos, sin)`."""
 
     @overrides
     def __repr__(self):
@@ -43,14 +43,14 @@ class SO2(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: Matrix) -> "SO2":
+    def from_matrix(matrix: types.Matrix) -> "SO2":
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=matrix[:, 0])
 
     # Accessors
 
     @overrides
-    def as_matrix(self) -> Matrix:
+    def as_matrix(self) -> types.Matrix:
         cos, sin = self.unit_complex
         return jnp.array(
             [
@@ -61,34 +61,34 @@ class SO2(_base.MatrixLieGroup):
 
     @property  # type: ignore
     @overrides
-    def parameters(self) -> Vector:
+    def parameters(self) -> types.Vector:
         return self.unit_complex
 
     # Operations
 
     @overrides
-    def apply(self: "SO2", target: Vector) -> Vector:
+    def apply(self: "SO2", target: types.Vector) -> types.Vector:
         assert target.shape == (2,)
         return self.as_matrix() @ target
 
     @overrides
-    def product(self: "SO2", other: "SO2") -> "SO2":
+    def multiply(self: "SO2", other: "SO2") -> "SO2":
         return SO2(unit_complex=self.as_matrix() @ other.unit_complex)
 
     @staticmethod
     @overrides
-    def exp(tangent: TangentVector) -> "SO2":
+    def exp(tangent: types.TangentVector) -> "SO2":
         assert tangent.shape == (1,)
         cos = jnp.cos(tangent[0])
         sin = jnp.sin(tangent[0])
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides
-    def log(self: "SO2") -> TangentVector:
+    def log(self: "SO2") -> types.TangentVector:
         return jnp.arctan2(self.unit_complex[1, None], self.unit_complex[0, None])
 
     @overrides
-    def adjoint(self: "SO2") -> Matrix:
+    def adjoint(self: "SO2") -> types.Matrix:
         return jnp.eye(1)
 
     @overrides

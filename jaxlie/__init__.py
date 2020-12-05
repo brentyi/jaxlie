@@ -1,4 +1,4 @@
-from . import _types as types
+from . import types
 from ._base import MatrixLieGroup
 from ._se2 import SE2
 from ._se3 import SE3
@@ -9,9 +9,10 @@ from ._utils import register_lie_group
 __all__ = [
     "types",
     "MatrixLieGroup",
-    "SO2",
     "SE2",
-    "SO3",
+    "SO2",
     "SE3",
+    "SO3",
+    "types",
     "register_lie_group",
 ]
