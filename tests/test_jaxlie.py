@@ -1,12 +1,13 @@
 from typing import Type
 
-import jaxlie
 import numpy as onp
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
 from jax.config import config
+
+import jaxlie
 
 # Run all tests with double-precision
 config.update("jax_enable_x64", True)
@@ -56,8 +57,8 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
         p1 = p1 * jnp.sign(jnp.sum(p1))
         p2 = p2 * jnp.sign(jnp.sum(p2))
     elif isinstance(a, jaxlie.SE3):
-        p1 = a.parameters.at[3:].mul(jnp.sign(jnp.sum(p1[3:])))
-        p2 = b.parameters.at[3:].mul(jnp.sign(jnp.sum(p2[3:])))
+        p1 = p1.at[3:].mul(jnp.sign(jnp.sum(p1[3:])))
+        p2 = p2.at[3:].mul(jnp.sign(jnp.sum(p2[3:])))
 
     # Make sure parameters are equal
     assert_arrays_close(p1, p2)
@@ -176,6 +177,17 @@ def test_matrix_recovery(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
+def test_adjoint(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+    """Check adjoint definition."""
+    transform = sample_transform(Group)
+    omega = onp.random.randn(Group.tangent_dim)
+    assert_transforms_close(
+        transform @ Group.exp(omega),
+        Group.exp(transform.adjoint() @ omega) @ transform,
+    )
+
+
+@general_group_test
 def test_repr(Group: Type[jaxlie.MatrixLieGroup], _random_module):
     """Smoke test for __repr__ implementations."""
     transform = sample_transform(Group)
@@ -219,7 +231,7 @@ def test_product(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 ##############
-# Tests: simple direction checks
+# Tests: simple transforms
 ##############
 
 

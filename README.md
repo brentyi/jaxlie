@@ -7,8 +7,8 @@
 
 Matrix Lie groups for rigid body transformations in Jax. Implements
 pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with support for
-(exp, log, product, inverse, identity) operations. Borrows heavily from the C++
-library [Sophus](https://github.com/strasdat/Sophus).
+(exp, log, adjoint, product, inverse, identity) operations. Borrows heavily from
+the C++ library [Sophus](https://github.com/strasdat/Sophus).
 
 ---
 
@@ -91,6 +91,10 @@ print(T_w_a)
 T_b_w = T_w_b.inverse()
 identity = T_w_b @ T_b_w
 print(identity)
+
+# Compute adjoints:
+adjoint_T_w_b = T_w_b.adjoint()
+print(adjoint_T_w_b)
 
 # Recover our twist, equivalent to `vee(logm(T_w_b.as_matrix()))`:
 twist = T_w_b.log()

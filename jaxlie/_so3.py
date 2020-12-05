@@ -263,6 +263,10 @@ class SO3(_base.MatrixLieGroup):
         return atan_factor * self.wxyz[1:]
 
     @overrides
+    def adjoint(self: "SO3") -> Matrix:
+        return self.as_matrix()
+
+    @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
         return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))

@@ -75,6 +75,10 @@ T_b_w = T_w_b.inverse()
 identity = T_w_b @ T_b_w
 print(identity)
 
+# Compute adjoints:
+adjoint_T_w_b = T_w_b.adjoint()
+print(adjoint_T_w_b)
+
 # Recover our twist, equivalent to `vee(logm(T_w_b.as_matrix()))`:
 twist = T_w_b.log()
 print(twist)

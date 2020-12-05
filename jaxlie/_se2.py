@@ -187,6 +187,17 @@ class SE2(_base.MatrixLieGroup):
         return tangent
 
     @overrides
+    def adjoint(self: "SE2") -> Matrix:
+        x, y, cos, sin = self.xy_unit_complex
+        return jnp.array(
+            [
+                [cos, -sin, y],
+                [sin, cos, -x],
+                [0.0, 0.0, 1.0],
+            ]
+        )
+
+    @overrides
     def inverse(self: "SE2") -> "SE2":
         R_inv = self.rotation.inverse()
         return SE2.from_rotation_and_translation(

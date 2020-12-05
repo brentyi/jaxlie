@@ -88,6 +88,10 @@ class SO2(_base.MatrixLieGroup):
         return jnp.arctan2(self.unit_complex[1, None], self.unit_complex[0, None])
 
     @overrides
+    def adjoint(self: "SO2") -> Matrix:
+        return jnp.eye(1)
+
+    @overrides
     def inverse(self: "SO2") -> "SO2":
         return SO2(unit_complex=self.unit_complex * onp.array([1, -1]))
 

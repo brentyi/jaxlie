@@ -190,6 +190,16 @@ class SE3(_base.MatrixLieGroup):
         return jnp.concatenate([V_inv @ self.translation, omega])
 
     @overrides
+    def adjoint(self: "SE3") -> Matrix:
+        R = self.rotation.as_matrix()
+        return jnp.block(
+            [
+                [R, _skew(self.translation) @ R],
+                [jnp.zeros((3, 3)), R],
+            ]
+        )
+
+    @overrides
     def inverse(self: "SE3") -> "SE3":
         R_inv = self.rotation.inverse()
         return SE3.from_rotation_and_translation(

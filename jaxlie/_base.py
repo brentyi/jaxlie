@@ -111,7 +111,7 @@ class MatrixLieGroup(abc.ABC):
             tangent (TangentVector): Input.
 
         Returns:
-            Matrix: Output.
+            MatrixLieGroup: Output.
         """
 
     @abc.abstractmethod
@@ -119,7 +119,23 @@ class MatrixLieGroup(abc.ABC):
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
-            TangentVector: Output.
+            TangentVector: Output. Shape should be `(tangent_dim,)`.
+        """
+
+    @abc.abstractmethod
+    def adjoint(self: T) -> Matrix:
+        """Computes the adjoint, which transforms tangent vectors between tangent spaces.
+
+        More precisely, for a transform `T`:
+        ```
+        T @ exp(omega) = exp(Adj_T @ omega) @ T
+        ```
+
+        For robotics, typically used for converting twists, wrenches, and Jacobians
+        between our spatial and body representations.
+
+        Returns:
+            Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
         """
 
     @abc.abstractmethod
