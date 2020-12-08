@@ -3,7 +3,11 @@ jaxlie documentation
 
 |build| |nbsp| |mypy| |nbsp| |lint| |nbsp| |coverage|
 
-`jaxlie` is a library for discrete-time Bayesian filtering in PyTorch.
+`jaxlie` is a Lie theory library for rigid body transformations in Jax. Implements
+pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with support for
+(exp, log, adjoint, multiply, inverse, identity) operations. Borrows heavily from
+the C++ library `Sophus <https://github.com/strasdat/Sophus>`_.
+
 Source code on `Github <https://github.com/brentyi/jaxlie>`_.
 
 .. toctree::
