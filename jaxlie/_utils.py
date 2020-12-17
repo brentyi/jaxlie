@@ -1,4 +1,3 @@
-import dataclasses
 from typing import TYPE_CHECKING, Callable, Tuple, Type, TypeVar
 
 import jax
@@ -69,7 +68,7 @@ def register_lie_group(
             v: "MatrixLieGroup",
         ) -> Tuple[Tuple[jnp.ndarray, ...], Tuple]:
             """Flatten a dataclass for use as a PyTree."""
-            as_dict = dataclasses.asdict(v)
+            as_dict = vars(v)
             return tuple(as_dict.values()), tuple(as_dict.keys())
 
         def _unflatten_group(
