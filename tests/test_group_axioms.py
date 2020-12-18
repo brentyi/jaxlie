@@ -1,10 +1,12 @@
+"""Tests for group axioms.
+
+https://proofwiki.org/wiki/Definition:Group_Axioms
+"""
+
 from typing import Type
 
 import jaxlie
 import numpy as onp
-from hypothesis import given, settings
-from hypothesis import strategies as st
-from jax import numpy as jnp
 
 from utils import (
     assert_arrays_close,
@@ -12,10 +14,6 @@ from utils import (
     general_group_test,
     sample_transform,
 )
-
-##############
-# Tests: group properties
-##############
 
 
 @general_group_test
