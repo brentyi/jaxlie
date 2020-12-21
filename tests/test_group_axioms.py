@@ -5,15 +5,15 @@ https://proofwiki.org/wiki/Definition:Group_Axioms
 
 from typing import Type
 
-import jaxlie
 import numpy as onp
-
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
     general_group_test,
     sample_transform,
 )
+
+import jaxlie
 
 
 @general_group_test

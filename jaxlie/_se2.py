@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Optional, Tuple
+from typing import Tuple
 
 import jax
 import numpy as onp
@@ -40,15 +40,10 @@ class SE2(_base.MatrixLieGroup):
 
     @staticmethod
     def from_rotation_and_translation(
-        rotation: Optional[SO2] = None,
-        translation: types.Vector = onp.zeros(2),
+        rotation: SO2,
+        translation: types.Vector,
     ) -> "SE2":
         assert translation.shape == (2,)
-
-        if rotation is None:
-            # We don't put this in the arglist to avoid JIT compilation during import
-            rotation = SO2.identity()
-
         return SE2(
             xy_unit_complex=jnp.concatenate([translation, rotation.unit_complex])
         )

@@ -3,16 +3,16 @@
 
 from typing import Type
 
-import jaxlie
 import numpy as onp
 from jax import numpy as jnp
-
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
     general_group_test,
     sample_transform,
 )
+
+import jaxlie
 
 
 @general_group_test

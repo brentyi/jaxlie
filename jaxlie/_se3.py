@@ -1,5 +1,4 @@
 import dataclasses
-from typing import Optional
 
 import jax
 import numpy as onp
@@ -47,15 +46,10 @@ class SE3(_base.MatrixLieGroup):
 
     @staticmethod
     def from_rotation_and_translation(
-        rotation: Optional[SO3] = None,
-        translation: types.Vector = onp.zeros(3),
+        rotation: SO3,
+        translation: types.Vector,
     ) -> "SE3":
         assert translation.shape == (3,)
-
-        if rotation is None:
-            # We don't put this in the arglist to avoid JIT compilation during import
-            rotation = SO3.identity()
-
         return SE3(xyz_wxyz=jnp.concatenate([translation, rotation.wxyz]))
 
     @property

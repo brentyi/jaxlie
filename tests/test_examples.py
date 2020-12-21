@@ -2,26 +2,25 @@
 """
 
 
-import jaxlie
 import numpy as onp
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
-
 from utils import assert_arrays_close, assert_transforms_close, sample_transform
 
+import jaxlie
 
+
+@settings(deadline=None)
 @given(_random_module=st.random_module())
 def test_se2_translation(_random_module):
     """Simple test for SE(2) translation terms."""
     translation = onp.random.randn(2)
-    T = jaxlie.SE2.from_rotation_and_translation(
-        rotation=jaxlie.SO2.identity(),
-        translation=translation,
-    )
+    T = jaxlie.SE2.from_xy_theta(*translation, theta=0.0)
     assert_arrays_close(T @ translation, translation * 2)
 
 
+@settings(deadline=None)
 @given(_random_module=st.random_module())
 def test_se3_translation(_random_module):
     """Simple test for SE(3) translation terms."""

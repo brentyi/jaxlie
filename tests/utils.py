@@ -1,12 +1,13 @@
 from typing import Type
 
-import jaxlie
 import numpy as onp
 import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
 from jax.config import config
+
+import jaxlie
 
 # Run all tests with double-precision
 config.update("jax_enable_x64", True)
