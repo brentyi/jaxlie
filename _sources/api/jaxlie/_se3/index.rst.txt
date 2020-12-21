@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: Optional[SO3] = None, translation: types.Vector = onp.zeros(3)) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation: SO3, translation: types.Vector) -> 'SE3'
       :staticmethod:
 
 

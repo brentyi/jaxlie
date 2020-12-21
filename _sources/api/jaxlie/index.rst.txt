@@ -212,7 +212,7 @@ Functions
       :staticmethod:
 
 
-   .. method:: from_rotation_and_translation(rotation: Optional[SO2] = None, translation: types.Vector = onp.zeros(2)) -> 'SE2'
+   .. method:: from_rotation_and_translation(rotation: SO2, translation: types.Vector) -> 'SE2'
       :staticmethod:
 
 
@@ -343,7 +343,7 @@ Functions
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: Optional[SO3] = None, translation: types.Vector = onp.zeros(3)) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation: SO3, translation: types.Vector) -> 'SE3'
       :staticmethod:
 
 

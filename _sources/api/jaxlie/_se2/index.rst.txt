@@ -42,7 +42,7 @@ Classes
       :staticmethod:
 
 
-   .. method:: from_rotation_and_translation(rotation: Optional[SO2] = None, translation: types.Vector = onp.zeros(2)) -> 'SE2'
+   .. method:: from_rotation_and_translation(rotation: SO2, translation: types.Vector) -> 'SE2'
       :staticmethod:
 
 
