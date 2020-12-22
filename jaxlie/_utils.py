@@ -8,12 +8,10 @@ if TYPE_CHECKING:
 
 
 def get_epsilon(dtype: jnp.dtype) -> float:
-    if dtype is jnp.dtype("float32"):
-        return 1e-5
-    elif dtype is jnp.dtype("float64"):
-        return 1e-10
-    else:
-        assert False, f"Unexpected array type: {dtype}"
+    return {
+        jnp.dtype("float32"): 1e-5,
+        jnp.dtype("float64"): 1e-10,
+    }[dtype]
 
 
 T = TypeVar("T", bound="MatrixLieGroup")
