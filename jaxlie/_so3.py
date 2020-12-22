@@ -1,6 +1,5 @@
 import dataclasses
 
-import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -93,7 +92,7 @@ class SO3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: types.Matrix) -> "SO3":
+    def from_matrix(matrix: types.Matrix, method="day") -> "SO3":
         assert matrix.shape == (3, 3)
 
         # Modified from:
@@ -120,21 +119,44 @@ class SO3(_base.MatrixLieGroup):
             q = jnp.array([t, m[2, 1] - m[1, 2], m[0, 2] - m[2, 0], m[1, 0] - m[0, 1]])
             return t, q
 
-        t, q = jax.lax.cond(
-            matrix[2, 2] < 0,
-            true_fun=lambda matrix: jax.lax.cond(
-                matrix[0, 0] > matrix[1, 1],
-                true_fun=case0,
-                false_fun=case1,
-                operand=matrix,
-            ),
-            false_fun=lambda matrix: jax.lax.cond(
-                matrix[0, 0] < -matrix[1, 1],
-                true_fun=case2,
-                false_fun=case3,
-                operand=matrix,
-            ),
-            operand=matrix,
+        # # We can also choose to branch, but this is slower
+        # t, q = jax.lax.cond(
+        #     matrix[2, 2] < 0,
+        #     true_fun=lambda matrix: jax.lax.cond(
+        #         matrix[0, 0] > matrix[1, 1],
+        #         true_fun=case0,
+        #         false_fun=case1,
+        #         operand=matrix,
+        #     ),
+        #     false_fun=lambda matrix: jax.lax.cond(
+        #         matrix[0, 0] < -matrix[1, 1],
+        #         true_fun=case2,
+        #         false_fun=case3,
+        #         operand=matrix,
+        #     ),
+        #     operand=matrix,
+        # )
+
+        # Compute four cases, then pick the most precise one
+        # Probably worth revisiting this!
+        case0_t, case0_q = case0(matrix)
+        case1_t, case1_q = case1(matrix)
+        case2_t, case2_q = case2(matrix)
+        case3_t, case3_q = case3(matrix)
+
+        cond0 = matrix[2, 2] < 0
+        cond1 = matrix[0, 0] > matrix[1, 1]
+        cond2 = matrix[0, 0] < -matrix[1, 1]
+
+        t = jnp.where(
+            cond0,
+            jnp.where(cond1, case0_t, case1_t),
+            jnp.where(cond2, case2_t, case3_t),
+        )
+        q = jnp.where(
+            cond0,
+            jnp.where(cond1, case0_q, case1_q),
+            jnp.where(cond2, case2_q, case3_q),
         )
 
         return SO3(wxyz=q * 0.5 / jnp.sqrt(t))
@@ -192,27 +214,21 @@ class SO3(_base.MatrixLieGroup):
 
         assert tangent.shape == (3,)
 
-        def compute_taylor(theta_sq):
-            # First-order approximation of axis-angle => quaternion factor formula
-            theta_pow_4 = theta_squared * theta_squared
-            real_factor = 1.0 - theta_squared / 8.0 + theta_pow_4 / 384.0
-            imaginary_factor = 0.5 - theta_squared / 48.0 + theta_pow_4 / 3840.0
-            return real_factor, imaginary_factor
-
-        def compute_exact(theta_squared):
-            # Standard axis-angle => quaternion factor formula
-            theta = jnp.sqrt(theta_squared)
-            half_theta = 0.5 * theta
-            real_factor = jnp.cos(half_theta)
-            imaginary_factor = jnp.sin(half_theta) / theta
-            return real_factor, imaginary_factor
-
         theta_squared = tangent @ tangent
-        real_factor, imaginary_factor = jax.lax.cond(
-            theta_squared < get_epsilon(tangent.dtype) ** 2,
-            true_fun=compute_taylor,
-            false_fun=compute_exact,
-            operand=theta_squared,
+        theta = jnp.sqrt(theta_squared)
+        half_theta = 0.5 * theta
+        theta_pow_4 = theta_squared * theta_squared
+
+        use_taylor = theta < get_epsilon(tangent.dtype)
+        real_factor = jnp.where(
+            use_taylor,
+            1.0 - theta_squared / 8.0 + theta_pow_4 / 384.0,
+            jnp.cos(half_theta),
+        )
+        imaginary_factor = jnp.where(
+            use_taylor,
+            0.5 - theta_squared / 48.0 + theta_pow_4 / 3840.0,
+            jnp.sin(half_theta) / theta,
         )
 
         return SO3(
@@ -231,33 +247,16 @@ class SO3(_base.MatrixLieGroup):
 
         w = self.wxyz[0]
         norm_sq = self.wxyz[1:] @ self.wxyz[1:]
-
-        def compute_taylor(operand):
-            w, norm_sq = operand
-            return 2.0 / w - 2.0 / 3.0 * norm_sq / (w ** 3)
-
-        def compute_exact(operand):
-            f, norm_sq = operand
-            norm = jnp.sqrt(norm_sq)
-            return jax.lax.cond(
+        norm = jnp.sqrt(norm_sq)
+        use_taylor = norm < get_epsilon(norm_sq.dtype)
+        atan_factor = jnp.where(
+            use_taylor,
+            2.0 / w - 2.0 / 3.0 * norm_sq / (w ** 3),
+            jnp.where(
                 jnp.abs(w) < get_epsilon(w.dtype),
-                true_fun=lambda w_norm: jax.lax.cond(
-                    w_norm[0] > 0,
-                    lambda norm: jnp.pi / norm,
-                    lambda norm: -jnp.pi / norm,
-                    operand=jnp.sqrt(w_norm[1]),
-                ),
-                false_fun=lambda w_norm: 2.0
-                * jnp.arctan(w_norm[1] / w_norm[0])
-                / w_norm[1],
-                operand=(w, norm),
-            )
-
-        atan_factor = jax.lax.cond(
-            norm_sq < get_epsilon(norm_sq.dtype) ** 2,
-            true_fun=compute_taylor,
-            false_fun=compute_exact,
-            operand=(w, norm_sq),
+                jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm,
+                2.0 * jnp.arctan(norm / w) / norm,
+            ),
         )
 
         return atan_factor * self.wxyz[1:]

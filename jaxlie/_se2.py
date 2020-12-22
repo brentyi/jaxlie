@@ -1,8 +1,6 @@
 import dataclasses
-from typing import Tuple
 
 import jax
-import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -119,24 +117,18 @@ class SE2(_base.MatrixLieGroup):
 
         assert tangent.shape == (3,)
 
-        def compute_taylor(theta: jnp.ndarray) -> Tuple[jnp.ndarray, jnp.ndarray]:
-            theta_sq = theta ** 2
-
-            sin_over_theta = 1.0 - theta_sq / 6.0
-            one_minus_cos_over_theta = 0.5 * theta - theta * theta_sq / 24.0
-            return sin_over_theta, one_minus_cos_over_theta
-
-        def compute_exact(theta: jnp.ndarray) -> Tuple[jnp.ndarray, jnp.ndarray]:
-            sin_over_theta = jnp.sin(theta) / theta
-            one_minus_cos_over_theta = (1.0 - jnp.cos(theta)) / theta
-            return sin_over_theta, one_minus_cos_over_theta
-
         theta = tangent[2]
-        sin_over_theta, one_minus_cos_over_theta = jax.lax.cond(
-            jnp.abs(theta) < get_epsilon(tangent.dtype),
-            compute_taylor,
-            compute_exact,
-            operand=theta,
+        use_taylor = jnp.abs(theta) < get_epsilon(tangent.dtype)
+        theta_sq = theta ** 2
+        sin_over_theta = jnp.where(
+            use_taylor,
+            1.0 - theta_sq / 6.0,
+            jnp.sin(theta) / theta,
+        )
+        one_minus_cos_over_theta = jnp.where(
+            use_taylor,
+            0.5 * theta - theta * theta_sq / 24.0,
+            (1.0 - jnp.cos(theta)) / theta,
         )
 
         V = jnp.array(
@@ -162,13 +154,13 @@ class SE2(_base.MatrixLieGroup):
         cos = jnp.cos(theta)
         cos_minus_one = cos - 1.0
         half_theta = theta / 2.0
-        half_theta_over_tan_half_theta = jax.lax.cond(
-            jnp.abs(cos_minus_one) < get_epsilon(theta.dtype),
+        use_taylor = jnp.abs(cos_minus_one) < get_epsilon(theta.dtype)
+        half_theta_over_tan_half_theta = jnp.where(
+            use_taylor,
             # First-order Taylor approximation
-            lambda args: 1.0 - (args[0] ** 2) / 12.0,
+            1.0 - (theta ** 2) / 12.0,
             # Default
-            lambda args: -(args[1] * jnp.sin(args[0])) / args[2],
-            operand=(theta, half_theta, cos_minus_one),
+            -(half_theta * jnp.sin(theta)) / cos_minus_one,
         )
 
         V_inv = jnp.array(

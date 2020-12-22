@@ -1,6 +1,5 @@
 import dataclasses
 
-import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -113,37 +112,28 @@ class SE3(_base.MatrixLieGroup):
     def exp(tangent: types.TangentVector) -> "SE3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
-        assert tangent.shape == (6,)
+
         # (x, y, z, omega_x, omega_y, omega_z)
+        assert tangent.shape == (6,)
+
+        rotation = SO3.exp(tangent[3:])
+
         theta_squared = tangent[3:] @ tangent[3:]
-
-        def compute_small_theta(args):
-            tangent, theta_squared = args
-            rotation = SO3.exp(tangent[3:])
-            V = rotation.as_matrix()
-            return rotation, V
-
-        def compute_general(args):
-            tangent, theta_squared = args
-            theta = jnp.sqrt(theta_squared)
-
-            rotation = SO3.exp(tangent[3:])
-            skew_omega = _skew(tangent[3:])
-            V = (
+        theta = jnp.sqrt(theta_squared)
+        skew_omega = _skew(tangent[3:])
+        use_small_theta = theta < get_epsilon(theta_squared.dtype)
+        V = jnp.where(
+            use_small_theta,
+            rotation.as_matrix(),
+            (
                 jnp.eye(3)
                 + (1.0 - jnp.cos(theta)) / (theta_squared) * skew_omega
                 + (theta - jnp.sin(theta))
                 / (theta_squared * theta)
                 * (skew_omega @ skew_omega)
-            )
-            return rotation, V
-
-        rotation, V = jax.lax.cond(
-            theta_squared < get_epsilon(theta_squared.dtype) ** 2,
-            true_fun=compute_small_theta,
-            false_fun=compute_general,
-            operand=(tangent, theta_squared),
+            ),
         )
+
         return SE3.from_rotation_and_translation(
             rotation=rotation,
             translation=V @ tangent[:3],
@@ -156,30 +146,19 @@ class SE3(_base.MatrixLieGroup):
         omega = self.rotation.log()
         theta_squared = omega @ omega
         skew_omega = _skew(omega)
-
-        def compute_small_theta(args):
-            skew_omega, theta_squared = args
-            V_inv = jnp.eye(3) - 0.5 * skew_omega + (skew_omega @ skew_omega) / 12.0
-            return V_inv
-
-        def compute_general(args):
-            skew_omega, theta_squared = args
-            theta = jnp.sqrt(theta_squared)
-            half_theta = theta / 2.0
-            V_inv = (
+        theta = jnp.sqrt(theta_squared)
+        half_theta = theta / 2.0
+        use_small_theta = theta < get_epsilon(theta_squared.dtype)
+        V_inv = jnp.where(
+            use_small_theta,
+            jnp.eye(3) - 0.5 * skew_omega + (skew_omega @ skew_omega) / 12.0,
+            (
                 jnp.eye(3)
                 - 0.5 * skew_omega
                 + (1.0 - theta * jnp.cos(half_theta) / (2.0 * jnp.sin(half_theta)))
                 / theta_squared
                 * (skew_omega @ skew_omega)
-            )
-            return V_inv
-
-        V_inv = jax.lax.cond(
-            theta_squared < get_epsilon(theta_squared.dtype) ** 2,
-            true_fun=compute_small_theta,
-            false_fun=compute_general,
-            operand=(skew_omega, theta_squared),
+            ),
         )
         return jnp.concatenate([V_inv @ self.translation, omega])
 
