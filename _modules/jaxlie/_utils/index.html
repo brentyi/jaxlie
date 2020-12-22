@@ -161,12 +161,10 @@
 
 
 <div class="viewcode-block" id="get_epsilon"><a class="viewcode-back" href="../../../api/jaxlie/_utils/#jaxlie._utils.get_epsilon">[docs]</a><span class="k">def</span> <span class="nf">get_epsilon</span><span class="p">(</span><span class="n">dtype</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">1e-5</span>
-    <span class="k">elif</span> <span class="n">dtype</span> <span class="ow">is</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="mf">1e-10</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unexpected array type: </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span></div>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">):</span> <span class="mf">1e-5</span><span class="p">,</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">):</span> <span class="mf">1e-10</span><span class="p">,</span>
+    <span class="p">}[</span><span class="n">dtype</span><span class="p">]</span></div>
 
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span>
