@@ -153,7 +153,6 @@
   <h1>Source code for jaxlie._so3</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
 
-<span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
@@ -246,7 +245,7 @@
 
 <div class="viewcode-block" id="SO3.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
         <span class="c1"># Modified from:</span>
@@ -273,21 +272,44 @@
             <span class="n">q</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
             <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">q</span>
 
-        <span class="n">t</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-            <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="n">true_fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-                <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="n">true_fun</span><span class="o">=</span><span class="n">case0</span><span class="p">,</span>
-                <span class="n">false_fun</span><span class="o">=</span><span class="n">case1</span><span class="p">,</span>
-                <span class="n">operand</span><span class="o">=</span><span class="n">matrix</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">false_fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-                <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-                <span class="n">true_fun</span><span class="o">=</span><span class="n">case2</span><span class="p">,</span>
-                <span class="n">false_fun</span><span class="o">=</span><span class="n">case3</span><span class="p">,</span>
-                <span class="n">operand</span><span class="o">=</span><span class="n">matrix</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">operand</span><span class="o">=</span><span class="n">matrix</span><span class="p">,</span>
+        <span class="c1"># # We can also choose to branch, but this is slower</span>
+        <span class="c1"># t, q = jax.lax.cond(</span>
+        <span class="c1">#     matrix[2, 2] &lt; 0,</span>
+        <span class="c1">#     true_fun=lambda matrix: jax.lax.cond(</span>
+        <span class="c1">#         matrix[0, 0] &gt; matrix[1, 1],</span>
+        <span class="c1">#         true_fun=case0,</span>
+        <span class="c1">#         false_fun=case1,</span>
+        <span class="c1">#         operand=matrix,</span>
+        <span class="c1">#     ),</span>
+        <span class="c1">#     false_fun=lambda matrix: jax.lax.cond(</span>
+        <span class="c1">#         matrix[0, 0] &lt; -matrix[1, 1],</span>
+        <span class="c1">#         true_fun=case2,</span>
+        <span class="c1">#         false_fun=case3,</span>
+        <span class="c1">#         operand=matrix,</span>
+        <span class="c1">#     ),</span>
+        <span class="c1">#     operand=matrix,</span>
+        <span class="c1"># )</span>
+
+        <span class="c1"># Compute four cases, then pick the most precise one</span>
+        <span class="c1"># Probably worth revisiting this!</span>
+        <span class="n">case0_t</span><span class="p">,</span> <span class="n">case0_q</span> <span class="o">=</span> <span class="n">case0</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="n">case1_t</span><span class="p">,</span> <span class="n">case1_q</span> <span class="o">=</span> <span class="n">case1</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="n">case2_t</span><span class="p">,</span> <span class="n">case2_q</span> <span class="o">=</span> <span class="n">case2</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="n">case3_t</span><span class="p">,</span> <span class="n">case3_q</span> <span class="o">=</span> <span class="n">case3</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
+
+        <span class="n">cond0</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span>
+        <span class="n">cond1</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">cond2</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">cond0</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond1</span><span class="p">,</span> <span class="n">case0_t</span><span class="p">,</span> <span class="n">case1_t</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond2</span><span class="p">,</span> <span class="n">case2_t</span><span class="p">,</span> <span class="n">case3_t</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">cond0</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond1</span><span class="p">,</span> <span class="n">case0_q</span><span class="p">,</span> <span class="n">case1_q</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond2</span><span class="p">,</span> <span class="n">case2_q</span><span class="p">,</span> <span class="n">case3_q</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">q</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">t</span><span class="p">))</span></div>
@@ -345,27 +367,21 @@
 
         <span class="k">assert</span> <span class="n">tangent</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
 
-        <span class="k">def</span> <span class="nf">compute_taylor</span><span class="p">(</span><span class="n">theta_sq</span><span class="p">):</span>
-            <span class="c1"># First-order approximation of axis-angle =&gt; quaternion factor formula</span>
-            <span class="n">theta_pow_4</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">*</span> <span class="n">theta_squared</span>
-            <span class="n">real_factor</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">8.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">384.0</span>
-            <span class="n">imaginary_factor</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">48.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">3840.0</span>
-            <span class="k">return</span> <span class="n">real_factor</span><span class="p">,</span> <span class="n">imaginary_factor</span>
-
-        <span class="k">def</span> <span class="nf">compute_exact</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">):</span>
-            <span class="c1"># Standard axis-angle =&gt; quaternion factor formula</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
-            <span class="n">half_theta</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span>
-            <span class="n">real_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span>
-            <span class="n">imaginary_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">theta</span>
-            <span class="k">return</span> <span class="n">real_factor</span><span class="p">,</span> <span class="n">imaginary_factor</span>
-
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">tangent</span> <span class="o">@</span> <span class="n">tangent</span>
-        <span class="n">real_factor</span><span class="p">,</span> <span class="n">imaginary_factor</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-            <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">true_fun</span><span class="o">=</span><span class="n">compute_taylor</span><span class="p">,</span>
-            <span class="n">false_fun</span><span class="o">=</span><span class="n">compute_exact</span><span class="p">,</span>
-            <span class="n">operand</span><span class="o">=</span><span class="n">theta_squared</span><span class="p">,</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
+        <span class="n">half_theta</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span>
+        <span class="n">theta_pow_4</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">*</span> <span class="n">theta_squared</span>
+
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">real_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">8.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">384.0</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">imaginary_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">0.5</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">48.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">3840.0</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">theta</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span>
@@ -384,33 +400,16 @@
 
         <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">norm_sq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-
-        <span class="k">def</span> <span class="nf">compute_taylor</span><span class="p">(</span><span class="n">operand</span><span class="p">):</span>
-            <span class="n">w</span><span class="p">,</span> <span class="n">norm_sq</span> <span class="o">=</span> <span class="n">operand</span>
-            <span class="k">return</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">w</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">norm_sq</span> <span class="o">/</span> <span class="p">(</span><span class="n">w</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span>
-
-        <span class="k">def</span> <span class="nf">compute_exact</span><span class="p">(</span><span class="n">operand</span><span class="p">):</span>
-            <span class="n">f</span><span class="p">,</span> <span class="n">norm_sq</span> <span class="o">=</span> <span class="n">operand</span>
-            <span class="n">norm</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_sq</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_sq</span><span class="p">)</span>
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">norm_sq</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">atan_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">2.0</span> <span class="o">/</span> <span class="n">w</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">norm_sq</span> <span class="o">/</span> <span class="p">(</span><span class="n">w</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
-                <span class="n">true_fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">w_norm</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-                    <span class="n">w_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>
-                    <span class="k">lambda</span> <span class="n">norm</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
-                    <span class="k">lambda</span> <span class="n">norm</span><span class="p">:</span> <span class="o">-</span><span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
-                    <span class="n">operand</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">w_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
-                <span class="p">),</span>
-                <span class="n">false_fun</span><span class="o">=</span><span class="k">lambda</span> <span class="n">w_norm</span><span class="p">:</span> <span class="mf">2.0</span>
-                <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">w_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">w_norm</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="o">/</span> <span class="n">w_norm</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                <span class="n">operand</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">norm</span><span class="p">),</span>
-            <span class="p">)</span>
-
-        <span class="n">atan_factor</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-            <span class="n">norm_sq</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">norm_sq</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">true_fun</span><span class="o">=</span><span class="n">compute_taylor</span><span class="p">,</span>
-            <span class="n">false_fun</span><span class="o">=</span><span class="n">compute_exact</span><span class="p">,</span>
-            <span class="n">operand</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">norm_sq</span><span class="p">),</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
+                <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">norm</span> <span class="o">/</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">atan_factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span></div>

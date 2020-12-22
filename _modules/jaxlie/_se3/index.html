@@ -153,7 +153,6 @@
   <h1>Source code for jaxlie._se3</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
 
-<span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
@@ -266,37 +265,28 @@
     <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761</span>
-        <span class="k">assert</span> <span class="n">tangent</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,)</span>
+
         <span class="c1"># (x, y, z, omega_x, omega_y, omega_z)</span>
+        <span class="k">assert</span> <span class="n">tangent</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">6</span><span class="p">,)</span>
+
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">@</span> <span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
-
-        <span class="k">def</span> <span class="nf">compute_small_theta</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="n">tangent</span><span class="p">,</span> <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">args</span>
-            <span class="n">rotation</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-            <span class="n">V</span> <span class="o">=</span> <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">V</span>
-
-        <span class="k">def</span> <span class="nf">compute_general</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="n">tangent</span><span class="p">,</span> <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">args</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
-
-            <span class="n">rotation</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-            <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-            <span class="n">V</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
+        <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+        <span class="n">use_small_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_small_theta</span><span class="p">,</span>
+            <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">(),</span>
+            <span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                 <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span> <span class="o">*</span> <span class="n">skew_omega</span>
                 <span class="o">+</span> <span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
                 <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
                 <span class="o">*</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">V</span>
-
-        <span class="n">rotation</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-            <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">true_fun</span><span class="o">=</span><span class="n">compute_small_theta</span><span class="p">,</span>
-            <span class="n">false_fun</span><span class="o">=</span><span class="n">compute_general</span><span class="p">,</span>
-            <span class="n">operand</span><span class="o">=</span><span class="p">(</span><span class="n">tangent</span><span class="p">,</span> <span class="n">theta_squared</span><span class="p">),</span>
+            <span class="p">),</span>
         <span class="p">)</span>
+
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span>
             <span class="n">translation</span><span class="o">=</span><span class="n">V</span> <span class="o">@</span> <span class="n">tangent</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span>
@@ -309,30 +299,19 @@
         <span class="n">omega</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">omega</span> <span class="o">@</span> <span class="n">omega</span>
         <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
-
-        <span class="k">def</span> <span class="nf">compute_small_theta</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="n">skew_omega</span><span class="p">,</span> <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">args</span>
-            <span class="n">V_inv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">skew_omega</span> <span class="o">+</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span>
-            <span class="k">return</span> <span class="n">V_inv</span>
-
-        <span class="k">def</span> <span class="nf">compute_general</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-            <span class="n">skew_omega</span><span class="p">,</span> <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">args</span>
-            <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
-            <span class="n">half_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span>
-            <span class="n">V_inv</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
+        <span class="n">half_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">use_small_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">V_inv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_small_theta</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">skew_omega</span> <span class="o">+</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">,</span>
+            <span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                 <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">skew_omega</span>
                 <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)))</span>
                 <span class="o">/</span> <span class="n">theta_squared</span>
                 <span class="o">*</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="n">V_inv</span>
-
-        <span class="n">V_inv</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
-            <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="n">true_fun</span><span class="o">=</span><span class="n">compute_small_theta</span><span class="p">,</span>
-            <span class="n">false_fun</span><span class="o">=</span><span class="n">compute_general</span><span class="p">,</span>
-            <span class="n">operand</span><span class="o">=</span><span class="p">(</span><span class="n">skew_omega</span><span class="p">,</span> <span class="n">theta_squared</span><span class="p">),</span>
+            <span class="p">),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">V_inv</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">,</span> <span class="n">omega</span><span class="p">])</span></div>
 

@@ -89,7 +89,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SO3'
+   .. method:: from_matrix(matrix: types.Matrix, method='day') -> 'SO3'
       :staticmethod:
 
       Get group member from matrix representation.
