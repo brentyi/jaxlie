@@ -68,7 +68,7 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 @general_group_test
 def test_associative(Group: Type[jaxlie.MatrixLieGroup], _random_module):
-    """Check associativity property."""
+    """Check associative property."""
     transform_a = sample_transform(Group)
     transform_b = sample_transform(Group)
     transform_c = sample_transform(Group)

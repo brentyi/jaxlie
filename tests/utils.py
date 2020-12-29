@@ -27,7 +27,7 @@ def general_group_test(f):
     # Add _random_module parameter
     f = given(_random_module=st.random_module())(f)
 
-    # Parametrize tests wtih each group type
+    # Parametrize tests with each group type
     f = pytest.mark.parametrize(
         "Group",
         [

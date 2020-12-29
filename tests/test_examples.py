@@ -5,7 +5,6 @@
 import numpy as onp
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from jax import numpy as jnp
 from utils import assert_arrays_close, assert_transforms_close, sample_transform
 
 import jaxlie
