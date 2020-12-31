@@ -3,10 +3,22 @@ jaxlie documentation
 
 |build| |nbsp| |mypy| |nbsp| |lint| |nbsp| |coverage|
 
-`jaxlie` is a Lie theory library for rigid body transformations in Jax. Implements
-pytree-compatible SO(2), SO(3), SE(2), and SE(3) dataclasses with support for
-(exp, log, adjoint, multiply, inverse, identity) operations. Borrows heavily from
-the C++ library `Sophus <https://github.com/strasdat/Sophus>`_.
+
+:code:`jaxlie` is a Lie theory library for rigid body transformations and
+optimization in JAX.
+
+Current functionality:
+
+- SO(2), SE(2), SO(3), and SE(3) Lie groups implemented as high-level
+  dataclasses.
+
+- :code:`exp()`, :code:`log()`, :code:`adjoint()`, :code:`multiply()`,
+  :code:`inverse()`, and :code:`identity()` implementations for each Lie group.
+
+- Pytree registration for all dataclasses.
+
+- Helpers + analytical Jacobians for on-manifold optimization
+  (:code:`jaxlie.manifold`).
 
 Source code on `Github <https://github.com/brentyi/jaxlie>`_.
 
