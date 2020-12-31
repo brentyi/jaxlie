@@ -1,0 +1,54 @@
+:orphan:
+
+:mod:`jaxlie.manifold._manifold_helpers`
+========================================
+
+.. py:module:: jaxlie.manifold._manifold_helpers
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._manifold_helpers.rplus
+   jaxlie.manifold._manifold_helpers.rminus
+
+
+.. data:: T
+   
+
+   
+
+.. function:: rplus(transform: T, delta: types.TangentVector) -> T
+
+   Manifold right plus.
+
+   Computes ``T_wb = T_wa @ exp(delta)``.
+
+   :param transform: ``T_wa``
+   :type transform: T
+   :param delta: ``T_ab.log()``
+   :type delta: types.TangentVector
+
+   :returns: *T* -- ``T_wb``
+
+
+.. function:: rminus(a: T, b: T) -> types.TangentVector
+
+   Manifold right minus.
+
+   Computes ``delta = (T_wa.inverse() @ T_wb).log()``.
+
+   :param a: ``T_wa``
+   :type a: T
+   :param b: ``T_wb``
+   :type b: T
+
+   :returns: *types.TangentVector* -- ``T_ab.log()``
+
+

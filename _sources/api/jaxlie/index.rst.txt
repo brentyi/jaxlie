@@ -10,6 +10,7 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
+   manifold/index.rst
    types/index.rst
 
 
