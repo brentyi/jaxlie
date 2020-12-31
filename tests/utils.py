@@ -19,7 +19,7 @@ def sample_transform(Group: Type[jaxlie.MatrixLieGroup]) -> jaxlie.MatrixLieGrou
     return Group.exp(tangent)
 
 
-def general_group_test(f):
+def general_group_test(f, max_examples=100):
     """Decorator for defining tests that run on all group types."""
     # Disable timing check (first run requires JIT tracing and will be slower)
     f = settings(deadline=None)(f)

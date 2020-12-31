@@ -34,6 +34,10 @@ class SO2(_base.MatrixLieGroup):
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
+    def to_radians(self) -> float:
+        (radians,) = self.log()
+        return radians
+
     # Factory
 
     @staticmethod
@@ -78,9 +82,9 @@ class SO2(_base.MatrixLieGroup):
     @staticmethod
     @overrides
     def exp(tangent: types.TangentVector) -> "SO2":
-        assert tangent.shape == (1,)
-        cos = jnp.cos(tangent[0])
-        sin = jnp.sin(tangent[0])
+        (theta,) = tangent
+        cos = jnp.cos(theta)
+        sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides

@@ -1,6 +1,8 @@
 import abc
 from typing import TypeVar, overload
 
+from jax import numpy as jnp
+
 from . import types
 
 T = TypeVar("T", bound="MatrixLieGroup")
@@ -23,6 +25,13 @@ class MatrixLieGroup(abc.ABC):
 
     space_dim: int = 0
     """Dimension of coordinates that can be transformed."""
+
+    def __init__(self, parameters: jnp.ndarray, /):
+        """Construct a group object from its underlying parameters."""
+
+        # Note that this method is implicitly overriden by the dataclass decorator and
+        # should _not_ be marked abstract.
+        raise NotImplementedError()
 
     # Shared implementations
 

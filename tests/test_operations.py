@@ -5,8 +5,12 @@ from typing import Type
 
 import numpy as onp
 from jax import numpy as jnp
-from utils import (assert_arrays_close, assert_transforms_close,
-                   general_group_test, sample_transform)
+from utils import (
+    assert_arrays_close,
+    assert_transforms_close,
+    general_group_test,
+    sample_transform,
+)
 
 import jaxlie
 
