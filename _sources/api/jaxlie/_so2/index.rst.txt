@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: SO2
+.. py:class:: SO2(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 
@@ -40,6 +40,9 @@ Classes
 
    .. method:: from_radians(theta: float) -> 'SO2'
       :staticmethod:
+
+
+   .. method:: to_radians(self) -> float
 
 
    .. method:: identity() -> 'SO2'

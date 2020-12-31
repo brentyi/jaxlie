@@ -15,6 +15,7 @@ Functions
 
    jaxlie.manifold.rminus
    jaxlie.manifold.rplus
+   jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero
 
 
 .. function:: rminus(a: T, b: T) -> types.TangentVector
@@ -43,5 +44,28 @@ Functions
    :type delta: types.TangentVector
 
    :returns: *T* -- ``T_wb``
+
+
+.. function:: rplus_jacobian_wrt_delta_at_zero(transform: T) -> T
+
+   Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
+   local delta.
+
+   Useful for on-manifold optimization.
+
+   Equivalent to --
+
+   .. code-block::
+
+          jax.jacfwd(
+              jaxlie.manifold.rplus,  # Args are (transform, delta)
+              argnums=1,  # Jacobian wrt delta
+          )(transform, onp.zeros(transform.tangent_dim))
+
+   :param transform: transform
+   :type transform: T
+
+   :returns: *T* -- Jacobian. Note that this will be a MatrixLieGroup object, and the matrix can
+             be accessed with ``.parameters``\ !
 
 

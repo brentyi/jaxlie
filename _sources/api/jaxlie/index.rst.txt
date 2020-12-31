@@ -38,7 +38,7 @@ Functions
    jaxlie.register_lie_group
 
 
-.. py:class:: MatrixLieGroup
+.. py:class:: MatrixLieGroup(parameters: jnp.ndarray, /)
 
    Bases: :class:`abc.ABC`
 
@@ -189,7 +189,7 @@ Functions
 
 
 
-.. py:class:: SE2
+.. py:class:: SE2(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 
@@ -324,7 +324,7 @@ Functions
 
 
 
-.. py:class:: SE3
+.. py:class:: SE3(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 
@@ -455,7 +455,7 @@ Functions
 
 
 
-.. py:class:: SO2
+.. py:class:: SO2(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 
@@ -477,6 +477,9 @@ Functions
 
    .. method:: from_radians(theta: float) -> 'SO2'
       :staticmethod:
+
+
+   .. method:: to_radians(self) -> float
 
 
    .. method:: identity() -> 'SO2'
@@ -578,7 +581,7 @@ Functions
 
 
 
-.. py:class:: SO3
+.. py:class:: SO3(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 

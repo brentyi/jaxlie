@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: SO3
+.. py:class:: SO3(parameters: jnp.ndarray, /)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 

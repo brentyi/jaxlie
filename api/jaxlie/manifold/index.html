@@ -178,6 +178,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus" title="jaxlie.manifold.rplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus</span></code></a>(transform: T, delta: types.TangentVector) → T</p></td>
 <td><p>Manifold right plus.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero" title="jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus_jacobian_wrt_delta_at_zero</span></code></a>(transform: T) → T</p></td>
+<td><p>Analytical Jacobians for <code class="docutils literal notranslate"><span class="pre">jaxlie.manifold.rplus()</span></code>, linearized around a zero</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py function">
@@ -212,6 +215,30 @@
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>T</em> – <code class="docutils literal notranslate"><span class="pre">T_wb</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero">
+<code class="sig-prename descclassname">jaxlie.manifold.</code><code class="sig-name descname">rplus_jacobian_wrt_delta_at_zero</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transform</span><span class="p">:</span> <span class="n">T</span></em><span class="sig-paren">)</span> &#x2192; T<a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus_jacobian_wrt_delta_at_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analytical Jacobians for <code class="docutils literal notranslate"><span class="pre">jaxlie.manifold.rplus()</span></code>, linearized around a zero
+local delta.</p>
+<p>Useful for on-manifold optimization.</p>
+<p>Equivalent to –</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">jacfwd</span><span class="p">(</span>
+    <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">,</span>  <span class="c1"># Args are (transform, delta)</span>
+    <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Jacobian wrt delta</span>
+<span class="p">)(</span><span class="n">transform</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>transform</strong> (<em>T</em>) – transform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>T</em> – Jacobian. Note that this will be a MatrixLieGroup object, and the matrix can
+be accessed with <code class="docutils literal notranslate"><span class="pre">.parameters</span></code>!</p>
 </dd>
 </dl>
 </dd></dl>
