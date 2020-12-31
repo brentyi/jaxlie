@@ -19,3 +19,6 @@ exclude_lines =
 
     # or assert statements
     assert
+
+    # or anything that's not implemented
+    NotImplementedError()
