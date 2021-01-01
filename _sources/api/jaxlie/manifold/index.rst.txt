@@ -15,7 +15,7 @@ Functions
 
    jaxlie.manifold.rminus
    jaxlie.manifold.rplus
-   jaxlie.manifold.rplus_jacobian_wrt_delta_at_zero
+   jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
 
 
 .. function:: rminus(a: T, b: T) -> types.TangentVector
@@ -46,7 +46,7 @@ Functions
    :returns: *T* -- ``T_wb``
 
 
-.. function:: rplus_jacobian_wrt_delta_at_zero(transform: T) -> T
+.. function:: rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray
 
    Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
    local delta.
@@ -57,15 +57,18 @@ Functions
 
    .. code-block::
 
-          jax.jacfwd(
+      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+          # Since transform objects are PyTree containers, note that `jacfwd` returns a
+          # transformation object itself and that the Jacobian terms corresponding to the
+          # parameters are grabbed explicitly.
+          return jax.jacfwd(
               jaxlie.manifold.rplus,  # Args are (transform, delta)
               argnums=1,  # Jacobian wrt delta
-          )(transform, onp.zeros(transform.tangent_dim))
+          )(transform, onp.zeros(transform.tangent_dim)).parameters
 
    :param transform: transform
    :type transform: T
 
-   :returns: *T* -- Jacobian. Note that this will be a MatrixLieGroup object, and the matrix can
-             be accessed with ``.parameters``\ !
+   :returns: *jnp.ndarray* -- Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
 
 

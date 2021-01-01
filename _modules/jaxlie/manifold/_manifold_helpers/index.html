@@ -182,8 +182,8 @@
     <span class="k">return</span> <span class="n">transform</span> <span class="o">@</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rplus_jacobian_wrt_delta_at_zero"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rplus_jacobian_wrt_delta_at_zero">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rplus_jacobian_wrt_delta_at_zero</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<div class="viewcode-block" id="rplus_jacobian_parameters_wrt_delta"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rplus_jacobian_parameters_wrt_delta">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero</span>
 <span class="sd">    local delta.</span>
 
@@ -191,26 +191,28 @@
 
 <span class="sd">    Equivalent to --</span>
 <span class="sd">    ```</span>
-<span class="sd">        jax.jacfwd(</span>
+<span class="sd">    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -&gt; jnp.ndarray:</span>
+<span class="sd">        # Since transform objects are PyTree containers, note that `jacfwd` returns a</span>
+<span class="sd">        # transformation object itself and that the Jacobian terms corresponding to the</span>
+<span class="sd">        # parameters are grabbed explicitly.</span>
+<span class="sd">        return jax.jacfwd(</span>
 <span class="sd">            jaxlie.manifold.rplus,  # Args are (transform, delta)</span>
 <span class="sd">            argnums=1,  # Jacobian wrt delta</span>
-<span class="sd">        )(transform, onp.zeros(transform.tangent_dim))</span>
+<span class="sd">        )(transform, onp.zeros(transform.tangent_dim)).parameters</span>
 <span class="sd">    ```</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        transform (T): transform</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        T: Jacobian. Note that this will be a MatrixLieGroup object, and the matrix can</span>
-<span class="sd">        be accessed with `.parameters`!</span>
+<span class="sd">        jnp.ndarray: Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">transform</span><span class="o">.</span><span class="n">parameters_dim</span><span class="p">,</span> <span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span>
-
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO2</span><span class="p">:</span>
         <span class="c1"># Jacobian row indices: cos, sin</span>
         <span class="c1"># Jacobian col indices: theta</span>
 
         <span class="n">transform_so2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SO2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="n">transform_so2</span><span class="o">.</span><span class="n">unit_complex</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
@@ -220,13 +222,14 @@
         <span class="c1"># Jacobian col indices: vx, vy, omega</span>
 
         <span class="n">transform_se2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
         <span class="c1"># Translation terms</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="n">rplus_jacobian_wrt_delta_at_zero</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
+            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO3</span><span class="p">:</span>
@@ -235,7 +238,6 @@
 
         <span class="n">transform_so3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SO3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
 
-        <span class="c1"># Jacobian</span>
         <span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
         <span class="n">neg_w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span> <span class="o">=</span> <span class="o">-</span><span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
 
@@ -253,22 +255,24 @@
 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="c1"># Jacobian row indices: x, y, z, qw, qx, qy, qz</span>
-        <span class="c1"># Jacobian col indices: omega x, omega y, omega z</span>
+        <span class="c1"># Jacobian col indices: vx, vy, vz, omega x, omega y, omega z</span>
 
         <span class="n">transform_se3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
         <span class="c1"># Translation terms</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="n">rplus_jacobian_wrt_delta_at_zero</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span>
+            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unsupported type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)(</span><span class="n">J</span><span class="p">)</span></div>
+    <span class="k">assert</span> <span class="n">J</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">parameters_dim</span><span class="p">,</span> <span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">J</span></div>
 
 
 <div class="viewcode-block" id="rminus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rminus">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
