@@ -239,15 +239,15 @@
         <span class="n">transform_so3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SO3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
 
         <span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
-        <span class="n">neg_w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span> <span class="o">=</span> <span class="o">-</span><span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
+        <span class="n">_unused_neg_w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span> <span class="o">=</span> <span class="o">-</span><span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
 
         <span class="n">J</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="p">[</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="o">-</span><span class="n">z</span><span class="p">],</span>
-                    <span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="o">-</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>
-                    <span class="p">[</span><span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="o">-</span><span class="n">x</span><span class="p">],</span>
-                    <span class="p">[</span><span class="o">-</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">neg_z</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">],</span>
+                    <span class="p">[</span><span class="n">neg_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
                 <span class="p">]</span>
             <span class="p">)</span>
             <span class="o">/</span> <span class="mf">2.0</span>
