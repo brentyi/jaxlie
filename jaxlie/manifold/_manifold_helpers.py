@@ -30,7 +30,7 @@ def rplus(transform: T, delta: types.TangentVector) -> T:
 
 
 @jax.jit
-def rplus_jacobian_wrt_delta_at_zero(transform: T) -> T:
+def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
     """Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero
     local delta.
 
@@ -38,26 +38,28 @@ def rplus_jacobian_wrt_delta_at_zero(transform: T) -> T:
 
     Equivalent to --
     ```
-        jax.jacfwd(
+    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+        # Since transform objects are PyTree containers, note that `jacfwd` returns a
+        # transformation object itself and that the Jacobian terms corresponding to the
+        # parameters are grabbed explicitly.
+        return jax.jacfwd(
             jaxlie.manifold.rplus,  # Args are (transform, delta)
             argnums=1,  # Jacobian wrt delta
-        )(transform, onp.zeros(transform.tangent_dim))
+        )(transform, onp.zeros(transform.tangent_dim)).parameters
     ```
 
     Args:
         transform (T): transform
 
     Returns:
-        T: Jacobian. Note that this will be a MatrixLieGroup object, and the matrix can
-        be accessed with `.parameters`!
+        jnp.ndarray: Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.
     """
-    J = jnp.zeros((transform.parameters_dim, transform.tangent_dim))
-
     if type(transform) is SO2:
         # Jacobian row indices: cos, sin
         # Jacobian col indices: theta
 
         transform_so2 = cast(SO2, transform)
+        J = jnp.zeros((2, 1))
 
         cos, sin = transform_so2.unit_complex
         J = J.at[0].set(-sin).at[1].set(cos)
@@ -67,13 +69,14 @@ def rplus_jacobian_wrt_delta_at_zero(transform: T) -> T:
         # Jacobian col indices: vx, vy, omega
 
         transform_se2 = cast(SE2, transform)
+        J = jnp.zeros((4, 3))
 
         # Translation terms
         J = J.at[:2, :2].set(transform_se2.rotation.as_matrix())
 
         # Rotation terms
         J = J.at[2:4, 2:3].set(
-            rplus_jacobian_wrt_delta_at_zero(transform_se2.rotation).parameters
+            rplus_jacobian_parameters_wrt_delta(transform_se2.rotation)
         )
 
     elif type(transform) is SO3:
@@ -82,7 +85,6 @@ def rplus_jacobian_wrt_delta_at_zero(transform: T) -> T:
 
         transform_so3 = cast(SO3, transform)
 
-        # Jacobian
         w, x, y, z = transform_so3.wxyz
         neg_w, neg_x, neg_y, neg_z = -transform_so3.wxyz
 
@@ -100,22 +102,24 @@ def rplus_jacobian_wrt_delta_at_zero(transform: T) -> T:
 
     elif type(transform) is SE3:
         # Jacobian row indices: x, y, z, qw, qx, qy, qz
-        # Jacobian col indices: omega x, omega y, omega z
+        # Jacobian col indices: vx, vy, vz, omega x, omega y, omega z
 
         transform_se3 = cast(SE3, transform)
+        J = jnp.zeros((7, 6))
 
         # Translation terms
         J = J.at[:3, :3].set(transform_se3.rotation.as_matrix())
 
         # Rotation terms
         J = J.at[3:7, 3:6].set(
-            rplus_jacobian_wrt_delta_at_zero(transform_se3.rotation).parameters
+            rplus_jacobian_parameters_wrt_delta(transform_se3.rotation)
         )
 
     else:
         assert False, f"Unsupported type: {type(transform)}"
 
-    return type(transform)(J)
+    assert J.shape == (transform.parameters_dim, transform.tangent_dim)
+    return J
 
 
 @jax.jit

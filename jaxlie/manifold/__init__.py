@@ -1,7 +1,7 @@
-from ._manifold_helpers import rminus, rplus, rplus_jacobian_wrt_delta_at_zero
+from ._manifold_helpers import rminus, rplus, rplus_jacobian_parameters_wrt_delta
 
 __all__ = [
     "rminus",
     "rplus",
-    "rplus_jacobian_wrt_delta_at_zero",
+    "rplus_jacobian_parameters_wrt_delta",
 ]
