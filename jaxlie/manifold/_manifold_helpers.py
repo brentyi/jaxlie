@@ -86,15 +86,15 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         transform_so3 = cast(SO3, transform)
 
         w, x, y, z = transform_so3.wxyz
-        neg_w, neg_x, neg_y, neg_z = -transform_so3.wxyz
+        _unused_neg_w, neg_x, neg_y, neg_z = -transform_so3.wxyz
 
         J = (
             jnp.array(
                 [
-                    [-x, -y, -z],
-                    [w, -z, y],
-                    [z, w, -x],
-                    [-y, x, w],
+                    [neg_x, neg_y, neg_z],
+                    [w, neg_z, y],
+                    [z, w, neg_x],
+                    [neg_y, x, w],
                 ]
             )
             / 2.0
