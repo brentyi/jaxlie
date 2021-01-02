@@ -967,6 +967,28 @@ Uses the ZYX mobile robot convention.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="jaxlie.SO3.from_quaternion_xyzw">
+<em class="property">static </em><code class="sig-name descname">from_quaternion_xyzw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xyzw</span><span class="p">:</span> <span class="n">jnp.ndarray</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.from_quaternion_xyzw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO3.from_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a rotation from an <code class="docutils literal notranslate"><span class="pre">xyzw</span></code> quaternion.</p>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">wxyz</span></code> quaternions can be constructed using the default dataclass
+constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jnp.ndarray</em>) – xyzw quaternion. Shape should be (4,).</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>SO3</em> – Output.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie.SO3.as_quaternion_xyzw">
+<code class="sig-name descname">as_quaternion_xyzw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; jnp.ndarray<a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.as_quaternion_xyzw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO3.as_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grab parameters as xyzw quaternion.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="jaxlie.SO3.identity">
 <em class="property">static </em><code class="sig-name descname">identity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO3.identity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns identity element.</p>

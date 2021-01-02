@@ -232,13 +232,33 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">SO3</span><span class="o">.</span><span class="n">from_z_radians</span><span class="p">(</span><span class="n">yaw</span><span class="p">)</span>
-<div class="viewcode-block" id="SO3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>            <span class="o">@</span> <span class="n">SO3</span><span class="o">.</span><span class="n">from_y_radians</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
+<div class="viewcode-block" id="SO3.from_quaternion_xyzw"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_quaternion_xyzw">[docs]</a>            <span class="o">@</span> <span class="n">SO3</span><span class="o">.</span><span class="n">from_y_radians</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span>
             <span class="o">@</span> <span class="n">SO3</span><span class="o">.</span><span class="n">from_x_radians</span><span class="p">(</span><span class="n">roll</span><span class="p">)</span>
         <span class="p">)</span></div>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_quaternion_xyzw</span><span class="p">(</span><span class="n">xyzw</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Construct a rotation from an `xyzw` quaternion.</span>
+
+<span class="sd">        Note that `wxyz` quaternions can be constructed using the default dataclass</span>
+<span class="sd">        constructor.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            xyzw (jnp.ndarray): xyzw quaternion. Shape should be (4,).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SO3: Output.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">xyzw</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">xyzw</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SO3.as_quaternion_xyzw"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.as_quaternion_xyzw">[docs]</a>    <span class="k">def</span> <span class="nf">as_quaternion_xyzw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Grab parameters as xyzw quaternion.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">shift</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
     <span class="c1"># Factory</span>
 
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SO3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>

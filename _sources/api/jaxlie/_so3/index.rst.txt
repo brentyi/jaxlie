@@ -81,6 +81,25 @@ Classes
       :returns: *SO3* -- Output.
 
 
+   .. method:: from_quaternion_xyzw(xyzw: jnp.ndarray) -> 'SO3'
+      :staticmethod:
+
+      Construct a rotation from an ``xyzw`` quaternion.
+
+      Note that ``wxyz`` quaternions can be constructed using the default dataclass
+      constructor.
+
+      :param xyzw: xyzw quaternion. Shape should be (4,).
+      :type xyzw: jnp.ndarray
+
+      :returns: *SO3* -- Output.
+
+
+   .. method:: as_quaternion_xyzw(self) -> jnp.ndarray
+
+      Grab parameters as xyzw quaternion.
+
+
    .. method:: identity() -> 'SO3'
       :staticmethod:
 
