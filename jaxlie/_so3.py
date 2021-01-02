@@ -83,6 +83,26 @@ class SO3(_base.MatrixLieGroup):
             @ SO3.from_x_radians(roll)
         )
 
+    @staticmethod
+    def from_quaternion_xyzw(xyzw: jnp.ndarray) -> "SO3":
+        """Construct a rotation from an `xyzw` quaternion.
+
+        Note that `wxyz` quaternions can be constructed using the default dataclass
+        constructor.
+
+        Args:
+            xyzw (jnp.ndarray): xyzw quaternion. Shape should be (4,).
+
+        Returns:
+            SO3: Output.
+        """
+        assert xyzw.shape == (4,)
+        return SO3(jnp.roll(xyzw, shift=1))
+
+    def as_quaternion_xyzw(self) -> jnp.ndarray:
+        """Grab parameters as xyzw quaternion."""
+        return jnp.roll(self.wxyz, shift=-1)
+
     # Factory
 
     @staticmethod

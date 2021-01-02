@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, TypeVar
 
 import numpy as onp
 import pytest
@@ -12,8 +12,10 @@ import jaxlie
 # Run all tests with double-precision
 config.update("jax_enable_x64", True)
 
+T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 
-def sample_transform(Group: Type[jaxlie.MatrixLieGroup]) -> jaxlie.MatrixLieGroup:
+
+def sample_transform(Group: Type[T]) -> T:
     """Sample a random transform from a group."""
     tangent = onp.random.randn(Group.tangent_dim)
     return Group.exp(tangent)

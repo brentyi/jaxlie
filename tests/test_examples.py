@@ -61,6 +61,22 @@ def test_se3_rotation():
     assert_arrays_close(T_w_b @ p_b, p_w)
 
 
+def test_so3_xyzw_basic():
+    """Check that we can create an SO3 object from an xyzw quaternion."""
+    assert_transforms_close(
+        jaxlie.SO3.from_quaternion_xyzw(onp.array([0, 0, 0, 1])),
+        jaxlie.SO3.identity(),
+    )
+
+
+@settings(deadline=None)
+@given(_random_module=st.random_module())
+def test_so3_xyzw_bijective(_random_module):
+    """Check that we can convert between xyzw and wxyz quaternions."""
+    T = sample_transform(jaxlie.SO3)
+    assert_transforms_close(T, jaxlie.SO3.from_quaternion_xyzw(T.as_quaternion_xyzw()))
+
+
 @settings(deadline=None)
 @given(_random_module=st.random_module())
 def test_se3_compose(_random_module):
