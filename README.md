@@ -23,7 +23,7 @@ Current functionality:
 
 ---
 
-##### Install (Python >=3.7)
+##### Install (Python >=3.6)
 ```bash
 pip install jaxlie
 ```
