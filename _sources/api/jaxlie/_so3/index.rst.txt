@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: SO3(parameters: jnp.ndarray, /)
+.. py:class:: SO3(parameters: jnp.ndarray)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 
@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta) -> 'SO3'
+   .. method:: from_x_radians(theta: float) -> 'SO3'
       :staticmethod:
 
       Generates a x-axis rotation.
@@ -48,7 +48,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_y_radians(theta) -> 'SO3'
+   .. method:: from_y_radians(theta: float) -> 'SO3'
       :staticmethod:
 
       Generates a y-axis rotation.
@@ -58,7 +58,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_z_radians(theta) -> 'SO3'
+   .. method:: from_z_radians(theta: float) -> 'SO3'
       :staticmethod:
 
       Generates a z-axis rotation.
@@ -68,7 +68,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_rpy_radians(roll, pitch, yaw) -> 'SO3'
+   .. method:: from_rpy_radians(roll: float, pitch: float, yaw: float) -> 'SO3'
       :staticmethod:
 
       Generates a transform from a set of Euler angles.

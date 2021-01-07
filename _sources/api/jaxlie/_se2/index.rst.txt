@@ -18,7 +18,7 @@ Classes
 
 
 
-.. py:class:: SE2(parameters: jnp.ndarray, /)
+.. py:class:: SE2(parameters: jnp.ndarray)
 
    Bases: :class:`jaxlie.MatrixLieGroup`
 

@@ -23,7 +23,7 @@ Classes
 
    
 
-.. py:class:: MatrixLieGroup(parameters: jnp.ndarray, /)
+.. py:class:: MatrixLieGroup(parameters: jnp.ndarray)
 
    Bases: :class:`abc.ABC`
 

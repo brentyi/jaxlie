@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>jaxlie._so3 &mdash; jaxlie  documentation</title>
   
@@ -17,7 +17,10 @@
 
   
   
+
   
+  
+
   
 
   
@@ -49,7 +52,7 @@
           
 
           
-            <a href="../../../" class="icon icon-home" alt="Documentation Home"> jaxlie
+            <a href="../../../" class="icon icon-home"> jaxlie
           
 
           
@@ -127,6 +130,8 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
@@ -182,7 +187,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(wxyz=</span><span class="si">{</span><span class="n">wxyz</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 <div class="viewcode-block" id="SO3.from_x_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_x_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_x_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_x_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a x-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -194,7 +199,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_y_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_y_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_y_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_y_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a y-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -206,7 +211,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_z_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_z_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_z_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_z_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a z-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -218,7 +223,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_rpy_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_rpy_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_rpy_radians</span><span class="p">(</span><span class="n">roll</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">yaw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_rpy_radians</span><span class="p">(</span><span class="n">roll</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pitch</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">yaw</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a transform from a set of Euler angles.</span>
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
@@ -452,28 +457,25 @@
            
           </div>
           <footer>
-  
 
   <hr/>
 
   <div role="contentinfo">
     <p>
-        
-        &copy; Copyright 2020
+        &#169; Copyright 2020.
 
     </p>
   </div>
     
     
     
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     
     provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
-
         </div>
       </div>
 
