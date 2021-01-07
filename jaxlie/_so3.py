@@ -29,7 +29,7 @@ class SO3(_base.MatrixLieGroup):
         return f"{self.__class__.__name__}(wxyz={wxyz})"
 
     @staticmethod
-    def from_x_radians(theta) -> "SO3":
+    def from_x_radians(theta: float) -> "SO3":
         """Generates a x-axis rotation.
 
         Args:
@@ -41,7 +41,7 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
     @staticmethod
-    def from_y_radians(theta) -> "SO3":
+    def from_y_radians(theta: float) -> "SO3":
         """Generates a y-axis rotation.
 
         Args:
@@ -53,7 +53,7 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
     @staticmethod
-    def from_z_radians(theta) -> "SO3":
+    def from_z_radians(theta: float) -> "SO3":
         """Generates a z-axis rotation.
 
         Args:
@@ -65,7 +65,7 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([0.0, 0.0, theta]))
 
     @staticmethod
-    def from_rpy_radians(roll, pitch, yaw) -> "SO3":
+    def from_rpy_radians(roll: float, pitch: float, yaw: float) -> "SO3":
         """Generates a transform from a set of Euler angles.
         Uses the ZYX mobile robot convention.
 

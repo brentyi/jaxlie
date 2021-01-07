@@ -26,7 +26,7 @@ class MatrixLieGroup(abc.ABC):
     space_dim: int = 0
     """Dimension of coordinates that can be transformed."""
 
-    def __init__(self, parameters: jnp.ndarray, /):
+    def __init__(self, parameters: jnp.ndarray):
         """Construct a group object from its underlying parameters."""
 
         # Note that this method is implicitly overriden by the dataclass decorator and

@@ -6,6 +6,7 @@
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
 
 **[ [API reference](https://brentyi.github.io/jaxlie) ]**
+**[ [PyPI](https://pypi.org/project/jaxlie/) ]**
 
 `jaxlie` is a Lie theory library for rigid body transformations and optimization
 in JAX.
@@ -19,6 +20,13 @@ Current functionality:
 - Pytree registration for all dataclasses.
 - Helpers + analytical Jacobians for on-manifold optimization
   (**`jaxlie.manifold`**).
+
+---
+
+##### Install (Python >=3.7)
+```bash
+pip install jaxlie
+```
 
 ---
 
