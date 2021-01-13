@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="0.0.2",
+    version="0.0.3",
     description="Matrix Lie groups in Jax",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -13,10 +13,11 @@ setup(
     author="brentyi",
     author_email="brentyi@berkeley.edu",
     license="MIT",
-    packages=find_packages(exclude=["examples", "tests"]),
+    packages=find_packages(),
     package_data={"liejax": ["py.typed"]},
     python_requires=">=3.6",
     install_requires=[
+        "flax",
         "jax",
         "jaxlib",
         "numpy",

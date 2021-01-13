@@ -48,8 +48,9 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
     assert_arrays_close(a.as_matrix(), b.as_matrix())
 
     # Flip signs for quaternions
-    p1 = a.parameters
-    p2 = b.parameters
+    # We use `jnp.asarray` here in case inputs are onp arrays and don't support `.at()`
+    p1 = jnp.asarray(a.parameters)
+    p2 = jnp.asarray(b.parameters)
     if isinstance(a, jaxlie.SO3):
         p1 = p1 * jnp.sign(jnp.sum(p1))
         p2 = p2 * jnp.sign(jnp.sum(p2))

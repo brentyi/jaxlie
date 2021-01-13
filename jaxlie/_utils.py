@@ -1,5 +1,6 @@
-from typing import TYPE_CHECKING, Callable, Tuple, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, Dict, Tuple, Type, TypeVar
 
+import flax
 import jax
 from jax import numpy as jnp
 
@@ -29,6 +30,10 @@ def register_lie_group(
     - Makes the group hashable
     - Marks all functions for JIT compilation
     - Adds flattening/unflattening ops for use as a PyTree node
+    - Adds serialization ops for `flax.serialization`
+
+    Note that a significant amount of functionality here could be replaced by
+    `flax.struct`, but `flax.struct` doesn't work very well with jedi or mypy.
 
     Example:
     ```
@@ -77,6 +82,19 @@ def register_lie_group(
             return cls(**dict(zip(treedef, children)))  # type: ignore
 
         jax.tree_util.register_pytree_node(cls, _flatten_group, _unflatten_group)
+
+        # Make object flax-serializable
+        def _ty_to_state_dict(x: "MatrixLieGroup") -> Dict[str, jnp.ndarray]:
+            return {"params": x.parameters}
+
+        def _ty_from_state_dict(x: "MatrixLieGroup", state: Dict) -> "MatrixLieGroup":
+            return type(x)(state["params"])
+
+        flax.serialization.register_serialization_state(
+            ty=cls,
+            ty_to_state_dict=_ty_to_state_dict,
+            ty_from_state_dict=_ty_from_state_dict,
+        )
 
         return cls
 

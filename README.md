@@ -5,32 +5,33 @@
 ![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
 
-**[ [API reference](https://brentyi.github.io/jaxlie) ]**
-**[ [PyPI](https://pypi.org/project/jaxlie/) ]**
+**[ [API reference](https://brentyi.github.io/jaxlie) ]** **[
+[PyPI](https://pypi.org/project/jaxlie/) ]**
 
 `jaxlie` is a Lie theory library for rigid body transformations and optimization
 in JAX.
 
 Current functionality:
 
-- SO(2), SE(2), SO(3), and SE(3) Lie groups implemented as high-level
-  dataclasses.
+- High-level interfaces for SO(2), SE(2), SO(3), and SE(3) Lie groups.
 - **`exp()`**, **`log()`**, **`adjoint()`**, **`multiply()`**, **`inverse()`**,
-  and **`identity()`** implementations for each Lie group.
-- Pytree registration for all dataclasses.
+  and **`identity()`** implementations for each group.
 - Helpers + analytical Jacobians for on-manifold optimization
   (**`jaxlie.manifold`**).
+- Dataclass-style implementations, with support for (un)flattening as pytree
+  nodes and serialization using [flax](https://github.com/google/flax).
 
 ---
 
 ##### Install (Python >=3.6)
+
 ```bash
 pip install jaxlie
 ```
 
 ---
 
-##### Example usage
+##### Example usage for SE(3)
 
 ```python
 import numpy as onp
@@ -45,7 +46,6 @@ from jaxlie import SE3
 # to `SE3.from_matrix(expm(wedge(twist)))`
 twist = onp.array([1.0, 0.0, 0.2, 0.0, 0.5, 0.0])
 T_w_b = SE3.exp(twist)
-p_b = onp.random.randn(3)
 
 # We can print the (quaternion) rotation term; this is a `SO3` object:
 print(T_w_b.rotation)
@@ -75,6 +75,7 @@ T_w_b = SE3(xyz_wxyz=T_w_b.xyz_wxyz)
 #############################
 
 # Transform points with the `@` operator:
+p_b = onp.random.randn(3)
 p_w = T_w_b @ p_b
 print(p_w)
 
