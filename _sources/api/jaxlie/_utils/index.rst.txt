@@ -36,6 +36,10 @@ Functions
    * Makes the group hashable
    * Marks all functions for JIT compilation
    * Adds flattening/unflattening ops for use as a PyTree node
+   * Adds serialization ops for ``flax.serialization``
+
+   Note that a significant amount of functionality here could be replaced by
+   ``flax.struct``\ , but ``flax.struct`` doesn't work very well with jedi or mypy.
 
    Example:
 

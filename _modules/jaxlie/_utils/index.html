@@ -156,8 +156,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for jaxlie._utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
 
+<span class="kn">import</span> <span class="nn">flax</span>
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
@@ -187,6 +188,10 @@
 <span class="sd">    - Makes the group hashable</span>
 <span class="sd">    - Marks all functions for JIT compilation</span>
 <span class="sd">    - Adds flattening/unflattening ops for use as a PyTree node</span>
+<span class="sd">    - Adds serialization ops for `flax.serialization`</span>
+
+<span class="sd">    Note that a significant amount of functionality here could be replaced by</span>
+<span class="sd">    `flax.struct`, but `flax.struct` doesn&#39;t work very well with jedi or mypy.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">    ```</span>
@@ -235,6 +240,19 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">treedef</span><span class="p">,</span> <span class="n">children</span><span class="p">)))</span>  <span class="c1"># type: ignore</span>
 
         <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_flatten_group</span><span class="p">,</span> <span class="n">_unflatten_group</span><span class="p">)</span>
+
+        <span class="c1"># Make object flax-serializable</span>
+        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">parameters</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">_ty_from_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)(</span><span class="n">state</span><span class="p">[</span><span class="s2">&quot;params&quot;</span><span class="p">])</span>
+
+        <span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">register_serialization_state</span><span class="p">(</span>
+            <span class="n">ty</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
+            <span class="n">ty_to_state_dict</span><span class="o">=</span><span class="n">_ty_to_state_dict</span><span class="p">,</span>
+            <span class="n">ty_from_state_dict</span><span class="o">=</span><span class="n">_ty_from_state_dict</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span>
 
