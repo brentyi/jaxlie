@@ -11,15 +11,51 @@
 `jaxlie` is a Lie theory library for rigid body transformations and optimization
 in JAX.
 
-Current functionality:
+Implements Lie groups as high-level (data)classes:
 
-- High-level interfaces for SO(2), SE(2), SO(3), and SE(3) Lie groups.
+<table>
+  <thead>
+    <tr>
+      <th>Group</th>
+      <th>Description</th>
+      <th>Parameterization</th>
+    </tr>
+  </thead>
+  <tbody valign="top">
+    <tr>
+      <td><code>jaxlie.<strong>SO2</strong></code></td>
+      <td>Rotations in 2D.</td>
+      <td><em>(real, imaginary):</em> unit norm complex number (∈ S<sup>2</sup>)</td>
+    </tr>
+    <tr>
+      <td><code>jaxlie.<strong>SE2</strong></code></td>
+      <td>Proper rigid transforms in 2D.</td>
+      <td><em>(x, y, real, imaginary):</em> translation &amp; unit complex</td>
+    </tr>
+    <tr>
+      <td><code>jaxlie.<strong>SO3</strong></code></td>
+      <td>Rotations in 3D.</td>
+      <td><em>(qw, qx, qy, qz):</em> wxyz quaternion (∈ S<sup>4</sup>)</td>
+    </tr>
+    <tr>
+      <td><code>jaxlie.<strong>SE3</strong></code></td>
+      <td>Proper rigid transforms in 3D.</td>
+      <td><em>(x, y, z, qw, qx, qy, qz):</em> translation &amp; wxyz quaternion</td>
+    </tr>
+  </tbody>
+</table>
+
+Each group supports:
+
 - **`exp()`**, **`log()`**, **`adjoint()`**, **`multiply()`**, **`inverse()`**,
-  and **`identity()`** implementations for each group.
+  and **`identity()`** operations
 - Helpers + analytical Jacobians for on-manifold optimization
-  (**`jaxlie.manifold`**).
-- Dataclass-style implementations, with support for (un)flattening as pytree
-  nodes and serialization using [flax](https://github.com/google/flax).
+  (<code>jaxlie.<strong>manifold</strong></code>)
+- (Un)flattening as pytree nodes
+- Serialization using [flax](https://github.com/google/flax)
+
+Heavily inspired by (and some operations ported from) the C++ library
+[Sophus](https://github.com/strasdat/Sophus).
 
 ---
 
@@ -119,10 +155,3 @@ print(adjoint_T_w_b)
 twist = T_w_b.log()
 print(twist)
 ```
-
----
-
-##### Misc
-
-`jaxlie` is heavily inspired by the C++ library
-[Sophus](https://github.com/strasdat/Sophus).
