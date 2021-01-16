@@ -24,7 +24,7 @@ class SO3(_base.MatrixLieGroup):
     """Internal parameters. `(w, x, y, z)` quaternion."""
 
     @overrides
-    def __repr__(self):
+    def __repr__(self) -> str:
         wxyz = jnp.round(self.wxyz, 5)
         return f"{self.__class__.__name__}(wxyz={wxyz})"
 
@@ -112,7 +112,7 @@ class SO3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: types.Matrix, method="day") -> "SO3":
+    def from_matrix(matrix: types.Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
 
         # Modified from:

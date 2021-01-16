@@ -17,7 +17,7 @@ import jaxlie
 
 
 @general_group_test
-def test_closure(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_closure(Group: Type[jaxlie.MatrixLieGroup]):
     """Check closure property."""
     transform_a = sample_transform(Group)
     transform_b = sample_transform(Group)
@@ -33,7 +33,7 @@ def test_closure(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_identity(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_identity(Group: Type[jaxlie.MatrixLieGroup]):
     """Check identity property."""
     transform = sample_transform(Group)
     identity = Group.identity()
@@ -48,7 +48,7 @@ def test_identity(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_inverse(Group: Type[jaxlie.MatrixLieGroup]):
     """Check inverse property."""
     transform = sample_transform(Group)
     identity = Group.identity()
@@ -67,7 +67,7 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_associative(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_associative(Group: Type[jaxlie.MatrixLieGroup]):
     """Check associative property."""
     transform_a = sample_transform(Group)
     transform_b = sample_transform(Group)

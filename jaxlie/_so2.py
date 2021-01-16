@@ -24,7 +24,7 @@ class SO2(_base.MatrixLieGroup):
     """Internal parameters. `(cos, sin)`."""
 
     @overrides
-    def __repr__(self):
+    def __repr__(self) -> str:
         unit_complex = jnp.round(self.unit_complex, 5)
         return f"{self.__class__.__name__}(unit_complex={unit_complex})"
 

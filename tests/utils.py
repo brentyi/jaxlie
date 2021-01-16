@@ -1,4 +1,4 @@
-from typing import Type, TypeVar
+from typing import Callable, Type, TypeVar
 
 import numpy as onp
 import pytest
@@ -21,16 +21,23 @@ def sample_transform(Group: Type[T]) -> T:
     return Group.exp(tangent)
 
 
-def general_group_test(f, max_examples=100):
+def general_group_test(
+    f: Callable[[Type[jaxlie.MatrixLieGroup]], None], max_examples: int = 100
+) -> Callable[[Type[jaxlie.MatrixLieGroup]], None]:
     """Decorator for defining tests that run on all group types."""
+
+    # Disregard unused argument
+    def f_wrapped(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+        f(Group)
+
     # Disable timing check (first run requires JIT tracing and will be slower)
-    f = settings(deadline=None)(f)
+    f_wrapped = settings(deadline=None)(f_wrapped)
 
     # Add _random_module parameter
-    f = given(_random_module=st.random_module())(f)
+    f_wrapped = given(_random_module=st.random_module())(f_wrapped)
 
     # Parametrize tests with each group type
-    f = pytest.mark.parametrize(
+    f_wrapped = pytest.mark.parametrize(
         "Group",
         [
             jaxlie.SO2,
@@ -38,8 +45,8 @@ def general_group_test(f, max_examples=100):
             jaxlie.SO3,
             jaxlie.SE3,
         ],
-    )(f)
-    return f
+    )(f_wrapped)
+    return f_wrapped
 
 
 def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):

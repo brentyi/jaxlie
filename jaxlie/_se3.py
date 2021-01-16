@@ -38,7 +38,7 @@ class SE3(_base.MatrixLieGroup):
     """Internal parameters. Length-3 translation followed by wxyz quaternion."""
 
     @overrides
-    def __repr__(self):
+    def __repr__(self) -> str:
         trans = jnp.round(self.xyz_wxyz[..., :3], 5)
         quat = jnp.round(self.xyz_wxyz[..., 3:], 5)
         return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"

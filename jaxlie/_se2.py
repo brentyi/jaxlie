@@ -25,7 +25,7 @@ class SE2(_base.MatrixLieGroup):
     """Internal parameters. `(x, y, cos, sin)`."""
 
     @overrides
-    def __repr__(self):
+    def __repr__(self) -> str:
         xy = jnp.round(self.xy_unit_complex[..., :2], 5)
         unit_complex = jnp.round(self.xy_unit_complex[..., 2:], 5)
         return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"

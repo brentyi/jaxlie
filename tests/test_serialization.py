@@ -11,9 +11,7 @@ import jaxlie
 
 
 @general_group_test
-def test_serialization_state_dict_bijective(
-    Group: Type[jaxlie.MatrixLieGroup], _random_module
-):
+def test_serialization_state_dict_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check bijectivity of state dict representation conversations."""
     T = sample_transform(Group)
     T_recovered = flax.serialization.from_state_dict(
@@ -23,9 +21,7 @@ def test_serialization_state_dict_bijective(
 
 
 @general_group_test
-def test_serialization_bytes_bijective(
-    Group: Type[jaxlie.MatrixLieGroup], _random_module
-):
+def test_serialization_bytes_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check bijectivity of byte representation conversations."""
     T = sample_transform(Group)
     T_recovered = flax.serialization.from_bytes(T, flax.serialization.to_bytes(T))

@@ -16,7 +16,7 @@ import jaxlie
 
 
 @general_group_test
-def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup]):
     """Check closure property."""
     T_wa = sample_transform(Group)
     T_wb = sample_transform(Group)
@@ -27,7 +27,7 @@ def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup]):
     """Check closure property."""
     T_wa = sample_transform(Group)
 

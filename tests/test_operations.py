@@ -16,7 +16,7 @@ import jaxlie
 
 
 @general_group_test
-def test_log_exp_bijective(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_log_exp_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check 1-to-1 mapping for log <=> exp operations."""
     transform = sample_transform(Group)
 
@@ -29,21 +29,21 @@ def test_log_exp_bijective(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_inverse_bijective(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_inverse_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check inverse of inverse."""
     transform = sample_transform(Group)
     assert_transforms_close(transform, transform.inverse().inverse())
 
 
 @general_group_test
-def test_matrix_recovery(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_matrix_recovery(Group: Type[jaxlie.MatrixLieGroup]):
     """Check that we can convert to and from matrices."""
     transform = sample_transform(Group)
     assert_transforms_close(transform, Group.from_matrix(transform.as_matrix()))
 
 
 @general_group_test
-def test_adjoint(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_adjoint(Group: Type[jaxlie.MatrixLieGroup]):
     """Check adjoint definition."""
     transform = sample_transform(Group)
     omega = onp.random.randn(Group.tangent_dim)
@@ -54,14 +54,14 @@ def test_adjoint(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_repr(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_repr(Group: Type[jaxlie.MatrixLieGroup]):
     """Smoke test for __repr__ implementations."""
     transform = sample_transform(Group)
     print(transform)
 
 
 @general_group_test
-def test_apply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_apply(Group: Type[jaxlie.MatrixLieGroup]):
     """Check group action interfaces."""
     T_w_b = sample_transform(Group)
     p_b = onp.random.randn(Group.space_dim)
@@ -83,7 +83,7 @@ def test_apply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
 
 
 @general_group_test
-def test_multiply(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+def test_multiply(Group: Type[jaxlie.MatrixLieGroup]):
     """Check multiply interfaces."""
     T_w_b = sample_transform(Group)
     T_b_a = sample_transform(Group)
