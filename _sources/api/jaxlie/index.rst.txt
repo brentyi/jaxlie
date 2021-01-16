@@ -204,7 +204,7 @@ Functions
       Internal parameters. ``(x, y, cos, sin)``.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
@@ -339,7 +339,7 @@ Functions
       Internal parameters. Length-3 translation followed by wxyz quaternion.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
@@ -470,7 +470,7 @@ Functions
       Internal parameters. ``(cos, sin)``.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
@@ -596,7 +596,7 @@ Functions
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
@@ -671,7 +671,7 @@ Functions
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix, method='day') -> 'SO3'
+   .. method:: from_matrix(matrix: types.Matrix) -> 'SO3'
       :staticmethod:
 
       Get group member from matrix representation.

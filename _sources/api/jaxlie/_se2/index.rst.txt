@@ -33,7 +33,7 @@ Classes
       Internal parameters. ``(x, y, cos, sin)``.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 

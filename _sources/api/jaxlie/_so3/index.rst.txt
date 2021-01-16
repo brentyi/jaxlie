@@ -33,7 +33,7 @@ Classes
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
@@ -108,7 +108,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix, method='day') -> 'SO3'
+   .. method:: from_matrix(matrix: types.Matrix) -> 'SO3'
       :staticmethod:
 
       Get group member from matrix representation.

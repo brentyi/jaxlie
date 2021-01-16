@@ -33,7 +33,7 @@ Classes
       Internal parameters. Length-3 translation followed by wxyz quaternion.
 
 
-   .. method:: __repr__(self)
+   .. method:: __repr__(self) -> str
 
       Return repr(self).
 
