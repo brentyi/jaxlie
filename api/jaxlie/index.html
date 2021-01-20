@@ -386,6 +386,17 @@ between our spatial and body representations.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="jaxlie.MatrixLieGroup.sample_uniform">
+<em class="property">abstract static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup">MatrixLieGroup</a><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -551,6 +562,17 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SE2.normalize">
 <code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2">SE2</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2">SE2</a><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SE2.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize/projects values and returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie.SE2.sample_uniform">
+<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2">SE2</a><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SE2.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
@@ -725,6 +747,17 @@ between our spatial and body representations.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt id="jaxlie.SE3.sample_uniform">
+<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3">SE3</a><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SE3.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -880,6 +913,17 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SO2.normalize">
 <code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO2.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize/projects values and returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie.SO2.sample_uniform">
+<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO2.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
@@ -1115,6 +1159,17 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SO3.normalize">
 <code class="sig-name descname">normalize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO3.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalize/projects values and returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie.SO3.sample_uniform">
+<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.SO3.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><em>T</em> – Normalized group member.</p>

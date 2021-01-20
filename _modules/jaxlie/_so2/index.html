@@ -158,6 +158,7 @@
   <h1>Source code for jaxlie._so2</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
 
+<span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
@@ -259,7 +260,14 @@
 
 <div class="viewcode-block" id="SO2.normalize"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.normalize">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">))</span></div></div>
+        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SO2.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="nd">@overrides</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">SO2</span><span class="o">.</span><span class="n">from_radians</span><span class="p">(</span>
+            <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>
