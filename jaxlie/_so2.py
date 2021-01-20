@@ -1,5 +1,6 @@
 import dataclasses
 
+import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -102,3 +103,10 @@ class SO2(_base.MatrixLieGroup):
     @overrides
     def normalize(self: "SO2") -> "SO2":
         return SO2(unit_complex=self.unit_complex / jnp.linalg.norm(self.unit_complex))
+
+    @staticmethod
+    @overrides
+    def sample_uniform(key: jax.random.PRNGKey) -> "SO2":
+        return SO2.from_radians(
+            jax.random.uniform(key=key, minval=0.0, maxval=2 * jnp.pi)
+        )

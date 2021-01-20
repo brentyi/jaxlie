@@ -1,5 +1,6 @@
 import dataclasses
 
+import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -293,3 +294,28 @@ class SO3(_base.MatrixLieGroup):
     @overrides
     def normalize(self: "SO3") -> "SO3":
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz))
+
+    @staticmethod
+    @overrides
+    def sample_uniform(key: jax.random.PRNGKey) -> "SO3":
+        # Uniformly sample over S^4
+        # > Reference: http://planning.cs.uiuc.edu/node198.html
+        u1, u2, u3 = jax.random.uniform(
+            key=key,
+            shape=(3,),
+            minval=jnp.zeros(3),
+            maxval=jnp.array([1.0, 2.0 * jnp.pi, 2.0 * jnp.pi]),
+        )
+        a = jnp.sqrt(1.0 - u1)
+        b = jnp.sqrt(u1)
+
+        return SO3(
+            wxyz=jnp.array(
+                [
+                    a * jnp.sin(u2),
+                    a * jnp.cos(u2),
+                    b * jnp.sin(u3),
+                    b * jnp.cos(u3),
+                ]
+            )
+        )

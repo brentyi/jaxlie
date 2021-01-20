@@ -1,5 +1,7 @@
+import random
 from typing import Callable, Type, TypeVar
 
+import jax
 import numpy as onp
 import pytest
 from hypothesis import given, settings
@@ -17,8 +19,8 @@ T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 
 def sample_transform(Group: Type[T]) -> T:
     """Sample a random transform from a group."""
-    tangent = onp.random.randn(Group.tangent_dim)
-    return Group.exp(tangent)
+    seed = random.getrandbits(32)
+    return Group.sample_uniform(key=jax.random.PRNGKey(seed=seed))
 
 
 def general_group_test(

@@ -4,6 +4,8 @@
 from typing import Type
 
 import numpy as onp
+from hypothesis import given, settings
+from hypothesis import strategies as st
 from jax import numpy as jnp
 from utils import (
     assert_arrays_close,
@@ -13,6 +15,29 @@ from utils import (
 )
 
 import jaxlie
+
+
+@general_group_test
+def test_sample_uniform_valid(Group: Type[jaxlie.MatrixLieGroup]):
+    """Check that sample_uniform() returns valid group members."""
+    T = sample_transform(Group)  # Calls sample_uniform under the hood
+    assert_transforms_close(T, T.normalize())
+
+
+@settings(deadline=None)
+@given(_random_module=st.random_module())
+def test_so2_from_to_radians_bijective(_random_module):
+    """Check that we can convert from and to radians."""
+    radians = onp.random.uniform(low=-onp.pi, high=onp.pi)
+    assert_arrays_close(jaxlie.SO2.from_radians(radians).to_radians(), radians)
+
+
+@settings(deadline=None)
+@given(_random_module=st.random_module())
+def test_so3_xyzw_bijective(_random_module):
+    """Check that we can convert between xyzw and wxyz quaternions."""
+    T = sample_transform(jaxlie.SO3)
+    assert_transforms_close(T, jaxlie.SO3.from_quaternion_xyzw(T.as_quaternion_xyzw()))
 
 
 @general_group_test
@@ -36,7 +61,7 @@ def test_inverse_bijective(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 @general_group_test
-def test_matrix_recovery(Group: Type[jaxlie.MatrixLieGroup]):
+def test_matrix_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check that we can convert to and from matrices."""
     transform = sample_transform(Group)
     assert_transforms_close(transform, Group.from_matrix(transform.as_matrix()))

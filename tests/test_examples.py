@@ -12,14 +12,6 @@ import jaxlie
 
 @settings(deadline=None)
 @given(_random_module=st.random_module())
-def test_so2_from_to_radians_bijective(_random_module):
-    """Check that we can convert from and to radians."""
-    radians = onp.random.uniform(low=-onp.pi, high=onp.pi)
-    assert_arrays_close(jaxlie.SO2.from_radians(radians).to_radians(), radians)
-
-
-@settings(deadline=None)
-@given(_random_module=st.random_module())
 def test_se2_translation(_random_module):
     """Simple test for SE(2) translation terms."""
     translation = onp.random.randn(2)
@@ -67,14 +59,6 @@ def test_so3_xyzw_basic():
         jaxlie.SO3.from_quaternion_xyzw(onp.array([0, 0, 0, 1])),
         jaxlie.SO3.identity(),
     )
-
-
-@settings(deadline=None)
-@given(_random_module=st.random_module())
-def test_so3_xyzw_bijective(_random_module):
-    """Check that we can convert between xyzw and wxyz quaternions."""
-    T = sample_transform(jaxlie.SO3)
-    assert_transforms_close(T, jaxlie.SO3.from_quaternion_xyzw(T.as_quaternion_xyzw()))
 
 
 @settings(deadline=None)

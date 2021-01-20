@@ -1,5 +1,6 @@
 import dataclasses
 
+import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -185,4 +186,15 @@ class SE3(_base.MatrixLieGroup):
         return SE3.from_rotation_and_translation(
             rotation=self.rotation.normalize(),
             translation=self.translation,
+        )
+
+    @staticmethod
+    @overrides
+    def sample_uniform(key: jax.random.PRNGKey) -> "SE3":
+        key0, key1 = jax.random.split(key)
+        return SE3.from_rotation_and_translation(
+            rotation=SO3.sample_uniform(key0),
+            translation=jax.random.uniform(
+                key=key1, shape=(3,), minval=-1.0, maxval=1.0
+            ),
         )

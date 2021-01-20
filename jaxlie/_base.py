@@ -1,6 +1,7 @@
 import abc
 from typing import TypeVar, overload
 
+import jax
 from jax import numpy as jnp
 
 from . import types
@@ -164,4 +165,13 @@ class MatrixLieGroup(abc.ABC):
 
         Returns:
             T: Normalized group member.
+        """
+
+    @staticmethod
+    @abc.abstractmethod
+    def sample_uniform(key: jax.random.PRNGKey) -> "MatrixLieGroup":
+        """Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+        Returns:
+            MatrixLieGroup: Sampled group member.
         """

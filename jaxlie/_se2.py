@@ -198,3 +198,14 @@ class SE2(_base.MatrixLieGroup):
             rotation=self.rotation.normalize(),
             translation=self.translation,
         )
+
+    @staticmethod
+    @overrides
+    def sample_uniform(key: jax.random.PRNGKey) -> "SE2":
+        key0, key1 = jax.random.split(key)
+        return SE2.from_rotation_and_translation(
+            rotation=SO2.sample_uniform(key0),
+            translation=jax.random.uniform(
+                key=key1, shape=(2,), minval=-1.0, maxval=1.0
+            ),
+        )
