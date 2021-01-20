@@ -194,7 +194,7 @@ Functions
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
-      :returns: *T* -- Normalized group member.
+      :returns: *MatrixLieGroup* -- Sampled group member.
 
 
 
@@ -337,7 +337,7 @@ Functions
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
-      :returns: *T* -- Normalized group member.
+      :returns: *MatrixLieGroup* -- Sampled group member.
 
 
 
@@ -476,7 +476,7 @@ Functions
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
-      :returns: *T* -- Normalized group member.
+      :returns: *MatrixLieGroup* -- Sampled group member.
 
 
 
@@ -610,7 +610,7 @@ Functions
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
-      :returns: *T* -- Normalized group member.
+      :returns: *MatrixLieGroup* -- Sampled group member.
 
 
 
@@ -799,7 +799,7 @@ Functions
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
-      :returns: *T* -- Normalized group member.
+      :returns: *MatrixLieGroup* -- Sampled group member.
 
 
 
