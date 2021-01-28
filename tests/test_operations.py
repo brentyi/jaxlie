@@ -40,6 +40,14 @@ def test_so3_xyzw_bijective(_random_module):
     assert_transforms_close(T, jaxlie.SO3.from_quaternion_xyzw(T.as_quaternion_xyzw()))
 
 
+@settings(deadline=None)
+@given(_random_module=st.random_module())
+def test_so3_rpy_bijective(_random_module):
+    """Check that we can convert between quaternions and Euler angles."""
+    T = sample_transform(jaxlie.SO3)
+    assert_transforms_close(T, jaxlie.SO3.from_rpy_radians(*T.as_rpy_radians()))
+
+
 @general_group_test
 def test_log_exp_bijective(Group: Type[jaxlie.MatrixLieGroup]):
     """Check 1-to-1 mapping for log <=> exp operations."""

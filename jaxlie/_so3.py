@@ -104,6 +104,52 @@ class SO3(_base.MatrixLieGroup):
         """Grab parameters as xyzw quaternion."""
         return jnp.roll(self.wxyz, shift=-1)
 
+    def as_rpy_radians(self) -> types.RollPitchYaw:
+        """Computes roll, pitch, and yaw angles.
+        Uses the ZYX mobile robot convention.
+
+        Returns:
+            jaxlie.types.RollPitchYaw: Named tuple containing Euler angles in radians.
+        """
+        return types.RollPitchYaw(
+            roll=self.compute_roll_radians(),
+            pitch=self.compute_pitch_radians(),
+            yaw=self.compute_yaw_radians(),
+        )
+
+    def compute_roll_radians(self) -> float:
+        """Compute roll angle.
+        Uses the ZYX mobile robot convention.
+
+        Returns:
+            float: Euler angle in radians.
+        """
+        # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
+        q0, q1, q2, q3 = self.wxyz
+        return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
+
+    def compute_pitch_radians(self) -> float:
+        """Compute pitch angle.
+        Uses the ZYX mobile robot convention.
+
+        Returns:
+            float: Euler angle in radians.
+        """
+        # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
+        q0, q1, q2, q3 = self.wxyz
+        return jnp.arcsin(2 * (q0 * q2 - q3 * q1))
+
+    def compute_yaw_radians(self) -> float:
+        """Compute yaw angle.
+        Uses the ZYX mobile robot convention.
+
+        Returns:
+            float: Euler angle in radians.
+        """
+        # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
+        q0, q1, q2, q3 = self.wxyz
+        return jnp.arctan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 ** 2 + q3 ** 2))
+
     # Factory
 
     @staticmethod

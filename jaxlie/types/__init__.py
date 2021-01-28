@@ -1,4 +1,15 @@
+from typing import NamedTuple
+
 from jax import numpy as jnp
+
+
+class RollPitchYaw(NamedTuple):
+    """Tuple containing roll, pitch, and yaw Euler angles."""
+
+    roll: jnp.ndarray
+    pitch: jnp.ndarray
+    yaw: jnp.ndarray
+
 
 Matrix = jnp.ndarray
 """Type alias for `jnp.ndarray`. Should not be instantiated.
@@ -23,6 +34,7 @@ Refers to a 1D array with shape `(Group.tangent_dim,)`.
 
 
 __all__ = [
+    "RollPitchYaw",
     "Matrix",
     "Vector",
     "TangentVector",
