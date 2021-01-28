@@ -1,5 +1,5 @@
 import random
-from typing import Callable, Type, TypeVar
+from typing import Any, Callable, Type, TypeVar, cast
 
 import jax
 import numpy as onp
@@ -20,16 +20,16 @@ T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 def sample_transform(Group: Type[T]) -> T:
     """Sample a random transform from a group."""
     seed = random.getrandbits(32)
-    return Group.sample_uniform(key=jax.random.PRNGKey(seed=seed))
+    return cast(T, Group.sample_uniform(key=jax.random.PRNGKey(seed=seed)))
 
 
 def general_group_test(
     f: Callable[[Type[jaxlie.MatrixLieGroup]], None], max_examples: int = 100
-) -> Callable[[Type[jaxlie.MatrixLieGroup]], None]:
+) -> Callable[[Type[jaxlie.MatrixLieGroup], Any], None]:
     """Decorator for defining tests that run on all group types."""
 
     # Disregard unused argument
-    def f_wrapped(Group: Type[jaxlie.MatrixLieGroup], _random_module):
+    def f_wrapped(Group: Type[jaxlie.MatrixLieGroup], _random_module) -> None:
         f(Group)
 
     # Disable timing check (first run requires JIT tracing and will be slower)
