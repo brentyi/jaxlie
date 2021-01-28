@@ -1,4 +1,4 @@
-from typing import NamedTuple
+from typing import NamedTuple, Union
 
 from jax import numpy as jnp
 
@@ -10,6 +10,10 @@ class RollPitchYaw(NamedTuple):
     pitch: jnp.ndarray
     yaw: jnp.ndarray
 
+
+Scalar = Union[float, jnp.ndarray]
+"""Type alias for `Union[float, jnp.ndarray]`.
+"""
 
 Matrix = jnp.ndarray
 """Type alias for `jnp.ndarray`. Should not be instantiated.
@@ -35,6 +39,7 @@ Refers to a 1D array with shape `(Group.tangent_dim,)`.
 
 __all__ = [
     "RollPitchYaw",
+    "Scalar",
     "Matrix",
     "Vector",
     "TangentVector",

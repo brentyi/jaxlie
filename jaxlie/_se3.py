@@ -1,7 +1,6 @@
 import dataclasses
 
 import jax
-import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -65,7 +64,7 @@ class SE3(_base.MatrixLieGroup):
     @staticmethod
     @overrides
     def identity() -> "SE3":
-        return SE3(xyz_wxyz=onp.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]))
+        return SE3(xyz_wxyz=jnp.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -190,7 +189,7 @@ class SE3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.PRNGKey) -> "SE3":
+    def sample_uniform(key: jnp.ndarray) -> "SE3":
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0),

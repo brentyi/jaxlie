@@ -1,7 +1,6 @@
 import dataclasses
 
 import jax
-import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -30,7 +29,7 @@ class SO3(_base.MatrixLieGroup):
         return f"{self.__class__.__name__}(wxyz={wxyz})"
 
     @staticmethod
-    def from_x_radians(theta: float) -> "SO3":
+    def from_x_radians(theta: types.Scalar) -> "SO3":
         """Generates a x-axis rotation.
 
         Args:
@@ -42,7 +41,7 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
     @staticmethod
-    def from_y_radians(theta: float) -> "SO3":
+    def from_y_radians(theta: types.Scalar) -> "SO3":
         """Generates a y-axis rotation.
 
         Args:
@@ -54,7 +53,7 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
     @staticmethod
-    def from_z_radians(theta: float) -> "SO3":
+    def from_z_radians(theta: types.Scalar) -> "SO3":
         """Generates a z-axis rotation.
 
         Args:
@@ -66,7 +65,11 @@ class SO3(_base.MatrixLieGroup):
         return SO3.exp(jnp.array([0.0, 0.0, theta]))
 
     @staticmethod
-    def from_rpy_radians(roll: float, pitch: float, yaw: float) -> "SO3":
+    def from_rpy_radians(
+        roll: types.Scalar,
+        pitch: types.Scalar,
+        yaw: types.Scalar,
+    ) -> "SO3":
         """Generates a transform from a set of Euler angles.
         Uses the ZYX mobile robot convention.
 
@@ -117,34 +120,34 @@ class SO3(_base.MatrixLieGroup):
             yaw=self.compute_yaw_radians(),
         )
 
-    def compute_roll_radians(self) -> float:
+    def compute_roll_radians(self) -> jnp.ndarray:
         """Compute roll angle.
         Uses the ZYX mobile robot convention.
 
         Returns:
-            float: Euler angle in radians.
+            jnp.ndarray: Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
         return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
 
-    def compute_pitch_radians(self) -> float:
+    def compute_pitch_radians(self) -> jnp.ndarray:
         """Compute pitch angle.
         Uses the ZYX mobile robot convention.
 
         Returns:
-            float: Euler angle in radians.
+            jnp.ndarray: Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
         return jnp.arcsin(2 * (q0 * q2 - q3 * q1))
 
-    def compute_yaw_radians(self) -> float:
+    def compute_yaw_radians(self) -> jnp.ndarray:
         """Compute yaw angle.
         Uses the ZYX mobile robot convention.
 
         Returns:
-            float: Euler angle in radians.
+            jnp.ndarray: Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
@@ -155,7 +158,7 @@ class SO3(_base.MatrixLieGroup):
     @staticmethod
     @overrides
     def identity() -> "SO3":
-        return SO3(wxyz=onp.array([1.0, 0.0, 0.0, 0.0]))
+        return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -335,7 +338,7 @@ class SO3(_base.MatrixLieGroup):
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
-        return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))
+        return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
 
     @overrides
     def normalize(self: "SO3") -> "SO3":
@@ -343,7 +346,7 @@ class SO3(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.PRNGKey) -> "SO3":
+    def sample_uniform(key: jnp.ndarray) -> "SO3":
         # Uniformly sample over S^4
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(

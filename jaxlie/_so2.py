@@ -1,7 +1,6 @@
 import dataclasses
 
 import jax
-import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -30,12 +29,12 @@ class SO2(_base.MatrixLieGroup):
         return f"{self.__class__.__name__}(unit_complex={unit_complex})"
 
     @staticmethod
-    def from_radians(theta: float) -> "SO2":
+    def from_radians(theta: types.Scalar) -> "SO2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    def as_radians(self) -> float:
+    def as_radians(self) -> jnp.ndarray:
         (radians,) = self.log()
         return radians
 
@@ -44,7 +43,7 @@ class SO2(_base.MatrixLieGroup):
     @staticmethod
     @overrides
     def identity() -> "SO2":
-        return SO2(unit_complex=onp.array([1.0, 0.0]))
+        return SO2(unit_complex=jnp.array([1.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -98,7 +97,7 @@ class SO2(_base.MatrixLieGroup):
 
     @overrides
     def inverse(self: "SO2") -> "SO2":
-        return SO2(unit_complex=self.unit_complex * onp.array([1, -1]))
+        return SO2(unit_complex=self.unit_complex * jnp.array([1, -1]))
 
     @overrides
     def normalize(self: "SO2") -> "SO2":
@@ -106,7 +105,7 @@ class SO2(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.PRNGKey) -> "SO2":
+    def sample_uniform(key: jnp.ndarray) -> "SO2":
         return SO2.from_radians(
-            jax.random.uniform(key=key, minval=0.0, maxval=2 * jnp.pi)
+            jax.random.uniform(key=key, minval=0.0, maxval=2.0 * jnp.pi)
         )

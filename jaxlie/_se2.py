@@ -31,7 +31,7 @@ class SE2(_base.MatrixLieGroup):
         return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"
 
     @staticmethod
-    def from_xy_theta(x: float, y: float, theta: float) -> "SE2":
+    def from_xy_theta(x: types.Scalar, y: types.Scalar, theta: types.Scalar) -> "SE2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SE2(xy_unit_complex=jnp.array([x, y, cos, sin]))
@@ -201,7 +201,7 @@ class SE2(_base.MatrixLieGroup):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.PRNGKey) -> "SE2":
+    def sample_uniform(key: jnp.ndarray) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(
             rotation=SO2.sample_uniform(key0),

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, Dict, Tuple, Type, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, Dict, Sequence, Tuple, Type, TypeVar
 
 import flax
 import jax
@@ -68,15 +68,13 @@ def register_lie_group(
 
         # Register as a PyTree node to make JIT compilation, etc easier in Jax
         def _flatten_group(
-            v: "MatrixLieGroup",
+            v: T,
         ) -> Tuple[Tuple[jnp.ndarray, ...], Tuple]:
             """Flatten a dataclass for use as a PyTree."""
             as_dict = vars(v)
             return tuple(as_dict.values()), tuple(as_dict.keys())
 
-        def _unflatten_group(
-            treedef: Tuple, children: Tuple[jnp.ndarray, ...]
-        ) -> "MatrixLieGroup":
+        def _unflatten_group(treedef: Any, children: Sequence[Any]) -> T:
             """Unflatten a dataclass for use as a PyTree."""
             # Treedef is names of fields
             return cls(**dict(zip(treedef, children)))  # type: ignore

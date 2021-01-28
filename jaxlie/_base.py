@@ -1,5 +1,5 @@
 import abc
-from typing import TypeVar, overload
+from typing import Type, TypeVar, overload
 
 import jax
 from jax import numpy as jnp
@@ -59,18 +59,18 @@ class MatrixLieGroup(abc.ABC):
 
     # Factory
 
-    @staticmethod
+    @classmethod
     @abc.abstractmethod
-    def identity() -> "MatrixLieGroup":
+    def identity(cls: Type[T]) -> T:
         """Returns identity element.
 
         Returns:
             types.Matrix: Identity.
         """
 
-    @staticmethod
+    @classmethod
     @abc.abstractmethod
-    def from_matrix(matrix: types.Matrix) -> "MatrixLieGroup":
+    def from_matrix(cls: Type[T], matrix: types.Matrix) -> T:
         """Get group member from matrix representation.
 
         Args:
@@ -115,9 +115,9 @@ class MatrixLieGroup(abc.ABC):
             T: self @ other
         """
 
-    @staticmethod
+    @classmethod
     @abc.abstractmethod
-    def exp(tangent: types.TangentVector) -> "MatrixLieGroup":
+    def exp(cls: Type[T], tangent: types.TangentVector) -> T:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -167,10 +167,13 @@ class MatrixLieGroup(abc.ABC):
             T: Normalized group member.
         """
 
-    @staticmethod
+    @classmethod
     @abc.abstractmethod
-    def sample_uniform(key: jax.random.PRNGKey) -> "MatrixLieGroup":
+    def sample_uniform(cls: Type[T], key: jnp.ndarray) -> T:
         """Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+        Args:
+            key (jnp.ndarray): PRNG key, as returned by `jax.random.PRNGKey()`.
 
         Returns:
             MatrixLieGroup: Sampled group member.
