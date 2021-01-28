@@ -41,6 +41,12 @@ Classes
       
 
 
+.. data:: Scalar
+   
+
+   Type alias for ``Union[float, jnp.ndarray, onp.ndarray]``.
+
+
 .. data:: Matrix
    
 

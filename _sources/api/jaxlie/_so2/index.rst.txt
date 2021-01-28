@@ -38,11 +38,11 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_radians(theta: float) -> 'SO2'
+   .. method:: from_radians(theta: types.Scalar) -> 'SO2'
       :staticmethod:
 
 
-   .. method:: as_radians(self) -> float
+   .. method:: as_radians(self) -> jnp.ndarray
 
 
    .. method:: identity() -> 'SO2'
@@ -143,10 +143,13 @@ Classes
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SO2'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO2'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 

@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta: float) -> 'SO3'
+   .. method:: from_x_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a x-axis rotation.
@@ -48,7 +48,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_y_radians(theta: float) -> 'SO3'
+   .. method:: from_y_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a y-axis rotation.
@@ -58,7 +58,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_z_radians(theta: float) -> 'SO3'
+   .. method:: from_z_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a z-axis rotation.
@@ -68,7 +68,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_rpy_radians(roll: float, pitch: float, yaw: float) -> 'SO3'
+   .. method:: from_rpy_radians(roll: types.Scalar, pitch: types.Scalar, yaw: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a transform from a set of Euler angles.
@@ -108,28 +108,28 @@ Classes
       :returns: *jaxlie.types.RollPitchYaw* -- Named tuple containing Euler angles in radians.
 
 
-   .. method:: compute_roll_radians(self) -> float
+   .. method:: compute_roll_radians(self) -> jnp.ndarray
 
       Compute roll angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
-   .. method:: compute_pitch_radians(self) -> float
+   .. method:: compute_pitch_radians(self) -> jnp.ndarray
 
       Compute pitch angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
-   .. method:: compute_yaw_radians(self) -> float
+   .. method:: compute_yaw_radians(self) -> jnp.ndarray
 
       Compute yaw angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
    .. method:: identity() -> 'SO3'
@@ -230,10 +230,13 @@ Classes
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SO3'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO3'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 

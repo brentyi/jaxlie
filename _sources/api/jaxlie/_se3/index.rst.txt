@@ -148,10 +148,13 @@ Classes
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SE3'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 

@@ -80,8 +80,8 @@ Functions
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
 
-   .. method:: identity() -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: identity(cls: Type[T]) -> T
+      :classmethod:
       :abstractmethod:
 
       Returns identity element.
@@ -89,8 +89,8 @@ Functions
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: from_matrix(cls: Type[T], matrix: types.Matrix) -> T
+      :classmethod:
       :abstractmethod:
 
       Get group member from matrix representation.
@@ -135,8 +135,8 @@ Functions
       :returns: *T* -- self @ other
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: exp(cls: Type[T], tangent: types.TangentVector) -> T
+      :classmethod:
       :abstractmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -188,11 +188,14 @@ Functions
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: sample_uniform(cls: Type[T], key: jnp.ndarray) -> T
+      :classmethod:
       :abstractmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 
@@ -332,10 +335,13 @@ Functions
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SE2'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE2'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 
@@ -471,10 +477,13 @@ Functions
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SE3'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 
@@ -500,11 +509,11 @@ Functions
       Return repr(self).
 
 
-   .. method:: from_radians(theta: float) -> 'SO2'
+   .. method:: from_radians(theta: types.Scalar) -> 'SO2'
       :staticmethod:
 
 
-   .. method:: as_radians(self) -> float
+   .. method:: as_radians(self) -> jnp.ndarray
 
 
    .. method:: identity() -> 'SO2'
@@ -605,10 +614,13 @@ Functions
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SO2'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO2'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 
@@ -634,7 +646,7 @@ Functions
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta: float) -> 'SO3'
+   .. method:: from_x_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a x-axis rotation.
@@ -644,7 +656,7 @@ Functions
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_y_radians(theta: float) -> 'SO3'
+   .. method:: from_y_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a y-axis rotation.
@@ -654,7 +666,7 @@ Functions
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_z_radians(theta: float) -> 'SO3'
+   .. method:: from_z_radians(theta: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a z-axis rotation.
@@ -664,7 +676,7 @@ Functions
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_rpy_radians(roll: float, pitch: float, yaw: float) -> 'SO3'
+   .. method:: from_rpy_radians(roll: types.Scalar, pitch: types.Scalar, yaw: types.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a transform from a set of Euler angles.
@@ -704,28 +716,28 @@ Functions
       :returns: *jaxlie.types.RollPitchYaw* -- Named tuple containing Euler angles in radians.
 
 
-   .. method:: compute_roll_radians(self) -> float
+   .. method:: compute_roll_radians(self) -> jnp.ndarray
 
       Compute roll angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
-   .. method:: compute_pitch_radians(self) -> float
+   .. method:: compute_pitch_radians(self) -> jnp.ndarray
 
       Compute pitch angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
-   .. method:: compute_yaw_radians(self) -> float
+   .. method:: compute_yaw_radians(self) -> jnp.ndarray
 
       Compute yaw angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *float* -- Euler angle in radians.
+      :returns: *jnp.ndarray* -- Euler angle in radians.
 
 
    .. method:: identity() -> 'SO3'
@@ -826,10 +838,13 @@ Functions
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'SO3'
+   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO3'
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 

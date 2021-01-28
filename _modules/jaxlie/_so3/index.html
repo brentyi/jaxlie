@@ -159,7 +159,6 @@
 <span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
 
@@ -188,7 +187,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(wxyz=</span><span class="si">{</span><span class="n">wxyz</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 <div class="viewcode-block" id="SO3.from_x_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_x_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_x_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_x_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a x-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -200,7 +199,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_y_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_y_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_y_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_y_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a y-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -212,7 +211,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_z_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_z_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_z_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_z_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a z-axis rotation.</span>
 
 <span class="sd">        Args:</span>
@@ -224,7 +223,11 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_rpy_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_rpy_radians">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_rpy_radians</span><span class="p">(</span><span class="n">roll</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pitch</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">yaw</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_rpy_radians</span><span class="p">(</span>
+        <span class="n">roll</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span>
+        <span class="n">pitch</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span>
+        <span class="n">yaw</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Generates a transform from a set of Euler angles.</span>
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
@@ -275,34 +278,34 @@
             <span class="n">yaw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_yaw_radians</span><span class="p">(),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="SO3.compute_roll_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_roll_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_roll_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="SO3.compute_roll_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_roll_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_roll_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compute roll angle.</span>
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">+</span> <span class="n">q2</span> <span class="o">*</span> <span class="n">q3</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">q2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SO3.compute_pitch_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_pitch_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_pitch_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="SO3.compute_pitch_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_pitch_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_pitch_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compute pitch angle.</span>
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q2</span> <span class="o">-</span> <span class="n">q3</span> <span class="o">*</span> <span class="n">q1</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="SO3.compute_yaw_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_yaw_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_yaw_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="SO3.compute_yaw_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_yaw_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_yaw_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compute yaw angle.</span>
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
@@ -313,7 +316,7 @@
 <div class="viewcode-block" id="SO3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -493,7 +496,7 @@
 <div class="viewcode-block" id="SO3.inverse"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.inverse">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="c1"># Negate complex terms</span>
-        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span> <span class="o">*</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.normalize"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.normalize">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
@@ -501,7 +504,7 @@
 
 <div class="viewcode-block" id="SO3.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="c1"># Uniformly sample over S^4</span>
         <span class="c1"># &gt; Reference: http://planning.cs.uiuc.edu/node198.html</span>
         <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>

@@ -65,8 +65,8 @@ Classes
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
 
-   .. method:: identity() -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: identity(cls: Type[T]) -> T
+      :classmethod:
       :abstractmethod:
 
       Returns identity element.
@@ -74,8 +74,8 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: from_matrix(cls: Type[T], matrix: types.Matrix) -> T
+      :classmethod:
       :abstractmethod:
 
       Get group member from matrix representation.
@@ -120,8 +120,8 @@ Classes
       :returns: *T* -- self @ other
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: exp(cls: Type[T], tangent: types.TangentVector) -> T
+      :classmethod:
       :abstractmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -173,11 +173,14 @@ Classes
       :returns: *T* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jax.random.PRNGKey) -> 'MatrixLieGroup'
-      :staticmethod:
+   .. method:: sample_uniform(cls: Type[T], key: jnp.ndarray) -> T
+      :classmethod:
       :abstractmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
+
+      :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :type key: jnp.ndarray
 
       :returns: *MatrixLieGroup* -- Sampled group member.
 

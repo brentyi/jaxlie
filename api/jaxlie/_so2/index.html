@@ -197,12 +197,12 @@
 
 <dl class="py method">
 <dt id="jaxlie._so2.SO2.from_radians">
-<em class="property">static </em><code class="sig-name descname">from_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">theta</span><span class="p">:</span> <span class="n">float</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so2.SO2" title="jaxlie._so2.SO2">SO2</a><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.from_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.from_radians" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">from_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">theta</span><span class="p">:</span> <span class="n">types.Scalar</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so2.SO2" title="jaxlie._so2.SO2">SO2</a><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.from_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.from_radians" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._so2.SO2.as_radians">
-<code class="sig-name descname">as_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.as_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.as_radians" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">as_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; jnp.ndarray<a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.as_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.as_radians" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -336,11 +336,14 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so2.SO2.sample_uniform">
-<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jax.random.PRNGKey</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so2.SO2" title="jaxlie._so2.SO2">SO2</a><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">sample_uniform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">jnp.ndarray</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so2.SO2" title="jaxlie._so2.SO2">SO2</a><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so2.SO2.sample_uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>
