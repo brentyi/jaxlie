@@ -42,7 +42,7 @@ Classes
       :staticmethod:
 
 
-   .. method:: to_radians(self) -> float
+   .. method:: as_radians(self) -> float
 
 
    .. method:: identity() -> 'SO2'
