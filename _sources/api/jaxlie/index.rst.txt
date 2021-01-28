@@ -221,7 +221,7 @@ Functions
       Return repr(self).
 
 
-   .. method:: from_xy_theta(x: float, y: float, theta: float) -> 'SE2'
+   .. method:: from_xy_theta(x: types.Scalar, y: types.Scalar, theta: types.Scalar) -> 'SE2'
       :staticmethod:
 
 
