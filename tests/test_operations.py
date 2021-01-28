@@ -29,7 +29,7 @@ def test_sample_uniform_valid(Group: Type[jaxlie.MatrixLieGroup]):
 def test_so2_from_to_radians_bijective(_random_module):
     """Check that we can convert from and to radians."""
     radians = onp.random.uniform(low=-onp.pi, high=onp.pi)
-    assert_arrays_close(jaxlie.SO2.from_radians(radians).to_radians(), radians)
+    assert_arrays_close(jaxlie.SO2.from_radians(radians).as_radians(), radians)
 
 
 @settings(deadline=None)

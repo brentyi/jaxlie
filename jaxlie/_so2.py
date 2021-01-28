@@ -35,7 +35,7 @@ class SO2(_base.MatrixLieGroup):
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    def to_radians(self) -> float:
+    def as_radians(self) -> float:
         (radians,) = self.log()
         return radians
 
