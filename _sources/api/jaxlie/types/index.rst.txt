@@ -7,6 +7,40 @@
 Package Contents
 ----------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.types.RollPitchYaw
+
+
+
+.. py:class:: RollPitchYaw
+
+   Bases: :class:`typing.NamedTuple`
+
+   .. autoapi-inheritance-diagram:: jaxlie.types.RollPitchYaw
+      :parts: 1
+
+   Tuple containing roll, pitch, and yaw Euler angles.
+
+   .. attribute:: roll
+      :annotation: :jnp.ndarray
+
+      
+
+   .. attribute:: pitch
+      :annotation: :jnp.ndarray
+
+      
+
+   .. attribute:: yaw
+      :annotation: :jnp.ndarray
+
+      
+
+
 .. data:: Matrix
    
 

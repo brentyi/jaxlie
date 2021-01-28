@@ -279,6 +279,54 @@ constructor.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="jaxlie._so3.SO3.as_rpy_radians">
+<code class="sig-name descname">as_rpy_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; types.RollPitchYaw<a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_rpy_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_rpy_radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes roll, pitch, and yaw angles.
+Uses the ZYX mobile robot convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>jaxlie.types.RollPitchYaw</em> – Named tuple containing Euler angles in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie._so3.SO3.compute_roll_radians">
+<code class="sig-name descname">compute_roll_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.compute_roll_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so3.SO3.compute_roll_radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute roll angle.
+Uses the ZYX mobile robot convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>float</em> – Euler angle in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie._so3.SO3.compute_pitch_radians">
+<code class="sig-name descname">compute_pitch_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.compute_pitch_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so3.SO3.compute_pitch_radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute pitch angle.
+Uses the ZYX mobile robot convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>float</em> – Euler angle in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="jaxlie._so3.SO3.compute_yaw_radians">
+<code class="sig-name descname">compute_yaw_radians</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.compute_yaw_radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so3.SO3.compute_yaw_radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute yaw angle.
+Uses the ZYX mobile robot convention.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>float</em> – Euler angle in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="jaxlie._so3.SO3.identity">
 <em class="property">static </em><code class="sig-name descname">identity</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie._so3.SO3.identity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns identity element.</p>

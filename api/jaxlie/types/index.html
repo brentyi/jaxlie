@@ -169,6 +169,44 @@
 <span id="jaxlie-types"></span><h1><a class="reference internal" href="#module-jaxlie.types" title="jaxlie.types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></a><a class="headerlink" href="#module-jaxlie.types" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.types.RollPitchYaw" title="jaxlie.types.RollPitchYaw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollPitchYaw</span></code></a></p></td>
+<td><p>Tuple containing roll, pitch, and yaw Euler angles.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt id="jaxlie.types.RollPitchYaw">
+<em class="property">class </em><code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">RollPitchYaw</code><a class="reference internal" href="../../../_modules/jaxlie/types/#RollPitchYaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.types.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.NamedTuple</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-16646af0f6e26a07d275fdb1de148b4403f79d73.png" alt="Inheritance diagram of jaxlie.types.RollPitchYaw" usemap="#inheritance10a0e18aa4" class="inheritance graphviz" /></div>
+<map id="inheritance10a0e18aa4" name="inheritance10a0e18aa4">
+<area shape="rect" id="node2" href="#jaxlie.types.RollPitchYaw" target="_top" title="Tuple containing roll, pitch, and yaw Euler angles." alt="" coords="156,5,259,31"/>
+</map><p>Tuple containing roll, pitch, and yaw Euler angles.</p>
+<dl class="py attribute">
+<dt id="jaxlie.types.RollPitchYaw.roll">
+<code class="sig-name descname">roll</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="jaxlie.types.RollPitchYaw.pitch">
+<code class="sig-name descname">pitch</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="jaxlie.types.RollPitchYaw.yaw">
+<code class="sig-name descname">yaw</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py data">
 <dt id="jaxlie.types.Matrix">
 <code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">Matrix</code><a class="headerlink" href="#jaxlie.types.Matrix" title="Permalink to this definition">¶</a></dt>
@@ -191,6 +229,7 @@ For adjoints, shape should be <code class="docutils literal notranslate"><span c
 <p>Refers to a 1D array with shape <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,)</span></code>.</p>
 </dd></dl>
 
+</div>
 </div>
 </div>
 

@@ -100,6 +100,38 @@ Classes
       Grab parameters as xyzw quaternion.
 
 
+   .. method:: as_rpy_radians(self) -> types.RollPitchYaw
+
+      Computes roll, pitch, and yaw angles.
+      Uses the ZYX mobile robot convention.
+
+      :returns: *jaxlie.types.RollPitchYaw* -- Named tuple containing Euler angles in radians.
+
+
+   .. method:: compute_roll_radians(self) -> float
+
+      Compute roll angle.
+      Uses the ZYX mobile robot convention.
+
+      :returns: *float* -- Euler angle in radians.
+
+
+   .. method:: compute_pitch_radians(self) -> float
+
+      Compute pitch angle.
+      Uses the ZYX mobile robot convention.
+
+      :returns: *float* -- Euler angle in radians.
+
+
+   .. method:: compute_yaw_radians(self) -> float
+
+      Compute yaw angle.
+      Uses the ZYX mobile robot convention.
+
+      :returns: *float* -- Euler angle in radians.
+
+
    .. method:: identity() -> 'SO3'
       :staticmethod:
 

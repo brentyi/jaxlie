@@ -262,6 +262,52 @@
         <span class="sd">&quot;&quot;&quot;Grab parameters as xyzw quaternion.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">shift</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="SO3.as_rpy_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.as_rpy_radians">[docs]</a>    <span class="k">def</span> <span class="nf">as_rpy_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">RollPitchYaw</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Computes roll, pitch, and yaw angles.</span>
+<span class="sd">        Uses the ZYX mobile robot convention.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            jaxlie.types.RollPitchYaw: Named tuple containing Euler angles in radians.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">types</span><span class="o">.</span><span class="n">RollPitchYaw</span><span class="p">(</span>
+            <span class="n">roll</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_roll_radians</span><span class="p">(),</span>
+            <span class="n">pitch</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_pitch_radians</span><span class="p">(),</span>
+            <span class="n">yaw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_yaw_radians</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="SO3.compute_roll_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_roll_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_roll_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Compute roll angle.</span>
+<span class="sd">        Uses the ZYX mobile robot convention.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
+        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q1</span> <span class="o">+</span> <span class="n">q2</span> <span class="o">*</span> <span class="n">q3</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">q2</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SO3.compute_pitch_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_pitch_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_pitch_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Compute pitch angle.</span>
+<span class="sd">        Uses the ZYX mobile robot convention.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
+        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q2</span> <span class="o">-</span> <span class="n">q3</span> <span class="o">*</span> <span class="n">q1</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SO3.compute_yaw_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.compute_yaw_radians">[docs]</a>    <span class="k">def</span> <span class="nf">compute_yaw_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Compute yaw angle.</span>
+<span class="sd">        Uses the ZYX mobile robot convention.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Euler angle in radians.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
+        <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q3</span> <span class="o">+</span> <span class="n">q1</span> <span class="o">*</span> <span class="n">q2</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q2</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">q3</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
+
     <span class="c1"># Factory</span>
 
 <div class="viewcode-block" id="SO3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
