@@ -211,11 +211,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">3</span><span class="p">:])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
 
     <span class="c1"># Factory</span>
 

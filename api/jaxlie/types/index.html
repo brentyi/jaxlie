@@ -184,7 +184,7 @@
 </table>
 <dl class="py class">
 <dt id="jaxlie.types.RollPitchYaw">
-<em class="property">class </em><code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">RollPitchYaw</code><a class="reference internal" href="../../../_modules/jaxlie/types/#RollPitchYaw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jaxlie.types.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">RollPitchYaw</span></code><a class="reference internal" href="../../../_modules/jaxlie/types/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.types.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.NamedTuple</span></code></p>
 <div class="graphviz"><img src="../../../_images/inheritance-16646af0f6e26a07d275fdb1de148b4403f79d73.png" alt="Inheritance diagram of jaxlie.types.RollPitchYaw" usemap="#inheritance10a0e18aa4" class="inheritance graphviz" /></div>
 <map id="inheritance10a0e18aa4" name="inheritance10a0e18aa4">
@@ -192,30 +192,30 @@
 </map><p>Tuple containing roll, pitch, and yaw Euler angles.</p>
 <dl class="py attribute">
 <dt id="jaxlie.types.RollPitchYaw.roll">
-<code class="sig-name descname">roll</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">roll</span></code><em class="property"> <span class="pre">:jnp.ndarray</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="jaxlie.types.RollPitchYaw.pitch">
-<code class="sig-name descname">pitch</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">pitch</span></code><em class="property"> <span class="pre">:jnp.ndarray</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="jaxlie.types.RollPitchYaw.yaw">
-<code class="sig-name descname">yaw</code><em class="property"> :jnp.ndarray</em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">yaw</span></code><em class="property"> <span class="pre">:jnp.ndarray</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py data">
 <dt id="jaxlie.types.Scalar">
-<code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">Scalar</code><a class="headerlink" href="#jaxlie.types.Scalar" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Scalar</span></code><a class="headerlink" href="#jaxlie.types.Scalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[float,</span> <span class="pre">jnp.ndarray]</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt id="jaxlie.types.Matrix">
-<code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">Matrix</code><a class="headerlink" href="#jaxlie.types.Matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Matrix</span></code><a class="headerlink" href="#jaxlie.types.Matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">jnp.ndarray</span></code>. Should not be instantiated.</p>
 <p>Refers to a square matrix, typically with shape <code class="docutils literal notranslate"><span class="pre">(Group.matrix_dim,</span> <span class="pre">Group.matrix_dim)</span></code>.
 For adjoints, shape should be <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,</span> <span class="pre">Group.tangent_dim)</span></code>.</p>
@@ -223,14 +223,14 @@ For adjoints, shape should be <code class="docutils literal notranslate"><span c
 
 <dl class="py data">
 <dt id="jaxlie.types.Vector">
-<code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">Vector</code><a class="headerlink" href="#jaxlie.types.Vector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Vector</span></code><a class="headerlink" href="#jaxlie.types.Vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">jnp.ndarray</span></code>. Should not be instantiated.</p>
 <p>Refers to a general 1D array.</p>
 </dd></dl>
 
 <dl class="py data">
 <dt id="jaxlie.types.TangentVector">
-<code class="sig-prename descclassname">jaxlie.types.</code><code class="sig-name descname">TangentVector</code><a class="headerlink" href="#jaxlie.types.TangentVector" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">TangentVector</span></code><a class="headerlink" href="#jaxlie.types.TangentVector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">jnp.ndarray</span></code>. Should not be instantiated.</p>
 <p>Refers to a 1D array with shape <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,)</span></code>.</p>
 </dd></dl>
