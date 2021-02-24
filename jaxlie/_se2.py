@@ -48,11 +48,11 @@ class SE2(_base.MatrixLieGroup):
 
     @property
     def rotation(self) -> SO2:
-        return SO2(unit_complex=self.xy_unit_complex[2:])
+        return SO2(unit_complex=self.xy_unit_complex[..., 2:])
 
     @property
     def translation(self) -> types.Vector:
-        return self.xy_unit_complex[:2]
+        return self.xy_unit_complex[..., :2]
 
     # Factory
 

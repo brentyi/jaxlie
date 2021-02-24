@@ -53,11 +53,11 @@ class SE3(_base.MatrixLieGroup):
 
     @property
     def rotation(self) -> SO3:
-        return SO3(wxyz=self.xyz_wxyz[3:])
+        return SO3(wxyz=self.xyz_wxyz[..., 3:])
 
     @property
     def translation(self) -> types.Vector:
-        return self.xyz_wxyz[:3]
+        return self.xyz_wxyz[..., :3]
 
     # Factory
 

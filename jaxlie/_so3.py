@@ -315,8 +315,8 @@ class SO3(_base.MatrixLieGroup):
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
-        w = self.wxyz[0]
-        norm_sq = self.wxyz[1:] @ self.wxyz[1:]
+        w = self.wxyz[..., 0]
+        norm_sq = self.wxyz[..., 1:] @ self.wxyz[..., 1:]
         norm = jnp.sqrt(norm_sq)
         use_taylor = norm < get_epsilon(norm_sq.dtype)
         atan_factor = jnp.where(

@@ -35,7 +35,7 @@ class SO2(_base.MatrixLieGroup):
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     def as_radians(self) -> jnp.ndarray:
-        (radians,) = self.log()
+        radians = self.log()[..., 0]
         return radians
 
     # Factory
@@ -89,7 +89,9 @@ class SO2(_base.MatrixLieGroup):
 
     @overrides
     def log(self: "SO2") -> types.TangentVector:
-        return jnp.arctan2(self.unit_complex[1, None], self.unit_complex[0, None])
+        return jnp.arctan2(
+            self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
+        )
 
     @overrides
     def adjoint(self: "SO2") -> types.Matrix:
