@@ -16,6 +16,43 @@ Classes
 
 
 
+.. data:: Array
+   
+
+   Type alias for ``Union[jnp.ndarray, onp.ndarray]``.
+
+
+.. data:: Scalar
+   
+
+   Type alias for ``Union[float, Array]``.
+
+
+.. data:: Matrix
+   
+
+   Type alias for ``Array``. Should not be instantiated.
+
+   Refers to a square matrix, typically with shape ``(Group.matrix_dim, Group.matrix_dim)``.
+   For adjoints, shape should be ``(Group.tangent_dim, Group.tangent_dim)``.
+
+
+.. data:: Vector
+   
+
+   Type alias for ``Array``. Should not be instantiated.
+
+   Refers to a general 1D array.
+
+
+.. data:: TangentVector
+   
+
+   Type alias for ``Array``. Should not be instantiated.
+
+   Refers to a 1D array with shape ``(Group.tangent_dim,)``.
+
+
 .. py:class:: RollPitchYaw
 
    Bases: :class:`typing.NamedTuple`
@@ -26,49 +63,18 @@ Classes
    Tuple containing roll, pitch, and yaw Euler angles.
 
    .. attribute:: roll
-      :annotation: :jnp.ndarray
+      :annotation: :Scalar
 
       
 
    .. attribute:: pitch
-      :annotation: :jnp.ndarray
+      :annotation: :Scalar
 
       
 
    .. attribute:: yaw
-      :annotation: :jnp.ndarray
+      :annotation: :Scalar
 
       
-
-
-.. data:: Scalar
-   
-
-   Type alias for ``Union[float, jnp.ndarray]``.
-
-
-.. data:: Matrix
-   
-
-   Type alias for ``jnp.ndarray``. Should not be instantiated.
-
-   Refers to a square matrix, typically with shape ``(Group.matrix_dim, Group.matrix_dim)``.
-   For adjoints, shape should be ``(Group.tangent_dim, Group.tangent_dim)``.
-
-
-.. data:: Vector
-   
-
-   Type alias for ``jnp.ndarray``. Should not be instantiated.
-
-   Refers to a general 1D array.
-
-
-.. data:: TangentVector
-   
-
-   Type alias for ``jnp.ndarray``. Should not be instantiated.
-
-   Refers to a 1D array with shape ``(Group.tangent_dim,)``.
 
 

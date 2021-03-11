@@ -246,14 +246,14 @@
         <span class="p">)</span></div>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_quaternion_xyzw</span><span class="p">(</span><span class="n">xyzw</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_quaternion_xyzw</span><span class="p">(</span><span class="n">xyzw</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Construct a rotation from an `xyzw` quaternion.</span>
 
 <span class="sd">        Note that `wxyz` quaternions can be constructed using the default dataclass</span>
 <span class="sd">        constructor.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            xyzw (jnp.ndarray): xyzw quaternion. Shape should be (4,).</span>
+<span class="sd">            xyzw (jnp.ndarray or onp.ndarray): xyzw quaternion. Shape should be (4,).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            SO3: Output.</span>

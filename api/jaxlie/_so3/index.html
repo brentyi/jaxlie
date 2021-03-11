@@ -258,13 +258,13 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_quaternion_xyzw">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_quaternion_xyzw</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyzw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_quaternion_xyzw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_quaternion_xyzw</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyzw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Array</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_quaternion_xyzw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a rotation from an <code class="docutils literal notranslate"><span class="pre">xyzw</span></code> quaternion.</p>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">wxyz</span></code> quaternions can be constructed using the default dataclass
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jnp.ndarray</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jnp.ndarray</em><em> or </em><em>onp.ndarray</em>) – xyzw quaternion. Shape should be (4,).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>SO3</em> – Output.</p>

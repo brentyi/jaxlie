@@ -156,11 +156,23 @@
            <div itemprop="articleBody">
             
   <h1>Source code for jaxlie._utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Hashable</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">flax</span>
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">types</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
@@ -227,7 +239,7 @@
         <span class="c1"># Register as a PyTree node to make JIT compilation, etc easier in Jax</span>
         <span class="k">def</span> <span class="nf">_flatten_group</span><span class="p">(</span>
             <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">]:</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
             <span class="sd">&quot;&quot;&quot;Flatten a dataclass for use as a PyTree.&quot;&quot;&quot;</span>
             <span class="n">as_dict</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -240,7 +252,7 @@
         <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_flatten_group</span><span class="p">,</span> <span class="n">_unflatten_group</span><span class="p">)</span>
 
         <span class="c1"># Make object flax-serializable</span>
-        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
             <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">parameters</span><span class="p">}</span>
 
         <span class="k">def</span> <span class="nf">_ty_from_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
