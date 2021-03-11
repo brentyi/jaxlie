@@ -179,20 +179,20 @@
 
     <span class="c1"># SE2-specific</span>
 
-    <span class="n">xy_unit_complex</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span>
-    <span class="sd">&quot;&quot;&quot;Internal parameters. `(x, y, cos, sin)`.&quot;&quot;&quot;</span>
+    <span class="n">unit_complex_xy</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span>
+    <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin, x, y)`.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE2.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.__repr__">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">xy</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="n">unit_complex</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:],</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(xy=</span><span class="si">{</span><span class="n">xy</span><span class="si">}</span><span class="s2">, unit_complex=</span><span class="si">{</span><span class="n">unit_complex</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+        <span class="n">unit_complex</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(unit_complex=</span><span class="si">{</span><span class="n">unit_complex</span><span class="si">}</span><span class="s2">, xy=</span><span class="si">{</span><span class="n">xy</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 <div class="viewcode-block" id="SE2.from_xy_theta"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_xy_theta">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_xy_theta</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="n">cos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">xy_unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SE2.from_rotation_and_translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_rotation_and_translation">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
@@ -201,23 +201,23 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">translation</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span>
-            <span class="n">xy_unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">translation</span><span class="p">,</span> <span class="n">rotation</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">])</span>
+            <span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">rotation</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">,</span> <span class="n">translation</span><span class="p">])</span>
         <span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:]</span>
 
     <span class="c1"># Factory</span>
 
 <div class="viewcode-block" id="SE2.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">xy_unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SE2.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -234,11 +234,11 @@
     <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span>
 
 <div class="viewcode-block" id="SE2.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span>
+        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="p">[</span><span class="n">cos</span><span class="p">,</span> <span class="o">-</span><span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span>
@@ -256,14 +256,14 @@
 <div class="viewcode-block" id="SE2.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.multiply">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="c1"># Apply rotation to both the rotation and translation terms of `other`</span>
-        <span class="n">xy_unit_complex</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">apply</span><span class="p">)(</span>
-            <span class="n">other</span><span class="o">.</span><span class="n">xy_unit_complex</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">unit_complex_xy</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">apply</span><span class="p">)(</span>
+            <span class="n">other</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
         <span class="c1"># Apply translation</span>
-        <span class="n">xy_unit_complex</span> <span class="o">=</span> <span class="n">xy_unit_complex</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">)</span>
+        <span class="n">unit_complex_xy</span> <span class="o">=</span> <span class="n">unit_complex_xy</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">xy_unit_complex</span><span class="o">=</span><span class="n">xy_unit_complex</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">unit_complex_xy</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SE2.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -333,7 +333,7 @@
 
 <div class="viewcode-block" id="SE2.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.adjoint">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xy_unit_complex</span>
+        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="p">[</span><span class="n">cos</span><span class="p">,</span> <span class="o">-</span><span class="n">sin</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>

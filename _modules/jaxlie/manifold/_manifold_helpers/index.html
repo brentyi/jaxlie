@@ -223,17 +223,17 @@
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE2</span><span class="p">:</span>
-        <span class="c1"># Jacobian row indices: x, y, cos, sin</span>
+        <span class="c1"># Jacobian row indices: cos, sin, x, y</span>
         <span class="c1"># Jacobian col indices: vx, vy, omega</span>
 
         <span class="n">transform_se2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
         <span class="c1"># Translation terms</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
         <span class="p">)</span>
 
@@ -259,17 +259,17 @@
         <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE3</span><span class="p">:</span>
-        <span class="c1"># Jacobian row indices: x, y, z, qw, qx, qy, qz</span>
+        <span class="c1"># Jacobian row indices: qw, qx, qy, qz, x, y, z</span>
         <span class="c1"># Jacobian col indices: vx, vy, vz, omega x, omega y, omega z</span>
 
         <span class="n">transform_se3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
         <span class="c1"># Translation terms</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">4</span><span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
         <span class="p">)</span>
 

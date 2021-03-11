@@ -27,10 +27,10 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 2D.
 
-   .. attribute:: xy_unit_complex
+   .. attribute:: unit_complex_xy
       :annotation: :types.Vector
 
-      Internal parameters. ``(x, y, cos, sin)``.
+      Internal parameters. ``(cos, sin, x, y)``.
 
 
    .. method:: __repr__(self) -> str

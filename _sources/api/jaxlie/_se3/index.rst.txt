@@ -27,10 +27,10 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 3D.
 
-   .. attribute:: xyz_wxyz
+   .. attribute:: wxyz_xyz
       :annotation: :types.Vector
 
-      Internal parameters. Length-3 translation followed by wxyz quaternion.
+      Internal parameters. wxyz quaternion followed by xyz translation.
 
 
    .. method:: __repr__(self) -> str

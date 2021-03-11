@@ -173,14 +173,14 @@
 <span class="n">twist</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 <span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">twist</span><span class="p">)</span>
 
-<span class="c1"># We can print the (quaternion) rotation term; this is a `SO3` object:</span>
+<span class="c1"># We can print the (quaternion) rotation term; this is an `SO3` object:</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">rotation</span><span class="p">)</span>
 
 <span class="c1"># Or print the translation; this is a simple array with shape (3,):</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">translation</span><span class="p">)</span>
 
-<span class="c1"># Or the underlying parameters; this is a length-7 (translation, quaternion) array:</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field</span>
+<span class="c1"># Or the underlying parameters; this is a length-7 (quaternion, quaternion) array:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>  <span class="c1"># Alias shared by all groups</span>
 
 <span class="c1"># There are also other helpers to generate transforms, eg from matrices:</span>
@@ -193,7 +193,7 @@
 <span class="p">)</span>
 
 <span class="c1"># Or with the dataclass constructor + the underlying length-7 parameterization:</span>
-<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="p">(</span><span class="n">xyz_wxyz</span><span class="o">=</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">)</span>
+<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>
 
 
 <span class="c1">#############################</span>

@@ -412,9 +412,9 @@ between our spatial and body representations.</p>
 <area shape="rect" id="node3" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="295,5,367,31"/>
 </map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
 <dl class="py attribute">
-<dt id="jaxlie.SE2.xy_unit_complex">
-<code class="sig-name descname"><span class="pre">xy_unit_complex</span></code><em class="property"> <span class="pre">:types.Vector</span></em><a class="headerlink" href="#jaxlie.SE2.xy_unit_complex" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">cos,</span> <span class="pre">sin)</span></code>.</p>
+<dt id="jaxlie.SE2.unit_complex_xy">
+<code class="sig-name descname"><span class="pre">unit_complex_xy</span></code><em class="property"> <span class="pre">:types.Vector</span></em><a class="headerlink" href="#jaxlie.SE2.unit_complex_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -598,9 +598,9 @@ between our spatial and body representations.</p>
 <area shape="rect" id="node3" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="295,5,367,31"/>
 </map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
 <dl class="py attribute">
-<dt id="jaxlie.SE3.xyz_wxyz">
-<code class="sig-name descname"><span class="pre">xyz_wxyz</span></code><em class="property"> <span class="pre">:types.Vector</span></em><a class="headerlink" href="#jaxlie.SE3.xyz_wxyz" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal parameters. Length-3 translation followed by wxyz quaternion.</p>
+<dt id="jaxlie.SE3.wxyz_xyz">
+<code class="sig-name descname"><span class="pre">wxyz_xyz</span></code><em class="property"> <span class="pre">:types.Vector</span></em><a class="headerlink" href="#jaxlie.SE3.wxyz_xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal parameters. wxyz quaternion followed by xyz translation.</p>
 </dd></dl>
 
 <dl class="py method">

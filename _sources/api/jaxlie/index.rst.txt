@@ -210,10 +210,10 @@ Functions
 
    Special Euclidean group for proper rigid transforms in 2D.
 
-   .. attribute:: xy_unit_complex
+   .. attribute:: unit_complex_xy
       :annotation: :types.Vector
 
-      Internal parameters. ``(x, y, cos, sin)``.
+      Internal parameters. ``(cos, sin, x, y)``.
 
 
    .. method:: __repr__(self) -> str
@@ -356,10 +356,10 @@ Functions
 
    Special Euclidean group for proper rigid transforms in 3D.
 
-   .. attribute:: xyz_wxyz
+   .. attribute:: wxyz_xyz
       :annotation: :types.Vector
 
-      Internal parameters. Length-3 translation followed by wxyz quaternion.
+      Internal parameters. wxyz quaternion followed by xyz translation.
 
 
    .. method:: __repr__(self) -> str

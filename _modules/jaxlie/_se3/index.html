@@ -192,14 +192,14 @@
 
     <span class="c1"># SE3-specific</span>
 
-    <span class="n">xyz_wxyz</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span>
-    <span class="sd">&quot;&quot;&quot;Internal parameters. Length-3 translation followed by wxyz quaternion.&quot;&quot;&quot;</span>
+    <span class="n">wxyz_xyz</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span>
+    <span class="sd">&quot;&quot;&quot;Internal parameters. wxyz quaternion followed by xyz translation.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE3.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.__repr__">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">trans</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="n">quat</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">3</span><span class="p">:],</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(xyz=</span><span class="si">{</span><span class="n">trans</span><span class="si">}</span><span class="s2">, wxyz=</span><span class="si">{</span><span class="n">quat</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+        <span class="n">quat</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">trans</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(wxyz=</span><span class="si">{</span><span class="n">quat</span><span class="si">}</span><span class="s2">, xyz=</span><span class="si">{</span><span class="n">trans</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 <div class="viewcode-block" id="SE3.from_rotation_and_translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.from_rotation_and_translation">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
@@ -207,22 +207,22 @@
         <span class="n">translation</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">translation</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
-        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">xyz_wxyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">translation</span><span class="p">,</span> <span class="n">rotation</span><span class="o">.</span><span class="n">wxyz</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">rotation</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">translation</span><span class="p">]))</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">3</span><span class="p">:])</span>
+        <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:]</span>
 
     <span class="c1"># Factory</span>
 
 <div class="viewcode-block" id="SE3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">xyz_wxyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SE3.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -249,7 +249,7 @@
     <span class="nd">@property</span>  <span class="c1"># type: ignore</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xyz_wxyz</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span>
 
     <span class="c1"># Operations</span>
 
