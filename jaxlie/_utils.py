@@ -1,3 +1,4 @@
+import dataclasses
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -95,10 +96,18 @@ def register_lie_group(
 
         # Make object flax-serializable
         def _ty_to_state_dict(x: "MatrixLieGroup") -> Dict[str, types.Array]:
-            return {"params": x.parameters}
+            return {
+                key: flax.serialization.to_state_dict(value)
+                for key, value in vars(x).items()
+            }
 
         def _ty_from_state_dict(x: "MatrixLieGroup", state: Dict) -> "MatrixLieGroup":
-            return type(x)(state["params"])
+            updates: Dict[str, Any] = {}
+            for key, value in vars(x).items():
+                updates[key] = flax.serialization.from_state_dict(
+                    getattr(x, key), value
+                )
+            return dataclasses.replace(x, **updates)
 
         flax.serialization.register_serialization_state(
             ty=cls,
