@@ -1,8 +1,20 @@
-from typing import TYPE_CHECKING, Any, Callable, Dict, Sequence, Tuple, Type, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Hashable,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+)
 
 import flax
 import jax
 from jax import numpy as jnp
+
+from . import types
 
 if TYPE_CHECKING:
     from ._base import MatrixLieGroup
@@ -69,7 +81,7 @@ def register_lie_group(
         # Register as a PyTree node to make JIT compilation, etc easier in Jax
         def _flatten_group(
             v: T,
-        ) -> Tuple[Tuple[jnp.ndarray, ...], Tuple]:
+        ) -> Tuple[Tuple[types.Vector, ...], Tuple[Hashable, ...]]:
             """Flatten a dataclass for use as a PyTree."""
             as_dict = vars(v)
             return tuple(as_dict.values()), tuple(as_dict.keys())
@@ -82,7 +94,7 @@ def register_lie_group(
         jax.tree_util.register_pytree_node(cls, _flatten_group, _unflatten_group)
 
         # Make object flax-serializable
-        def _ty_to_state_dict(x: "MatrixLieGroup") -> Dict[str, jnp.ndarray]:
+        def _ty_to_state_dict(x: "MatrixLieGroup") -> Dict[str, types.Array]:
             return {"params": x.parameters}
 
         def _ty_from_state_dict(x: "MatrixLieGroup", state: Dict) -> "MatrixLieGroup":

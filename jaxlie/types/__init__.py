@@ -1,46 +1,49 @@
 from typing import NamedTuple, Union
 
+import numpy as onp
 from jax import numpy as jnp
 
-
-class RollPitchYaw(NamedTuple):
-    """Tuple containing roll, pitch, and yaw Euler angles."""
-
-    roll: jnp.ndarray
-    pitch: jnp.ndarray
-    yaw: jnp.ndarray
-
-
-Scalar = Union[float, jnp.ndarray]
-"""Type alias for `Union[float, jnp.ndarray]`.
+Array = Union[onp.ndarray, jnp.ndarray]
+"""Type alias for `Union[jnp.ndarray, onp.ndarray]`.
 """
 
-Matrix = jnp.ndarray
-"""Type alias for `jnp.ndarray`. Should not be instantiated.
+Scalar = Union[float, Array]
+"""Type alias for `Union[float, Array]`.
+"""
+
+Matrix = Array
+"""Type alias for `Array`. Should not be instantiated.
 
 Refers to a square matrix, typically with shape `(Group.matrix_dim, Group.matrix_dim)`.
 For adjoints, shape should be `(Group.tangent_dim, Group.tangent_dim)`.
 """
 
-
-Vector = jnp.ndarray
-"""Type alias for `jnp.ndarray`. Should not be instantiated.
+Vector = Array
+"""Type alias for `Array`. Should not be instantiated.
 
 Refers to a general 1D array.
 """
 
-
-TangentVector = jnp.ndarray
-"""Type alias for `jnp.ndarray`. Should not be instantiated.
+TangentVector = Array
+"""Type alias for `Array`. Should not be instantiated.
 
 Refers to a 1D array with shape `(Group.tangent_dim,)`.
 """
 
 
+class RollPitchYaw(NamedTuple):
+    """Tuple containing roll, pitch, and yaw Euler angles."""
+
+    roll: Scalar
+    pitch: Scalar
+    yaw: Scalar
+
+
 __all__ = [
-    "RollPitchYaw",
+    "Array",
     "Scalar",
     "Matrix",
     "Vector",
     "TangentVector",
+    "RollPitchYaw",
 ]

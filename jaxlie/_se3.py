@@ -9,7 +9,7 @@ from ._so3 import SO3
 from ._utils import get_epsilon, register_lie_group
 
 
-def _skew(omega: jnp.ndarray) -> jnp.ndarray:
+def _skew(omega: types.Vector) -> types.Matrix:
     """Returns the skew-symmetric form of a length-3 vector. """
 
     wx, wy, wz = omega

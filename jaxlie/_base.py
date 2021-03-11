@@ -2,6 +2,7 @@ import abc
 from typing import Type, TypeVar, overload
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 
 from . import types
@@ -50,7 +51,7 @@ class MatrixLieGroup(abc.ABC):
         Switches between the group action (`.apply()`) and multiplication
         (`.multiply()`) based on the type of `other`.
         """
-        if isinstance(other, types.Vector):
+        if isinstance(other, (onp.ndarray, jnp.ndarray)):
             return self.apply(target=other)
         if isinstance(other, MatrixLieGroup):
             return self.multiply(other=other)

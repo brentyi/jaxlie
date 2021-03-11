@@ -71,7 +71,7 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
     assert_arrays_close(p1, p2)
 
 
-def assert_arrays_close(*arrays: jnp.ndarray):
+def assert_arrays_close(*arrays: jaxlie.types.Array):
     """Make sure two arrays are close. (and not NaN)"""
     for array1, array2 in zip(arrays[:-1], arrays[1:]):
         onp.testing.assert_allclose(array1, array2, rtol=1e-8, atol=1e-8)
