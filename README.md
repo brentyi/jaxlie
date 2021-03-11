@@ -40,7 +40,7 @@ Implements Lie groups as high-level (data)classes:
     <tr>
       <td><code>jaxlie.<strong>SE3</strong></code></td>
       <td>Proper rigid transforms in 3D.</td>
-      <td><em>(x, y, z, qw, qx, qy, qz):</em> translation &amp; wxyz quaternion</td>
+      <td><em>(qw, qx, qy, qz, x, y, z):</em> wxyz quaternion &amp; translation</td>
     </tr>
   </tbody>
 </table>
