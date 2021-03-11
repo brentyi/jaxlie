@@ -21,20 +21,20 @@ class SE2(_base.MatrixLieGroup):
 
     # SE2-specific
 
-    xy_unit_complex: types.Vector
-    """Internal parameters. `(x, y, cos, sin)`."""
+    unit_complex_xy: types.Vector
+    """Internal parameters. `(cos, sin, x, y)`."""
 
     @overrides
     def __repr__(self) -> str:
-        xy = jnp.round(self.xy_unit_complex[..., :2], 5)
-        unit_complex = jnp.round(self.xy_unit_complex[..., 2:], 5)
-        return f"{self.__class__.__name__}(xy={xy}, unit_complex={unit_complex})"
+        unit_complex = jnp.round(self.unit_complex_xy[..., :2], 5)
+        xy = jnp.round(self.unit_complex_xy[..., 2:], 5)
+        return f"{self.__class__.__name__}(unit_complex={unit_complex}, xy={xy})"
 
     @staticmethod
     def from_xy_theta(x: types.Scalar, y: types.Scalar, theta: types.Scalar) -> "SE2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
-        return SE2(xy_unit_complex=jnp.array([x, y, cos, sin]))
+        return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))
 
     @staticmethod
     def from_rotation_and_translation(
@@ -43,23 +43,23 @@ class SE2(_base.MatrixLieGroup):
     ) -> "SE2":
         assert translation.shape == (2,)
         return SE2(
-            xy_unit_complex=jnp.concatenate([translation, rotation.unit_complex])
+            unit_complex_xy=jnp.concatenate([rotation.unit_complex, translation])
         )
 
     @property
     def rotation(self) -> SO2:
-        return SO2(unit_complex=self.xy_unit_complex[..., 2:])
+        return SO2(unit_complex=self.unit_complex_xy[..., :2])
 
     @property
     def translation(self) -> types.Vector:
-        return self.xy_unit_complex[..., :2]
+        return self.unit_complex_xy[..., 2:]
 
     # Factory
 
     @staticmethod
     @overrides
     def identity() -> "SE2":
-        return SE2(xy_unit_complex=jnp.array([0.0, 0.0, 1.0, 0.0]))
+        return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -76,11 +76,11 @@ class SE2(_base.MatrixLieGroup):
     @property  # type: ignore
     @overrides
     def parameters(self) -> types.Vector:
-        return self.xy_unit_complex
+        return self.unit_complex_xy
 
     @overrides
     def as_matrix(self) -> types.Matrix:
-        x, y, cos, sin = self.xy_unit_complex
+        cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
                 [cos, -sin, x],
@@ -98,14 +98,14 @@ class SE2(_base.MatrixLieGroup):
     @overrides
     def multiply(self: "SE2", other: "SE2") -> "SE2":
         # Apply rotation to both the rotation and translation terms of `other`
-        xy_unit_complex = jax.vmap(self.rotation.apply)(
-            other.xy_unit_complex.reshape((2, 2))
+        unit_complex_xy = jax.vmap(self.rotation.apply)(
+            other.unit_complex_xy.reshape((2, 2))
         ).flatten()
 
         # Apply translation
-        xy_unit_complex = xy_unit_complex.at[:2].add(self.translation)
+        unit_complex_xy = unit_complex_xy.at[2:].add(self.translation)
 
-        return SE2(xy_unit_complex=xy_unit_complex)
+        return SE2(unit_complex_xy=unit_complex_xy)
 
     @staticmethod
     @overrides
@@ -175,7 +175,7 @@ class SE2(_base.MatrixLieGroup):
 
     @overrides
     def adjoint(self: "SE2") -> types.Matrix:
-        x, y, cos, sin = self.xy_unit_complex
+        cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
                 [cos, -sin, y],

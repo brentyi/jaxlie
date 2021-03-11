@@ -64,8 +64,8 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
         p1 = p1 * jnp.sign(jnp.sum(p1))
         p2 = p2 * jnp.sign(jnp.sum(p2))
     elif isinstance(a, jaxlie.SE3):
-        p1 = p1.at[3:].mul(jnp.sign(jnp.sum(p1[3:])))
-        p2 = p2.at[3:].mul(jnp.sign(jnp.sum(p2[3:])))
+        p1 = p1.at[:4].mul(jnp.sign(jnp.sum(p1[:4])))
+        p2 = p2.at[:4].mul(jnp.sign(jnp.sum(p2[:4])))
 
     # Make sure parameters are equal
     assert_arrays_close(p1, p2)

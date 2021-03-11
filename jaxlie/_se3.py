@@ -34,14 +34,14 @@ class SE3(_base.MatrixLieGroup):
 
     # SE3-specific
 
-    xyz_wxyz: types.Vector
-    """Internal parameters. Length-3 translation followed by wxyz quaternion."""
+    wxyz_xyz: types.Vector
+    """Internal parameters. wxyz quaternion followed by xyz translation."""
 
     @overrides
     def __repr__(self) -> str:
-        trans = jnp.round(self.xyz_wxyz[..., :3], 5)
-        quat = jnp.round(self.xyz_wxyz[..., 3:], 5)
-        return f"{self.__class__.__name__}(xyz={trans}, wxyz={quat})"
+        quat = jnp.round(self.wxyz_xyz[..., :4], 5)
+        trans = jnp.round(self.wxyz_xyz[..., 4:], 5)
+        return f"{self.__class__.__name__}(wxyz={quat}, xyz={trans})"
 
     @staticmethod
     def from_rotation_and_translation(
@@ -49,22 +49,22 @@ class SE3(_base.MatrixLieGroup):
         translation: types.Vector,
     ) -> "SE3":
         assert translation.shape == (3,)
-        return SE3(xyz_wxyz=jnp.concatenate([translation, rotation.wxyz]))
+        return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
     @property
     def rotation(self) -> SO3:
-        return SO3(wxyz=self.xyz_wxyz[..., 3:])
+        return SO3(wxyz=self.wxyz_xyz[..., :4])
 
     @property
     def translation(self) -> types.Vector:
-        return self.xyz_wxyz[..., :3]
+        return self.wxyz_xyz[..., 4:]
 
     # Factory
 
     @staticmethod
     @overrides
     def identity() -> "SE3":
-        return SE3(xyz_wxyz=jnp.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]))
+        return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -91,7 +91,7 @@ class SE3(_base.MatrixLieGroup):
     @property  # type: ignore
     @overrides
     def parameters(self) -> types.Vector:
-        return self.xyz_wxyz
+        return self.wxyz_xyz
 
     # Operations
 

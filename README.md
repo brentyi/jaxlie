@@ -25,12 +25,12 @@ Implements Lie groups as high-level (data)classes:
     <tr>
       <td><code>jaxlie.<strong>SO2</strong></code></td>
       <td>Rotations in 2D.</td>
-      <td><em>(real, imaginary):</em> unit norm complex number (∈ S<sup>2</sup>)</td>
+      <td><em>(real, imaginary):</em> unit complex (∈ S<sup>2</sup>)</td>
     </tr>
     <tr>
       <td><code>jaxlie.<strong>SE2</strong></code></td>
       <td>Proper rigid transforms in 2D.</td>
-      <td><em>(x, y, real, imaginary):</em> translation &amp; unit complex</td>
+      <td><em>(real, imaginary, x, y):</em> unit complex &amp; translation</td>
     </tr>
     <tr>
       <td><code>jaxlie.<strong>SO3</strong></code></td>
@@ -83,14 +83,14 @@ from jaxlie import SE3
 twist = onp.array([1.0, 0.0, 0.2, 0.0, 0.5, 0.0])
 T_w_b = SE3.exp(twist)
 
-# We can print the (quaternion) rotation term; this is a `SO3` object:
+# We can print the (quaternion) rotation term; this is an `SO3` object:
 print(T_w_b.rotation)
 
 # Or print the translation; this is a simple array with shape (3,):
 print(T_w_b.translation)
 
-# Or the underlying parameters; this is a length-7 (translation, quaternion) array:
-print(T_w_b.xyz_wxyz)  # SE3-specific field
+# Or the underlying parameters; this is a length-7 (quaternion, quaternion) array:
+print(T_w_b.wxyz_xyz)  # SE3-specific field
 print(T_w_b.parameters)  # Alias shared by all groups
 
 # There are also other helpers to generate transforms, eg from matrices:
@@ -103,7 +103,7 @@ T_w_b = SE3.from_rotation_and_translation(
 )
 
 # Or with the dataclass constructor + the underlying length-7 parameterization:
-T_w_b = SE3(xyz_wxyz=T_w_b.xyz_wxyz)
+T_w_b = SE3(wxyz_xyz=T_w_b.wxyz_xyz)
 
 
 #############################

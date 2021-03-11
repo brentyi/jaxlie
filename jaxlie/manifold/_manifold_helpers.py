@@ -65,17 +65,17 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         J = J.at[0].set(-sin).at[1].set(cos)
 
     elif type(transform) is SE2:
-        # Jacobian row indices: x, y, cos, sin
+        # Jacobian row indices: cos, sin, x, y
         # Jacobian col indices: vx, vy, omega
 
         transform_se2 = cast(SE2, transform)
         J = jnp.zeros((4, 3))
 
         # Translation terms
-        J = J.at[:2, :2].set(transform_se2.rotation.as_matrix())
+        J = J.at[2:, :2].set(transform_se2.rotation.as_matrix())
 
         # Rotation terms
-        J = J.at[2:4, 2:3].set(
+        J = J.at[:2, 2:3].set(
             rplus_jacobian_parameters_wrt_delta(transform_se2.rotation)
         )
 
@@ -101,17 +101,17 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         )
 
     elif type(transform) is SE3:
-        # Jacobian row indices: x, y, z, qw, qx, qy, qz
+        # Jacobian row indices: qw, qx, qy, qz, x, y, z
         # Jacobian col indices: vx, vy, vz, omega x, omega y, omega z
 
         transform_se3 = cast(SE3, transform)
         J = jnp.zeros((7, 6))
 
         # Translation terms
-        J = J.at[:3, :3].set(transform_se3.rotation.as_matrix())
+        J = J.at[4:, :3].set(transform_se3.rotation.as_matrix())
 
         # Rotation terms
-        J = J.at[3:7, 3:6].set(
+        J = J.at[:4, 3:6].set(
             rplus_jacobian_parameters_wrt_delta(transform_se3.rotation)
         )
 
