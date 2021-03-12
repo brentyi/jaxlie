@@ -48,25 +48,25 @@ Functions
    Interface definition for matrix Lie groups.
 
    .. attribute:: matrix_dim
-      :annotation: :int = 0
+      :annotation: :int
 
       Dimension of square matrix output from ``.as_matrix()``.
 
 
    .. attribute:: parameters_dim
-      :annotation: :int = 0
+      :annotation: :int
 
-      Dimension of underlying parameters, ``.parameters``.
+      Dimension of underlying parameters, ``.parameters()``.
 
 
    .. attribute:: tangent_dim
-      :annotation: :int = 0
+      :annotation: :int
 
       Dimension of tangent space.
 
 
    .. attribute:: space_dim
-      :annotation: :int = 0
+      :annotation: :int
 
       Dimension of coordinates that can be transformed.
 
@@ -230,11 +230,9 @@ Functions
 
 
    .. method:: rotation(self) -> SO2
-      :property:
 
 
    .. method:: translation(self) -> types.Vector
-      :property:
 
 
    .. method:: identity() -> 'SE2'
@@ -257,7 +255,6 @@ Functions
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 
@@ -372,11 +369,9 @@ Functions
 
 
    .. method:: rotation(self) -> SO3
-      :property:
 
 
    .. method:: translation(self) -> types.Vector
-      :property:
 
 
    .. method:: identity() -> 'SE3'
@@ -404,7 +399,6 @@ Functions
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 
@@ -541,7 +535,6 @@ Functions
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 
@@ -765,7 +758,6 @@ Functions
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 

@@ -225,25 +225,25 @@
 </map><p>Interface definition for matrix Lie groups.</p>
 <dl class="py attribute">
 <dt id="jaxlie.MatrixLieGroup.matrix_dim">
-<code class="sig-name descname"><span class="pre">matrix_dim</span></code><em class="property"> <span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.matrix_dim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">matrix_dim</span></code><em class="property"> <span class="pre">:int</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.matrix_dim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dimension of square matrix output from <code class="docutils literal notranslate"><span class="pre">.as_matrix()</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="jaxlie.MatrixLieGroup.parameters_dim">
-<code class="sig-name descname"><span class="pre">parameters_dim</span></code><em class="property"> <span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.parameters_dim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dimension of underlying parameters, <code class="docutils literal notranslate"><span class="pre">.parameters</span></code>.</p>
+<code class="sig-name descname"><span class="pre">parameters_dim</span></code><em class="property"> <span class="pre">:int</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.parameters_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dimension of underlying parameters, <code class="docutils literal notranslate"><span class="pre">.parameters()</span></code>.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="jaxlie.MatrixLieGroup.tangent_dim">
-<code class="sig-name descname"><span class="pre">tangent_dim</span></code><em class="property"> <span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.tangent_dim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">tangent_dim</span></code><em class="property"> <span class="pre">:int</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.tangent_dim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dimension of tangent space.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="jaxlie.MatrixLieGroup.space_dim">
-<code class="sig-name descname"><span class="pre">space_dim</span></code><em class="property"> <span class="pre">:int</span> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.space_dim" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">space_dim</span></code><em class="property"> <span class="pre">:int</span></em><a class="headerlink" href="#jaxlie.MatrixLieGroup.space_dim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dimension of coordinates that can be transformed.</p>
 </dd></dl>
 
@@ -435,12 +435,12 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SE2.rotation">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><span class="pre">SO2</span></a><a class="headerlink" href="#jaxlie.SE2.rotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><span class="pre">SO2</span></a><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.rotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie.SE2.translation">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SE2.translation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.translation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -470,7 +470,7 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SE2.parameters">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SE2.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 
@@ -616,12 +616,12 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SE3.rotation">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><span class="pre">SO3</span></a><a class="headerlink" href="#jaxlie.SE3.rotation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.rotation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie.SE3.translation">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SE3.translation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.translation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -657,7 +657,7 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SE3.parameters">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SE3.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 
@@ -833,7 +833,7 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SO2.parameters">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SO2.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 
@@ -1130,7 +1130,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie.SO3.parameters">
-<em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="headerlink" href="#jaxlie.SO3.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 

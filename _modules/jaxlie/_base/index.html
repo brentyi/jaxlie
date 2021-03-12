@@ -174,16 +174,16 @@
     <span class="c1"># Class properties</span>
     <span class="c1"># &gt; These will be set in `_utils.register_lie_group()`</span>
 
-    <span class="n">matrix_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">matrix_dim</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Dimension of square matrix output from `.as_matrix()`.&quot;&quot;&quot;</span>
 
-    <span class="n">parameters_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="sd">&quot;&quot;&quot;Dimension of underlying parameters, `.parameters`.&quot;&quot;&quot;</span>
+    <span class="n">parameters_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="sd">&quot;&quot;&quot;Dimension of underlying parameters, `.parameters()`.&quot;&quot;&quot;</span>
 
-    <span class="n">tangent_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tangent_dim</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Dimension of tangent space.&quot;&quot;&quot;</span>
 
-    <span class="n">space_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">space_dim</span><span class="p">:</span> <span class="nb">int</span>
     <span class="sd">&quot;&quot;&quot;Dimension of coordinates that can be transformed.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>

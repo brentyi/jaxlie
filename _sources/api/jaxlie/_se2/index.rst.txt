@@ -47,11 +47,9 @@ Classes
 
 
    .. method:: rotation(self) -> SO2
-      :property:
 
 
    .. method:: translation(self) -> types.Vector
-      :property:
 
 
    .. method:: identity() -> 'SE2'
@@ -74,7 +72,6 @@ Classes
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 

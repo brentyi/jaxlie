@@ -57,7 +57,7 @@ Functions
           return jax.jacfwd(
               jaxlie.manifold.rplus,  # Args are (transform, delta)
               argnums=1,  # Jacobian wrt delta
-          )(transform, onp.zeros(transform.tangent_dim)).parameters
+          )(transform, onp.zeros(transform.tangent_dim)).parameters()
 
    :param transform: transform
    :type transform: T

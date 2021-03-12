@@ -217,7 +217,7 @@ local delta.</p>
     <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">jacfwd</span><span class="p">(</span>
         <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">,</span>  <span class="c1"># Args are (transform, delta)</span>
         <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Jacobian wrt delta</span>
-    <span class="p">)(</span><span class="n">transform</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span><span class="o">.</span><span class="n">parameters</span>
+    <span class="p">)(</span><span class="n">transform</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

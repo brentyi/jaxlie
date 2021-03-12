@@ -43,11 +43,9 @@ Classes
 
 
    .. method:: rotation(self) -> SO3
-      :property:
 
 
    .. method:: translation(self) -> types.Vector
-      :property:
 
 
    .. method:: identity() -> 'SE3'
@@ -75,7 +73,6 @@ Classes
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 

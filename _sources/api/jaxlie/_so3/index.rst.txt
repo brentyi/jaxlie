@@ -157,7 +157,6 @@ Classes
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
 
       Get underlying representation.
 
