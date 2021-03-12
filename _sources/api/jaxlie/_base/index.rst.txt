@@ -93,7 +93,7 @@ Classes
 
 
    .. method:: parameters(self) -> types.Vector
-      :property:
+      :abstractmethod:
 
       Get underlying representation.
 
