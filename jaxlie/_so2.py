@@ -63,7 +63,6 @@ class SO2(_base.MatrixLieGroup):
             ]
         )
 
-    @property  # type: ignore
     @overrides
     def parameters(self) -> types.Vector:
         return self.unit_complex

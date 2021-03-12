@@ -45,7 +45,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         return jax.jacfwd(
             jaxlie.manifold.rplus,  # Args are (transform, delta)
             argnums=1,  # Jacobian wrt delta
-        )(transform, onp.zeros(transform.tangent_dim)).parameters
+        )(transform, onp.zeros(transform.tangent_dim)).parameters()
     ```
 
     Args:
@@ -72,11 +72,11 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         J = jnp.zeros((4, 3))
 
         # Translation terms
-        J = J.at[2:, :2].set(transform_se2.rotation.as_matrix())
+        J = J.at[2:, :2].set(transform_se2.rotation().as_matrix())
 
         # Rotation terms
         J = J.at[:2, 2:3].set(
-            rplus_jacobian_parameters_wrt_delta(transform_se2.rotation)
+            rplus_jacobian_parameters_wrt_delta(transform_se2.rotation())
         )
 
     elif type(transform) is SO3:
@@ -108,11 +108,11 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
         J = jnp.zeros((7, 6))
 
         # Translation terms
-        J = J.at[4:, :3].set(transform_se3.rotation.as_matrix())
+        J = J.at[4:, :3].set(transform_se3.rotation().as_matrix())
 
         # Rotation terms
         J = J.at[:4, 3:6].set(
-            rplus_jacobian_parameters_wrt_delta(transform_se3.rotation)
+            rplus_jacobian_parameters_wrt_delta(transform_se3.rotation())
         )
 
     else:

@@ -46,4 +46,4 @@ def _rplus_jacobian_parameters_wrt_delta(
     return jax.jacfwd(
         jaxlie.manifold.rplus,  # Args are (transform, delta)
         argnums=1,  # Jacobian wrt delta
-    )(transform, onp.zeros(transform.tangent_dim)).parameters
+    )(transform, onp.zeros(transform.tangent_dim)).parameters()

@@ -46,11 +46,9 @@ class SE2(_base.MatrixLieGroup):
             unit_complex_xy=jnp.concatenate([rotation.unit_complex, translation])
         )
 
-    @property
     def rotation(self) -> SO2:
         return SO2(unit_complex=self.unit_complex_xy[..., :2])
 
-    @property
     def translation(self) -> types.Vector:
         return self.unit_complex_xy[..., 2:]
 
@@ -73,7 +71,6 @@ class SE2(_base.MatrixLieGroup):
 
     # Accessors
 
-    @property  # type: ignore
     @overrides
     def parameters(self) -> types.Vector:
         return self.unit_complex_xy
@@ -93,17 +90,17 @@ class SE2(_base.MatrixLieGroup):
 
     @overrides
     def apply(self: "SE2", target: types.Vector) -> types.Vector:
-        return self.rotation @ target + self.translation
+        return self.rotation() @ target + self.translation()
 
     @overrides
     def multiply(self: "SE2", other: "SE2") -> "SE2":
         # Apply rotation to both the rotation and translation terms of `other`
-        unit_complex_xy = jax.vmap(self.rotation.apply)(
+        unit_complex_xy = jax.vmap(self.rotation().apply)(
             other.unit_complex_xy.reshape((2, 2))
         ).flatten()
 
         # Apply translation
-        unit_complex_xy = unit_complex_xy.at[2:].add(self.translation)
+        unit_complex_xy = unit_complex_xy.at[2:].add(self.translation())
 
         return SE2(unit_complex_xy=unit_complex_xy)
 
@@ -149,7 +146,7 @@ class SE2(_base.MatrixLieGroup):
         # Also see:
         # > http://ethaneade.com/lie.pdf
 
-        theta = self.rotation.log()[0]
+        theta = self.rotation().log()[0]
 
         cos = jnp.cos(theta)
         cos_minus_one = cos - 1.0
@@ -170,7 +167,7 @@ class SE2(_base.MatrixLieGroup):
             ]
         )
 
-        tangent = jnp.concatenate([V_inv @ self.translation, theta[None]])
+        tangent = jnp.concatenate([V_inv @ self.translation(), theta[None]])
         return tangent
 
     @overrides
@@ -186,17 +183,17 @@ class SE2(_base.MatrixLieGroup):
 
     @overrides
     def inverse(self: "SE2") -> "SE2":
-        R_inv = self.rotation.inverse()
+        R_inv = self.rotation().inverse()
         return SE2.from_rotation_and_translation(
             rotation=R_inv,
-            translation=-(R_inv @ self.translation),
+            translation=-(R_inv @ self.translation()),
         )
 
     @overrides
     def normalize(self: "SE2") -> "SE2":
         return SE2.from_rotation_and_translation(
-            rotation=self.rotation.normalize(),
-            translation=self.translation,
+            rotation=self.rotation().normalize(),
+            translation=self.translation(),
         )
 
     @staticmethod

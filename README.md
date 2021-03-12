@@ -84,22 +84,22 @@ twist = onp.array([1.0, 0.0, 0.2, 0.0, 0.5, 0.0])
 T_w_b = SE3.exp(twist)
 
 # We can print the (quaternion) rotation term; this is an `SO3` object:
-print(T_w_b.rotation)
+print(T_w_b.rotation())
 
 # Or print the translation; this is a simple array with shape (3,):
-print(T_w_b.translation)
+print(T_w_b.translation())
 
 # Or the underlying parameters; this is a length-7 (quaternion, quaternion) array:
 print(T_w_b.wxyz_xyz)  # SE3-specific field
-print(T_w_b.parameters)  # Alias shared by all groups
+print(T_w_b.parameters())  # Helper shared by all groups
 
 # There are also other helpers to generate transforms, eg from matrices:
 T_w_b = SE3.from_matrix(T_w_b.as_matrix())
 
 # Or from explicit rotation and translation terms:
 T_w_b = SE3.from_rotation_and_translation(
-    rotation=T_w_b.rotation,
-    translation=T_w_b.translation,
+    rotation=T_w_b.rotation(),
+    translation=T_w_b.translation(),
 )
 
 # Or with the dataclass constructor + the underlying length-7 parameterization:

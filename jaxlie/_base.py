@@ -16,16 +16,16 @@ class MatrixLieGroup(abc.ABC):
     # Class properties
     # > These will be set in `_utils.register_lie_group()`
 
-    matrix_dim: int = 0
+    matrix_dim: int
     """Dimension of square matrix output from `.as_matrix()`."""
 
-    parameters_dim: int = 0
-    """Dimension of underlying parameters, `.parameters`."""
+    parameters_dim: int
+    """Dimension of underlying parameters, `.parameters()`."""
 
-    tangent_dim: int = 0
+    tangent_dim: int
     """Dimension of tangent space."""
 
-    space_dim: int = 0
+    space_dim: int
     """Dimension of coordinates that can be transformed."""
 
     def __init__(self, parameters: jnp.ndarray):
@@ -87,7 +87,6 @@ class MatrixLieGroup(abc.ABC):
     def as_matrix(self) -> types.Matrix:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
-    @property
     @abc.abstractmethod
     def parameters(self) -> types.Vector:
         """Get underlying representation."""

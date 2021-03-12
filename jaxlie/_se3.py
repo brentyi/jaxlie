@@ -51,11 +51,9 @@ class SE3(_base.MatrixLieGroup):
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
-    @property
     def rotation(self) -> SO3:
         return SO3(wxyz=self.wxyz_xyz[..., :4])
 
-    @property
     def translation(self) -> types.Vector:
         return self.wxyz_xyz[..., 4:]
 
@@ -83,12 +81,11 @@ class SE3(_base.MatrixLieGroup):
         return (
             jnp.eye(4)
             .at[:3, :3]
-            .set(self.rotation.as_matrix())
+            .set(self.rotation().as_matrix())
             .at[:3, 3]
-            .set(self.translation)
+            .set(self.translation())
         )
 
-    @property  # type: ignore
     @overrides
     def parameters(self) -> types.Vector:
         return self.wxyz_xyz
@@ -98,13 +95,13 @@ class SE3(_base.MatrixLieGroup):
     @overrides
     def apply(self: "SE3", target: types.Vector) -> types.Vector:
         assert target.shape == (3,)
-        return self.rotation @ target + self.translation
+        return self.rotation() @ target + self.translation()
 
     @overrides
     def multiply(self: "SE3", other: "SE3") -> "SE3":
         return SE3.from_rotation_and_translation(
-            rotation=self.rotation @ other.rotation,
-            translation=(self.rotation @ other.translation) + self.translation,
+            rotation=self.rotation() @ other.rotation(),
+            translation=(self.rotation() @ other.translation()) + self.translation(),
         )
 
     @staticmethod
@@ -143,7 +140,7 @@ class SE3(_base.MatrixLieGroup):
     def log(self: "SE3") -> types.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
-        omega = self.rotation.log()
+        omega = self.rotation().log()
         theta_squared = omega @ omega
         skew_omega = _skew(omega)
         theta = jnp.sqrt(theta_squared)
@@ -160,31 +157,31 @@ class SE3(_base.MatrixLieGroup):
                 * (skew_omega @ skew_omega)
             ),
         )
-        return jnp.concatenate([V_inv @ self.translation, omega])
+        return jnp.concatenate([V_inv @ self.translation(), omega])
 
     @overrides
     def adjoint(self: "SE3") -> types.Matrix:
-        R = self.rotation.as_matrix()
+        R = self.rotation().as_matrix()
         return jnp.block(
             [
-                [R, _skew(self.translation) @ R],
+                [R, _skew(self.translation()) @ R],
                 [jnp.zeros((3, 3)), R],
             ]
         )
 
     @overrides
     def inverse(self: "SE3") -> "SE3":
-        R_inv = self.rotation.inverse()
+        R_inv = self.rotation().inverse()
         return SE3.from_rotation_and_translation(
             rotation=R_inv,
-            translation=-(R_inv @ self.translation),
+            translation=-(R_inv @ self.translation()),
         )
 
     @overrides
     def normalize(self: "SE3") -> "SE3":
         return SE3.from_rotation_and_translation(
-            rotation=self.rotation.normalize(),
-            translation=self.translation,
+            rotation=self.rotation().normalize(),
+            translation=self.translation(),
         )
 
     @staticmethod
