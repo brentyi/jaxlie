@@ -6,7 +6,7 @@ from overrides import final, overrides
 
 from . import _base, types
 from ._so3 import SO3
-from ._utils import get_epsilon, register_lie_group
+from .utils import get_epsilon, register_lie_group
 
 
 def _skew(omega: types.Vector) -> types.Matrix:

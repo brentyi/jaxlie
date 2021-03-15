@@ -15,20 +15,21 @@ import flax
 import jax
 from jax import numpy as jnp
 
-from . import types
+from .. import types
 
 if TYPE_CHECKING:
-    from ._base import MatrixLieGroup
+    from .._base import MatrixLieGroup
+
+
+T = TypeVar("T", bound="MatrixLieGroup")
 
 
 def get_epsilon(dtype: jnp.dtype) -> float:
+    """Helper for grabbing type-specific precision constants."""
     return {
         jnp.dtype("float32"): 1e-5,
         jnp.dtype("float64"): 1e-10,
     }[dtype]
-
-
-T = TypeVar("T", bound="MatrixLieGroup")
 
 
 def register_lie_group(

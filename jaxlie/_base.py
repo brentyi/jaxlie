@@ -183,12 +183,13 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
 
 class SOBase(MatrixLieGroup):
-    pass
+    """Base class for special orthogonal groups."""
 
 
 class SEBase(MatrixLieGroup):
+    """Base class for special Euclidean groups."""
 
-    # Standard interface
+    # SE-specific interface
 
     @staticmethod
     @abc.abstractmethod
@@ -196,7 +197,7 @@ class SEBase(MatrixLieGroup):
         rotation: SOBase,
         translation: types.Vector,
     ) -> SEGroupType:
-        """Construct an rigid transform from a rotation and a translation."""
+        """Construct a rigid transform from a rotation and a translation."""
 
     @abc.abstractmethod
     def rotation(self) -> SOBase:

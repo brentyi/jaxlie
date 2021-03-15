@@ -6,7 +6,7 @@ from overrides import final, overrides
 
 from . import _base, types
 from ._so2 import SO2
-from ._utils import get_epsilon, register_lie_group
+from .utils import get_epsilon, register_lie_group
 
 
 @register_lie_group(

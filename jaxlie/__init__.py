@@ -1,14 +1,14 @@
-from . import manifold, types
+from . import manifold, types, utils
 from ._base import MatrixLieGroup, SEBase, SOBase
 from ._se2 import SE2
 from ._se3 import SE3
 from ._so2 import SO2
 from ._so3 import SO3
-from ._utils import register_lie_group
 
 __all__ = [
     "manifold",
     "types",
+    "utils",
     "MatrixLieGroup",
     "SOBase",
     "SEBase",
@@ -16,6 +16,4 @@ __all__ = [
     "SO2",
     "SE3",
     "SO3",
-    "types",
-    "register_lie_group",
 ]
