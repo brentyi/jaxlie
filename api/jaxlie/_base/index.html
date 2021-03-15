@@ -173,10 +173,10 @@
 <td><p>Interface definition for matrix Lie groups.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie._base.SOBase" title="jaxlie._base.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SOBase</span></code></a></p></td>
-<td><p>Interface definition for special orthogonal groups.</p></td>
+<td><p>Base class for special orthogonal groups.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SEBase</span></code></a></p></td>
-<td><p>Interface definition for special Euclidean groups.</p></td>
+<td><p>Base class for special Euclidean groups.</p></td>
 </tr>
 </tbody>
 </table>
@@ -381,26 +381,26 @@ between our spatial and body representations.</p>
 <dt id="jaxlie._base.SOBase">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie._base.</span></code><code class="sig-name descname"><span class="pre">SOBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SOBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SOBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../../_images/inheritance-3e8642655b36885c1e81bf83257765598a5372ea.png" alt="Inheritance diagram of jaxlie._base.SOBase" usemap="#inheritancee96954c0d6" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../_images/inheritance-7be718fdb1a42ae5d5b9ec0d0f2f4ffd4a033fde.png" alt="Inheritance diagram of jaxlie._base.SOBase" usemap="#inheritancee96954c0d6" class="inheritance graphviz" /></div>
 <map id="inheritancee96954c0d6" name="inheritancee96954c0d6">
 <area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node4" href="../#jaxlie.SOBase" target="_top" title="Interface definition for special orthogonal groups." alt="" coords="357,31,429,56"/>
-</map><p>Interface definition for special orthogonal groups.</p>
+<area shape="rect" id="node4" href="../#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="357,31,429,56"/>
+</map><p>Base class for special orthogonal groups.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="jaxlie._base.SEBase">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie._base.</span></code><code class="sig-name descname"><span class="pre">SEBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../../_images/inheritance-80404ffe31f426d9991db94684bb42d5920126ee.png" alt="Inheritance diagram of jaxlie._base.SEBase" usemap="#inheritancee2938e520b" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../_images/inheritance-513561b9cfecf362b3df0dfe66b589ee3d1a3df2.png" alt="Inheritance diagram of jaxlie._base.SEBase" usemap="#inheritancee2938e520b" class="inheritance graphviz" /></div>
 <map id="inheritancee2938e520b" name="inheritancee2938e520b">
 <area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node4" href="../#jaxlie.SEBase" target="_top" title="Interface definition for special Euclidean groups." alt="" coords="357,31,429,56"/>
-</map><p>Interface definition for special Euclidean groups.</p>
+<area shape="rect" id="node4" href="../#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,31,429,56"/>
+</map><p>Base class for special Euclidean groups.</p>
 <dl class="py method">
 <dt id="jaxlie._base.SEBase.from_rotation_and_translation">
 <em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.SOBase" title="jaxlie._base.SOBase"><span class="pre">SOBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.SEGroupType" title="jaxlie._base.SEGroupType"><span class="pre">SEGroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct an rigid transform from a rotation and a translation.</p>
+<dd><p>Construct a rigid transform from a rotation and a translation.</p>
 </dd></dl>
 
 <dl class="py method">

@@ -200,7 +200,7 @@ Classes
    .. autoapi-inheritance-diagram:: jaxlie._base.SOBase
       :parts: 1
 
-   Interface definition for special orthogonal groups.
+   Base class for special orthogonal groups.
 
 
 .. py:class:: SEBase(parameters: jnp.ndarray)
@@ -210,13 +210,13 @@ Classes
    .. autoapi-inheritance-diagram:: jaxlie._base.SEBase
       :parts: 1
 
-   Interface definition for special Euclidean groups.
+   Base class for special Euclidean groups.
 
    .. method:: from_rotation_and_translation(rotation: SOBase, translation: types.Vector) -> SEGroupType
       :staticmethod:
       :abstractmethod:
 
-      Construct an rigid transform from a rotation and a translation.
+      Construct a rigid transform from a rotation and a translation.
 
 
    .. method:: rotation(self) -> SOBase
