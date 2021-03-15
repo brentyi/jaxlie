@@ -190,10 +190,10 @@
 <td><p>Interface definition for matrix Lie groups.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SEBase</span></code></a></p></td>
-<td><p>Interface definition for matrix Lie groups.</p></td>
+<td><p>Interface definition for special Euclidean groups.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SOBase</span></code></a></p></td>
-<td><p>Interface definition for matrix Lie groups.</p></td>
+<td><p>Interface definition for special orthogonal groups.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SE2</span></code></a></p></td>
 <td><p>Special Euclidean group for proper rigid transforms in 2D.</p></td>
@@ -400,11 +400,11 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SEBase">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SEBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-ab14e5cf15c3ee5606b2d859ea34850cb84972bd.png" alt="Inheritance diagram of jaxlie.SEBase" usemap="#inheritancea167573c30" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-6609b8ec5e76ae630583de1d2435ce5e10182715.png" alt="Inheritance diagram of jaxlie.SEBase" usemap="#inheritancea167573c30" class="inheritance graphviz" /></div>
 <map id="inheritancea167573c30" name="inheritancea167573c30">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SEBase" target="_top" title="SEBase" alt="" coords="357,31,429,56"/>
-</map><p>Interface definition for matrix Lie groups.</p>
+<area shape="rect" id="node4" href="#jaxlie.SEBase" target="_top" title="Interface definition for special Euclidean groups." alt="" coords="357,31,429,56"/>
+</map><p>Interface definition for special Euclidean groups.</p>
 <dl class="py method">
 <dt id="jaxlie.SEBase.from_rotation_and_translation">
 <em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><span class="pre">SOBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="types/#jaxlie.types.Vector" title="jaxlie.types.Vector"><span class="pre">types.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">SEGroupType</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
@@ -479,21 +479,21 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SOBase">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SOBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SOBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SOBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-59d864e451b02857e5505bd74ad7b6364d1e0454.png" alt="Inheritance diagram of jaxlie.SOBase" usemap="#inheritance28d58d5a65" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-edd6942724ffaba0d6e4bec7988d385c69caf3a3.png" alt="Inheritance diagram of jaxlie.SOBase" usemap="#inheritance28d58d5a65" class="inheritance graphviz" /></div>
 <map id="inheritance28d58d5a65" name="inheritance28d58d5a65">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SOBase" target="_top" title="SOBase" alt="" coords="357,31,429,56"/>
-</map><p>Interface definition for matrix Lie groups.</p>
+<area shape="rect" id="node4" href="#jaxlie.SOBase" target="_top" title="Interface definition for special orthogonal groups." alt="" coords="357,31,429,56"/>
+</map><p>Interface definition for special orthogonal groups.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt id="jaxlie.SE2">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SE2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-59cdde075e9628506a165c04ebfd50af9c8103f8.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-73d0901bea1d2b01a85a1a14e10c05203af2e531.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
 <map id="inheritance181a071670" name="inheritance181a071670">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="SEBase" alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Interface definition for special Euclidean groups." alt="" coords="357,31,429,56"/>
 <area shape="rect" id="node4" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="477,31,549,56"/>
 </map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
 <dl class="py attribute">
@@ -630,10 +630,10 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SE3">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SE3</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-ceef388a3237d3d68ca895a7da2df87fbaebfb98.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-57313a27dc4e5959ff3735e4eb8216d81e02267f.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
 <map id="inheritance122bbc4208" name="inheritance122bbc4208">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="SEBase" alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Interface definition for special Euclidean groups." alt="" coords="357,31,429,56"/>
 <area shape="rect" id="node4" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="477,31,549,56"/>
 </map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
 <dl class="py attribute">
@@ -765,10 +765,10 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SO2">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SO2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-1a5c5b220017d4461433f51cd991242b5ad9cb95.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-dee320f2d6483e2f39df07d075904627ed4b8319.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
 <map id="inheritancea272fb6a93" name="inheritancea272fb6a93">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="SOBase" alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Interface definition for special orthogonal groups." alt="" coords="357,31,429,56"/>
 <area shape="rect" id="node4" href="#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="477,31,549,56"/>
 </map><p>Special orthogonal group for 2D rotations.</p>
 <dl class="py attribute">
@@ -942,10 +942,10 @@ between our spatial and body representations.</p>
 <dt id="jaxlie.SO3">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SO3</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-10bff51486f81a581576ef9c18afceb20642cdeb.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../_images/inheritance-8f0185ce543edb5983d55d451b3a640cb4af3b6b.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
 <map id="inheritance6555072674" name="inheritance6555072674">
 <area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="SOBase" alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Interface definition for special orthogonal groups." alt="" coords="357,31,429,56"/>
 <area shape="rect" id="node4" href="#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="477,31,549,56"/>
 </map><p>Special orthogonal group for 3D rotations.</p>
 <dl class="py attribute">

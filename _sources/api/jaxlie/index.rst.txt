@@ -203,7 +203,7 @@ Classes
    .. autoapi-inheritance-diagram:: jaxlie.SEBase
       :parts: 1
 
-   Interface definition for matrix Lie groups.
+   Interface definition for special Euclidean groups.
 
    .. method:: from_rotation_and_translation(rotation: SOBase, translation: types.Vector) -> SEGroupType
       :staticmethod:
@@ -266,7 +266,7 @@ Classes
    .. autoapi-inheritance-diagram:: jaxlie.SOBase
       :parts: 1
 
-   Interface definition for matrix Lie groups.
+   Interface definition for special orthogonal groups.
 
 
 .. py:class:: SE2(parameters: jnp.ndarray)
