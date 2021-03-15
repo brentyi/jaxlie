@@ -20,7 +20,7 @@ Classes
 
 .. py:class:: SO3(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`
+   Bases: :class:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._so3.SO3
       :parts: 1
@@ -148,7 +148,7 @@ Classes
       :param matrix: types.Matrix representaiton.
       :type matrix: jnp.ndarray
 
-      :returns: *T* -- Group member.
+      :returns: *GroupType* -- Group member.
 
 
    .. method:: as_matrix(self) -> types.Matrix
@@ -176,9 +176,9 @@ Classes
       Left-multiplies this transformations with another.
 
       :param other: other
-      :type other: T
+      :type other: GroupType
 
-      :returns: *T* -- self @ other
+      :returns: *GroupType* -- self @ other
 
 
    .. method:: exp(tangent: types.TangentVector) -> 'SO3'
@@ -203,13 +203,13 @@ Classes
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
-      More precisely, for a transform ``T``\ :
+      More precisely, for a transform ``GroupType``\ :
 
       .. code-block::
 
-         T @ exp(omega) = exp(Adj_T @ omega) @ T
+         GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      For robotics, typically used for converting twists, wrenches, and Jacobians
+      In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
       :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
@@ -226,7 +226,7 @@ Classes
 
       Normalize/projects values and returns.
 
-      :returns: *T* -- Normalized group member.
+      :returns: *GroupType* -- Normalized group member.
 
 
    .. method:: sample_uniform(key: jnp.ndarray) -> 'SO3'

@@ -20,7 +20,7 @@ Classes
 
 .. py:class:: SE2(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`
+   Bases: :class:`jaxlie.SEBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._se2.SE2
       :parts: 1
@@ -45,11 +45,17 @@ Classes
    .. method:: from_rotation_and_translation(rotation: SO2, translation: types.Vector) -> 'SE2'
       :staticmethod:
 
+      Construct an rigid transform from a rotation and a translation.
+
 
    .. method:: rotation(self) -> SO2
 
+      Returns a transform's rotation term.
+
 
    .. method:: translation(self) -> types.Vector
+
+      Returns a transform's translation term.
 
 
    .. method:: identity() -> 'SE2'
@@ -68,7 +74,7 @@ Classes
       :param matrix: types.Matrix representaiton.
       :type matrix: jnp.ndarray
 
-      :returns: *T* -- Group member.
+      :returns: *GroupType* -- Group member.
 
 
    .. method:: parameters(self) -> types.Vector
@@ -79,26 +85,6 @@ Classes
    .. method:: as_matrix(self) -> types.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
-
-
-   .. method:: apply(self: SE2, target: types.Vector) -> types.Vector
-
-      Applies the group action.
-
-      :param target: types.Vector to transform.
-      :type target: types.Vector
-
-      :returns: *types.Vector* -- Transformed vector.
-
-
-   .. method:: multiply(self: SE2, other: SE2) -> 'SE2'
-
-      Left-multiplies this transformations with another.
-
-      :param other: other
-      :type other: T
-
-      :returns: *T* -- self @ other
 
 
    .. method:: exp(tangent: types.TangentVector) -> 'SE2'
@@ -123,30 +109,16 @@ Classes
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
-      More precisely, for a transform ``T``\ :
+      More precisely, for a transform ``GroupType``\ :
 
       .. code-block::
 
-         T @ exp(omega) = exp(Adj_T @ omega) @ T
+         GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      For robotics, typically used for converting twists, wrenches, and Jacobians
+      In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
       :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
-
-
-   .. method:: inverse(self: SE2) -> 'SE2'
-
-      Computes the inverse of our transform.
-
-      :returns: *types.Matrix* -- Output.
-
-
-   .. method:: normalize(self: SE2) -> 'SE2'
-
-      Normalize/projects values and returns.
-
-      :returns: *T* -- Normalized group member.
 
 
    .. method:: sample_uniform(key: jnp.ndarray) -> 'SE2'

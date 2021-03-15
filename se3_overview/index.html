@@ -179,7 +179,7 @@
 <span class="c1"># Or print the translation; this is a simple array with shape (3,):</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">translation</span><span class="p">())</span>
 
-<span class="c1"># Or the underlying parameters; this is a length-7 (quaternion, quaternion) array:</span>
+<span class="c1"># Or the underlying parameters; this is a length-7 (quaternion, translation) array:</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>  <span class="c1"># Helper shared by all groups</span>
 

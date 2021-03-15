@@ -177,11 +177,12 @@
 <dl class="py class">
 <dt id="jaxlie._so2.SO2">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie._so2.</span></code><code class="sig-name descname"><span class="pre">SO2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so2.SO2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../../_images/inheritance-47be0d3a66ac926a177febf88a11c8e8460a40f9.png" alt="Inheritance diagram of jaxlie._so2.SO2" usemap="#inheritance8658821419" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="../#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
+<div class="graphviz"><img src="../../../_images/inheritance-b763fbb845f5767335f3b924e26849af39a8ddd8.png" alt="Inheritance diagram of jaxlie._so2.SO2" usemap="#inheritance8658821419" class="inheritance graphviz" /></div>
 <map id="inheritance8658821419" name="inheritance8658821419">
-<area shape="rect" id="node2" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,247,31"/>
-<area shape="rect" id="node3" href="../#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="295,5,367,31"/>
+<area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
+<area shape="rect" id="node5" href="../#jaxlie.SOBase" target="_top" title="SOBase" alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node4" href="../#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="477,31,549,56"/>
 </map><p>Special orthogonal group for 2D rotations.</p>
 <dl class="py attribute">
 <dt id="jaxlie._so2.SO2.unit_complex">
@@ -225,7 +226,7 @@
 <dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – types.Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>T</em> – Group member.</p>
+<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -262,10 +263,10 @@
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>T</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>T</em> – self &#64; other</p>
+<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -299,11 +300,11 @@
 <dt id="jaxlie._so2.SO2.adjoint">
 <code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so2.SO2" title="jaxlie._so2.SO2"><span class="pre">SO2</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_so2/#SO2.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so2.SO2.adjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the adjoint, which transforms tangent vectors between tangent spaces.</p>
-<p>More precisely, for a transform <code class="docutils literal notranslate"><span class="pre">T</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">Adj_T</span> <span class="o">@</span> <span class="n">omega</span><span class="p">)</span> <span class="o">@</span> <span class="n">T</span>
+<p>More precisely, for a transform <code class="docutils literal notranslate"><span class="pre">GroupType</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GroupType</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">Adj_T</span> <span class="o">@</span> <span class="n">omega</span><span class="p">)</span> <span class="o">@</span> <span class="n">GroupType</span>
 </pre></div>
 </div>
-<p>For robotics, typically used for converting twists, wrenches, and Jacobians
+<p>In robotics, typically used for converting twists, wrenches, and Jacobians
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -329,7 +330,7 @@ between our spatial and body representations.</p>
 <dd><p>Normalize/projects values and returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>T</em> – Normalized group member.</p>
+<dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
 </dd>
 </dl>
 </dd></dl>
