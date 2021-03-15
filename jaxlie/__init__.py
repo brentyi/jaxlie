@@ -1,5 +1,5 @@
 from . import manifold, types
-from ._base import MatrixLieGroup
+from ._base import MatrixLieGroup, SEBase, SOBase
 from ._se2 import SE2
 from ._se3 import SE3
 from ._so2 import SO2
@@ -10,6 +10,8 @@ __all__ = [
     "manifold",
     "types",
     "MatrixLieGroup",
+    "SOBase",
+    "SEBase",
     "SE2",
     "SO2",
     "SE3",

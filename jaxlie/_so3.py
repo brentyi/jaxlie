@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import overrides
+from overrides import final, overrides
 
 from . import _base, types
 from ._utils import get_epsilon, register_lie_group
@@ -15,7 +15,7 @@ from ._utils import get_epsilon, register_lie_group
     space_dim=3,
 )
 @dataclasses.dataclass(frozen=True)
-class SO3(_base.MatrixLieGroup):
+class SO3(_base.SOBase):
     """Special orthogonal group for 3D rotations."""
 
     # SO3-specific
@@ -23,6 +23,7 @@ class SO3(_base.MatrixLieGroup):
     wxyz: types.Vector
     """Internal parameters. `(w, x, y, z)` quaternion."""
 
+    @final
     @overrides
     def __repr__(self) -> str:
         wxyz = jnp.round(self.wxyz, 5)
@@ -156,11 +157,13 @@ class SO3(_base.MatrixLieGroup):
     # Factory
 
     @staticmethod
+    @final
     @overrides
     def identity() -> "SO3":
         return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
+    @final
     @overrides
     def from_matrix(matrix: types.Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
@@ -189,24 +192,6 @@ class SO3(_base.MatrixLieGroup):
             q = jnp.array([t, m[2, 1] - m[1, 2], m[0, 2] - m[2, 0], m[1, 0] - m[0, 1]])
             return t, q
 
-        # # We can also choose to branch, but this is slower
-        # t, q = jax.lax.cond(
-        #     matrix[2, 2] < 0,
-        #     true_fun=lambda matrix: jax.lax.cond(
-        #         matrix[0, 0] > matrix[1, 1],
-        #         true_fun=case0,
-        #         false_fun=case1,
-        #         operand=matrix,
-        #     ),
-        #     false_fun=lambda matrix: jax.lax.cond(
-        #         matrix[0, 0] < -matrix[1, 1],
-        #         true_fun=case2,
-        #         false_fun=case3,
-        #         operand=matrix,
-        #     ),
-        #     operand=matrix,
-        # )
-
         # Compute four cases, then pick the most precise one
         # Probably worth revisiting this!
         case0_t, case0_q = case0(matrix)
@@ -229,10 +214,29 @@ class SO3(_base.MatrixLieGroup):
             jnp.where(cond2, case2_q, case3_q),
         )
 
+        # # We can also choose to branch, but this is slower
+        # t, q = jax.lax.cond(
+        #     matrix[2, 2] < 0,
+        #     true_fun=lambda matrix: jax.lax.cond(
+        #         matrix[0, 0] > matrix[1, 1],
+        #         true_fun=case0,
+        #         false_fun=case1,
+        #         operand=matrix,
+        #     ),
+        #     false_fun=lambda matrix: jax.lax.cond(
+        #         matrix[0, 0] < -matrix[1, 1],
+        #         true_fun=case2,
+        #         false_fun=case3,
+        #         operand=matrix,
+        #     ),
+        #     operand=matrix,
+        # )
+
         return SO3(wxyz=q * 0.5 / jnp.sqrt(t))
 
     # Accessors
 
+    @final
     @overrides
     def as_matrix(self) -> types.Matrix:
         norm = self.wxyz @ self.wxyz
@@ -246,12 +250,14 @@ class SO3(_base.MatrixLieGroup):
             ]
         )
 
+    @final
     @overrides
     def parameters(self) -> types.Vector:
         return self.wxyz
 
     # Operations
 
+    @final
     @overrides
     def apply(self: "SO3", target: types.Vector) -> types.Vector:
         assert target.shape == (3,)
@@ -260,6 +266,7 @@ class SO3(_base.MatrixLieGroup):
         padded_target = jnp.zeros(4).at[1:].set(target)
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
+    @final
     @overrides
     def multiply(self: "SO3", other: "SO3") -> "SO3":
         w0, x0, y0, z0 = self.wxyz
@@ -276,6 +283,7 @@ class SO3(_base.MatrixLieGroup):
         )
 
     @staticmethod
+    @final
     @overrides
     def exp(tangent: types.TangentVector) -> "SO3":
         # Reference:
@@ -309,6 +317,7 @@ class SO3(_base.MatrixLieGroup):
             )
         )
 
+    @final
     @overrides
     def log(self: "SO3") -> types.TangentVector:
         # Reference:
@@ -330,20 +339,24 @@ class SO3(_base.MatrixLieGroup):
 
         return atan_factor * self.wxyz[1:]
 
+    @final
     @overrides
     def adjoint(self: "SO3") -> types.Matrix:
         return self.as_matrix()
 
+    @final
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
         return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
 
+    @final
     @overrides
     def normalize(self: "SO3") -> "SO3":
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz))
 
     @staticmethod
+    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SO3":
         # Uniformly sample over S^4

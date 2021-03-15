@@ -17,7 +17,7 @@ print(T_w_b.rotation())
 # Or print the translation; this is a simple array with shape (3,):
 print(T_w_b.translation())
 
-# Or the underlying parameters; this is a length-7 (quaternion, quaternion) array:
+# Or the underlying parameters; this is a length-7 (quaternion, translation) array:
 print(T_w_b.wxyz_xyz)  # SE3-specific field
 print(T_w_b.parameters())  # Helper shared by all groups
 

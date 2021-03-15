@@ -4,13 +4,15 @@ from typing import Type, TypeVar, overload
 import jax
 import numpy as onp
 from jax import numpy as jnp
+from overrides import EnforceOverrides, final, overrides
 
 from . import types
 
-T = TypeVar("T", bound="MatrixLieGroup")
+GroupType = TypeVar("GroupType", bound="MatrixLieGroup")
+SEGroupType = TypeVar("SEGroupType", bound="SEBase")
 
 
-class MatrixLieGroup(abc.ABC):
+class MatrixLieGroup(abc.ABC, EnforceOverrides):
     """Interface definition for matrix Lie groups."""
 
     # Class properties
@@ -38,11 +40,11 @@ class MatrixLieGroup(abc.ABC):
     # Shared implementations
 
     @overload
-    def __matmul__(self: T, other: T) -> T:
+    def __matmul__(self: GroupType, other: GroupType) -> GroupType:
         ...
 
     @overload
-    def __matmul__(self: T, other: types.Vector) -> types.Vector:
+    def __matmul__(self: GroupType, other: types.Vector) -> types.Vector:
         ...
 
     def __matmul__(self, other):
@@ -62,7 +64,7 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def identity(cls: Type[T]) -> T:
+    def identity(cls: Type[GroupType]) -> GroupType:
         """Returns identity element.
 
         Returns:
@@ -71,14 +73,14 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[T], matrix: types.Matrix) -> T:
+    def from_matrix(cls: Type[GroupType], matrix: types.Matrix) -> GroupType:
         """Get group member from matrix representation.
 
         Args:
             matrix (jnp.ndarray): types.Matrix representaiton.
 
         Returns:
-            T: Group member.
+            GroupType: Group member.
         """
 
     # Accessors
@@ -94,7 +96,7 @@ class MatrixLieGroup(abc.ABC):
     # Operations
 
     @abc.abstractmethod
-    def apply(self: T, target: types.Vector) -> types.Vector:
+    def apply(self: GroupType, target: types.Vector) -> types.Vector:
         """Applies the group action.
 
         Args:
@@ -105,19 +107,19 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def multiply(self: T, other: T) -> T:
+    def multiply(self: GroupType, other: GroupType) -> GroupType:
         """Left-multiplies this transformations with another.
 
         Args:
-            other (T): other
+            other (GroupType): other
 
         Returns:
-            T: self @ other
+            GroupType: self @ other
         """
 
     @classmethod
     @abc.abstractmethod
-    def exp(cls: Type[T], tangent: types.TangentVector) -> T:
+    def exp(cls: Type[GroupType], tangent: types.TangentVector) -> GroupType:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -128,7 +130,7 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def log(self: T) -> types.TangentVector:
+    def log(self: GroupType) -> types.TangentVector:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -136,15 +138,15 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def adjoint(self: T) -> types.Matrix:
+    def adjoint(self: GroupType) -> types.Matrix:
         """Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
-        More precisely, for a transform `T`:
+        More precisely, for a transform `GroupType`:
         ```
-        T @ exp(omega) = exp(Adj_T @ omega) @ T
+        GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
         ```
 
-        For robotics, typically used for converting twists, wrenches, and Jacobians
+        In robotics, typically used for converting twists, wrenches, and Jacobians
         between our spatial and body representations.
 
         Returns:
@@ -152,7 +154,7 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def inverse(self: T) -> T:
+    def inverse(self: GroupType) -> GroupType:
         """Computes the inverse of our transform.
 
         Returns:
@@ -160,16 +162,16 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def normalize(self: T) -> T:
+    def normalize(self: GroupType) -> GroupType:
         """Normalize/projects values and returns.
 
         Returns:
-            T: Normalized group member.
+            GroupType: Normalized group member.
         """
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[T], key: jnp.ndarray) -> T:
+    def sample_uniform(cls: Type[GroupType], key: jnp.ndarray) -> GroupType:
         """Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
         Args:
@@ -178,3 +180,60 @@ class MatrixLieGroup(abc.ABC):
         Returns:
             MatrixLieGroup: Sampled group member.
         """
+
+
+class SOBase(MatrixLieGroup):
+    pass
+
+
+class SEBase(MatrixLieGroup):
+
+    # Standard interface
+
+    @staticmethod
+    @abc.abstractmethod
+    def from_rotation_and_translation(
+        rotation: SOBase,
+        translation: types.Vector,
+    ) -> SEGroupType:
+        """Construct an rigid transform from a rotation and a translation."""
+
+    @abc.abstractmethod
+    def rotation(self) -> SOBase:
+        """Returns a transform's rotation term."""
+
+    @abc.abstractmethod
+    def translation(self) -> types.Vector:
+        """Returns a transform's translation term."""
+
+    # Overrides
+
+    @final
+    @overrides
+    def apply(self, target: types.Vector) -> types.Vector:
+        return self.rotation() @ target + self.translation()
+
+    @final
+    @overrides
+    def multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType:
+        return type(self).from_rotation_and_translation(
+            rotation=self.rotation() @ other.rotation(),
+            translation=(self.rotation() @ other.translation()) + self.translation(),
+        )
+
+    @final
+    @overrides
+    def inverse(self: SEGroupType) -> SEGroupType:
+        R_inv = self.rotation().inverse()
+        return type(self).from_rotation_and_translation(
+            rotation=R_inv,
+            translation=-(R_inv @ self.translation()),
+        )
+
+    @final
+    @overrides
+    def normalize(self: SEGroupType) -> SEGroupType:
+        return type(self).from_rotation_and_translation(
+            rotation=self.rotation().normalize(),
+            translation=self.translation(),
+        )

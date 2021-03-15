@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import overrides
+from overrides import final, overrides
 
 from . import _base, types
 from ._so3 import SO3
@@ -29,7 +29,7 @@ def _skew(omega: types.Vector) -> types.Matrix:
     space_dim=3,
 )
 @dataclasses.dataclass(frozen=True)
-class SE3(_base.MatrixLieGroup):
+class SE3(_base.SEBase):
     """Special Euclidean group for proper rigid transforms in 3D."""
 
     # SE3-specific
@@ -37,13 +37,18 @@ class SE3(_base.MatrixLieGroup):
     wxyz_xyz: types.Vector
     """Internal parameters. wxyz quaternion followed by xyz translation."""
 
+    @final
     @overrides
     def __repr__(self) -> str:
         quat = jnp.round(self.wxyz_xyz[..., :4], 5)
         trans = jnp.round(self.wxyz_xyz[..., 4:], 5)
         return f"{self.__class__.__name__}(wxyz={quat}, xyz={trans})"
 
+    # SE-specific
+
     @staticmethod
+    @final
+    @overrides
     def from_rotation_and_translation(
         rotation: SO3,
         translation: types.Vector,
@@ -51,20 +56,26 @@ class SE3(_base.MatrixLieGroup):
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
+    @final
+    @overrides
     def rotation(self) -> SO3:
         return SO3(wxyz=self.wxyz_xyz[..., :4])
 
+    @final
+    @overrides
     def translation(self) -> types.Vector:
         return self.wxyz_xyz[..., 4:]
 
     # Factory
 
     @staticmethod
+    @final
     @overrides
     def identity() -> "SE3":
         return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
+    @final
     @overrides
     def from_matrix(matrix: types.Matrix) -> "SE3":
         assert matrix.shape == (4, 4)
@@ -76,6 +87,7 @@ class SE3(_base.MatrixLieGroup):
 
     # Accessors
 
+    @final
     @overrides
     def as_matrix(self) -> types.Matrix:
         return (
@@ -86,25 +98,15 @@ class SE3(_base.MatrixLieGroup):
             .set(self.translation())
         )
 
+    @final
     @overrides
     def parameters(self) -> types.Vector:
         return self.wxyz_xyz
 
     # Operations
 
-    @overrides
-    def apply(self: "SE3", target: types.Vector) -> types.Vector:
-        assert target.shape == (3,)
-        return self.rotation() @ target + self.translation()
-
-    @overrides
-    def multiply(self: "SE3", other: "SE3") -> "SE3":
-        return SE3.from_rotation_and_translation(
-            rotation=self.rotation() @ other.rotation(),
-            translation=(self.rotation() @ other.translation()) + self.translation(),
-        )
-
     @staticmethod
+    @final
     @overrides
     def exp(tangent: types.TangentVector) -> "SE3":
         # Reference:
@@ -136,6 +138,7 @@ class SE3(_base.MatrixLieGroup):
             translation=V @ tangent[:3],
         )
 
+    @final
     @overrides
     def log(self: "SE3") -> types.TangentVector:
         # Reference:
@@ -159,6 +162,7 @@ class SE3(_base.MatrixLieGroup):
         )
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
+    @final
     @overrides
     def adjoint(self: "SE3") -> types.Matrix:
         R = self.rotation().as_matrix()
@@ -169,22 +173,8 @@ class SE3(_base.MatrixLieGroup):
             ]
         )
 
-    @overrides
-    def inverse(self: "SE3") -> "SE3":
-        R_inv = self.rotation().inverse()
-        return SE3.from_rotation_and_translation(
-            rotation=R_inv,
-            translation=-(R_inv @ self.translation()),
-        )
-
-    @overrides
-    def normalize(self: "SE3") -> "SE3":
-        return SE3.from_rotation_and_translation(
-            rotation=self.rotation().normalize(),
-            translation=self.translation(),
-        )
-
     @staticmethod
+    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SE3":
         key0, key1 = jax.random.split(key)
