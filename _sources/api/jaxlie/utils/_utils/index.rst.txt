@@ -1,9 +1,9 @@
 :orphan:
 
-:mod:`jaxlie._utils`
-====================
+:mod:`jaxlie.utils._utils`
+==========================
 
-.. py:module:: jaxlie._utils
+.. py:module:: jaxlie.utils._utils
 
 
 Module Contents
@@ -15,17 +15,19 @@ Functions
 
 .. autoapisummary::
 
-   jaxlie._utils.get_epsilon
-   jaxlie._utils.register_lie_group
-
-
-.. function:: get_epsilon(dtype: jnp.dtype) -> float
+   jaxlie.utils._utils.get_epsilon
+   jaxlie.utils._utils.register_lie_group
 
 
 .. data:: T
    
 
    
+
+.. function:: get_epsilon(dtype: jnp.dtype) -> float
+
+   Helper for grabbing type-specific precision constants.
+
 
 .. function:: register_lie_group(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) -> Callable[[Type[T]], Type[T]]
 

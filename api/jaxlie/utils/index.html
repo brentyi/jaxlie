@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>jaxlie._utils &mdash; jaxlie  documentation</title>
+  <title>jaxlie.utils &mdash; jaxlie  documentation</title>
   
 
   
@@ -38,7 +38,9 @@
 
     
     <link rel="index" title="Index" href="../../../genindex/" />
-    <link rel="search" title="Search" href="../../../search/" /> 
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="SE(3) Overview" href="../../../se3_overview/" />
+    <link rel="prev" title="jaxlie.types" href="../types/" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -84,8 +86,13 @@
             
             
               <p class="caption"><span class="caption-text">API Reference</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../manifold/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../types/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Example usage</span></p>
 <ul>
@@ -138,13 +145,15 @@
     
       <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
         
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._utils</span></code></li>
+          <li><a href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a> &raquo;</li>
+        
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../../_sources/api/jaxlie/_utils/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/api/jaxlie/utils/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -157,10 +166,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-jaxlie._utils">
-<span id="jaxlie-utils"></span><h1><a class="reference internal" href="#module-jaxlie._utils" title="jaxlie._utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._utils</span></code></a><a class="headerlink" href="#module-jaxlie._utils" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-jaxlie.utils">
+<span id="jaxlie-utils"></span><h1><a class="reference internal" href="#module-jaxlie.utils" title="jaxlie.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a><a class="headerlink" href="#module-jaxlie.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
@@ -169,27 +178,23 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie._utils.get_epsilon" title="jaxlie._utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype: jnp.dtype) → float</p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils.get_epsilon" title="jaxlie.utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype: jnp.dtype) → float</p></td>
+<td><p>Helper for grabbing type-specific precision constants.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie._utils.register_lie_group" title="jaxlie._utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) → Callable[[Type[T]], Type[T]]</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils.register_lie_group" title="jaxlie.utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) → Callable[[Type[T]], Type[T]]</p></td>
 <td><p>Decorator for registering Lie group dataclasses.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
-<dt id="jaxlie._utils.get_epsilon">
-<code class="sig-prename descclassname"><span class="pre">jaxlie._utils.</span></code><code class="sig-name descname"><span class="pre">get_epsilon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../../../_modules/jaxlie/_utils/#get_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._utils.get_epsilon" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt id="jaxlie._utils.T">
-<code class="sig-prename descclassname"><span class="pre">jaxlie._utils.</span></code><code class="sig-name descname"><span class="pre">T</span></code><a class="headerlink" href="#jaxlie._utils.T" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="jaxlie.utils.get_epsilon">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.utils.</span></code><code class="sig-name descname"><span class="pre">get_epsilon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../../../_modules/jaxlie/utils/_utils/#get_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils.get_epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper for grabbing type-specific precision constants.</p>
+</dd></dl>
 
 <dl class="py function">
-<dt id="jaxlie._utils.register_lie_group">
-<code class="sig-prename descclassname"><span class="pre">jaxlie._utils.</span></code><code class="sig-name descname"><span class="pre">register_lie_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._utils.T" title="jaxlie._utils.T"><span class="pre">T</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._utils.T" title="jaxlie._utils.T"><span class="pre">T</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../_modules/jaxlie/_utils/#register_lie_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._utils.register_lie_group" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.utils.register_lie_group">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.utils.</span></code><code class="sig-name descname"><span class="pre">register_lie_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">T</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../_modules/jaxlie/utils/_utils/#register_lie_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils.register_lie_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for registering Lie group dataclasses.</p>
 <ul class="simple">
 <li><p>Sets static dimensionality attributes</p></li>
@@ -223,6 +228,10 @@
            
           </div>
           <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../../se3_overview/" class="btn btn-neutral float-right" title="SE(3) Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../types/" class="btn btn-neutral float-left" title="jaxlie.types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 
