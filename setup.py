@@ -24,6 +24,14 @@ setup(
         "overrides",
         "dataclasses; python_version < '3.7.0'",
     ],
+    extras_require={
+        "testing": [
+            "pytest",
+            "pytest-cov",
+            "hypothesis",
+            "hypothesis[numpy]",
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
