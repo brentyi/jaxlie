@@ -28,7 +28,7 @@ Classes
    Special Euclidean group for proper rigid transforms in 3D.
 
    .. attribute:: wxyz_xyz
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: SO3, translation: types.Vector) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation: SO3, translation: annotations.Vector) -> 'SE3'
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
@@ -49,7 +49,7 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> types.Vector
+   .. method:: translation(self) -> annotations.Vector
 
       Returns a transform's translation term.
 
@@ -62,7 +62,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SE3'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SE3'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -73,17 +73,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SE3'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SE3'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -94,14 +94,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SE3) -> types.TangentVector
+   .. method:: log(self: SE3) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE3) -> types.Matrix
+   .. method:: adjoint(self: SE3) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 

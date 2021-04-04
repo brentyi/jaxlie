@@ -4,7 +4,8 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
+  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>jaxlie.manifold &mdash; jaxlie  documentation</title>
@@ -39,8 +40,8 @@
     
     <link rel="index" title="Index" href="../../../genindex/" />
     <link rel="search" title="Search" href="../../../search/" />
-    <link rel="next" title="jaxlie.types" href="../types/" />
-    <link rel="prev" title="jaxlie" href="../" /> 
+    <link rel="next" title="jaxlie.utils" href="../utils/" />
+    <link rel="prev" title="jaxlie.annotations" href="../annotations/" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,16 +86,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <p><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../annotations/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.annotations</span></code></a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../types/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../utils/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a></li>
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Example usage</span></p>
+<p><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -166,11 +167,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-jaxlie.manifold">
+  <section id="module-jaxlie.manifold">
 <span id="jaxlie-manifold"></span><h1><a class="reference internal" href="#module-jaxlie.manifold" title="jaxlie.manifold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a><a class="headerlink" href="#module-jaxlie.manifold" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="package-contents">
+<section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="functions">
+<section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -178,10 +179,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rminus" title="jaxlie.manifold.rminus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rminus</span></code></a>(a: T, b: T) → types.TangentVector</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rminus" title="jaxlie.manifold.rminus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rminus</span></code></a>(a: T, b: T) → annotations.TangentVector</p></td>
 <td><p>Manifold right minus.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus" title="jaxlie.manifold.rplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus</span></code></a>(transform: T, delta: types.TangentVector) → T</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus" title="jaxlie.manifold.rplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus</span></code></a>(transform: T, delta: annotations.TangentVector) → T</p></td>
 <td><p>Manifold right plus.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="jaxlie.manifold.rplus_jacobian_parameters_wrt_delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></code></a>(transform: MatrixLieGroup) → jnp.ndarray</p></td>
@@ -191,7 +192,7 @@
 </table>
 <dl class="py function">
 <dt id="jaxlie.manifold.rminus">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></code><code class="sig-name descname"><span class="pre">rminus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rminus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rminus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></code><code class="sig-name descname"><span class="pre">rminus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rminus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rminus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manifold right minus.</p>
 <p>Computes <code class="docutils literal notranslate"><span class="pre">delta</span> <span class="pre">=</span> <span class="pre">(T_wa.inverse()</span> <span class="pre">&#64;</span> <span class="pre">T_wb).log()</span></code>.</p>
 <dl class="field-list simple">
@@ -209,7 +210,7 @@
 
 <dl class="py function">
 <dt id="jaxlie.manifold.rplus">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></code><code class="sig-name descname"><span class="pre">rplus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">T</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></code><code class="sig-name descname"><span class="pre">rplus</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">T</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manifold right plus.</p>
 <p>Computes <code class="docutils literal notranslate"><span class="pre">T_wb</span> <span class="pre">=</span> <span class="pre">T_wa</span> <span class="pre">&#64;</span> <span class="pre">exp(delta)</span></code>.</p>
 <dl class="field-list simple">
@@ -252,9 +253,9 @@ local delta.</p>
 </dl>
 </dd></dl>
 
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -262,8 +263,8 @@ local delta.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../types/" class="btn btn-neutral float-right" title="jaxlie.types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../" class="btn btn-neutral float-left" title="jaxlie" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../utils/" class="btn btn-neutral float-right" title="jaxlie.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../annotations/" class="btn btn-neutral float-left" title="jaxlie.annotations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

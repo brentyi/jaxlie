@@ -10,8 +10,8 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
+   annotations/index.rst
    manifold/index.rst
-   types/index.rst
    utils/index.rst
 
 
@@ -67,7 +67,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: types.Vector) -> types.Vector
+               __matmul__(self: GroupType, other: annotations.Vector) -> annotations.Vector
 
       Overload for the ``@`` operator.
 
@@ -84,7 +84,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(cls: Type[GroupType], matrix: types.Matrix) -> GroupType
+   .. method:: from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType
       :classmethod:
       :abstractmethod:
 
@@ -96,19 +96,19 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
       :abstractmethod:
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
       :abstractmethod:
 
       Get underlying representation.
 
 
-   .. method:: apply(self: GroupType, target: types.Vector) -> types.Vector
+   .. method:: apply(self: GroupType, target: annotations.Vector) -> annotations.Vector
       :abstractmethod:
 
       Applies the group action.
@@ -130,7 +130,7 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(cls: Type[GroupType], tangent: types.TangentVector) -> GroupType
+   .. method:: exp(cls: Type[GroupType], tangent: annotations.TangentVector) -> GroupType
       :classmethod:
       :abstractmethod:
 
@@ -142,7 +142,7 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: GroupType) -> types.TangentVector
+   .. method:: log(self: GroupType) -> annotations.TangentVector
       :abstractmethod:
 
       Computes ``vee(logm(transformation matrix))``.
@@ -150,7 +150,7 @@ Classes
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: GroupType) -> types.Matrix
+   .. method:: adjoint(self: GroupType) -> annotations.Matrix
       :abstractmethod:
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
@@ -205,7 +205,7 @@ Classes
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(rotation: SOBase, translation: types.Vector) -> SEGroupType
+   .. method:: from_rotation_and_translation(rotation: SOBase, translation: annotations.Vector) -> SEGroupType
       :staticmethod:
       :abstractmethod:
 
@@ -218,13 +218,13 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> types.Vector
+   .. method:: translation(self) -> annotations.Vector
       :abstractmethod:
 
       Returns a transform's translation term.
 
 
-   .. method:: apply(self, target: types.Vector) -> types.Vector
+   .. method:: apply(self, target: annotations.Vector) -> annotations.Vector
 
       Applies the group action.
 
@@ -279,7 +279,7 @@ Classes
    Special Euclidean group for proper rigid transforms in 2D.
 
    .. attribute:: unit_complex_xy
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. ``(cos, sin, x, y)``.
 
@@ -289,11 +289,11 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_xy_theta(x: types.Scalar, y: types.Scalar, theta: types.Scalar) -> 'SE2'
+   .. method:: from_xy_theta(x: annotations.Scalar, y: annotations.Scalar, theta: annotations.Scalar) -> 'SE2'
       :staticmethod:
 
 
-   .. method:: from_rotation_and_translation(rotation: SO2, translation: types.Vector) -> 'SE2'
+   .. method:: from_rotation_and_translation(rotation: SO2, translation: annotations.Vector) -> 'SE2'
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
@@ -304,7 +304,7 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> types.Vector
+   .. method:: translation(self) -> annotations.Vector
 
       Returns a transform's translation term.
 
@@ -317,7 +317,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SE2'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SE2'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -328,17 +328,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SE2'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SE2'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -349,14 +349,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SE2) -> types.TangentVector
+   .. method:: log(self: SE2) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE2) -> types.Matrix
+   .. method:: adjoint(self: SE2) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -394,7 +394,7 @@ Classes
    Special Euclidean group for proper rigid transforms in 3D.
 
    .. attribute:: wxyz_xyz
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
@@ -404,7 +404,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: SO3, translation: types.Vector) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation: SO3, translation: annotations.Vector) -> 'SE3'
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
@@ -415,7 +415,7 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> types.Vector
+   .. method:: translation(self) -> annotations.Vector
 
       Returns a transform's translation term.
 
@@ -428,7 +428,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SE3'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SE3'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -439,17 +439,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SE3'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SE3'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -460,14 +460,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SE3) -> types.TangentVector
+   .. method:: log(self: SE3) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE3) -> types.Matrix
+   .. method:: adjoint(self: SE3) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -505,7 +505,7 @@ Classes
    Special orthogonal group for 2D rotations.
 
    .. attribute:: unit_complex
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. ``(cos, sin)``.
 
@@ -515,7 +515,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_radians(theta: types.Scalar) -> 'SO2'
+   .. method:: from_radians(theta: annotations.Scalar) -> 'SO2'
       :staticmethod:
 
 
@@ -530,7 +530,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SO2'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SO2'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -541,17 +541,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO2, target: types.Vector) -> types.Vector
+   .. method:: apply(self: SO2, target: annotations.Vector) -> annotations.Vector
 
       Applies the group action.
 
@@ -571,7 +571,7 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SO2'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SO2'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -582,14 +582,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SO2) -> types.TangentVector
+   .. method:: log(self: SO2) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO2) -> types.Matrix
+   .. method:: adjoint(self: SO2) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -641,7 +641,7 @@ Classes
    Special orthogonal group for 3D rotations.
 
    .. attribute:: wxyz
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
@@ -651,7 +651,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta: types.Scalar) -> 'SO3'
+   .. method:: from_x_radians(theta: annotations.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a x-axis rotation.
@@ -661,7 +661,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_y_radians(theta: types.Scalar) -> 'SO3'
+   .. method:: from_y_radians(theta: annotations.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a y-axis rotation.
@@ -671,7 +671,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_z_radians(theta: types.Scalar) -> 'SO3'
+   .. method:: from_z_radians(theta: annotations.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a z-axis rotation.
@@ -681,7 +681,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_rpy_radians(roll: types.Scalar, pitch: types.Scalar, yaw: types.Scalar) -> 'SO3'
+   .. method:: from_rpy_radians(roll: annotations.Scalar, pitch: annotations.Scalar, yaw: annotations.Scalar) -> 'SO3'
       :staticmethod:
 
       Generates a transform from a set of Euler angles.
@@ -694,7 +694,7 @@ Classes
       :returns: *SO3* -- Output.
 
 
-   .. method:: from_quaternion_xyzw(xyzw: types.Array) -> 'SO3'
+   .. method:: from_quaternion_xyzw(xyzw: annotations.Array) -> 'SO3'
       :staticmethod:
 
       Construct a rotation from an ``xyzw`` quaternion.
@@ -713,7 +713,7 @@ Classes
       Grab parameters as xyzw quaternion.
 
 
-   .. method:: as_rpy_radians(self) -> types.RollPitchYaw
+   .. method:: as_rpy_radians(self) -> annotations.RollPitchYaw
 
       Computes roll, pitch, and yaw angles.
       Uses the ZYX mobile robot convention.
@@ -753,7 +753,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SO3'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SO3'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -764,17 +764,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO3, target: types.Vector) -> types.Vector
+   .. method:: apply(self: SO3, target: annotations.Vector) -> annotations.Vector
 
       Applies the group action.
 
@@ -794,7 +794,7 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SO3'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SO3'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -805,14 +805,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SO3) -> types.TangentVector
+   .. method:: log(self: SO3) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO3) -> types.Matrix
+   .. method:: adjoint(self: SO3) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 

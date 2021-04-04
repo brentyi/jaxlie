@@ -18,7 +18,7 @@ Functions
    jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
 
 
-.. function:: rminus(a: T, b: T) -> types.TangentVector
+.. function:: rminus(a: T, b: T) -> annotations.TangentVector
 
    Manifold right minus.
 
@@ -32,7 +32,7 @@ Functions
    :returns: *types.TangentVector* -- ``T_ab.log()``
 
 
-.. function:: rplus(transform: T, delta: types.TangentVector) -> T
+.. function:: rplus(transform: T, delta: annotations.TangentVector) -> T
 
    Manifold right plus.
 

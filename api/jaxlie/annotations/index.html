@@ -4,10 +4,11 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
+  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>jaxlie.types &mdash; jaxlie  documentation</title>
+  <title>jaxlie.annotations &mdash; jaxlie  documentation</title>
   
 
   
@@ -39,8 +40,8 @@
     
     <link rel="index" title="Index" href="../../../genindex/" />
     <link rel="search" title="Search" href="../../../search/" />
-    <link rel="next" title="jaxlie.utils" href="../utils/" />
-    <link rel="prev" title="jaxlie.manifold" href="../manifold/" /> 
+    <link rel="next" title="jaxlie.manifold" href="../manifold/" />
+    <link rel="prev" title="jaxlie" href="../" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,16 +86,16 @@
               
             
             
-              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <p><span class="caption-text">API Reference</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.annotations</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../manifold/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../utils/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a></li>
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Example usage</span></p>
+<p><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -147,13 +148,13 @@
         
           <li><a href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a> &raquo;</li>
         
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></li>
+      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.annotations</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="../../../_sources/api/jaxlie/types/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/api/jaxlie/annotations/index.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -166,11 +167,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-jaxlie.types">
-<span id="jaxlie-types"></span><h1><a class="reference internal" href="#module-jaxlie.types" title="jaxlie.types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.types</span></code></a><a class="headerlink" href="#module-jaxlie.types" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="package-contents">
+  <section id="module-jaxlie.annotations">
+<span id="jaxlie-annotations"></span><h1><a class="reference internal" href="#module-jaxlie.annotations" title="jaxlie.annotations"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.annotations</span></code></a><a class="headerlink" href="#module-jaxlie.annotations" title="Permalink to this headline">¶</a></h1>
+<section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="classes">
+<section id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -178,73 +179,73 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.types.RollPitchYaw" title="jaxlie.types.RollPitchYaw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollPitchYaw</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.annotations.RollPitchYaw" title="jaxlie.annotations.RollPitchYaw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RollPitchYaw</span></code></a></p></td>
 <td><p>Tuple containing roll, pitch, and yaw Euler angles.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py data">
-<dt id="jaxlie.types.Array">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Array</span></code><a class="headerlink" href="#jaxlie.types.Array" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.Array">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">Array</span></code><a class="headerlink" href="#jaxlie.annotations.Array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[jnp.ndarray,</span> <span class="pre">onp.ndarray]</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.types.Scalar">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Scalar</span></code><a class="headerlink" href="#jaxlie.types.Scalar" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.Scalar">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">Scalar</span></code><a class="headerlink" href="#jaxlie.annotations.Scalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[float,</span> <span class="pre">Array]</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.types.Matrix">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Matrix</span></code><a class="headerlink" href="#jaxlie.types.Matrix" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.Matrix">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">Matrix</span></code><a class="headerlink" href="#jaxlie.annotations.Matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a square matrix, typically with shape <code class="docutils literal notranslate"><span class="pre">(Group.matrix_dim,</span> <span class="pre">Group.matrix_dim)</span></code>.
 For adjoints, shape should be <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,</span> <span class="pre">Group.tangent_dim)</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.types.Vector">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">Vector</span></code><a class="headerlink" href="#jaxlie.types.Vector" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.Vector">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">Vector</span></code><a class="headerlink" href="#jaxlie.annotations.Vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a general 1D array.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.types.TangentVector">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">TangentVector</span></code><a class="headerlink" href="#jaxlie.types.TangentVector" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.TangentVector">
+<code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">TangentVector</span></code><a class="headerlink" href="#jaxlie.annotations.TangentVector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a 1D array with shape <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,)</span></code>.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="jaxlie.types.RollPitchYaw">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.types.</span></code><code class="sig-name descname"><span class="pre">RollPitchYaw</span></code><a class="reference internal" href="../../../_modules/jaxlie/types/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.types.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.RollPitchYaw">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.annotations.</span></code><code class="sig-name descname"><span class="pre">RollPitchYaw</span></code><a class="reference internal" href="../../../_modules/jaxlie/annotations/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.annotations.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.NamedTuple</span></code></p>
-<div class="graphviz"><img src="../../../_images/inheritance-16646af0f6e26a07d275fdb1de148b4403f79d73.png" alt="Inheritance diagram of jaxlie.types.RollPitchYaw" usemap="#inheritance10a0e18aa4" class="inheritance graphviz" /></div>
-<map id="inheritance10a0e18aa4" name="inheritance10a0e18aa4">
-<area shape="rect" id="node2" href="#jaxlie.types.RollPitchYaw" target="_top" title="Tuple containing roll, pitch, and yaw Euler angles." alt="" coords="156,5,259,31"/>
+<div class="graphviz"><img src="../../../_images/inheritance-d828e765f2081d850d479e0198288ab6ca2bb9a7.png" alt="Inheritance diagram of jaxlie.annotations.RollPitchYaw" usemap="#inheritance368a43e92c" class="inheritance graphviz" /></div>
+<map id="inheritance368a43e92c" name="inheritance368a43e92c">
+<area shape="rect" id="node2" href="#jaxlie.annotations.RollPitchYaw" target="_top" title="Tuple containing roll, pitch, and yaw Euler angles." alt="" coords="156,5,259,31"/>
 </map><p>Tuple containing roll, pitch, and yaw Euler angles.</p>
 <dl class="py attribute">
-<dt id="jaxlie.types.RollPitchYaw.roll">
-<code class="sig-name descname"><span class="pre">roll</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.RollPitchYaw.roll">
+<code class="sig-name descname"><span class="pre">roll</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.annotations.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="jaxlie.types.RollPitchYaw.pitch">
-<code class="sig-name descname"><span class="pre">pitch</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.RollPitchYaw.pitch">
+<code class="sig-name descname"><span class="pre">pitch</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.annotations.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="jaxlie.types.RollPitchYaw.yaw">
-<code class="sig-name descname"><span class="pre">yaw</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.types.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
+<dt id="jaxlie.annotations.RollPitchYaw.yaw">
+<code class="sig-name descname"><span class="pre">yaw</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.annotations.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -252,8 +253,8 @@ For adjoints, shape should be <code class="docutils literal notranslate"><span c
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../utils/" class="btn btn-neutral float-right" title="jaxlie.utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../manifold/" class="btn btn-neutral float-left" title="jaxlie.manifold" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../manifold/" class="btn btn-neutral float-right" title="jaxlie.manifold" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../" class="btn btn-neutral float-left" title="jaxlie" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

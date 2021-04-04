@@ -25,7 +25,7 @@ Functions
 
    
 
-.. function:: rplus(transform: T, delta: types.TangentVector) -> T
+.. function:: rplus(transform: T, delta: annotations.TangentVector) -> T
 
    Manifold right plus.
 
@@ -65,7 +65,7 @@ Functions
    :returns: *jnp.ndarray* -- Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
 
 
-.. function:: rminus(a: T, b: T) -> types.TangentVector
+.. function:: rminus(a: T, b: T) -> annotations.TangentVector
 
    Manifold right minus.
 

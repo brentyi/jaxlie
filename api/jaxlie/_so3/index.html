@@ -4,7 +4,8 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
+  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>jaxlie._so3 &mdash; jaxlie  documentation</title>
@@ -83,11 +84,11 @@
               
             
             
-              <p class="caption"><span class="caption-text">API Reference</span></p>
+              <p><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
 </ul>
-<p class="caption"><span class="caption-text">Example usage</span></p>
+<p><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -157,11 +158,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-jaxlie._so3">
+  <section id="module-jaxlie._so3">
 <span id="jaxlie-so3"></span><h1><a class="reference internal" href="#module-jaxlie._so3" title="jaxlie._so3"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._so3</span></code></a><a class="headerlink" href="#module-jaxlie._so3" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
+<section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="classes">
+<section id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -186,7 +187,7 @@
 </map><p>Special orthogonal group for 3D rotations.</p>
 <dl class="py attribute">
 <dt id="jaxlie._so3.SO3.wxyz">
-<code class="sig-name descname"><span class="pre">wxyz</span></code><em class="property"> <span class="pre">:types.Vector</span></em><a class="headerlink" href="#jaxlie._so3.SO3.wxyz" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">wxyz</span></code><em class="property"> <span class="pre">:annotations.Vector</span></em><a class="headerlink" href="#jaxlie._so3.SO3.wxyz" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> quaternion.</p>
 </dd></dl>
 
@@ -198,7 +199,7 @@
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_x_radians">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_x_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_x_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_x_radians" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_x_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_x_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_x_radians" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a x-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -212,7 +213,7 @@
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_y_radians">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_y_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_y_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_y_radians" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_y_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_y_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_y_radians" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a y-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -226,7 +227,7 @@
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_z_radians">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_z_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_z_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_z_radians" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_z_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_z_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_z_radians" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a z-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -240,7 +241,7 @@
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_rpy_radians">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rpy_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roll</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_rpy_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_rpy_radians" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rpy_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roll</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pitch</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Scalar</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_rpy_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_rpy_radians" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a transform from a set of Euler angles.
 Uses the ZYX mobile robot convention.</p>
 <dl class="field-list simple">
@@ -259,7 +260,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_quaternion_xyzw">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_quaternion_xyzw</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyzw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Array</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_quaternion_xyzw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_quaternion_xyzw</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyzw</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Array</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_quaternion_xyzw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_quaternion_xyzw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a rotation from an <code class="docutils literal notranslate"><span class="pre">xyzw</span></code> quaternion.</p>
 <p>Note that <code class="docutils literal notranslate"><span class="pre">wxyz</span></code> quaternions can be constructed using the default dataclass
 constructor.</p>
@@ -281,7 +282,7 @@ constructor.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.as_rpy_radians">
-<code class="sig-name descname"><span class="pre">as_rpy_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.RollPitchYaw</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_rpy_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_rpy_radians" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">as_rpy_radians</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.RollPitchYaw</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_rpy_radians"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_rpy_radians" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes roll, pitch, and yaw angles.
 Uses the ZYX mobile robot convention.</p>
 <dl class="field-list simple">
@@ -340,7 +341,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.from_matrix">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Matrix</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Matrix</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.from_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -354,19 +355,19 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.as_matrix">
-<code class="sig-name descname"><span class="pre">as_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">as_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.parameters">
-<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.parameters" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.apply">
-<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.apply" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -394,7 +395,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.exp">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">exp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">types.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.exp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">exp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.exp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -408,7 +409,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.log">
-<code class="sig-name descname"><span class="pre">log</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.log" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">log</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -419,7 +420,7 @@ Uses the ZYX mobile robot convention.</p>
 
 <dl class="py method">
 <dt id="jaxlie._so3.SO3.adjoint">
-<code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">types.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.adjoint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><span class="pre">SO3</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.adjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the adjoint, which transforms tangent vectors between tangent spaces.</p>
 <p>More precisely, for a transform <code class="docutils literal notranslate"><span class="pre">GroupType</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GroupType</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">Adj_T</span> <span class="o">@</span> <span class="n">omega</span><span class="p">)</span> <span class="o">@</span> <span class="n">GroupType</span>
@@ -472,9 +473,9 @@ between our spatial and body representations.</p>
 
 </dd></dl>
 
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

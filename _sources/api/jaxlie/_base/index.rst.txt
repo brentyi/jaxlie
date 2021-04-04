@@ -64,7 +64,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: types.Vector) -> types.Vector
+               __matmul__(self: GroupType, other: annotations.Vector) -> annotations.Vector
 
       Overload for the ``@`` operator.
 
@@ -81,7 +81,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(cls: Type[GroupType], matrix: types.Matrix) -> GroupType
+   .. method:: from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType
       :classmethod:
       :abstractmethod:
 
@@ -93,19 +93,19 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
       :abstractmethod:
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
       :abstractmethod:
 
       Get underlying representation.
 
 
-   .. method:: apply(self: GroupType, target: types.Vector) -> types.Vector
+   .. method:: apply(self: GroupType, target: annotations.Vector) -> annotations.Vector
       :abstractmethod:
 
       Applies the group action.
@@ -127,7 +127,7 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(cls: Type[GroupType], tangent: types.TangentVector) -> GroupType
+   .. method:: exp(cls: Type[GroupType], tangent: annotations.TangentVector) -> GroupType
       :classmethod:
       :abstractmethod:
 
@@ -139,7 +139,7 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: GroupType) -> types.TangentVector
+   .. method:: log(self: GroupType) -> annotations.TangentVector
       :abstractmethod:
 
       Computes ``vee(logm(transformation matrix))``.
@@ -147,7 +147,7 @@ Classes
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: GroupType) -> types.Matrix
+   .. method:: adjoint(self: GroupType) -> annotations.Matrix
       :abstractmethod:
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
@@ -212,7 +212,7 @@ Classes
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(rotation: SOBase, translation: types.Vector) -> SEGroupType
+   .. method:: from_rotation_and_translation(rotation: SOBase, translation: annotations.Vector) -> SEGroupType
       :staticmethod:
       :abstractmethod:
 
@@ -225,13 +225,13 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> types.Vector
+   .. method:: translation(self) -> annotations.Vector
       :abstractmethod:
 
       Returns a transform's translation term.
 
 
-   .. method:: apply(self, target: types.Vector) -> types.Vector
+   .. method:: apply(self, target: annotations.Vector) -> annotations.Vector
 
       Applies the group action.
 

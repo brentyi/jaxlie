@@ -28,7 +28,7 @@ Classes
    Special orthogonal group for 2D rotations.
 
    .. attribute:: unit_complex
-      :annotation: :types.Vector
+      :annotation: :annotations.Vector
 
       Internal parameters. ``(cos, sin)``.
 
@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_radians(theta: types.Scalar) -> 'SO2'
+   .. method:: from_radians(theta: annotations.Scalar) -> 'SO2'
       :staticmethod:
 
 
@@ -53,7 +53,7 @@ Classes
       :returns: *types.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: types.Matrix) -> 'SO2'
+   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SO2'
       :staticmethod:
 
       Get group member from matrix representation.
@@ -64,17 +64,17 @@ Classes
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> types.Matrix
+   .. method:: as_matrix(self) -> annotations.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> types.Vector
+   .. method:: parameters(self) -> annotations.Vector
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO2, target: types.Vector) -> types.Vector
+   .. method:: apply(self: SO2, target: annotations.Vector) -> annotations.Vector
 
       Applies the group action.
 
@@ -94,7 +94,7 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(tangent: types.TangentVector) -> 'SO2'
+   .. method:: exp(tangent: annotations.TangentVector) -> 'SO2'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -105,14 +105,14 @@ Classes
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SO2) -> types.TangentVector
+   .. method:: log(self: SO2) -> annotations.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO2) -> types.Matrix
+   .. method:: adjoint(self: SO2) -> annotations.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
