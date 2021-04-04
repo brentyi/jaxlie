@@ -112,7 +112,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            jaxlie.types.RollPitchYaw: Named tuple containing Euler angles in radians.
+            annotations.RollPitchYaw: Named tuple containing Euler angles in radians.
         """
         return annotations.RollPitchYaw(
             roll=self.compute_roll_radians(),
@@ -166,7 +166,7 @@ class SO3(_base.SOBase):
         assert matrix.shape == (3, 3)
 
         # Modified from:
-        # > "Converting a Rotation types.Matrix to a Quaternion" from Mike Day
+        # > "Converting a Rotation Matrix to a Quaternion" from Mike Day
         # > https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2015/01/matrix-to-quat.pdf
 
         def case0(m):

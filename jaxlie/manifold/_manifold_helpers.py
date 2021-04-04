@@ -21,7 +21,7 @@ def rplus(transform: T, delta: annotations.TangentVector) -> T:
 
     Args:
         transform (T): `T_wa`
-        delta (types.TangentVector): `T_ab.log()`
+        delta (annotations.TangentVector): `T_ab.log()`
 
     Returns:
         T: `T_wb`
@@ -133,6 +133,6 @@ def rminus(a: T, b: T) -> annotations.TangentVector:
         b (T): `T_wb`
 
     Returns:
-        types.TangentVector: `T_ab.log()`
+        annotations.TangentVector: `T_ab.log()`
     """
     return (a.inverse() @ b).log()

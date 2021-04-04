@@ -68,7 +68,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Returns identity element.
 
         Returns:
-            types.Matrix: Identity.
+            annotations.Matrix: Identity.
         """
 
     @classmethod
@@ -77,7 +77,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Get group member from matrix representation.
 
         Args:
-            matrix (jnp.ndarray): types.Matrix representaiton.
+            matrix (jnp.ndarray): annotations.Matrix representaiton.
 
         Returns:
             GroupType: Group member.
@@ -100,10 +100,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Applies the group action.
 
         Args:
-            target (types.Vector): types.Vector to transform.
+            target (annotations.Vector): annotations.Vector to transform.
 
         Returns:
-            types.Vector: Transformed vector.
+            annotations.Vector: Transformed vector.
         """
 
     @abc.abstractmethod
@@ -123,7 +123,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes `expm(wedge(tangent))`.
 
         Args:
-            tangent (types.TangentVector): Input.
+            tangent (annotations.TangentVector): Input.
 
         Returns:
             MatrixLieGroup: Output.
@@ -134,7 +134,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
-            types.TangentVector: Output. Shape should be `(tangent_dim,)`.
+            annotations.TangentVector: Output. Shape should be `(tangent_dim,)`.
         """
 
     @abc.abstractmethod
@@ -150,7 +150,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         between our spatial and body representations.
 
         Returns:
-            types.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
+            annotations.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
         """
 
     @abc.abstractmethod
@@ -158,7 +158,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes the inverse of our transform.
 
         Returns:
-            types.Matrix: Output.
+            annotations.Matrix: Output.
         """
 
     @abc.abstractmethod
