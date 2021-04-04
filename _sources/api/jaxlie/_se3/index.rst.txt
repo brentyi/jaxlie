@@ -59,7 +59,7 @@ Classes
 
       Returns identity element.
 
-      :returns: *types.Matrix* -- Identity.
+      :returns: *annotations.Matrix* -- Identity.
 
 
    .. method:: from_matrix(matrix: annotations.Matrix) -> 'SE3'
@@ -67,7 +67,7 @@ Classes
 
       Get group member from matrix representation.
 
-      :param matrix: types.Matrix representaiton.
+      :param matrix: annotations.Matrix representaiton.
       :type matrix: jnp.ndarray
 
       :returns: *GroupType* -- Group member.
@@ -89,7 +89,7 @@ Classes
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Input.
-      :type tangent: types.TangentVector
+      :type tangent: annotations.TangentVector
 
       :returns: *MatrixLieGroup* -- Output.
 
@@ -98,7 +98,7 @@ Classes
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: *annotations.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
    .. method:: adjoint(self: SE3) -> annotations.Matrix
@@ -114,7 +114,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: *annotations.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'

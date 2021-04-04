@@ -34,7 +34,7 @@ Functions
    :param transform: ``T_wa``
    :type transform: T
    :param delta: ``T_ab.log()``
-   :type delta: types.TangentVector
+   :type delta: annotations.TangentVector
 
    :returns: *T* -- ``T_wb``
 
@@ -76,6 +76,6 @@ Functions
    :param b: ``T_wb``
    :type b: T
 
-   :returns: *types.TangentVector* -- ``T_ab.log()``
+   :returns: *annotations.TangentVector* -- ``T_ab.log()``
 
 

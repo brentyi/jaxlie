@@ -78,7 +78,7 @@ Classes
 
       Returns identity element.
 
-      :returns: *types.Matrix* -- Identity.
+      :returns: *annotations.Matrix* -- Identity.
 
 
    .. method:: from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType
@@ -87,7 +87,7 @@ Classes
 
       Get group member from matrix representation.
 
-      :param matrix: types.Matrix representaiton.
+      :param matrix: annotations.Matrix representaiton.
       :type matrix: jnp.ndarray
 
       :returns: *GroupType* -- Group member.
@@ -110,10 +110,10 @@ Classes
 
       Applies the group action.
 
-      :param target: types.Vector to transform.
-      :type target: types.Vector
+      :param target: annotations.Vector to transform.
+      :type target: annotations.Vector
 
-      :returns: *types.Vector* -- Transformed vector.
+      :returns: *annotations.Vector* -- Transformed vector.
 
 
    .. method:: multiply(self: GroupType, other: GroupType) -> GroupType
@@ -134,7 +134,7 @@ Classes
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Input.
-      :type tangent: types.TangentVector
+      :type tangent: annotations.TangentVector
 
       :returns: *MatrixLieGroup* -- Output.
 
@@ -144,7 +144,7 @@ Classes
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *types.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: *annotations.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
    .. method:: adjoint(self: GroupType) -> annotations.Matrix
@@ -161,7 +161,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *types.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: *annotations.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: inverse(self: GroupType) -> GroupType
@@ -169,7 +169,7 @@ Classes
 
       Computes the inverse of our transform.
 
-      :returns: *types.Matrix* -- Output.
+      :returns: *annotations.Matrix* -- Output.
 
 
    .. method:: normalize(self: GroupType) -> GroupType
@@ -235,10 +235,10 @@ Classes
 
       Applies the group action.
 
-      :param target: types.Vector to transform.
-      :type target: types.Vector
+      :param target: annotations.Vector to transform.
+      :type target: annotations.Vector
 
-      :returns: *types.Vector* -- Transformed vector.
+      :returns: *annotations.Vector* -- Transformed vector.
 
 
    .. method:: multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType
@@ -255,7 +255,7 @@ Classes
 
       Computes the inverse of our transform.
 
-      :returns: *types.Matrix* -- Output.
+      :returns: *annotations.Matrix* -- Output.
 
 
    .. method:: normalize(self: SEGroupType) -> SEGroupType

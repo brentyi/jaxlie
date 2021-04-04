@@ -226,7 +226,7 @@
         <span class="sd">&quot;&quot;&quot;Returns identity element.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            types.Matrix: Identity.</span>
+<span class="sd">            annotations.Matrix: Identity.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.from_matrix">[docs]</a>    <span class="nd">@classmethod</span>
@@ -235,7 +235,7 @@
         <span class="sd">&quot;&quot;&quot;Get group member from matrix representation.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            matrix (jnp.ndarray): types.Matrix representaiton.</span>
+<span class="sd">            matrix (jnp.ndarray): annotations.Matrix representaiton.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            GroupType: Group member.</span>
@@ -258,10 +258,10 @@
         <span class="sd">&quot;&quot;&quot;Applies the group action.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            target (types.Vector): types.Vector to transform.</span>
+<span class="sd">            target (annotations.Vector): annotations.Vector to transform.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            types.Vector: Transformed vector.</span>
+<span class="sd">            annotations.Vector: Transformed vector.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.multiply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -281,7 +281,7 @@
         <span class="sd">&quot;&quot;&quot;Computes `expm(wedge(tangent))`.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tangent (types.TangentVector): Input.</span>
+<span class="sd">            tangent (annotations.TangentVector): Input.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            MatrixLieGroup: Output.</span>
@@ -292,7 +292,7 @@
         <span class="sd">&quot;&quot;&quot;Computes `vee(logm(transformation matrix))`.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            types.TangentVector: Output. Shape should be `(tangent_dim,)`.</span>
+<span class="sd">            annotations.TangentVector: Output. Shape should be `(tangent_dim,)`.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.adjoint">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -308,7 +308,7 @@
 <span class="sd">        between our spatial and body representations.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            types.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.</span>
+<span class="sd">            annotations.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.inverse"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.inverse">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -316,7 +316,7 @@
         <span class="sd">&quot;&quot;&quot;Computes the inverse of our transform.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            types.Matrix: Output.</span>
+<span class="sd">            annotations.Matrix: Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.normalize"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.normalize">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
