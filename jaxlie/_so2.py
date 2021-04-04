@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import final, overrides
+from overrides import overrides
 
 from . import _base, annotations
 from .utils import register_lie_group
@@ -23,7 +23,6 @@ class SO2(_base.SOBase):
     unit_complex: annotations.Vector
     """Internal parameters. `(cos, sin)`."""
 
-    @final
     @overrides
     def __repr__(self) -> str:
         unit_complex = jnp.round(self.unit_complex, 5)
@@ -42,13 +41,11 @@ class SO2(_base.SOBase):
     # Factory
 
     @staticmethod
-    @final
     @overrides
     def identity() -> "SO2":
         return SO2(unit_complex=jnp.array([1.0, 0.0]))
 
     @staticmethod
-    @final
     @overrides
     def from_matrix(matrix: annotations.Matrix) -> "SO2":
         assert matrix.shape == (2, 2)
@@ -56,7 +53,6 @@ class SO2(_base.SOBase):
 
     # Accessors
 
-    @final
     @overrides
     def as_matrix(self) -> annotations.Matrix:
         cos, sin = self.unit_complex
@@ -67,26 +63,22 @@ class SO2(_base.SOBase):
             ]
         )
 
-    @final
     @overrides
     def parameters(self) -> annotations.Vector:
         return self.unit_complex
 
     # Operations
 
-    @final
     @overrides
     def apply(self: "SO2", target: annotations.Vector) -> annotations.Vector:
         assert target.shape == (2,)
         return self.as_matrix() @ target
 
-    @final
     @overrides
     def multiply(self: "SO2", other: "SO2") -> "SO2":
         return SO2(unit_complex=self.as_matrix() @ other.unit_complex)
 
     @staticmethod
-    @final
     @overrides
     def exp(tangent: annotations.TangentVector) -> "SO2":
         (theta,) = tangent
@@ -94,30 +86,25 @@ class SO2(_base.SOBase):
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    @final
     @overrides
     def log(self: "SO2") -> annotations.TangentVector:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
-    @final
     @overrides
     def adjoint(self: "SO2") -> annotations.Matrix:
         return jnp.eye(1)
 
-    @final
     @overrides
     def inverse(self: "SO2") -> "SO2":
         return SO2(unit_complex=self.unit_complex * jnp.array([1, -1]))
 
-    @final
     @overrides
     def normalize(self: "SO2") -> "SO2":
         return SO2(unit_complex=self.unit_complex / jnp.linalg.norm(self.unit_complex))
 
     @staticmethod
-    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SO2":
         return SO2.from_radians(

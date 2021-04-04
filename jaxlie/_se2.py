@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import final, overrides
+from overrides import overrides
 
 from . import _base, annotations
 from ._so2 import SO2
@@ -24,7 +24,6 @@ class SE2(_base.SEBase):
     unit_complex_xy: annotations.Vector
     """Internal parameters. `(cos, sin, x, y)`."""
 
-    @final
     @overrides
     def __repr__(self) -> str:
         unit_complex = jnp.round(self.unit_complex_xy[..., :2], 5)
@@ -42,7 +41,6 @@ class SE2(_base.SEBase):
     # SE-specific
 
     @staticmethod
-    @final
     @overrides
     def from_rotation_and_translation(
         rotation: SO2,
@@ -53,12 +51,10 @@ class SE2(_base.SEBase):
             unit_complex_xy=jnp.concatenate([rotation.unit_complex, translation])
         )
 
-    @final
     @overrides
     def rotation(self) -> SO2:
         return SO2(unit_complex=self.unit_complex_xy[..., :2])
 
-    @final
     @overrides
     def translation(self) -> annotations.Vector:
         return self.unit_complex_xy[..., 2:]
@@ -66,13 +62,11 @@ class SE2(_base.SEBase):
     # Factory
 
     @staticmethod
-    @final
     @overrides
     def identity() -> "SE2":
         return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
-    @final
     @overrides
     def from_matrix(matrix: annotations.Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
@@ -84,12 +78,10 @@ class SE2(_base.SEBase):
 
     # Accessors
 
-    @final
     @overrides
     def parameters(self) -> annotations.Vector:
         return self.unit_complex_xy
 
-    @final
     @overrides
     def as_matrix(self) -> annotations.Matrix:
         cos, sin, x, y = self.unit_complex_xy
@@ -104,7 +96,6 @@ class SE2(_base.SEBase):
     # Operations
 
     @staticmethod
-    @final
     @overrides
     def exp(tangent: annotations.TangentVector) -> "SE2":
         # Reference:
@@ -139,7 +130,6 @@ class SE2(_base.SEBase):
             translation=V @ tangent[:2],
         )
 
-    @final
     @overrides
     def log(self: "SE2") -> annotations.TangentVector:
         # Reference:
@@ -171,7 +161,6 @@ class SE2(_base.SEBase):
         tangent = jnp.concatenate([V_inv @ self.translation(), theta[None]])
         return tangent
 
-    @final
     @overrides
     def adjoint(self: "SE2") -> annotations.Matrix:
         cos, sin, x, y = self.unit_complex_xy
@@ -184,7 +173,6 @@ class SE2(_base.SEBase):
         )
 
     @staticmethod
-    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SE2":
         key0, key1 = jax.random.split(key)

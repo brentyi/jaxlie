@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import final, overrides
+from overrides import overrides
 
 from . import _base, annotations
 from .utils import get_epsilon, register_lie_group
@@ -23,7 +23,6 @@ class SO3(_base.SOBase):
     wxyz: annotations.Vector
     """Internal parameters. `(w, x, y, z)` quaternion."""
 
-    @final
     @overrides
     def __repr__(self) -> str:
         wxyz = jnp.round(self.wxyz, 5)
@@ -157,13 +156,11 @@ class SO3(_base.SOBase):
     # Factory
 
     @staticmethod
-    @final
     @overrides
     def identity() -> "SO3":
         return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
-    @final
     @overrides
     def from_matrix(matrix: annotations.Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
@@ -236,7 +233,6 @@ class SO3(_base.SOBase):
 
     # Accessors
 
-    @final
     @overrides
     def as_matrix(self) -> annotations.Matrix:
         norm = self.wxyz @ self.wxyz
@@ -250,14 +246,12 @@ class SO3(_base.SOBase):
             ]
         )
 
-    @final
     @overrides
     def parameters(self) -> annotations.Vector:
         return self.wxyz
 
     # Operations
 
-    @final
     @overrides
     def apply(self: "SO3", target: annotations.Vector) -> annotations.Vector:
         assert target.shape == (3,)
@@ -266,7 +260,6 @@ class SO3(_base.SOBase):
         padded_target = jnp.zeros(4).at[1:].set(target)
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
-    @final
     @overrides
     def multiply(self: "SO3", other: "SO3") -> "SO3":
         w0, x0, y0, z0 = self.wxyz
@@ -283,7 +276,6 @@ class SO3(_base.SOBase):
         )
 
     @staticmethod
-    @final
     @overrides
     def exp(tangent: annotations.TangentVector) -> "SO3":
         # Reference:
@@ -317,7 +309,6 @@ class SO3(_base.SOBase):
             )
         )
 
-    @final
     @overrides
     def log(self: "SO3") -> annotations.TangentVector:
         # Reference:
@@ -339,24 +330,20 @@ class SO3(_base.SOBase):
 
         return atan_factor * self.wxyz[1:]
 
-    @final
     @overrides
     def adjoint(self: "SO3") -> annotations.Matrix:
         return self.as_matrix()
 
-    @final
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
         return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
 
-    @final
     @overrides
     def normalize(self: "SO3") -> "SO3":
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz))
 
     @staticmethod
-    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SO3":
         # Uniformly sample over S^4

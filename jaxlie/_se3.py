@@ -2,7 +2,7 @@ import dataclasses
 
 import jax
 from jax import numpy as jnp
-from overrides import final, overrides
+from overrides import overrides
 
 from . import _base, annotations
 from ._so3 import SO3
@@ -37,7 +37,6 @@ class SE3(_base.SEBase):
     wxyz_xyz: annotations.Vector
     """Internal parameters. wxyz quaternion followed by xyz translation."""
 
-    @final
     @overrides
     def __repr__(self) -> str:
         quat = jnp.round(self.wxyz_xyz[..., :4], 5)
@@ -47,7 +46,6 @@ class SE3(_base.SEBase):
     # SE-specific
 
     @staticmethod
-    @final
     @overrides
     def from_rotation_and_translation(
         rotation: SO3,
@@ -56,12 +54,10 @@ class SE3(_base.SEBase):
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
-    @final
     @overrides
     def rotation(self) -> SO3:
         return SO3(wxyz=self.wxyz_xyz[..., :4])
 
-    @final
     @overrides
     def translation(self) -> annotations.Vector:
         return self.wxyz_xyz[..., 4:]
@@ -69,13 +65,11 @@ class SE3(_base.SEBase):
     # Factory
 
     @staticmethod
-    @final
     @overrides
     def identity() -> "SE3":
         return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
-    @final
     @overrides
     def from_matrix(matrix: annotations.Matrix) -> "SE3":
         assert matrix.shape == (4, 4)
@@ -87,7 +81,6 @@ class SE3(_base.SEBase):
 
     # Accessors
 
-    @final
     @overrides
     def as_matrix(self) -> annotations.Matrix:
         return (
@@ -98,7 +91,6 @@ class SE3(_base.SEBase):
             .set(self.translation())
         )
 
-    @final
     @overrides
     def parameters(self) -> annotations.Vector:
         return self.wxyz_xyz
@@ -106,7 +98,6 @@ class SE3(_base.SEBase):
     # Operations
 
     @staticmethod
-    @final
     @overrides
     def exp(tangent: annotations.TangentVector) -> "SE3":
         # Reference:
@@ -138,7 +129,6 @@ class SE3(_base.SEBase):
             translation=V @ tangent[:3],
         )
 
-    @final
     @overrides
     def log(self: "SE3") -> annotations.TangentVector:
         # Reference:
@@ -162,7 +152,6 @@ class SE3(_base.SEBase):
         )
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
-    @final
     @overrides
     def adjoint(self: "SE3") -> annotations.Matrix:
         R = self.rotation().as_matrix()
@@ -174,7 +163,6 @@ class SE3(_base.SEBase):
         )
 
     @staticmethod
-    @final
     @overrides
     def sample_uniform(key: jnp.ndarray) -> "SE3":
         key0, key1 = jax.random.split(key)
