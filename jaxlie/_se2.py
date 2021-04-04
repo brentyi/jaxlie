@@ -4,7 +4,7 @@ import jax
 from jax import numpy as jnp
 from overrides import final, overrides
 
-from . import _base, types
+from . import _base, annotations
 from ._so2 import SO2
 from .utils import get_epsilon, register_lie_group
 
@@ -21,7 +21,7 @@ class SE2(_base.SEBase):
 
     # SE2-specific
 
-    unit_complex_xy: types.Vector
+    unit_complex_xy: annotations.Vector
     """Internal parameters. `(cos, sin, x, y)`."""
 
     @final
@@ -32,7 +32,9 @@ class SE2(_base.SEBase):
         return f"{self.__class__.__name__}(unit_complex={unit_complex}, xy={xy})"
 
     @staticmethod
-    def from_xy_theta(x: types.Scalar, y: types.Scalar, theta: types.Scalar) -> "SE2":
+    def from_xy_theta(
+        x: annotations.Scalar, y: annotations.Scalar, theta: annotations.Scalar
+    ) -> "SE2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))
@@ -44,7 +46,7 @@ class SE2(_base.SEBase):
     @overrides
     def from_rotation_and_translation(
         rotation: SO2,
-        translation: types.Vector,
+        translation: annotations.Vector,
     ) -> "SE2":
         assert translation.shape == (2,)
         return SE2(
@@ -58,7 +60,7 @@ class SE2(_base.SEBase):
 
     @final
     @overrides
-    def translation(self) -> types.Vector:
+    def translation(self) -> annotations.Vector:
         return self.unit_complex_xy[..., 2:]
 
     # Factory
@@ -72,7 +74,7 @@ class SE2(_base.SEBase):
     @staticmethod
     @final
     @overrides
-    def from_matrix(matrix: types.Matrix) -> "SE2":
+    def from_matrix(matrix: annotations.Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
         # Currently assumes bottom row is [0, 0, 1]
         return SE2.from_rotation_and_translation(
@@ -84,12 +86,12 @@ class SE2(_base.SEBase):
 
     @final
     @overrides
-    def parameters(self) -> types.Vector:
+    def parameters(self) -> annotations.Vector:
         return self.unit_complex_xy
 
     @final
     @overrides
-    def as_matrix(self) -> types.Matrix:
+    def as_matrix(self) -> annotations.Matrix:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
@@ -104,7 +106,7 @@ class SE2(_base.SEBase):
     @staticmethod
     @final
     @overrides
-    def exp(tangent: types.TangentVector) -> "SE2":
+    def exp(tangent: annotations.TangentVector) -> "SE2":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
         # Also see:
@@ -139,7 +141,7 @@ class SE2(_base.SEBase):
 
     @final
     @overrides
-    def log(self: "SE2") -> types.TangentVector:
+    def log(self: "SE2") -> annotations.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
@@ -171,7 +173,7 @@ class SE2(_base.SEBase):
 
     @final
     @overrides
-    def adjoint(self: "SE2") -> types.Matrix:
+    def adjoint(self: "SE2") -> annotations.Matrix:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [

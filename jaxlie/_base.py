@@ -6,7 +6,7 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
 
-from . import types
+from . import annotations
 
 GroupType = TypeVar("GroupType", bound="MatrixLieGroup")
 SEGroupType = TypeVar("SEGroupType", bound="SEBase")
@@ -44,7 +44,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self: GroupType, other: types.Vector) -> types.Vector:
+    def __matmul__(self: GroupType, other: annotations.Vector) -> annotations.Vector:
         ...
 
     def __matmul__(self, other):
@@ -73,7 +73,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[GroupType], matrix: types.Matrix) -> GroupType:
+    def from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType:
         """Get group member from matrix representation.
 
         Args:
@@ -86,17 +86,17 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Accessors
 
     @abc.abstractmethod
-    def as_matrix(self) -> types.Matrix:
+    def as_matrix(self) -> annotations.Matrix:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @abc.abstractmethod
-    def parameters(self) -> types.Vector:
+    def parameters(self) -> annotations.Vector:
         """Get underlying representation."""
 
     # Operations
 
     @abc.abstractmethod
-    def apply(self: GroupType, target: types.Vector) -> types.Vector:
+    def apply(self: GroupType, target: annotations.Vector) -> annotations.Vector:
         """Applies the group action.
 
         Args:
@@ -119,7 +119,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def exp(cls: Type[GroupType], tangent: types.TangentVector) -> GroupType:
+    def exp(cls: Type[GroupType], tangent: annotations.TangentVector) -> GroupType:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -130,7 +130,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def log(self: GroupType) -> types.TangentVector:
+    def log(self: GroupType) -> annotations.TangentVector:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -138,7 +138,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def adjoint(self: GroupType) -> types.Matrix:
+    def adjoint(self: GroupType) -> annotations.Matrix:
         """Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
         More precisely, for a transform `GroupType`:
@@ -195,7 +195,7 @@ class SEBase(MatrixLieGroup):
     @abc.abstractmethod
     def from_rotation_and_translation(
         rotation: SOBase,
-        translation: types.Vector,
+        translation: annotations.Vector,
     ) -> SEGroupType:
         """Construct a rigid transform from a rotation and a translation."""
 
@@ -204,14 +204,14 @@ class SEBase(MatrixLieGroup):
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod
-    def translation(self) -> types.Vector:
+    def translation(self) -> annotations.Vector:
         """Returns a transform's translation term."""
 
     # Overrides
 
     @final
     @overrides
-    def apply(self, target: types.Vector) -> types.Vector:
+    def apply(self, target: annotations.Vector) -> annotations.Vector:
         return self.rotation() @ target + self.translation()
 
     @final

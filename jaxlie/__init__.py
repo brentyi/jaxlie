@@ -1,4 +1,4 @@
-from . import manifold, types, utils
+from . import annotations, manifold, utils
 from ._base import MatrixLieGroup, SEBase, SOBase
 from ._se2 import SE2
 from ._se3 import SE3
@@ -6,8 +6,8 @@ from ._so2 import SO2
 from ._so3 import SO3
 
 __all__ = [
+    "annotations",
     "manifold",
-    "types",
     "utils",
     "MatrixLieGroup",
     "SOBase",

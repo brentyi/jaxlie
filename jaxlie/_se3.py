@@ -4,12 +4,12 @@ import jax
 from jax import numpy as jnp
 from overrides import final, overrides
 
-from . import _base, types
+from . import _base, annotations
 from ._so3 import SO3
 from .utils import get_epsilon, register_lie_group
 
 
-def _skew(omega: types.Vector) -> types.Matrix:
+def _skew(omega: annotations.Vector) -> annotations.Matrix:
     """Returns the skew-symmetric form of a length-3 vector. """
 
     wx, wy, wz = omega
@@ -34,7 +34,7 @@ class SE3(_base.SEBase):
 
     # SE3-specific
 
-    wxyz_xyz: types.Vector
+    wxyz_xyz: annotations.Vector
     """Internal parameters. wxyz quaternion followed by xyz translation."""
 
     @final
@@ -51,7 +51,7 @@ class SE3(_base.SEBase):
     @overrides
     def from_rotation_and_translation(
         rotation: SO3,
-        translation: types.Vector,
+        translation: annotations.Vector,
     ) -> "SE3":
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
@@ -63,7 +63,7 @@ class SE3(_base.SEBase):
 
     @final
     @overrides
-    def translation(self) -> types.Vector:
+    def translation(self) -> annotations.Vector:
         return self.wxyz_xyz[..., 4:]
 
     # Factory
@@ -77,7 +77,7 @@ class SE3(_base.SEBase):
     @staticmethod
     @final
     @overrides
-    def from_matrix(matrix: types.Matrix) -> "SE3":
+    def from_matrix(matrix: annotations.Matrix) -> "SE3":
         assert matrix.shape == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1]
         return SE3.from_rotation_and_translation(
@@ -89,7 +89,7 @@ class SE3(_base.SEBase):
 
     @final
     @overrides
-    def as_matrix(self) -> types.Matrix:
+    def as_matrix(self) -> annotations.Matrix:
         return (
             jnp.eye(4)
             .at[:3, :3]
@@ -100,7 +100,7 @@ class SE3(_base.SEBase):
 
     @final
     @overrides
-    def parameters(self) -> types.Vector:
+    def parameters(self) -> annotations.Vector:
         return self.wxyz_xyz
 
     # Operations
@@ -108,7 +108,7 @@ class SE3(_base.SEBase):
     @staticmethod
     @final
     @overrides
-    def exp(tangent: types.TangentVector) -> "SE3":
+    def exp(tangent: annotations.TangentVector) -> "SE3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
 
@@ -140,7 +140,7 @@ class SE3(_base.SEBase):
 
     @final
     @overrides
-    def log(self: "SE3") -> types.TangentVector:
+    def log(self: "SE3") -> annotations.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
@@ -164,7 +164,7 @@ class SE3(_base.SEBase):
 
     @final
     @overrides
-    def adjoint(self: "SE3") -> types.Matrix:
+    def adjoint(self: "SE3") -> annotations.Matrix:
         R = self.rotation().as_matrix()
         return jnp.block(
             [

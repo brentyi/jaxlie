@@ -4,7 +4,7 @@ import jax
 from jax import numpy as jnp
 from overrides import final, overrides
 
-from . import _base, types
+from . import _base, annotations
 from .utils import register_lie_group
 
 
@@ -20,7 +20,7 @@ class SO2(_base.SOBase):
 
     # SO2-specific
 
-    unit_complex: types.Vector
+    unit_complex: annotations.Vector
     """Internal parameters. `(cos, sin)`."""
 
     @final
@@ -30,7 +30,7 @@ class SO2(_base.SOBase):
         return f"{self.__class__.__name__}(unit_complex={unit_complex})"
 
     @staticmethod
-    def from_radians(theta: types.Scalar) -> "SO2":
+    def from_radians(theta: annotations.Scalar) -> "SO2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
@@ -50,7 +50,7 @@ class SO2(_base.SOBase):
     @staticmethod
     @final
     @overrides
-    def from_matrix(matrix: types.Matrix) -> "SO2":
+    def from_matrix(matrix: annotations.Matrix) -> "SO2":
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=matrix[:, 0])
 
@@ -58,7 +58,7 @@ class SO2(_base.SOBase):
 
     @final
     @overrides
-    def as_matrix(self) -> types.Matrix:
+    def as_matrix(self) -> annotations.Matrix:
         cos, sin = self.unit_complex
         return jnp.array(
             [
@@ -69,14 +69,14 @@ class SO2(_base.SOBase):
 
     @final
     @overrides
-    def parameters(self) -> types.Vector:
+    def parameters(self) -> annotations.Vector:
         return self.unit_complex
 
     # Operations
 
     @final
     @overrides
-    def apply(self: "SO2", target: types.Vector) -> types.Vector:
+    def apply(self: "SO2", target: annotations.Vector) -> annotations.Vector:
         assert target.shape == (2,)
         return self.as_matrix() @ target
 
@@ -88,7 +88,7 @@ class SO2(_base.SOBase):
     @staticmethod
     @final
     @overrides
-    def exp(tangent: types.TangentVector) -> "SO2":
+    def exp(tangent: annotations.TangentVector) -> "SO2":
         (theta,) = tangent
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
@@ -96,14 +96,14 @@ class SO2(_base.SOBase):
 
     @final
     @overrides
-    def log(self: "SO2") -> types.TangentVector:
+    def log(self: "SO2") -> annotations.TangentVector:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
     @final
     @overrides
-    def adjoint(self: "SO2") -> types.Matrix:
+    def adjoint(self: "SO2") -> annotations.Matrix:
         return jnp.eye(1)
 
     @final

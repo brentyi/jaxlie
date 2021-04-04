@@ -3,7 +3,7 @@ from typing import TypeVar, cast
 import jax
 from jax import numpy as jnp
 
-from .. import types
+from .. import annotations
 from .._base import MatrixLieGroup
 from .._se2 import SE2
 from .._se3 import SE3
@@ -14,7 +14,7 @@ T = TypeVar("T", bound=MatrixLieGroup)
 
 
 @jax.jit
-def rplus(transform: T, delta: types.TangentVector) -> T:
+def rplus(transform: T, delta: annotations.TangentVector) -> T:
     """Manifold right plus.
 
     Computes `T_wb = T_wa @ exp(delta)`.
@@ -123,7 +123,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
 
 
 @jax.jit
-def rminus(a: T, b: T) -> types.TangentVector:
+def rminus(a: T, b: T) -> annotations.TangentVector:
     """Manifold right minus.
 
     Computes `delta = (T_wa.inverse() @ T_wb).log()`.

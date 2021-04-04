@@ -6,4 +6,5 @@ __pycache__
 .coverage
 htmlcov
 .mypy_cache
+.dmypy.json
 .hypothesis
