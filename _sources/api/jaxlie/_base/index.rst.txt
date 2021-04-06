@@ -64,7 +64,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: annotations.Vector) -> annotations.Vector
+               __matmul__(self: GroupType, other: hints.Vector) -> hints.Vector
 
       Overload for the ``@`` operator.
 
@@ -78,42 +78,42 @@ Classes
 
       Returns identity element.
 
-      :returns: *annotations.Matrix* -- Identity.
+      :returns: *hints.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType
+   .. method:: from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType
       :classmethod:
       :abstractmethod:
 
       Get group member from matrix representation.
 
-      :param matrix: annotations.Matrix representaiton.
+      :param matrix: hints.Matrix representaiton.
       :type matrix: jnp.ndarray
 
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> annotations.Matrix
+   .. method:: as_matrix(self) -> hints.Matrix
       :abstractmethod:
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> annotations.Vector
+   .. method:: parameters(self) -> hints.Vector
       :abstractmethod:
 
       Get underlying representation.
 
 
-   .. method:: apply(self: GroupType, target: annotations.Vector) -> annotations.Vector
+   .. method:: apply(self: GroupType, target: hints.Vector) -> hints.Vector
       :abstractmethod:
 
       Applies the group action.
 
-      :param target: annotations.Vector to transform.
-      :type target: annotations.Vector
+      :param target: hints.Vector to transform.
+      :type target: hints.Vector
 
-      :returns: *annotations.Vector* -- Transformed vector.
+      :returns: *hints.Vector* -- Transformed vector.
 
 
    .. method:: multiply(self: GroupType, other: GroupType) -> GroupType
@@ -127,27 +127,27 @@ Classes
       :returns: *GroupType* -- self @ other
 
 
-   .. method:: exp(cls: Type[GroupType], tangent: annotations.TangentVector) -> GroupType
+   .. method:: exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType
       :classmethod:
       :abstractmethod:
 
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Input.
-      :type tangent: annotations.TangentVector
+      :type tangent: hints.TangentVector
 
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: GroupType) -> annotations.TangentVector
+   .. method:: log(self: GroupType) -> hints.TangentVector
       :abstractmethod:
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *annotations.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: *hints.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: GroupType) -> annotations.Matrix
+   .. method:: adjoint(self: GroupType) -> hints.Matrix
       :abstractmethod:
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
@@ -161,7 +161,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *annotations.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: *hints.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: inverse(self: GroupType) -> GroupType
@@ -169,7 +169,7 @@ Classes
 
       Computes the inverse of our transform.
 
-      :returns: *annotations.Matrix* -- Output.
+      :returns: *hints.Matrix* -- Output.
 
 
    .. method:: normalize(self: GroupType) -> GroupType
@@ -212,7 +212,7 @@ Classes
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(rotation: SOBase, translation: annotations.Vector) -> SEGroupType
+   .. method:: from_rotation_and_translation(rotation: SOBase, translation: hints.Vector) -> SEGroupType
       :staticmethod:
       :abstractmethod:
 
@@ -225,20 +225,20 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> annotations.Vector
+   .. method:: translation(self) -> hints.Vector
       :abstractmethod:
 
       Returns a transform's translation term.
 
 
-   .. method:: apply(self, target: annotations.Vector) -> annotations.Vector
+   .. method:: apply(self, target: hints.Vector) -> hints.Vector
 
       Applies the group action.
 
-      :param target: annotations.Vector to transform.
-      :type target: annotations.Vector
+      :param target: hints.Vector to transform.
+      :type target: hints.Vector
 
-      :returns: *annotations.Vector* -- Transformed vector.
+      :returns: *hints.Vector* -- Transformed vector.
 
 
    .. method:: multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType
@@ -255,7 +255,7 @@ Classes
 
       Computes the inverse of our transform.
 
-      :returns: *annotations.Matrix* -- Output.
+      :returns: *hints.Matrix* -- Output.
 
 
    .. method:: normalize(self: SEGroupType) -> SEGroupType

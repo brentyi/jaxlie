@@ -28,7 +28,7 @@ Classes
    Special Euclidean group for proper rigid transforms in 3D.
 
    .. attribute:: wxyz_xyz
-      :annotation: :annotations.Vector
+      :annotation: :hints.Vector
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
@@ -38,7 +38,7 @@ Classes
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: SO3, translation: annotations.Vector) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation: SO3, translation: hints.Vector) -> 'SE3'
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
@@ -49,7 +49,7 @@ Classes
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> annotations.Vector
+   .. method:: translation(self) -> hints.Vector
 
       Returns a transform's translation term.
 
@@ -59,49 +59,49 @@ Classes
 
       Returns identity element.
 
-      :returns: *annotations.Matrix* -- Identity.
+      :returns: *hints.Matrix* -- Identity.
 
 
-   .. method:: from_matrix(matrix: annotations.Matrix) -> 'SE3'
+   .. method:: from_matrix(matrix: hints.Matrix) -> 'SE3'
       :staticmethod:
 
       Get group member from matrix representation.
 
-      :param matrix: annotations.Matrix representaiton.
+      :param matrix: hints.Matrix representaiton.
       :type matrix: jnp.ndarray
 
       :returns: *GroupType* -- Group member.
 
 
-   .. method:: as_matrix(self) -> annotations.Matrix
+   .. method:: as_matrix(self) -> hints.Matrix
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> annotations.Vector
+   .. method:: parameters(self) -> hints.Vector
 
       Get underlying representation.
 
 
-   .. method:: exp(tangent: annotations.TangentVector) -> 'SE3'
+   .. method:: exp(tangent: hints.TangentVector) -> 'SE3'
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Input.
-      :type tangent: annotations.TangentVector
+      :type tangent: hints.TangentVector
 
       :returns: *MatrixLieGroup* -- Output.
 
 
-   .. method:: log(self: SE3) -> annotations.TangentVector
+   .. method:: log(self: SE3) -> hints.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *annotations.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: *hints.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE3) -> annotations.Matrix
+   .. method:: adjoint(self: SE3) -> hints.Matrix
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -114,7 +114,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *annotations.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: *hints.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'

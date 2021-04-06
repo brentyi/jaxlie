@@ -4,8 +4,7 @@
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
-
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>jaxlie._base &mdash; jaxlie  documentation</title>
@@ -84,11 +83,11 @@
               
             
             
-              <p><span class="caption-text">API Reference</span></p>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
 </ul>
-<p><span class="caption-text">Example usage</span></p>
+<p class="caption"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -158,11 +157,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <section id="module-jaxlie._base">
+  <div class="section" id="module-jaxlie._base">
 <span id="jaxlie-base"></span><h1><a class="reference internal" href="#module-jaxlie._base" title="jaxlie._base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._base</span></code></a><a class="headerlink" href="#module-jaxlie._base" title="Permalink to this headline">¶</a></h1>
-<section id="module-contents">
+<div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<section id="classes">
+<div class="section" id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <table class="longtable docutils align-default">
 <colgroup>
@@ -227,7 +226,7 @@
 <dt id="jaxlie._base.MatrixLieGroup.__matmul__">
 <code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.__matmul__" title="Permalink to this definition">¶</a></dt>
 <dt>
-<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span></dt>
+<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Vector</span></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
 <p>Switches between the group action (<code class="docutils literal notranslate"><span class="pre">.apply()</span></code>) and multiplication
 (<code class="docutils literal notranslate"><span class="pre">.multiply()</span></code>) based on the type of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
@@ -239,18 +238,18 @@
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>annotations.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.from_matrix">
-<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Matrix</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.from_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.Matrix</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.from_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – annotations.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>GroupType</em> – Group member.</p>
@@ -260,26 +259,26 @@
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.as_matrix">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">as_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.as_matrix" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">as_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.as_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.parameters">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.parameters" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.apply">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.apply" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>annotations.Vector</em>) – annotations.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>annotations.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -300,11 +299,11 @@
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.exp">
-<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">exp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.exp" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">exp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.TangentVector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.exp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>annotations.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
@@ -314,18 +313,18 @@
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.log">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">log</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.log" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">log</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.TangentVector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>annotations.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._base.MatrixLieGroup.adjoint">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.adjoint" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Matrix</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.adjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the adjoint, which transforms tangent vectors between tangent spaces.</p>
 <p>More precisely, for a transform <code class="docutils literal notranslate"><span class="pre">GroupType</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GroupType</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">Adj_T</span> <span class="o">@</span> <span class="n">omega</span><span class="p">)</span> <span class="o">@</span> <span class="n">GroupType</span>
@@ -335,7 +334,7 @@
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>annotations.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -346,7 +345,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>annotations.Matrix</em> – Output.</p>
+<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -400,7 +399,7 @@ between our spatial and body representations.</p>
 </map><p>Base class for special Euclidean groups.</p>
 <dl class="py method">
 <dt id="jaxlie._base.SEBase.from_rotation_and_translation">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.SOBase" title="jaxlie._base.SOBase"><span class="pre">SOBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.SEGroupType" title="jaxlie._base.SEGroupType"><span class="pre">SEGroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.SOBase" title="jaxlie._base.SOBase"><span class="pre">SOBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.SEGroupType" title="jaxlie._base.SEGroupType"><span class="pre">SEGroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a rigid transform from a rotation and a translation.</p>
 </dd></dl>
 
@@ -412,20 +411,20 @@ between our spatial and body representations.</p>
 
 <dl class="py method">
 <dt id="jaxlie._base.SEBase.translation">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.translation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a transform’s translation term.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie._base.SEBase.apply">
-<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">annotations.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">annotations.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.apply" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">hints.Vector</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">hints.Vector</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#SEBase.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.SEBase.apply" title="Permalink to this definition">¶</a></dt>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>annotations.Vector</em>) – annotations.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>annotations.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -450,7 +449,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>annotations.Matrix</em> – Output.</p>
+<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -468,9 +467,9 @@ between our spatial and body representations.</p>
 
 </dd></dl>
 
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
 
            </div>

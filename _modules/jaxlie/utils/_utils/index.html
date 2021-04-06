@@ -83,11 +83,11 @@
               
             
             
-              <p><span class="caption-text">API Reference</span></p>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
 </ul>
-<p><span class="caption-text">Example usage</span></p>
+<p class="caption"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -173,7 +173,7 @@
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">hints</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
@@ -241,7 +241,7 @@
         <span class="c1"># Register as a PyTree node to make JIT compilation, etc easier in Jax</span>
         <span class="k">def</span> <span class="nf">_flatten_group</span><span class="p">(</span>
             <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">annotations</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
             <span class="sd">&quot;&quot;&quot;Flatten a dataclass for use as a PyTree.&quot;&quot;&quot;</span>
             <span class="n">as_dict</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -254,7 +254,7 @@
         <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_flatten_group</span><span class="p">,</span> <span class="n">_unflatten_group</span><span class="p">)</span>
 
         <span class="c1"># Make object flax-serializable</span>
-        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
+        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="n">key</span><span class="p">:</span> <span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">to_state_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>

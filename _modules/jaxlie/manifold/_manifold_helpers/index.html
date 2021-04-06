@@ -83,11 +83,11 @@
               
             
             
-              <p><span class="caption-text">API Reference</span></p>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
 </ul>
-<p><span class="caption-text">Example usage</span></p>
+<p class="caption"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -161,7 +161,7 @@
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">hints</span>
 <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
 <span class="kn">from</span> <span class="nn">.._se2</span> <span class="kn">import</span> <span class="n">SE2</span>
 <span class="kn">from</span> <span class="nn">.._se3</span> <span class="kn">import</span> <span class="n">SE3</span>
@@ -172,7 +172,7 @@
 
 
 <div class="viewcode-block" id="rplus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rplus">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Manifold right plus.</span>
 
 <span class="sd">    Computes `T_wb = T_wa @ exp(delta)`.</span>
@@ -281,7 +281,7 @@
 
 
 <div class="viewcode-block" id="rminus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rminus">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Manifold right minus.</span>
 
 <span class="sd">    Computes `delta = (T_wa.inverse() @ T_wb).log()`.</span>

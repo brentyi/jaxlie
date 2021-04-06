@@ -83,11 +83,11 @@
               
             
             
-              <p><span class="caption-text">API Reference</span></p>
+              <p class="caption"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
 </ul>
-<p><span class="caption-text">Example usage</span></p>
+<p class="caption"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
@@ -162,7 +162,7 @@
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_base</span><span class="p">,</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_base</span><span class="p">,</span> <span class="n">hints</span>
 <span class="kn">from</span> <span class="nn">._so2</span> <span class="kn">import</span> <span class="n">SO2</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_epsilon</span><span class="p">,</span> <span class="n">register_lie_group</span>
 
@@ -179,7 +179,7 @@
 
     <span class="c1"># SE2-specific</span>
 
-    <span class="n">unit_complex_xy</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Vector</span>
+    <span class="n">unit_complex_xy</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin, x, y)`.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE2.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.__repr__">[docs]</a>    <span class="nd">@overrides</span>
@@ -189,9 +189,7 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(unit_complex=</span><span class="si">{</span><span class="n">unit_complex</span><span class="si">}</span><span class="s2">, xy=</span><span class="si">{</span><span class="n">xy</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
 <div class="viewcode-block" id="SE2.from_xy_theta"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_xy_theta">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_xy_theta</span><span class="p">(</span>
-        <span class="n">x</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Scalar</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_xy_theta</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="n">cos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]))</span></div>
@@ -202,7 +200,7 @@
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
         <span class="n">rotation</span><span class="p">:</span> <span class="n">SO2</span><span class="p">,</span>
-        <span class="n">translation</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
+        <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">translation</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span>
@@ -214,7 +212,7 @@
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SE2.translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.translation">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:]</span></div>
 
     <span class="c1"># Factory</span>
@@ -226,7 +224,7 @@
 
 <div class="viewcode-block" id="SE2.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="c1"># Currently assumes bottom row is [0, 0, 1]</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
@@ -237,11 +235,11 @@
     <span class="c1"># Accessors</span>
 
 <div class="viewcode-block" id="SE2.parameters"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.parameters">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span></div>
 
 <div class="viewcode-block" id="SE2.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
         <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
@@ -255,7 +253,7 @@
 
 <div class="viewcode-block" id="SE2.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">annotations</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558</span>
         <span class="c1"># Also see:</span>
@@ -289,7 +287,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SE2.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.log">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160</span>
         <span class="c1"># Also see:</span>
@@ -320,7 +318,7 @@
         <span class="k">return</span> <span class="n">tangent</span></div>
 
 <div class="viewcode-block" id="SE2.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.adjoint">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">annotations</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">:</span>
         <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>

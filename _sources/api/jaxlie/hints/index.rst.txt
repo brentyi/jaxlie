@@ -1,7 +1,7 @@
-:mod:`jaxlie.annotations`
-=========================
+:mod:`jaxlie.hints`
+===================
 
-.. py:module:: jaxlie.annotations
+.. py:module:: jaxlie.hints
 
 
 Package Contents
@@ -12,7 +12,7 @@ Classes
 
 .. autoapisummary::
 
-   jaxlie.annotations.RollPitchYaw
+   jaxlie.hints.RollPitchYaw
 
 
 
@@ -57,7 +57,7 @@ Classes
 
    Bases: :class:`typing.NamedTuple`
 
-   .. autoapi-inheritance-diagram:: jaxlie.annotations.RollPitchYaw
+   .. autoapi-inheritance-diagram:: jaxlie.hints.RollPitchYaw
       :parts: 1
 
    Tuple containing roll, pitch, and yaw Euler angles.
