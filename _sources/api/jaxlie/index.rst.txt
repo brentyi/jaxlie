@@ -718,7 +718,7 @@ Classes
       Computes roll, pitch, and yaw angles.
       Uses the ZYX mobile robot convention.
 
-      :returns: *annotations.RollPitchYaw* -- Named tuple containing Euler angles in radians.
+      :returns: *hints.RollPitchYaw* -- Named tuple containing Euler angles in radians.
 
 
    .. method:: compute_roll_radians(self) -> jnp.ndarray
