@@ -6,7 +6,7 @@ import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
 
-from . import annotations
+from . import hints
 
 GroupType = TypeVar("GroupType", bound="MatrixLieGroup")
 SEGroupType = TypeVar("SEGroupType", bound="SEBase")
@@ -44,7 +44,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self: GroupType, other: annotations.Vector) -> annotations.Vector:
+    def __matmul__(self: GroupType, other: hints.Vector) -> hints.Vector:
         ...
 
     def __matmul__(self, other):
@@ -68,16 +68,16 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Returns identity element.
 
         Returns:
-            annotations.Matrix: Identity.
+            hints.Matrix: Identity.
         """
 
     @classmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[GroupType], matrix: annotations.Matrix) -> GroupType:
+    def from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType:
         """Get group member from matrix representation.
 
         Args:
-            matrix (jnp.ndarray): annotations.Matrix representaiton.
+            matrix (jnp.ndarray): hints.Matrix representaiton.
 
         Returns:
             GroupType: Group member.
@@ -86,24 +86,24 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Accessors
 
     @abc.abstractmethod
-    def as_matrix(self) -> annotations.Matrix:
+    def as_matrix(self) -> hints.Matrix:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @abc.abstractmethod
-    def parameters(self) -> annotations.Vector:
+    def parameters(self) -> hints.Vector:
         """Get underlying representation."""
 
     # Operations
 
     @abc.abstractmethod
-    def apply(self: GroupType, target: annotations.Vector) -> annotations.Vector:
+    def apply(self: GroupType, target: hints.Vector) -> hints.Vector:
         """Applies the group action.
 
         Args:
-            target (annotations.Vector): annotations.Vector to transform.
+            target (hints.Vector): hints.Vector to transform.
 
         Returns:
-            annotations.Vector: Transformed vector.
+            hints.Vector: Transformed vector.
         """
 
     @abc.abstractmethod
@@ -119,26 +119,26 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def exp(cls: Type[GroupType], tangent: annotations.TangentVector) -> GroupType:
+    def exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType:
         """Computes `expm(wedge(tangent))`.
 
         Args:
-            tangent (annotations.TangentVector): Input.
+            tangent (hints.TangentVector): Input.
 
         Returns:
             MatrixLieGroup: Output.
         """
 
     @abc.abstractmethod
-    def log(self: GroupType) -> annotations.TangentVector:
+    def log(self: GroupType) -> hints.TangentVector:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
-            annotations.TangentVector: Output. Shape should be `(tangent_dim,)`.
+            hints.TangentVector: Output. Shape should be `(tangent_dim,)`.
         """
 
     @abc.abstractmethod
-    def adjoint(self: GroupType) -> annotations.Matrix:
+    def adjoint(self: GroupType) -> hints.Matrix:
         """Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
         More precisely, for a transform `GroupType`:
@@ -150,7 +150,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         between our spatial and body representations.
 
         Returns:
-            annotations.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
+            hints.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
         """
 
     @abc.abstractmethod
@@ -158,7 +158,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes the inverse of our transform.
 
         Returns:
-            annotations.Matrix: Output.
+            hints.Matrix: Output.
         """
 
     @abc.abstractmethod
@@ -195,7 +195,7 @@ class SEBase(MatrixLieGroup):
     @abc.abstractmethod
     def from_rotation_and_translation(
         rotation: SOBase,
-        translation: annotations.Vector,
+        translation: hints.Vector,
     ) -> SEGroupType:
         """Construct a rigid transform from a rotation and a translation."""
 
@@ -204,14 +204,14 @@ class SEBase(MatrixLieGroup):
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod
-    def translation(self) -> annotations.Vector:
+    def translation(self) -> hints.Vector:
         """Returns a transform's translation term."""
 
     # Overrides
 
     @final
     @overrides
-    def apply(self, target: annotations.Vector) -> annotations.Vector:
+    def apply(self, target: hints.Vector) -> hints.Vector:
         return self.rotation() @ target + self.translation()
 
     @final

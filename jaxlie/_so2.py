@@ -4,7 +4,7 @@ import jax
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base, annotations
+from . import _base, hints
 from .utils import register_lie_group
 
 
@@ -20,7 +20,7 @@ class SO2(_base.SOBase):
 
     # SO2-specific
 
-    unit_complex: annotations.Vector
+    unit_complex: hints.Vector
     """Internal parameters. `(cos, sin)`."""
 
     @overrides
@@ -29,7 +29,7 @@ class SO2(_base.SOBase):
         return f"{self.__class__.__name__}(unit_complex={unit_complex})"
 
     @staticmethod
-    def from_radians(theta: annotations.Scalar) -> "SO2":
+    def from_radians(theta: hints.Scalar) -> "SO2":
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
@@ -47,14 +47,14 @@ class SO2(_base.SOBase):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: annotations.Matrix) -> "SO2":
+    def from_matrix(matrix: hints.Matrix) -> "SO2":
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=matrix[:, 0])
 
     # Accessors
 
     @overrides
-    def as_matrix(self) -> annotations.Matrix:
+    def as_matrix(self) -> hints.Matrix:
         cos, sin = self.unit_complex
         return jnp.array(
             [
@@ -64,13 +64,13 @@ class SO2(_base.SOBase):
         )
 
     @overrides
-    def parameters(self) -> annotations.Vector:
+    def parameters(self) -> hints.Vector:
         return self.unit_complex
 
     # Operations
 
     @overrides
-    def apply(self: "SO2", target: annotations.Vector) -> annotations.Vector:
+    def apply(self: "SO2", target: hints.Vector) -> hints.Vector:
         assert target.shape == (2,)
         return self.as_matrix() @ target
 
@@ -80,20 +80,20 @@ class SO2(_base.SOBase):
 
     @staticmethod
     @overrides
-    def exp(tangent: annotations.TangentVector) -> "SO2":
+    def exp(tangent: hints.TangentVector) -> "SO2":
         (theta,) = tangent
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides
-    def log(self: "SO2") -> annotations.TangentVector:
+    def log(self: "SO2") -> hints.TangentVector:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
     @overrides
-    def adjoint(self: "SO2") -> annotations.Matrix:
+    def adjoint(self: "SO2") -> hints.Matrix:
         return jnp.eye(1)
 
     @overrides

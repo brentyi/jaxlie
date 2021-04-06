@@ -4,7 +4,7 @@ import jax
 from jax import numpy as jnp
 from overrides import overrides
 
-from . import _base, annotations
+from . import _base, hints
 from .utils import get_epsilon, register_lie_group
 
 
@@ -20,7 +20,7 @@ class SO3(_base.SOBase):
 
     # SO3-specific
 
-    wxyz: annotations.Vector
+    wxyz: hints.Vector
     """Internal parameters. `(w, x, y, z)` quaternion."""
 
     @overrides
@@ -29,7 +29,7 @@ class SO3(_base.SOBase):
         return f"{self.__class__.__name__}(wxyz={wxyz})"
 
     @staticmethod
-    def from_x_radians(theta: annotations.Scalar) -> "SO3":
+    def from_x_radians(theta: hints.Scalar) -> "SO3":
         """Generates a x-axis rotation.
 
         Args:
@@ -41,7 +41,7 @@ class SO3(_base.SOBase):
         return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
     @staticmethod
-    def from_y_radians(theta: annotations.Scalar) -> "SO3":
+    def from_y_radians(theta: hints.Scalar) -> "SO3":
         """Generates a y-axis rotation.
 
         Args:
@@ -53,7 +53,7 @@ class SO3(_base.SOBase):
         return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
     @staticmethod
-    def from_z_radians(theta: annotations.Scalar) -> "SO3":
+    def from_z_radians(theta: hints.Scalar) -> "SO3":
         """Generates a z-axis rotation.
 
         Args:
@@ -66,9 +66,9 @@ class SO3(_base.SOBase):
 
     @staticmethod
     def from_rpy_radians(
-        roll: annotations.Scalar,
-        pitch: annotations.Scalar,
-        yaw: annotations.Scalar,
+        roll: hints.Scalar,
+        pitch: hints.Scalar,
+        yaw: hints.Scalar,
     ) -> "SO3":
         """Generates a transform from a set of Euler angles.
         Uses the ZYX mobile robot convention.
@@ -88,7 +88,7 @@ class SO3(_base.SOBase):
         )
 
     @staticmethod
-    def from_quaternion_xyzw(xyzw: annotations.Array) -> "SO3":
+    def from_quaternion_xyzw(xyzw: hints.Array) -> "SO3":
         """Construct a rotation from an `xyzw` quaternion.
 
         Note that `wxyz` quaternions can be constructed using the default dataclass
@@ -107,14 +107,14 @@ class SO3(_base.SOBase):
         """Grab parameters as xyzw quaternion."""
         return jnp.roll(self.wxyz, shift=-1)
 
-    def as_rpy_radians(self) -> annotations.RollPitchYaw:
+    def as_rpy_radians(self) -> hints.RollPitchYaw:
         """Computes roll, pitch, and yaw angles.
         Uses the ZYX mobile robot convention.
 
         Returns:
             annotations.RollPitchYaw: Named tuple containing Euler angles in radians.
         """
-        return annotations.RollPitchYaw(
+        return hints.RollPitchYaw(
             roll=self.compute_roll_radians(),
             pitch=self.compute_pitch_radians(),
             yaw=self.compute_yaw_radians(),
@@ -162,7 +162,7 @@ class SO3(_base.SOBase):
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: annotations.Matrix) -> "SO3":
+    def from_matrix(matrix: hints.Matrix) -> "SO3":
         assert matrix.shape == (3, 3)
 
         # Modified from:
@@ -234,7 +234,7 @@ class SO3(_base.SOBase):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> annotations.Matrix:
+    def as_matrix(self) -> hints.Matrix:
         norm = self.wxyz @ self.wxyz
         q = self.wxyz * jnp.sqrt(2.0 / norm)
         q = jnp.outer(q, q)
@@ -247,13 +247,13 @@ class SO3(_base.SOBase):
         )
 
     @overrides
-    def parameters(self) -> annotations.Vector:
+    def parameters(self) -> hints.Vector:
         return self.wxyz
 
     # Operations
 
     @overrides
-    def apply(self: "SO3", target: annotations.Vector) -> annotations.Vector:
+    def apply(self: "SO3", target: hints.Vector) -> hints.Vector:
         assert target.shape == (3,)
 
         # Compute using quaternion multiplys
@@ -277,7 +277,7 @@ class SO3(_base.SOBase):
 
     @staticmethod
     @overrides
-    def exp(tangent: annotations.TangentVector) -> "SO3":
+    def exp(tangent: hints.TangentVector) -> "SO3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583
 
@@ -310,7 +310,7 @@ class SO3(_base.SOBase):
         )
 
     @overrides
-    def log(self: "SO3") -> annotations.TangentVector:
+    def log(self: "SO3") -> hints.TangentVector:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
@@ -331,7 +331,7 @@ class SO3(_base.SOBase):
         return atan_factor * self.wxyz[1:]
 
     @overrides
-    def adjoint(self: "SO3") -> annotations.Matrix:
+    def adjoint(self: "SO3") -> hints.Matrix:
         return self.as_matrix()
 
     @overrides
