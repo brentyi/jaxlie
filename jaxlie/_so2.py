@@ -1,6 +1,7 @@
 import dataclasses
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -43,7 +44,7 @@ class SO2(_base.SOBase):
     @staticmethod
     @overrides
     def identity() -> "SO2":
-        return SO2(unit_complex=jnp.array([1.0, 0.0]))
+        return SO2(unit_complex=onp.array([1.0, 0.0]))
 
     @staticmethod
     @overrides

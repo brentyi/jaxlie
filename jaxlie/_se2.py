@@ -1,6 +1,7 @@
 import dataclasses
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -62,7 +63,7 @@ class SE2(_base.SEBase):
     @staticmethod
     @overrides
     def identity() -> "SE2":
-        return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
+        return SE2(unit_complex_xy=onp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides

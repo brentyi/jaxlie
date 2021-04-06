@@ -1,6 +1,7 @@
 import dataclasses
 
 import jax
+import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
 
@@ -112,7 +113,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            annotations.RollPitchYaw: Named tuple containing Euler angles in radians.
+            hints.RollPitchYaw: Named tuple containing Euler angles in radians.
         """
         return hints.RollPitchYaw(
             roll=self.compute_roll_radians(),
@@ -158,7 +159,7 @@ class SO3(_base.SOBase):
     @staticmethod
     @overrides
     def identity() -> "SO3":
-        return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
+        return SO3(wxyz=onp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
@@ -337,7 +338,7 @@ class SO3(_base.SOBase):
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms
-        return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
+        return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))
 
     @overrides
     def normalize(self: "SO3") -> "SO3":
