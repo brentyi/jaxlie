@@ -68,7 +68,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Returns identity element.
 
         Returns:
-            hints.Matrix: Identity.
+            Identity element.
         """
 
     @classmethod
@@ -77,10 +77,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Get group member from matrix representation.
 
         Args:
-            matrix (jnp.ndarray): hints.Matrix representaiton.
+            matrix: Matrix representaiton.
 
         Returns:
-            GroupType: Group member.
+            Group member.
         """
 
     # Accessors
@@ -100,10 +100,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Applies the group action.
 
         Args:
-            target (hints.Vector): hints.Vector to transform.
+            target: Vector to transform.
 
         Returns:
-            hints.Vector: Transformed vector.
+            Transformed vector.
         """
 
     @abc.abstractmethod
@@ -111,10 +111,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Left-multiplies this transformations with another.
 
         Args:
-            other (GroupType): other
+            other: other
 
         Returns:
-            GroupType: self @ other
+            self @ other
         """
 
     @classmethod
@@ -123,10 +123,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes `expm(wedge(tangent))`.
 
         Args:
-            tangent (hints.TangentVector): Input.
+            tangent: Tangent vector to take the exponential of.
 
         Returns:
-            MatrixLieGroup: Output.
+            Output.
         """
 
     @abc.abstractmethod
@@ -134,7 +134,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
-            hints.TangentVector: Output. Shape should be `(tangent_dim,)`.
+            Output. Shape should be `(tangent_dim,)`.
         """
 
     @abc.abstractmethod
@@ -150,7 +150,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         between our spatial and body representations.
 
         Returns:
-            hints.Matrix: Output. Shape should be `(tangent_dim, tangent_dim)`.
+            Output. Shape should be `(tangent_dim, tangent_dim)`.
         """
 
     @abc.abstractmethod
@@ -158,7 +158,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Computes the inverse of our transform.
 
         Returns:
-            hints.Matrix: Output.
+            Output.
         """
 
     @abc.abstractmethod
@@ -175,10 +175,10 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
         Args:
-            key (jnp.ndarray): PRNG key, as returned by `jax.random.PRNGKey()`.
+            key: PRNG key, as returned by `jax.random.PRNGKey()`.
 
         Returns:
-            MatrixLieGroup: Sampled group member.
+            Sampled group member.
         """
 
 

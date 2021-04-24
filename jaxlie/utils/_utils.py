@@ -25,7 +25,14 @@ T = TypeVar("T", bound="MatrixLieGroup")
 
 
 def get_epsilon(dtype: jnp.dtype) -> float:
-    """Helper for grabbing type-specific precision constants."""
+    """Helper for grabbing type-specific precision constants.
+
+    Args:
+        dtype: Datatype.
+
+    Returns:
+        Output float.
+    """
     return {
         jnp.dtype("float32"): 1e-5,
         jnp.dtype("float64"): 1e-10,
