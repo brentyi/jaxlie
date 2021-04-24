@@ -1,5 +1,5 @@
 import abc
-from typing import Type, TypeVar, overload
+from typing import Generic, Type, TypeVar, overload
 
 import jax
 import numpy as onp
@@ -186,21 +186,25 @@ class SOBase(MatrixLieGroup):
     """Base class for special orthogonal groups."""
 
 
-class SEBase(MatrixLieGroup):
+SOBaseType = TypeVar("SOBaseType", bound=SOBase)
+
+
+class SEBase(MatrixLieGroup, Generic[SOBaseType]):
     """Base class for special Euclidean groups."""
 
     # SE-specific interface
 
-    @staticmethod
+    @classmethod
     @abc.abstractmethod
     def from_rotation_and_translation(
-        rotation: SOBase,
+        cls: Type[SEGroupType],
+        rotation: SOBaseType,
         translation: hints.Vector,
     ) -> SEGroupType:
         """Construct a rigid transform from a rotation and a translation."""
 
     @abc.abstractmethod
-    def rotation(self) -> SOBase:
+    def rotation(self) -> SOBaseType:
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod

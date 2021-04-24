@@ -30,7 +30,7 @@ def _skew(omega: hints.Vector) -> hints.Matrix:
     space_dim=3,
 )
 @dataclasses.dataclass(frozen=True)
-class SE3(_base.SEBase):
+class SE3(_base.SEBase[SO3]):
     """Special Euclidean group for proper rigid transforms in 3D."""
 
     # SE3-specific
