@@ -333,7 +333,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -344,10 +344,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -370,10 +370,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> – Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p>Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -384,10 +384,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
+<dd class="field-even"><p>self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -398,10 +398,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -412,7 +412,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -429,7 +429,7 @@ Uses the ZYX mobile robot convention.</p>
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -440,7 +440,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
+<dd class="field-odd"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -462,10 +462,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -20,7 +20,7 @@ Classes
 
 .. py:class:: SE3(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.SEBase`
+   Bases: :class:`jaxlie._base.SEBase[SO3]`
 
    .. autoapi-inheritance-diagram:: jaxlie._se3.SE3
       :parts: 1
@@ -59,7 +59,7 @@ Classes
 
       Returns identity element.
 
-      :returns: *hints.Matrix* -- Identity.
+      :returns: Identity element.
 
 
    .. method:: from_matrix(matrix: hints.Matrix) -> 'SE3'
@@ -67,10 +67,9 @@ Classes
 
       Get group member from matrix representation.
 
-      :param matrix: hints.Matrix representaiton.
-      :type matrix: jnp.ndarray
+      :param matrix: Matrix representaiton.
 
-      :returns: *GroupType* -- Group member.
+      :returns: Group member.
 
 
    .. method:: as_matrix(self) -> hints.Matrix
@@ -88,17 +87,16 @@ Classes
 
       Computes ``expm(wedge(tangent))``.
 
-      :param tangent: Input.
-      :type tangent: hints.TangentVector
+      :param tangent: Tangent vector to take the exponential of.
 
-      :returns: *MatrixLieGroup* -- Output.
+      :returns: Output.
 
 
    .. method:: log(self: SE3) -> hints.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *hints.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
    .. method:: adjoint(self: SE3) -> hints.Matrix
@@ -114,7 +112,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *hints.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'
@@ -123,9 +121,8 @@ Classes
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
-      :type key: jnp.ndarray
 
-      :returns: *MatrixLieGroup* -- Sampled group member.
+      :returns: Sampled group member.
 
 
 

@@ -257,7 +257,7 @@
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -268,10 +268,10 @@
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -294,10 +294,10 @@
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> – Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p>Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -308,10 +308,10 @@
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
+<dd class="field-even"><p>self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -322,10 +322,10 @@
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -336,7 +336,7 @@
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -353,7 +353,7 @@
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -364,7 +364,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
+<dd class="field-odd"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -386,10 +386,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -399,21 +399,21 @@ between our spatial and body representations.</p>
 <dl class="py class">
 <dt id="jaxlie.SEBase">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SEBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-04bf3a3a8691b5a4a43b8a65d88371402ceb0cca.png" alt="Inheritance diagram of jaxlie.SEBase" usemap="#inheritancea167573c30" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.MatrixLieGroup</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic[SOBaseType]</span></code></p>
+<div class="graphviz"><img src="../../_images/inheritance-15b6a4a1ed1e743865a1b0881e2838271193d3d3.png" alt="Inheritance diagram of jaxlie.SEBase" usemap="#inheritancea167573c30" class="inheritance graphviz" /></div>
 <map id="inheritancea167573c30" name="inheritancea167573c30">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,31,429,56"/>
+<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,309,55"/>
+<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,55,429,80"/>
 </map><p>Base class for special Euclidean groups.</p>
 <dl class="py method">
 <dt id="jaxlie.SEBase.from_rotation_and_translation">
-<em class="property"><span class="pre">abstract</span> <span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><span class="pre">SOBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">SEGroupType</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> <span class="pre">classmethod</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">SEGroupType</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">SOBaseType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">SEGroupType</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a rigid transform from a rotation and a translation.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="jaxlie.SEBase.rotation">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><span class="pre">SOBase</span></a><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.rotation" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">SOBaseType</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.rotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a transform’s rotation term.</p>
 </dd></dl>
 
@@ -429,10 +429,10 @@ between our spatial and body representations.</p>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> – Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p>Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -443,10 +443,10 @@ between our spatial and body representations.</p>
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
+<dd class="field-even"><p>self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -457,7 +457,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
+<dd class="field-odd"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -489,12 +489,12 @@ between our spatial and body representations.</p>
 <dl class="py class">
 <dt id="jaxlie.SE2">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SE2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-f2828885dcb91e47efc5e8aa73559cd982660ba0.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie._base.SEBase[SO2]</span></code></p>
+<div class="graphviz"><img src="../../_images/inheritance-1a980a399505ae2bb3b44a142eea3eeb9f994b16.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
 <map id="inheritance181a071670" name="inheritance181a071670">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,31,429,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="477,31,549,56"/>
+<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,309,55"/>
+<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,55,429,80"/>
+<area shape="rect" id="node5" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="477,55,549,80"/>
 </map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
 <dl class="py attribute">
 <dt id="jaxlie.SE2.unit_complex_xy">
@@ -537,7 +537,7 @@ between our spatial and body representations.</p>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -548,10 +548,10 @@ between our spatial and body representations.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -574,10 +574,10 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,7 +588,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -605,7 +605,7 @@ between our spatial and body representations.</p>
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -616,10 +616,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -629,12 +629,12 @@ between our spatial and body representations.</p>
 <dl class="py class">
 <dt id="jaxlie.SE3">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.</span></code><code class="sig-name descname"><span class="pre">SE3</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-e6bc6b90dc2b0616d02dfd133e823261657b6b12.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">jaxlie._base.SEBase[SO3]</span></code></p>
+<div class="graphviz"><img src="../../_images/inheritance-33adf899148ee220ae5e6ae71e34e4dc21aba115.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
 <map id="inheritance122bbc4208" name="inheritance122bbc4208">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,31,429,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="477,31,549,56"/>
+<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,309,55"/>
+<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,55,429,80"/>
+<area shape="rect" id="node5" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="477,55,549,80"/>
 </map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
 <dl class="py attribute">
 <dt id="jaxlie.SE3.wxyz_xyz">
@@ -672,7 +672,7 @@ between our spatial and body representations.</p>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -683,10 +683,10 @@ between our spatial and body representations.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -709,10 +709,10 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -723,7 +723,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -740,7 +740,7 @@ between our spatial and body representations.</p>
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -751,10 +751,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -799,7 +799,7 @@ between our spatial and body representations.</p>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -810,10 +810,10 @@ between our spatial and body representations.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -836,10 +836,10 @@ between our spatial and body representations.</p>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> – Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p>Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -850,10 +850,10 @@ between our spatial and body representations.</p>
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
+<dd class="field-even"><p>self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -864,10 +864,10 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -878,7 +878,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -895,7 +895,7 @@ between our spatial and body representations.</p>
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -906,7 +906,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
+<dd class="field-odd"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -928,10 +928,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1097,7 +1097,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Identity.</p>
+<dd class="field-odd"><p>Identity element.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1108,10 +1108,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jnp.ndarray</em>) – hints.Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – Group member.</p>
+<dd class="field-even"><p>Group member.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1134,10 +1134,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Applies the group action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>hints.Vector</em>) – hints.Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> – Vector to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>hints.Vector</em> – Transformed vector.</p>
+<dd class="field-even"><p>Transformed vector.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1148,10 +1148,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Left-multiplies this transformations with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>other</strong> (<em>GroupType</em>) – other</p>
+<dd class="field-odd"><p><strong>other</strong> – other</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>GroupType</em> – self &#64; other</p>
+<dd class="field-even"><p>self &#64; other</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1162,10 +1162,10 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>hints.TangentVector</em>) – Input.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Output.</p>
+<dd class="field-even"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1176,7 +1176,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.TangentVector</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1193,7 +1193,7 @@ Uses the ZYX mobile robot convention.</p>
 between our spatial and body representations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
+<dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1204,7 +1204,7 @@ between our spatial and body representations.</p>
 <dd><p>Computes the inverse of our transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>hints.Matrix</em> – Output.</p>
+<dd class="field-odd"><p>Output.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1226,10 +1226,10 @@ between our spatial and body representations.</p>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jnp.ndarray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>MatrixLieGroup</em> – Sampled group member.</p>
+<dd class="field-even"><p>Sampled group member.</p>
 </dd>
 </dl>
 </dd></dl>

@@ -21,6 +21,10 @@ Functions
 
    Helper for grabbing type-specific precision constants.
 
+   :param dtype: Datatype.
+
+   :returns: Output float.
+
 
 .. function:: register_lie_group(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) -> Callable[[Type[T]], Type[T]]
 

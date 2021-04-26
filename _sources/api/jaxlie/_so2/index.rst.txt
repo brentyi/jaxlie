@@ -50,7 +50,7 @@ Classes
 
       Returns identity element.
 
-      :returns: *hints.Matrix* -- Identity.
+      :returns: Identity element.
 
 
    .. method:: from_matrix(matrix: hints.Matrix) -> 'SO2'
@@ -58,10 +58,9 @@ Classes
 
       Get group member from matrix representation.
 
-      :param matrix: hints.Matrix representaiton.
-      :type matrix: jnp.ndarray
+      :param matrix: Matrix representaiton.
 
-      :returns: *GroupType* -- Group member.
+      :returns: Group member.
 
 
    .. method:: as_matrix(self) -> hints.Matrix
@@ -78,10 +77,9 @@ Classes
 
       Applies the group action.
 
-      :param target: hints.Vector to transform.
-      :type target: hints.Vector
+      :param target: Vector to transform.
 
-      :returns: *hints.Vector* -- Transformed vector.
+      :returns: Transformed vector.
 
 
    .. method:: multiply(self: SO2, other: SO2) -> 'SO2'
@@ -89,9 +87,8 @@ Classes
       Left-multiplies this transformations with another.
 
       :param other: other
-      :type other: GroupType
 
-      :returns: *GroupType* -- self @ other
+      :returns: self @ other
 
 
    .. method:: exp(tangent: hints.TangentVector) -> 'SO2'
@@ -99,17 +96,16 @@ Classes
 
       Computes ``expm(wedge(tangent))``.
 
-      :param tangent: Input.
-      :type tangent: hints.TangentVector
+      :param tangent: Tangent vector to take the exponential of.
 
-      :returns: *MatrixLieGroup* -- Output.
+      :returns: Output.
 
 
    .. method:: log(self: SO2) -> hints.TangentVector
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *hints.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
    .. method:: adjoint(self: SO2) -> hints.Matrix
@@ -125,14 +121,14 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *hints.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: inverse(self: SO2) -> 'SO2'
 
       Computes the inverse of our transform.
 
-      :returns: *hints.Matrix* -- Output.
+      :returns: Output.
 
 
    .. method:: normalize(self: SO2) -> 'SO2'
@@ -148,9 +144,8 @@ Classes
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
-      :type key: jnp.ndarray
 
-      :returns: *MatrixLieGroup* -- Sampled group member.
+      :returns: Sampled group member.
 
 
 

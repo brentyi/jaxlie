@@ -78,7 +78,7 @@ Classes
 
       Returns identity element.
 
-      :returns: *hints.Matrix* -- Identity.
+      :returns: Identity element.
 
 
    .. method:: from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType
@@ -87,10 +87,9 @@ Classes
 
       Get group member from matrix representation.
 
-      :param matrix: hints.Matrix representaiton.
-      :type matrix: jnp.ndarray
+      :param matrix: Matrix representaiton.
 
-      :returns: *GroupType* -- Group member.
+      :returns: Group member.
 
 
    .. method:: as_matrix(self) -> hints.Matrix
@@ -110,10 +109,9 @@ Classes
 
       Applies the group action.
 
-      :param target: hints.Vector to transform.
-      :type target: hints.Vector
+      :param target: Vector to transform.
 
-      :returns: *hints.Vector* -- Transformed vector.
+      :returns: Transformed vector.
 
 
    .. method:: multiply(self: GroupType, other: GroupType) -> GroupType
@@ -122,9 +120,8 @@ Classes
       Left-multiplies this transformations with another.
 
       :param other: other
-      :type other: GroupType
 
-      :returns: *GroupType* -- self @ other
+      :returns: self @ other
 
 
    .. method:: exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType
@@ -133,10 +130,9 @@ Classes
 
       Computes ``expm(wedge(tangent))``.
 
-      :param tangent: Input.
-      :type tangent: hints.TangentVector
+      :param tangent: Tangent vector to take the exponential of.
 
-      :returns: *MatrixLieGroup* -- Output.
+      :returns: Output.
 
 
    .. method:: log(self: GroupType) -> hints.TangentVector
@@ -144,7 +140,7 @@ Classes
 
       Computes ``vee(logm(transformation matrix))``.
 
-      :returns: *hints.TangentVector* -- Output. Shape should be ``(tangent_dim,)``.
+      :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
    .. method:: adjoint(self: GroupType) -> hints.Matrix
@@ -161,7 +157,7 @@ Classes
       In robotics, typically used for converting twists, wrenches, and Jacobians
       between our spatial and body representations.
 
-      :returns: *hints.Matrix* -- Output. Shape should be ``(tangent_dim, tangent_dim)``.
+      :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
    .. method:: inverse(self: GroupType) -> GroupType
@@ -169,7 +165,7 @@ Classes
 
       Computes the inverse of our transform.
 
-      :returns: *hints.Matrix* -- Output.
+      :returns: Output.
 
 
    .. method:: normalize(self: GroupType) -> GroupType
@@ -187,9 +183,8 @@ Classes
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
-      :type key: jnp.ndarray
 
-      :returns: *MatrixLieGroup* -- Sampled group member.
+      :returns: Sampled group member.
 
 
 
@@ -203,23 +198,28 @@ Classes
    Base class for special orthogonal groups.
 
 
+.. data:: SOBaseType
+   
+
+   
+
 .. py:class:: SEBase(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`
+   Bases: :class:`jaxlie.MatrixLieGroup`, :class:`Generic[SOBaseType]`
 
    .. autoapi-inheritance-diagram:: jaxlie._base.SEBase
       :parts: 1
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(rotation: SOBase, translation: hints.Vector) -> SEGroupType
-      :staticmethod:
+   .. method:: from_rotation_and_translation(cls: Type[SEGroupType], rotation: SOBaseType, translation: hints.Vector) -> SEGroupType
+      :classmethod:
       :abstractmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
 
-   .. method:: rotation(self) -> SOBase
+   .. method:: rotation(self) -> SOBaseType
       :abstractmethod:
 
       Returns a transform's rotation term.
@@ -235,10 +235,9 @@ Classes
 
       Applies the group action.
 
-      :param target: hints.Vector to transform.
-      :type target: hints.Vector
+      :param target: Vector to transform.
 
-      :returns: *hints.Vector* -- Transformed vector.
+      :returns: Transformed vector.
 
 
    .. method:: multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType
@@ -246,16 +245,15 @@ Classes
       Left-multiplies this transformations with another.
 
       :param other: other
-      :type other: GroupType
 
-      :returns: *GroupType* -- self @ other
+      :returns: self @ other
 
 
    .. method:: inverse(self: SEGroupType) -> SEGroupType
 
       Computes the inverse of our transform.
 
-      :returns: *hints.Matrix* -- Output.
+      :returns: Output.
 
 
    .. method:: normalize(self: SEGroupType) -> SEGroupType
