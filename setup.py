@@ -15,7 +15,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     package_data={"jaxlie": ["py.typed"]},
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         "flax",
         "jax",
@@ -26,7 +26,6 @@ setup(
         # > https://github.com/mkorpela/overrides/issues/63
         # > https://github.com/mkorpela/overrides/issues/61
         "overrides<4",
-        "dataclasses; python_version < '3.7.0'",
     ],
     extras_require={
         "testing": [
@@ -37,10 +36,10 @@ setup(
         ]
     },
     classifiers=[
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
