@@ -11,7 +11,7 @@ from .utils import get_epsilon, register_lie_group
 
 
 def _skew(omega: hints.Vector) -> hints.Matrix:
-    """Returns the skew-symmetric form of a length-3 vector. """
+    """Returns the skew-symmetric form of a length-3 vector."""
 
     wx, wy, wz = omega
     return jnp.array(
