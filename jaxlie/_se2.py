@@ -33,6 +33,8 @@ class SE2(_base.SEBase[SO2]):
 
     @staticmethod
     def from_xy_theta(x: hints.Scalar, y: hints.Scalar, theta: hints.Scalar) -> "SE2":
+        """Construct a transformation from standard 2D pose parameters. Note that this
+        is not the same as integrating over a length-3 twist."""
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))

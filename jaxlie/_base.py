@@ -110,9 +110,6 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     def multiply(self: GroupType, other: GroupType) -> GroupType:
         """Left-multiplies this transformations with another.
 
-        Args:
-            other: other
-
         Returns:
             self @ other
         """
@@ -186,11 +183,14 @@ class SOBase(MatrixLieGroup):
     """Base class for special orthogonal groups."""
 
 
-SOBaseType = TypeVar("SOBaseType", bound=SOBase)
+ContainedSOType = TypeVar("ContainedSOType", bound=SOBase)
 
 
-class SEBase(MatrixLieGroup, Generic[SOBaseType]):
-    """Base class for special Euclidean groups."""
+class SEBase(Generic[ContainedSOType], MatrixLieGroup):
+    """Base class for special Euclidean groups.
+
+    Each SE(N) group member contains an SO(N) rotation, as well as an N-dimensional
+    translation vector."""
 
     # SE-specific interface
 
@@ -198,13 +198,21 @@ class SEBase(MatrixLieGroup, Generic[SOBaseType]):
     @abc.abstractmethod
     def from_rotation_and_translation(
         cls: Type[SEGroupType],
-        rotation: SOBaseType,
+        rotation: ContainedSOType,
         translation: hints.Vector,
     ) -> SEGroupType:
-        """Construct a rigid transform from a rotation and a translation."""
+        """Construct a rigid transform from a rotation and a translation.
+
+        Args:
+            rotation: Rotation term.
+            translation: translation term.
+
+        Returns:
+            Constructed transformation.
+        """
 
     @abc.abstractmethod
-    def rotation(self) -> SOBaseType:
+    def rotation(self) -> ContainedSOType:
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod

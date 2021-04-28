@@ -31,11 +31,13 @@ class SO2(_base.SOBase):
 
     @staticmethod
     def from_radians(theta: hints.Scalar) -> "SO2":
+        """Construct a rotation object from a scalar angle."""
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    def as_radians(self) -> jnp.ndarray:
+    def as_radians(self) -> hints.Scalar:
+        """Compute a scalar angle from a rotation object."""
         radians = self.log()[..., 0]
         return radians
 

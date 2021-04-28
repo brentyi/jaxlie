@@ -37,7 +37,7 @@ class SO3(_base.SOBase):
             angle: X rotation, in radians.
 
         Returns:
-            SO3: Output.
+            Output.
         """
         return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
@@ -49,7 +49,7 @@ class SO3(_base.SOBase):
             angle: Y rotation, in radians.
 
         Returns:
-            SO3: Output.
+            Output.
         """
         return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
@@ -61,7 +61,7 @@ class SO3(_base.SOBase):
             angle: Z rotation, in radians.
 
         Returns:
-            SO3: Output.
+            Output.
         """
         return SO3.exp(jnp.array([0.0, 0.0, theta]))
 
@@ -80,7 +80,7 @@ class SO3(_base.SOBase):
             yaw: Z rotation, in radians. Applied last.
 
         Returns:
-            SO3: Output.
+            Output.
         """
         return (
             SO3.from_z_radians(yaw)
@@ -96,10 +96,10 @@ class SO3(_base.SOBase):
         constructor.
 
         Args:
-            xyzw (jnp.ndarray or onp.ndarray): xyzw quaternion. Shape should be (4,).
+            xyzw: xyzw quaternion. Shape should be (4,).
 
         Returns:
-            SO3: Output.
+            Output.
         """
         assert xyzw.shape == (4,)
         return SO3(jnp.roll(xyzw, shift=1))
@@ -113,7 +113,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            hints.RollPitchYaw: Named tuple containing Euler angles in radians.
+            Named tuple containing Euler angles in radians.
         """
         return hints.RollPitchYaw(
             roll=self.compute_roll_radians(),
@@ -126,7 +126,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            jnp.ndarray: Euler angle in radians.
+            Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
@@ -137,7 +137,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            jnp.ndarray: Euler angle in radians.
+            Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
@@ -148,7 +148,7 @@ class SO3(_base.SOBase):
         Uses the ZYX mobile robot convention.
 
         Returns:
-            jnp.ndarray: Euler angle in radians.
+            Euler angle in radians.
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
