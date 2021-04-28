@@ -20,6 +20,17 @@ Classes
 
 
 
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie._base.GroupType
+   jaxlie._base.SEGroupType
+   jaxlie._base.ContainedSOType
+
+
 .. data:: GroupType
    
 
@@ -30,9 +41,10 @@ Classes
 
    
 
-.. py:class:: MatrixLieGroup(parameters: jnp.ndarray)
+.. class:: MatrixLieGroup(parameters)
 
-   Bases: :class:`abc.ABC`, :class:`overrides.EnforceOverrides`
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`overrides.EnforceOverrides`
 
    .. autoapi-inheritance-diagram:: jaxlie._base.MatrixLieGroup
       :parts: 1
@@ -64,7 +76,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: hints.Vector) -> hints.Vector
+               __matmul__(self: GroupType, other: jaxlie.hints.Vector) -> jaxlie.hints.Vector
 
       Overload for the ``@`` operator.
 
@@ -72,7 +84,7 @@ Classes
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
 
-   .. method:: identity(cls: Type[GroupType]) -> GroupType
+   .. method:: identity(cls)
       :classmethod:
       :abstractmethod:
 
@@ -81,7 +93,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType
+   .. method:: from_matrix(cls, matrix)
       :classmethod:
       :abstractmethod:
 
@@ -92,19 +104,19 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
       :abstractmethod:
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
       :abstractmethod:
 
       Get underlying representation.
 
 
-   .. method:: apply(self: GroupType, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
       :abstractmethod:
 
       Applies the group action.
@@ -114,17 +126,15 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: GroupType, other: GroupType) -> GroupType
+   .. method:: multiply(self, other)
       :abstractmethod:
 
       Left-multiplies this transformations with another.
 
-      :param other: other
-
       :returns: self @ other
 
 
-   .. method:: exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType
+   .. method:: exp(cls, tangent)
       :classmethod:
       :abstractmethod:
 
@@ -135,7 +145,7 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: GroupType) -> hints.TangentVector
+   .. method:: log(self)
       :abstractmethod:
 
       Computes ``vee(logm(transformation matrix))``.
@@ -143,7 +153,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: GroupType) -> hints.Matrix
+   .. method:: adjoint(self)
       :abstractmethod:
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
@@ -160,7 +170,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: GroupType) -> GroupType
+   .. method:: inverse(self)
       :abstractmethod:
 
       Computes the inverse of our transform.
@@ -168,7 +178,7 @@ Classes
       :returns: Output.
 
 
-   .. method:: normalize(self: GroupType) -> GroupType
+   .. method:: normalize(self)
       :abstractmethod:
 
       Normalize/projects values and returns.
@@ -176,7 +186,7 @@ Classes
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(cls: Type[GroupType], key: jnp.ndarray) -> GroupType
+   .. method:: sample_uniform(cls, key)
       :classmethod:
       :abstractmethod:
 
@@ -188,9 +198,10 @@ Classes
 
 
 
-.. py:class:: SOBase(parameters: jnp.ndarray)
+.. class:: SOBase(parameters)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`
+
+   Bases: :py:obj:`MatrixLieGroup`
 
    .. autoapi-inheritance-diagram:: jaxlie._base.SOBase
       :parts: 1
@@ -198,40 +209,49 @@ Classes
    Base class for special orthogonal groups.
 
 
-.. data:: SOBaseType
+.. data:: ContainedSOType
    
 
    
 
-.. py:class:: SEBase(parameters: jnp.ndarray)
+.. class:: SEBase(parameters)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`, :class:`Generic[SOBaseType]`
+
+   Bases: :py:obj:`Generic`\ [\ :py:obj:`ContainedSOType`\ ], :py:obj:`MatrixLieGroup`
 
    .. autoapi-inheritance-diagram:: jaxlie._base.SEBase
       :parts: 1
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(cls: Type[SEGroupType], rotation: SOBaseType, translation: hints.Vector) -> SEGroupType
+   Each SE(N) group member contains an SO(N) rotation, as well as an N-dimensional
+   translation vector.
+
+   .. method:: from_rotation_and_translation(cls, rotation, translation)
       :classmethod:
       :abstractmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
+      :param rotation: Rotation term.
+      :param translation: translation term.
 
-   .. method:: rotation(self) -> SOBaseType
+      :returns: Constructed transformation.
+
+
+   .. method:: rotation(self)
       :abstractmethod:
 
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> hints.Vector
+   .. method:: translation(self)
       :abstractmethod:
 
       Returns a transform's translation term.
 
 
-   .. method:: apply(self, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -240,23 +260,21 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: inverse(self: SEGroupType) -> SEGroupType
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SEGroupType) -> SEGroupType
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 

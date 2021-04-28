@@ -169,11 +169,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils._utils.get_epsilon" title="jaxlie.utils._utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype: jnp.dtype) → float</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils._utils.get_epsilon" title="jaxlie.utils._utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype)</p></td>
 <td><p>Helper for grabbing type-specific precision constants.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils._utils.register_lie_group" title="jaxlie.utils._utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) → Callable[[Type[T]], Type[T]]</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils._utils.register_lie_group" title="jaxlie.utils._utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim, parameters_dim, tangent_dim, space_dim)</p></td>
 <td><p>Decorator for registering Lie group dataclasses.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils._utils.T" title="jaxlie.utils._utils.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -184,21 +198,24 @@
 
 <dl class="py function">
 <dt id="jaxlie.utils._utils.get_epsilon">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></code><code class="sig-name descname"><span class="pre">get_epsilon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">jnp.dtype</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">float</span><a class="reference internal" href="../../../../_modules/jaxlie/utils/_utils/#get_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils._utils.get_epsilon" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></code><code class="sig-name descname"><span class="pre">get_epsilon</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jaxlie/utils/_utils/#get_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils._utils.get_epsilon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper for grabbing type-specific precision constants.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dtype</strong> – Datatype.</p>
+<dd class="field-odd"><p><strong>dtype</strong> (<em>jax.numpy.dtype</em>) – Datatype.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output float.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="jaxlie.utils._utils.register_lie_group">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></code><code class="sig-name descname"><span class="pre">register_lie_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie.utils._utils.T" title="jaxlie.utils._utils.T"><span class="pre">T</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#jaxlie.utils._utils.T" title="jaxlie.utils._utils.T"><span class="pre">T</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="reference internal" href="../../../../_modules/jaxlie/utils/_utils/#register_lie_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils._utils.register_lie_group" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></code><code class="sig-name descname"><span class="pre">register_lie_group</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jaxlie/utils/_utils/#register_lie_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils._utils.register_lie_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for registering Lie group dataclasses.</p>
 <ul class="simple">
 <li><p>Sets static dimensionality attributes</p></li>
@@ -221,6 +238,19 @@
     <span class="o">...</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>matrix_dim</strong> (<em>int</em>) – </p></li>
+<li><p><strong>parameters_dim</strong> (<em>int</em>) – </p></li>
+<li><p><strong>tangent_dim</strong> (<em>int</em>) – </p></li>
+<li><p><strong>space_dim</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Callable[[Type[T]], Type[T]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

@@ -33,9 +33,11 @@ Classes
 
 
 
-.. py:class:: MatrixLieGroup(parameters: jnp.ndarray)
 
-   Bases: :class:`abc.ABC`, :class:`overrides.EnforceOverrides`
+.. class:: MatrixLieGroup(parameters)
+
+
+   Bases: :py:obj:`abc.ABC`, :py:obj:`overrides.EnforceOverrides`
 
    .. autoapi-inheritance-diagram:: jaxlie.MatrixLieGroup
       :parts: 1
@@ -67,7 +69,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: hints.Vector) -> hints.Vector
+               __matmul__(self: GroupType, other: jaxlie.hints.Vector) -> jaxlie.hints.Vector
 
       Overload for the ``@`` operator.
 
@@ -75,7 +77,7 @@ Classes
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
 
-   .. method:: identity(cls: Type[GroupType]) -> GroupType
+   .. method:: identity(cls)
       :classmethod:
       :abstractmethod:
 
@@ -84,7 +86,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType
+   .. method:: from_matrix(cls, matrix)
       :classmethod:
       :abstractmethod:
 
@@ -95,19 +97,19 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
       :abstractmethod:
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
       :abstractmethod:
 
       Get underlying representation.
 
 
-   .. method:: apply(self: GroupType, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
       :abstractmethod:
 
       Applies the group action.
@@ -117,17 +119,15 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: GroupType, other: GroupType) -> GroupType
+   .. method:: multiply(self, other)
       :abstractmethod:
 
       Left-multiplies this transformations with another.
 
-      :param other: other
-
       :returns: self @ other
 
 
-   .. method:: exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType
+   .. method:: exp(cls, tangent)
       :classmethod:
       :abstractmethod:
 
@@ -138,7 +138,7 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: GroupType) -> hints.TangentVector
+   .. method:: log(self)
       :abstractmethod:
 
       Computes ``vee(logm(transformation matrix))``.
@@ -146,7 +146,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: GroupType) -> hints.Matrix
+   .. method:: adjoint(self)
       :abstractmethod:
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
@@ -163,7 +163,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: GroupType) -> GroupType
+   .. method:: inverse(self)
       :abstractmethod:
 
       Computes the inverse of our transform.
@@ -171,7 +171,7 @@ Classes
       :returns: Output.
 
 
-   .. method:: normalize(self: GroupType) -> GroupType
+   .. method:: normalize(self)
       :abstractmethod:
 
       Normalize/projects values and returns.
@@ -179,7 +179,7 @@ Classes
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(cls: Type[GroupType], key: jnp.ndarray) -> GroupType
+   .. method:: sample_uniform(cls, key)
       :classmethod:
       :abstractmethod:
 
@@ -191,35 +191,44 @@ Classes
 
 
 
-.. py:class:: SEBase(parameters: jnp.ndarray)
+.. class:: SEBase(parameters)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`, :class:`Generic[SOBaseType]`
+
+   Bases: :py:obj:`Generic`\ [\ :py:obj:`ContainedSOType`\ ], :py:obj:`MatrixLieGroup`
 
    .. autoapi-inheritance-diagram:: jaxlie.SEBase
       :parts: 1
 
    Base class for special Euclidean groups.
 
-   .. method:: from_rotation_and_translation(cls: Type[SEGroupType], rotation: SOBaseType, translation: hints.Vector) -> SEGroupType
+   Each SE(N) group member contains an SO(N) rotation, as well as an N-dimensional
+   translation vector.
+
+   .. method:: from_rotation_and_translation(cls, rotation, translation)
       :classmethod:
       :abstractmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
+      :param rotation: Rotation term.
+      :param translation: translation term.
 
-   .. method:: rotation(self) -> SOBaseType
+      :returns: Constructed transformation.
+
+
+   .. method:: rotation(self)
       :abstractmethod:
 
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> hints.Vector
+   .. method:: translation(self)
       :abstractmethod:
 
       Returns a transform's translation term.
 
 
-   .. method:: apply(self, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -228,23 +237,21 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: inverse(self: SEGroupType) -> SEGroupType
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SEGroupType) -> SEGroupType
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 
@@ -252,9 +259,10 @@ Classes
 
 
 
-.. py:class:: SOBase(parameters: jnp.ndarray)
+.. class:: SOBase(parameters)
 
-   Bases: :class:`jaxlie.MatrixLieGroup`
+
+   Bases: :py:obj:`MatrixLieGroup`
 
    .. autoapi-inheritance-diagram:: jaxlie.SOBase
       :parts: 1
@@ -262,9 +270,10 @@ Classes
    Base class for special orthogonal groups.
 
 
-.. py:class:: SE2(parameters: jnp.ndarray)
+.. class:: SE2(parameters)
 
-   Bases: :class:`jaxlie._base.SEBase[SO2]`
+
+   Bases: :py:obj:`jaxlie._base.SEBase`\ [\ :py:obj:`jaxlie._so2.SO2`\ ]
 
    .. autoapi-inheritance-diagram:: jaxlie.SE2
       :parts: 1
@@ -272,37 +281,45 @@ Classes
    Special Euclidean group for proper rigid transforms in 2D.
 
    .. attribute:: unit_complex_xy
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. ``(cos, sin, x, y)``.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_xy_theta(x: hints.Scalar, y: hints.Scalar, theta: hints.Scalar) -> 'SE2'
+   .. method:: from_xy_theta(x, y, theta)
       :staticmethod:
 
+      Construct a transformation from standard 2D pose parameters. Note that this
+      is not the same as integrating over a length-3 twist.
 
-   .. method:: from_rotation_and_translation(rotation: SO2, translation: hints.Vector) -> 'SE2'
+
+   .. method:: from_rotation_and_translation(rotation, translation)
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
+      :param rotation: Rotation term.
+      :param translation: translation term.
 
-   .. method:: rotation(self) -> SO2
+      :returns: Constructed transformation.
+
+
+   .. method:: rotation(self)
 
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> hints.Vector
+   .. method:: translation(self)
 
       Returns a transform's translation term.
 
 
-   .. method:: identity() -> 'SE2'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -310,7 +327,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SE2'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -320,17 +337,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SE2'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -340,14 +357,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SE2) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE2) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -363,7 +380,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE2'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
@@ -374,9 +391,10 @@ Classes
 
 
 
-.. py:class:: SE3(parameters: jnp.ndarray)
+.. class:: SE3(parameters)
 
-   Bases: :class:`jaxlie._base.SEBase[SO3]`
+
+   Bases: :py:obj:`jaxlie._base.SEBase`\ [\ :py:obj:`jaxlie._so3.SO3`\ ]
 
    .. autoapi-inheritance-diagram:: jaxlie.SE3
       :parts: 1
@@ -384,33 +402,38 @@ Classes
    Special Euclidean group for proper rigid transforms in 3D.
 
    .. attribute:: wxyz_xyz
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: SO3, translation: hints.Vector) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation, translation)
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
+      :param rotation: Rotation term.
+      :param translation: translation term.
 
-   .. method:: rotation(self) -> SO3
+      :returns: Constructed transformation.
+
+
+   .. method:: rotation(self)
 
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> hints.Vector
+   .. method:: translation(self)
 
       Returns a transform's translation term.
 
 
-   .. method:: identity() -> 'SE3'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -418,7 +441,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SE3'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -428,17 +451,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SE3'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -448,14 +471,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SE3) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE3) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -471,7 +494,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
@@ -482,9 +505,10 @@ Classes
 
 
 
-.. py:class:: SO2(parameters: jnp.ndarray)
+.. class:: SO2(parameters)
 
-   Bases: :class:`jaxlie.SOBase`
+
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie.SO2
       :parts: 1
@@ -492,24 +516,28 @@ Classes
    Special orthogonal group for 2D rotations.
 
    .. attribute:: unit_complex
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. ``(cos, sin)``.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_radians(theta: hints.Scalar) -> 'SO2'
+   .. method:: from_radians(theta)
       :staticmethod:
 
+      Construct a rotation object from a scalar angle.
 
-   .. method:: as_radians(self) -> jnp.ndarray
+
+   .. method:: as_radians(self)
+
+      Compute a scalar angle from a rotation object.
 
 
-   .. method:: identity() -> 'SO2'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -517,7 +545,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SO2'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -527,17 +555,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO2, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -546,16 +574,14 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SO2, other: SO2) -> 'SO2'
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SO2'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -565,14 +591,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SO2) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO2) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -588,21 +614,21 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: SO2) -> 'SO2'
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SO2) -> 'SO2'
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO2'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
@@ -613,9 +639,10 @@ Classes
 
 
 
-.. py:class:: SO3(parameters: jnp.ndarray)
+.. class:: SO3(parameters)
 
-   Bases: :class:`jaxlie.SOBase`
+
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie.SO3
       :parts: 1
@@ -623,47 +650,47 @@ Classes
    Special orthogonal group for 3D rotations.
 
    .. attribute:: wxyz
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_x_radians(theta)
       :staticmethod:
 
       Generates a x-axis rotation.
 
       :param angle: X rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_y_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_y_radians(theta)
       :staticmethod:
 
       Generates a y-axis rotation.
 
       :param angle: Y rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_z_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_z_radians(theta)
       :staticmethod:
 
       Generates a z-axis rotation.
 
       :param angle: Z rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_rpy_radians(roll: hints.Scalar, pitch: hints.Scalar, yaw: hints.Scalar) -> 'SO3'
+   .. method:: from_rpy_radians(roll, pitch, yaw)
       :staticmethod:
 
       Generates a transform from a set of Euler angles.
@@ -673,10 +700,10 @@ Classes
       :param pitch: Y rotation, in radians. Applied second.
       :param yaw: Z rotation, in radians. Applied last.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_quaternion_xyzw(xyzw: hints.Array) -> 'SO3'
+   .. method:: from_quaternion_xyzw(xyzw)
       :staticmethod:
 
       Construct a rotation from an ``xyzw`` quaternion.
@@ -685,49 +712,48 @@ Classes
       constructor.
 
       :param xyzw: xyzw quaternion. Shape should be (4,).
-      :type xyzw: jnp.ndarray or onp.ndarray
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: as_quaternion_xyzw(self) -> jnp.ndarray
+   .. method:: as_quaternion_xyzw(self)
 
       Grab parameters as xyzw quaternion.
 
 
-   .. method:: as_rpy_radians(self) -> hints.RollPitchYaw
+   .. method:: as_rpy_radians(self)
 
       Computes roll, pitch, and yaw angles.
       Uses the ZYX mobile robot convention.
 
-      :returns: *hints.RollPitchYaw* -- Named tuple containing Euler angles in radians.
+      :returns: Named tuple containing Euler angles in radians.
 
 
-   .. method:: compute_roll_radians(self) -> jnp.ndarray
+   .. method:: compute_roll_radians(self)
 
       Compute roll angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: compute_pitch_radians(self) -> jnp.ndarray
+   .. method:: compute_pitch_radians(self)
 
       Compute pitch angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: compute_yaw_radians(self) -> jnp.ndarray
+   .. method:: compute_yaw_radians(self)
 
       Compute yaw angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: identity() -> 'SO3'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -735,7 +761,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SO3'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -745,17 +771,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO3, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -764,16 +790,14 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SO3, other: SO3) -> 'SO3'
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SO3'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -783,14 +807,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SO3) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO3) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -806,21 +830,21 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: SO3) -> 'SO3'
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SO3) -> 'SO3'
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO3'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].

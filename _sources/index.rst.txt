@@ -7,6 +7,11 @@ jaxlie documentation
 :code:`jaxlie` is a Lie theory library for rigid body transformations and
 optimization in JAX.
 
+
+.. autoapi-inheritance-diagram:: jaxlie.SO2 jaxlie.SO3 jaxlie.SE2 jaxlie.SE3
+   :top-classes: jaxlie.MatrixLieGroup
+
+
 Current functionality:
 
 - SO(2), SE(2), SO(3), and SE(3) Lie groups implemented as high-level
@@ -21,6 +26,7 @@ Current functionality:
   (:code:`jaxlie.manifold`).
 
 Source code on `Github <https://github.com/brentyi/jaxlie>`_.
+
 
 .. toctree::
    :caption: API Reference

@@ -16,6 +16,19 @@ Classes
 
 
 
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.hints.Array
+   jaxlie.hints.Scalar
+   jaxlie.hints.Matrix
+   jaxlie.hints.Vector
+   jaxlie.hints.TangentVector
+
+
 .. data:: Array
    
 
@@ -53,9 +66,9 @@ Classes
    Refers to a 1D array with shape ``(Group.tangent_dim,)``.
 
 
-.. py:class:: RollPitchYaw
+.. class:: RollPitchYaw
 
-   Bases: :class:`typing.NamedTuple`
+   Bases: :py:obj:`NamedTuple`
 
    .. autoapi-inheritance-diagram:: jaxlie.hints.RollPitchYaw
       :parts: 1

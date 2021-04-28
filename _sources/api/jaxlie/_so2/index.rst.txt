@@ -18,9 +18,11 @@ Classes
 
 
 
-.. py:class:: SO2(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.SOBase`
+.. class:: SO2(parameters)
+
+
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._so2.SO2
       :parts: 1
@@ -28,24 +30,28 @@ Classes
    Special orthogonal group for 2D rotations.
 
    .. attribute:: unit_complex
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. ``(cos, sin)``.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_radians(theta: hints.Scalar) -> 'SO2'
+   .. method:: from_radians(theta)
       :staticmethod:
 
+      Construct a rotation object from a scalar angle.
 
-   .. method:: as_radians(self) -> jnp.ndarray
+
+   .. method:: as_radians(self)
+
+      Compute a scalar angle from a rotation object.
 
 
-   .. method:: identity() -> 'SO2'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -53,7 +59,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SO2'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -63,17 +69,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO2, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -82,16 +88,14 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SO2, other: SO2) -> 'SO2'
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SO2'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -101,14 +105,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SO2) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO2) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -124,21 +128,21 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: SO2) -> 'SO2'
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SO2) -> 'SO2'
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO2'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].

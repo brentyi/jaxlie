@@ -18,9 +18,11 @@ Classes
 
 
 
-.. py:class:: SO3(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie.SOBase`
+.. class:: SO3(parameters)
+
+
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._so3.SO3
       :parts: 1
@@ -28,47 +30,47 @@ Classes
    Special orthogonal group for 3D rotations.
 
    .. attribute:: wxyz
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_x_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_x_radians(theta)
       :staticmethod:
 
       Generates a x-axis rotation.
 
       :param angle: X rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_y_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_y_radians(theta)
       :staticmethod:
 
       Generates a y-axis rotation.
 
       :param angle: Y rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_z_radians(theta: hints.Scalar) -> 'SO3'
+   .. method:: from_z_radians(theta)
       :staticmethod:
 
       Generates a z-axis rotation.
 
       :param angle: Z rotation, in radians.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_rpy_radians(roll: hints.Scalar, pitch: hints.Scalar, yaw: hints.Scalar) -> 'SO3'
+   .. method:: from_rpy_radians(roll, pitch, yaw)
       :staticmethod:
 
       Generates a transform from a set of Euler angles.
@@ -78,10 +80,10 @@ Classes
       :param pitch: Y rotation, in radians. Applied second.
       :param yaw: Z rotation, in radians. Applied last.
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: from_quaternion_xyzw(xyzw: hints.Array) -> 'SO3'
+   .. method:: from_quaternion_xyzw(xyzw)
       :staticmethod:
 
       Construct a rotation from an ``xyzw`` quaternion.
@@ -90,49 +92,48 @@ Classes
       constructor.
 
       :param xyzw: xyzw quaternion. Shape should be (4,).
-      :type xyzw: jnp.ndarray or onp.ndarray
 
-      :returns: *SO3* -- Output.
+      :returns: Output.
 
 
-   .. method:: as_quaternion_xyzw(self) -> jnp.ndarray
+   .. method:: as_quaternion_xyzw(self)
 
       Grab parameters as xyzw quaternion.
 
 
-   .. method:: as_rpy_radians(self) -> hints.RollPitchYaw
+   .. method:: as_rpy_radians(self)
 
       Computes roll, pitch, and yaw angles.
       Uses the ZYX mobile robot convention.
 
-      :returns: *hints.RollPitchYaw* -- Named tuple containing Euler angles in radians.
+      :returns: Named tuple containing Euler angles in radians.
 
 
-   .. method:: compute_roll_radians(self) -> jnp.ndarray
+   .. method:: compute_roll_radians(self)
 
       Compute roll angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: compute_pitch_radians(self) -> jnp.ndarray
+   .. method:: compute_pitch_radians(self)
 
       Compute pitch angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: compute_yaw_radians(self) -> jnp.ndarray
+   .. method:: compute_yaw_radians(self)
 
       Compute yaw angle.
       Uses the ZYX mobile robot convention.
 
-      :returns: *jnp.ndarray* -- Euler angle in radians.
+      :returns: Euler angle in radians.
 
 
-   .. method:: identity() -> 'SO3'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -140,7 +141,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SO3'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -150,17 +151,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: apply(self: SO3, target: hints.Vector) -> hints.Vector
+   .. method:: apply(self, target)
 
       Applies the group action.
 
@@ -169,16 +170,14 @@ Classes
       :returns: Transformed vector.
 
 
-   .. method:: multiply(self: SO3, other: SO3) -> 'SO3'
+   .. method:: multiply(self, other)
 
       Left-multiplies this transformations with another.
-
-      :param other: other
 
       :returns: self @ other
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SO3'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -188,14 +187,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SO3) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SO3) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -211,21 +210,21 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: inverse(self: SO3) -> 'SO3'
+   .. method:: inverse(self)
 
       Computes the inverse of our transform.
 
       :returns: Output.
 
 
-   .. method:: normalize(self: SO3) -> 'SO3'
+   .. method:: normalize(self)
 
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SO3'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].

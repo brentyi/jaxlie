@@ -183,6 +183,32 @@
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.hints.Array" title="jaxlie.hints.Array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Array</span></code></a></p></td>
+<td><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[jnp.ndarray,</span> <span class="pre">onp.ndarray]</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.hints.Scalar" title="jaxlie.hints.Scalar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scalar</span></code></a></p></td>
+<td><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[float,</span> <span class="pre">Array]</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.hints.Matrix" title="jaxlie.hints.Matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Matrix</span></code></a></p></td>
+<td><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vector</span></code></a></p></td>
+<td><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.hints.TangentVector" title="jaxlie.hints.TangentVector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TangentVector</span></code></a></p></td>
+<td><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py data">
 <dt id="jaxlie.hints.Array">
 <code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">Array</span></code><a class="headerlink" href="#jaxlie.hints.Array" title="Permalink to this definition">¶</a></dt>
@@ -220,7 +246,7 @@ For adjoints, shape should be <code class="docutils literal notranslate"><span c
 <dl class="py class">
 <dt id="jaxlie.hints.RollPitchYaw">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">RollPitchYaw</span></code><a class="reference internal" href="../../../_modules/jaxlie/hints/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.hints.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">typing.NamedTuple</span></code></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
 <div class="graphviz"><img src="../../../_images/inheritance-52f1191b372f80a43fd488b2e8c952e37a0bac1b.png" alt="Inheritance diagram of jaxlie.hints.RollPitchYaw" usemap="#inheritance56390600a5" class="inheritance graphviz" /></div>
 <map id="inheritance56390600a5" name="inheritance56390600a5">
 <area shape="rect" id="node2" href="#jaxlie.hints.RollPitchYaw" target="_top" title="Tuple containing roll, pitch, and yaw Euler angles." alt="" coords="156,5,259,31"/>

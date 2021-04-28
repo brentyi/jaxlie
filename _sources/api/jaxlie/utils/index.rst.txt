@@ -17,7 +17,8 @@ Functions
    jaxlie.utils.register_lie_group
 
 
-.. function:: get_epsilon(dtype: jnp.dtype) -> float
+
+.. function:: get_epsilon(dtype)
 
    Helper for grabbing type-specific precision constants.
 
@@ -26,7 +27,7 @@ Functions
    :returns: Output float.
 
 
-.. function:: register_lie_group(*, matrix_dim: int, parameters_dim: int, tangent_dim: int, space_dim: int) -> Callable[[Type[T]], Type[T]]
+.. function:: register_lie_group(*, matrix_dim, parameters_dim, tangent_dim, space_dim)
 
    Decorator for registering Lie group dataclasses.
 

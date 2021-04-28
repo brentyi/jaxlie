@@ -195,7 +195,7 @@
 <span class="sd">            angle: X rotation, in radians.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            SO3: Output.</span>
+<span class="sd">            Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
@@ -207,7 +207,7 @@
 <span class="sd">            angle: Y rotation, in radians.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            SO3: Output.</span>
+<span class="sd">            Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
@@ -219,7 +219,7 @@
 <span class="sd">            angle: Z rotation, in radians.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            SO3: Output.</span>
+<span class="sd">            Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="p">]))</span></div>
 
@@ -238,7 +238,7 @@
 <span class="sd">            yaw: Z rotation, in radians. Applied last.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            SO3: Output.</span>
+<span class="sd">            Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">SO3</span><span class="o">.</span><span class="n">from_z_radians</span><span class="p">(</span><span class="n">yaw</span><span class="p">)</span>
@@ -254,10 +254,10 @@
 <span class="sd">        constructor.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            xyzw (jnp.ndarray or onp.ndarray): xyzw quaternion. Shape should be (4,).</span>
+<span class="sd">            xyzw: xyzw quaternion. Shape should be (4,).</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            SO3: Output.</span>
+<span class="sd">            Output.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">xyzw</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">xyzw</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span></div>
@@ -271,7 +271,7 @@
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            hints.RollPitchYaw: Named tuple containing Euler angles in radians.</span>
+<span class="sd">            Named tuple containing Euler angles in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">hints</span><span class="o">.</span><span class="n">RollPitchYaw</span><span class="p">(</span>
             <span class="n">roll</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_roll_radians</span><span class="p">(),</span>
@@ -284,7 +284,7 @@
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
+<span class="sd">            Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
@@ -295,7 +295,7 @@
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
+<span class="sd">            Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
@@ -306,7 +306,7 @@
 <span class="sd">        Uses the ZYX mobile robot convention.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            jnp.ndarray: Euler angle in radians.</span>
+<span class="sd">            Euler angle in radians.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion</span>
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>

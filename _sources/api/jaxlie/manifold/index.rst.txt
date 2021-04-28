@@ -18,7 +18,8 @@ Functions
    jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
 
 
-.. function:: rminus(a: T, b: T) -> hints.TangentVector
+
+.. function:: rminus(a, b)
 
    Manifold right minus.
 
@@ -32,7 +33,7 @@ Functions
    :returns: *hints.TangentVector* -- ``T_ab.log()``
 
 
-.. function:: rplus(transform: T, delta: hints.TangentVector) -> T
+.. function:: rplus(transform, delta)
 
    Manifold right plus.
 
@@ -46,7 +47,7 @@ Functions
    :returns: *T* -- ``T_wb``
 
 
-.. function:: rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray
+.. function:: rplus_jacobian_parameters_wrt_delta(transform)
 
    Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
    local delta.

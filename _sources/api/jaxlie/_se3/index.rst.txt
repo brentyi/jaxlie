@@ -18,9 +18,11 @@ Classes
 
 
 
-.. py:class:: SE3(parameters: jnp.ndarray)
 
-   Bases: :class:`jaxlie._base.SEBase[SO3]`
+.. class:: SE3(parameters)
+
+
+   Bases: :py:obj:`jaxlie._base.SEBase`\ [\ :py:obj:`jaxlie._so3.SO3`\ ]
 
    .. autoapi-inheritance-diagram:: jaxlie._se3.SE3
       :parts: 1
@@ -28,33 +30,38 @@ Classes
    Special Euclidean group for proper rigid transforms in 3D.
 
    .. attribute:: wxyz_xyz
-      :annotation: :hints.Vector
+      :annotation: :jaxlie.hints.Vector
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
 
-   .. method:: __repr__(self) -> str
+   .. method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: from_rotation_and_translation(rotation: SO3, translation: hints.Vector) -> 'SE3'
+   .. method:: from_rotation_and_translation(rotation, translation)
       :staticmethod:
 
       Construct a rigid transform from a rotation and a translation.
 
+      :param rotation: Rotation term.
+      :param translation: translation term.
 
-   .. method:: rotation(self) -> SO3
+      :returns: Constructed transformation.
+
+
+   .. method:: rotation(self)
 
       Returns a transform's rotation term.
 
 
-   .. method:: translation(self) -> hints.Vector
+   .. method:: translation(self)
 
       Returns a transform's translation term.
 
 
-   .. method:: identity() -> 'SE3'
+   .. method:: identity()
       :staticmethod:
 
       Returns identity element.
@@ -62,7 +69,7 @@ Classes
       :returns: Identity element.
 
 
-   .. method:: from_matrix(matrix: hints.Matrix) -> 'SE3'
+   .. method:: from_matrix(matrix)
       :staticmethod:
 
       Get group member from matrix representation.
@@ -72,17 +79,17 @@ Classes
       :returns: Group member.
 
 
-   .. method:: as_matrix(self) -> hints.Matrix
+   .. method:: as_matrix(self)
 
       Get transformation as a matrix. Homogeneous for SE groups.
 
 
-   .. method:: parameters(self) -> hints.Vector
+   .. method:: parameters(self)
 
       Get underlying representation.
 
 
-   .. method:: exp(tangent: hints.TangentVector) -> 'SE3'
+   .. method:: exp(tangent)
       :staticmethod:
 
       Computes ``expm(wedge(tangent))``.
@@ -92,14 +99,14 @@ Classes
       :returns: Output.
 
 
-   .. method:: log(self: SE3) -> hints.TangentVector
+   .. method:: log(self)
 
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
 
-   .. method:: adjoint(self: SE3) -> hints.Matrix
+   .. method:: adjoint(self)
 
       Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
@@ -115,7 +122,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
 
-   .. method:: sample_uniform(key: jnp.ndarray) -> 'SE3'
+   .. method:: sample_uniform(key)
       :staticmethod:
 
       Draw a uniform sample from the group. Translations are in the range [-1, 1].
