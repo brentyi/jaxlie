@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="1.2.1",
+    version="1.2.2",
     description="Matrix Lie groups in Jax",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -25,7 +25,7 @@ setup(
         # > https://github.com/mkorpela/overrides/issues/65
         # > https://github.com/mkorpela/overrides/issues/63
         # > https://github.com/mkorpela/overrides/issues/61
-        "overrides<4",
+        "overrides!=4",
     ],
     extras_require={
         "testing": [
