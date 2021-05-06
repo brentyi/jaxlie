@@ -30,7 +30,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     space_dim: int
     """Dimension of coordinates that can be transformed."""
 
-    def __init__(self, parameters: jnp.ndarray):
+    def __init__(self, parameters: hints.Vector):
         """Construct a group object from its underlying parameters."""
 
         # Note that this method is implicitly overriden by the dataclass decorator and
@@ -44,7 +44,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self: GroupType, other: hints.Vector) -> hints.Vector:
+    def __matmul__(self: GroupType, other: hints.Vector) -> hints.VectorJax:
         ...
 
     def __matmul__(self, other):
@@ -86,7 +86,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Accessors
 
     @abc.abstractmethod
-    def as_matrix(self) -> hints.Matrix:
+    def as_matrix(self) -> hints.MatrixJax:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @abc.abstractmethod
@@ -96,7 +96,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Operations
 
     @abc.abstractmethod
-    def apply(self: GroupType, target: hints.Vector) -> hints.Vector:
+    def apply(self: GroupType, target: hints.Vector) -> hints.VectorJax:
         """Applies the group action.
 
         Args:
@@ -127,7 +127,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def log(self: GroupType) -> hints.TangentVector:
+    def log(self: GroupType) -> hints.TangentVectorJax:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -135,7 +135,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def adjoint(self: GroupType) -> hints.Matrix:
+    def adjoint(self: GroupType) -> hints.MatrixJax:
         """Computes the adjoint, which transforms tangent vectors between tangent spaces.
 
         More precisely, for a transform `GroupType`:
@@ -223,7 +223,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
 
     @final
     @overrides
-    def apply(self, target: hints.Vector) -> hints.Vector:
+    def apply(self, target: hints.Vector) -> hints.VectorJax:
         return self.rotation() @ target + self.translation()
 
     @final

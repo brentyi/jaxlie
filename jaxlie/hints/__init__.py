@@ -3,6 +3,8 @@ from typing import NamedTuple, Union
 import numpy as onp
 from jax import numpy as jnp
 
+# Type aliases for JAX/Numpy arrays; primarily for function inputs
+
 Array = Union[onp.ndarray, jnp.ndarray]
 """Type alias for `Union[jnp.ndarray, onp.ndarray]`.
 """
@@ -30,6 +32,23 @@ TangentVector = Array
 Refers to a 1D array with shape `(Group.tangent_dim,)`.
 """
 
+# Type aliases for JAX arrays; primarily for function outputs
+
+ArrayJax = jnp.ndarray
+"""Type alias for jnp.ndarray."""
+
+ScalarJax = ArrayJax
+"""Type alias for jnp.ndarray."""
+
+MatrixJax = ArrayJax
+"""Type alias for jnp.ndarray."""
+
+VectorJax = ArrayJax
+"""Type alias for jnp.ndarray."""
+
+TangentVectorJax = ArrayJax
+"""Type alias for jnp.ndarray."""
+
 
 class RollPitchYaw(NamedTuple):
     """Tuple containing roll, pitch, and yaw Euler angles."""
@@ -45,5 +64,10 @@ __all__ = [
     "Matrix",
     "Vector",
     "TangentVector",
+    "ArrayJax",
+    "ScalarJax",
+    "MatrixJax",
+    "VectorJax",
+    "TangentVectorJax",
     "RollPitchYaw",
 ]

@@ -10,7 +10,7 @@ from ._so3 import SO3
 from .utils import get_epsilon, register_lie_group
 
 
-def _skew(omega: hints.Vector) -> hints.Matrix:
+def _skew(omega: hints.Vector) -> hints.MatrixJax:
     """Returns the skew-symmetric form of a length-3 vector."""
 
     wx, wy, wz = omega
@@ -83,7 +83,7 @@ class SE3(_base.SEBase[SO3]):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> hints.Matrix:
+    def as_matrix(self) -> hints.MatrixJax:
         return (
             jnp.eye(4)
             .at[:3, :3]
@@ -131,7 +131,7 @@ class SE3(_base.SEBase[SO3]):
         )
 
     @overrides
-    def log(self: "SE3") -> hints.TangentVector:
+    def log(self: "SE3") -> hints.TangentVectorJax:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
@@ -154,7 +154,7 @@ class SE3(_base.SEBase[SO3]):
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
     @overrides
-    def adjoint(self: "SE3") -> hints.Matrix:
+    def adjoint(self: "SE3") -> hints.MatrixJax:
         R = self.rotation().as_matrix()
         return jnp.block(
             [

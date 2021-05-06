@@ -89,7 +89,7 @@ class SO3(_base.SOBase):
         )
 
     @staticmethod
-    def from_quaternion_xyzw(xyzw: hints.Array) -> "SO3":
+    def from_quaternion_xyzw(xyzw: hints.Vector) -> "SO3":
         """Construct a rotation from an `xyzw` quaternion.
 
         Note that `wxyz` quaternions can be constructed using the default dataclass
@@ -104,7 +104,7 @@ class SO3(_base.SOBase):
         assert xyzw.shape == (4,)
         return SO3(jnp.roll(xyzw, shift=1))
 
-    def as_quaternion_xyzw(self) -> jnp.ndarray:
+    def as_quaternion_xyzw(self) -> hints.VectorJax:
         """Grab parameters as xyzw quaternion."""
         return jnp.roll(self.wxyz, shift=-1)
 
@@ -121,7 +121,7 @@ class SO3(_base.SOBase):
             yaw=self.compute_yaw_radians(),
         )
 
-    def compute_roll_radians(self) -> jnp.ndarray:
+    def compute_roll_radians(self) -> hints.ScalarJax:
         """Compute roll angle.
         Uses the ZYX mobile robot convention.
 
@@ -132,7 +132,7 @@ class SO3(_base.SOBase):
         q0, q1, q2, q3 = self.wxyz
         return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
 
-    def compute_pitch_radians(self) -> jnp.ndarray:
+    def compute_pitch_radians(self) -> hints.ScalarJax:
         """Compute pitch angle.
         Uses the ZYX mobile robot convention.
 
@@ -143,7 +143,7 @@ class SO3(_base.SOBase):
         q0, q1, q2, q3 = self.wxyz
         return jnp.arcsin(2 * (q0 * q2 - q3 * q1))
 
-    def compute_yaw_radians(self) -> jnp.ndarray:
+    def compute_yaw_radians(self) -> hints.ScalarJax:
         """Compute yaw angle.
         Uses the ZYX mobile robot convention.
 
@@ -235,7 +235,7 @@ class SO3(_base.SOBase):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> hints.Matrix:
+    def as_matrix(self) -> hints.MatrixJax:
         norm = self.wxyz @ self.wxyz
         q = self.wxyz * jnp.sqrt(2.0 / norm)
         q = jnp.outer(q, q)
@@ -254,7 +254,7 @@ class SO3(_base.SOBase):
     # Operations
 
     @overrides
-    def apply(self: "SO3", target: hints.Vector) -> hints.Vector:
+    def apply(self: "SO3", target: hints.Vector) -> hints.VectorJax:
         assert target.shape == (3,)
 
         # Compute using quaternion multiplys
@@ -311,7 +311,7 @@ class SO3(_base.SOBase):
         )
 
     @overrides
-    def log(self: "SO3") -> hints.TangentVector:
+    def log(self: "SO3") -> hints.TangentVectorJax:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
@@ -332,7 +332,7 @@ class SO3(_base.SOBase):
         return atan_factor * self.wxyz[1:]
 
     @overrides
-    def adjoint(self: "SO3") -> hints.Matrix:
+    def adjoint(self: "SO3") -> hints.MatrixJax:
         return self.as_matrix()
 
     @overrides

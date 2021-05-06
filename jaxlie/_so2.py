@@ -36,7 +36,7 @@ class SO2(_base.SOBase):
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    def as_radians(self) -> hints.Scalar:
+    def as_radians(self) -> hints.ScalarJax:
         """Compute a scalar angle from a rotation object."""
         radians = self.log()[..., 0]
         return radians
@@ -57,7 +57,7 @@ class SO2(_base.SOBase):
     # Accessors
 
     @overrides
-    def as_matrix(self) -> hints.Matrix:
+    def as_matrix(self) -> hints.MatrixJax:
         cos, sin = self.unit_complex
         return jnp.array(
             [
@@ -73,7 +73,7 @@ class SO2(_base.SOBase):
     # Operations
 
     @overrides
-    def apply(self: "SO2", target: hints.Vector) -> hints.Vector:
+    def apply(self: "SO2", target: hints.Vector) -> hints.VectorJax:
         assert target.shape == (2,)
         return self.as_matrix() @ target
 
@@ -90,13 +90,13 @@ class SO2(_base.SOBase):
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides
-    def log(self: "SO2") -> hints.TangentVector:
+    def log(self: "SO2") -> hints.TangentVectorJax:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
     @overrides
-    def adjoint(self: "SO2") -> hints.Matrix:
+    def adjoint(self: "SO2") -> hints.MatrixJax:
         return jnp.eye(1)
 
     @overrides

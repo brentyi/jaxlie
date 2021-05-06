@@ -20,8 +20,8 @@ def rplus(transform: T, delta: hints.TangentVector) -> T:
     Computes `T_wb = T_wa @ exp(delta)`.
 
     Args:
-        transform (T): `T_wa`
-        delta (hints.TangentVector): `T_ab.log()`
+        transform: `T_wa`
+        delta: `T_ab.log()`
 
     Returns:
         T: `T_wb`
@@ -30,7 +30,7 @@ def rplus(transform: T, delta: hints.TangentVector) -> T:
 
 
 @jax.jit
-def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.MatrixJax:
     """Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero
     local delta.
 
@@ -49,10 +49,10 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
     ```
 
     Args:
-        transform (T): transform
+        transform
 
     Returns:
-        jnp.ndarray: Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.
+        Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.
     """
     if type(transform) is SO2:
         # Jacobian row indices: cos, sin
@@ -123,16 +123,16 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
 
 
 @jax.jit
-def rminus(a: T, b: T) -> hints.TangentVector:
+def rminus(a: T, b: T) -> hints.TangentVectorJax:
     """Manifold right minus.
 
     Computes `delta = (T_wa.inverse() @ T_wb).log()`.
 
     Args:
-        a (T): `T_wa`
-        b (T): `T_wb`
+        a: `T_wa`
+        b: `T_wb`
 
     Returns:
-        hints.TangentVector: `T_ab.log()`
+        `T_ab.log()`
     """
     return (a.inverse() @ b).log()

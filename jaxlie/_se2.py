@@ -84,7 +84,7 @@ class SE2(_base.SEBase[SO2]):
         return self.unit_complex_xy
 
     @overrides
-    def as_matrix(self) -> hints.Matrix:
+    def as_matrix(self) -> hints.MatrixJax:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
@@ -132,7 +132,7 @@ class SE2(_base.SEBase[SO2]):
         )
 
     @overrides
-    def log(self: "SE2") -> hints.TangentVector:
+    def log(self: "SE2") -> hints.TangentVectorJax:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
@@ -163,7 +163,7 @@ class SE2(_base.SEBase[SO2]):
         return tangent
 
     @overrides
-    def adjoint(self: "SE2") -> hints.Matrix:
+    def adjoint(self: "SE2") -> hints.MatrixJax:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
