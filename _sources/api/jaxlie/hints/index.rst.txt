@@ -27,6 +27,11 @@ Attributes
    jaxlie.hints.Matrix
    jaxlie.hints.Vector
    jaxlie.hints.TangentVector
+   jaxlie.hints.ArrayJax
+   jaxlie.hints.ScalarJax
+   jaxlie.hints.MatrixJax
+   jaxlie.hints.VectorJax
+   jaxlie.hints.TangentVectorJax
 
 
 .. data:: Array
@@ -64,6 +69,36 @@ Attributes
    Type alias for ``Array``. Should not be instantiated.
 
    Refers to a 1D array with shape ``(Group.tangent_dim,)``.
+
+
+.. data:: ArrayJax
+   
+
+   Type alias for jnp.ndarray.
+
+
+.. data:: ScalarJax
+   
+
+   Type alias for jnp.ndarray.
+
+
+.. data:: MatrixJax
+   
+
+   Type alias for jnp.ndarray.
+
+
+.. data:: VectorJax
+   
+
+   Type alias for jnp.ndarray.
+
+
+.. data:: TangentVectorJax
+   
+
+   Type alias for jnp.ndarray.
 
 
 .. class:: RollPitchYaw

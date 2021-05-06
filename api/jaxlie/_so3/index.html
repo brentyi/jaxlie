@@ -291,7 +291,7 @@ Uses the ZYX mobile robot convention.</p>
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Vector</em>) – xyzw quaternion. Shape should be (4,).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -308,7 +308,7 @@ constructor.</p>
 <dd><p>Grab parameters as xyzw quaternion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -338,7 +338,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -353,7 +353,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -368,7 +368,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -410,7 +410,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,7 +441,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -495,7 +495,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -518,7 +518,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>

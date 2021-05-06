@@ -245,7 +245,7 @@
 <dt id="jaxlie.MatrixLieGroup.__matmul__">
 <code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">GroupType</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">GroupType</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.__matmul__" title="Permalink to this definition">¶</a></dt>
 <dt>
-<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></dt>
+<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="hints/#jaxlie.hints.VectorJax" title="jaxlie.hints.VectorJax"><span class="pre">jaxlie.hints.VectorJax</span></a></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
 <p>Switches between the group action (<code class="docutils literal notranslate"><span class="pre">.apply()</span></code>) and multiplication
 (<code class="docutils literal notranslate"><span class="pre">.multiply()</span></code>) based on the type of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
@@ -294,7 +294,7 @@
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -325,7 +325,7 @@
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -382,7 +382,7 @@
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -405,7 +405,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -532,7 +532,7 @@ translation vector.</p>
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -740,7 +740,7 @@ is not the same as integrating over a length-3 twist.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -774,7 +774,7 @@ is not the same as integrating over a length-3 twist.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><em>SE2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -797,7 +797,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><em>SE2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -927,7 +927,7 @@ between our spatial and body representations.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -972,7 +972,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3"><em>SE3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -995,7 +995,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3"><em>SE3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1066,7 +1066,7 @@ between our spatial and body representations.</p>
 <dd><p>Compute a scalar angle from a rotation object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Scalar</p>
+<dd class="field-odd"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1108,7 +1108,7 @@ between our spatial and body representations.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1139,7 +1139,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1193,7 +1193,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1216,7 +1216,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1391,7 +1391,7 @@ Uses the ZYX mobile robot convention.</p>
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Vector</em>) – xyzw quaternion. Shape should be (4,).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -1408,7 +1408,7 @@ constructor.</p>
 <dd><p>Grab parameters as xyzw quaternion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1438,7 +1438,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1453,7 +1453,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1468,7 +1468,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
+<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1510,7 +1510,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1541,7 +1541,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1595,7 +1595,7 @@ Uses the ZYX mobile robot convention.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1618,7 +1618,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>

@@ -161,6 +161,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
+<span class="c1"># Type aliases for JAX/Numpy arrays; primarily for function inputs</span>
+
 <span class="n">Array</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 <span class="sd">&quot;&quot;&quot;Type alias for `Union[jnp.ndarray, onp.ndarray]`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -188,6 +190,23 @@
 <span class="sd">Refers to a 1D array with shape `(Group.tangent_dim,)`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="c1"># Type aliases for JAX arrays; primarily for function outputs</span>
+
+<span class="n">ArrayJax</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
+<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
+
+<span class="n">ScalarJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
+<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
+
+<span class="n">MatrixJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
+<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
+
+<span class="n">VectorJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
+<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
+
+<span class="n">TangentVectorJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
+<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
+
 
 <div class="viewcode-block" id="RollPitchYaw"><a class="viewcode-back" href="../../../api/jaxlie/hints/#jaxlie.hints.RollPitchYaw">[docs]</a><span class="k">class</span> <span class="nc">RollPitchYaw</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Tuple containing roll, pitch, and yaw Euler angles.&quot;&quot;&quot;</span>
@@ -203,6 +222,11 @@
     <span class="s2">&quot;Matrix&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Vector&quot;</span><span class="p">,</span>
     <span class="s2">&quot;TangentVector&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ArrayJax&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ScalarJax&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MatrixJax&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;VectorJax&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TangentVectorJax&quot;</span><span class="p">,</span>
     <span class="s2">&quot;RollPitchYaw&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>

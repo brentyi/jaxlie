@@ -246,7 +246,7 @@
 <dt id="jaxlie._base.MatrixLieGroup.__matmul__">
 <code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.__matmul__" title="Permalink to this definition">¶</a></dt>
 <dt>
-<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></dt>
+<code class="sig-name descname"><span class="pre">__matmul__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#jaxlie._base.GroupType" title="jaxlie._base.GroupType"><span class="pre">GroupType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="../hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="../hints/#jaxlie.hints.VectorJax" title="jaxlie.hints.VectorJax"><span class="pre">jaxlie.hints.VectorJax</span></a></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
 <p>Switches between the group action (<code class="docutils literal notranslate"><span class="pre">.apply()</span></code>) and multiplication
 (<code class="docutils literal notranslate"><span class="pre">.multiply()</span></code>) based on the type of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
@@ -295,7 +295,7 @@
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -326,7 +326,7 @@
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,7 +383,7 @@
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVector</p>
+<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -406,7 +406,7 @@ between our spatial and body representations.</p>
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Matrix</p>
+<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
 </dd>
 </dl>
 </dd></dl>
@@ -549,7 +549,7 @@ translation vector.</p>
 <dd class="field-even"><p>Transformed vector.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
 </dd>
 </dl>
 </dd></dl>

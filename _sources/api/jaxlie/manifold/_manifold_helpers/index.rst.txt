@@ -41,9 +41,7 @@ Attributes
    Computes ``T_wb = T_wa @ exp(delta)``.
 
    :param transform: ``T_wa``
-   :type transform: T
    :param delta: ``T_ab.log()``
-   :type delta: hints.TangentVector
 
    :returns: *T* -- ``T_wb``
 
@@ -68,10 +66,9 @@ Attributes
               argnums=1,  # Jacobian wrt delta
           )(transform, onp.zeros(transform.tangent_dim)).parameters()
 
-   :param transform: transform
-   :type transform: T
+   :param transform:
 
-   :returns: *jnp.ndarray* -- Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
+   :returns: Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
 
 
 .. function:: rminus(a, b)
@@ -81,10 +78,8 @@ Attributes
    Computes ``delta = (T_wa.inverse() @ T_wb).log()``.
 
    :param a: ``T_wa``
-   :type a: T
    :param b: ``T_wb``
-   :type b: T
 
-   :returns: *hints.TangentVector* -- ``T_ab.log()``
+   :returns: ``T_ab.log()``
 
 

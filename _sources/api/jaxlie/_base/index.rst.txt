@@ -76,7 +76,7 @@ Attributes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: jaxlie.hints.Vector) -> jaxlie.hints.Vector
+               __matmul__(self: GroupType, other: jaxlie.hints.Vector) -> jaxlie.hints.VectorJax
 
       Overload for the ``@`` operator.
 
