@@ -1,5 +1,5 @@
 import abc
-from typing import Generic, Type, TypeVar, overload
+from typing import ClassVar, Generic, Type, TypeVar, overload
 
 import jax
 import numpy as onp
@@ -18,16 +18,16 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Class properties
     # > These will be set in `_utils.register_lie_group()`
 
-    matrix_dim: int
+    matrix_dim: ClassVar[int]
     """Dimension of square matrix output from `.as_matrix()`."""
 
-    parameters_dim: int
+    parameters_dim: ClassVar[int]
     """Dimension of underlying parameters, `.parameters()`."""
 
-    tangent_dim: int
+    tangent_dim: ClassVar[int]
     """Dimension of tangent space."""
 
-    space_dim: int
+    space_dim: ClassVar[int]
     """Dimension of coordinates that can be transformed."""
 
     def __init__(self, parameters: hints.Vector):
