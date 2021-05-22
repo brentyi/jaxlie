@@ -45,25 +45,25 @@ Classes
    Interface definition for matrix Lie groups.
 
    .. attribute:: matrix_dim
-      :annotation: :int
+      :annotation: :ClassVar[int]
 
       Dimension of square matrix output from ``.as_matrix()``.
 
 
    .. attribute:: parameters_dim
-      :annotation: :int
+      :annotation: :ClassVar[int]
 
       Dimension of underlying parameters, ``.parameters()``.
 
 
    .. attribute:: tangent_dim
-      :annotation: :int
+      :annotation: :ClassVar[int]
 
       Dimension of tangent space.
 
 
    .. attribute:: space_dim
-      :annotation: :int
+      :annotation: :ClassVar[int]
 
       Dimension of coordinates that can be transformed.
 

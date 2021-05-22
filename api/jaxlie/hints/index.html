@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
 
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -225,90 +228,90 @@
 </tbody>
 </table>
 <dl class="py data">
-<dt id="jaxlie.hints.Array">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">Array</span></code><a class="headerlink" href="#jaxlie.hints.Array" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.Array">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">Array</span></span><a class="headerlink" href="#jaxlie.hints.Array" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[jnp.ndarray,</span> <span class="pre">onp.ndarray]</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.Scalar">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">Scalar</span></code><a class="headerlink" href="#jaxlie.hints.Scalar" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.Scalar">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">Scalar</span></span><a class="headerlink" href="#jaxlie.hints.Scalar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Union[float,</span> <span class="pre">Array]</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.Matrix">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">Matrix</span></code><a class="headerlink" href="#jaxlie.hints.Matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.Matrix">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">Matrix</span></span><a class="headerlink" href="#jaxlie.hints.Matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a square matrix, typically with shape <code class="docutils literal notranslate"><span class="pre">(Group.matrix_dim,</span> <span class="pre">Group.matrix_dim)</span></code>.
 For adjoints, shape should be <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,</span> <span class="pre">Group.tangent_dim)</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.Vector">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">Vector</span></code><a class="headerlink" href="#jaxlie.hints.Vector" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.Vector">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">Vector</span></span><a class="headerlink" href="#jaxlie.hints.Vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a general 1D array.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.TangentVector">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">TangentVector</span></code><a class="headerlink" href="#jaxlie.hints.TangentVector" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.TangentVector">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">TangentVector</span></span><a class="headerlink" href="#jaxlie.hints.TangentVector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for <code class="docutils literal notranslate"><span class="pre">Array</span></code>. Should not be instantiated.</p>
 <p>Refers to a 1D array with shape <code class="docutils literal notranslate"><span class="pre">(Group.tangent_dim,)</span></code>.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.ArrayJax">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">ArrayJax</span></code><a class="headerlink" href="#jaxlie.hints.ArrayJax" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.ArrayJax">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">ArrayJax</span></span><a class="headerlink" href="#jaxlie.hints.ArrayJax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for jnp.ndarray.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.ScalarJax">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">ScalarJax</span></code><a class="headerlink" href="#jaxlie.hints.ScalarJax" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.ScalarJax">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">ScalarJax</span></span><a class="headerlink" href="#jaxlie.hints.ScalarJax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for jnp.ndarray.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.MatrixJax">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">MatrixJax</span></code><a class="headerlink" href="#jaxlie.hints.MatrixJax" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.MatrixJax">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">MatrixJax</span></span><a class="headerlink" href="#jaxlie.hints.MatrixJax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for jnp.ndarray.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.VectorJax">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">VectorJax</span></code><a class="headerlink" href="#jaxlie.hints.VectorJax" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.VectorJax">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">VectorJax</span></span><a class="headerlink" href="#jaxlie.hints.VectorJax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for jnp.ndarray.</p>
 </dd></dl>
 
 <dl class="py data">
-<dt id="jaxlie.hints.TangentVectorJax">
-<code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">TangentVectorJax</span></code><a class="headerlink" href="#jaxlie.hints.TangentVectorJax" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.TangentVectorJax">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">TangentVectorJax</span></span><a class="headerlink" href="#jaxlie.hints.TangentVectorJax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Type alias for jnp.ndarray.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="jaxlie.hints.RollPitchYaw">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></code><code class="sig-name descname"><span class="pre">RollPitchYaw</span></code><a class="reference internal" href="../../../_modules/jaxlie/hints/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.hints.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.RollPitchYaw">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">jaxlie.hints.</span></span><span class="sig-name descname"><span class="pre">RollPitchYaw</span></span><a class="reference internal" href="../../../_modules/jaxlie/hints/#RollPitchYaw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.hints.RollPitchYaw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">NamedTuple</span></code></p>
 <div class="graphviz"><img src="../../../_images/inheritance-52f1191b372f80a43fd488b2e8c952e37a0bac1b.png" alt="Inheritance diagram of jaxlie.hints.RollPitchYaw" usemap="#inheritance56390600a5" class="inheritance graphviz" /></div>
 <map id="inheritance56390600a5" name="inheritance56390600a5">
 <area shape="rect" id="node2" href="#jaxlie.hints.RollPitchYaw" target="_top" title="Tuple containing roll, pitch, and yaw Euler angles." alt="" coords="156,5,259,31"/>
 </map><p>Tuple containing roll, pitch, and yaw Euler angles.</p>
 <dl class="py attribute">
-<dt id="jaxlie.hints.RollPitchYaw.roll">
-<code class="sig-name descname"><span class="pre">roll</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.RollPitchYaw.roll">
+<span class="sig-name descname"><span class="pre">roll</span></span><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.roll" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="jaxlie.hints.RollPitchYaw.pitch">
-<code class="sig-name descname"><span class="pre">pitch</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.RollPitchYaw.pitch">
+<span class="sig-name descname"><span class="pre">pitch</span></span><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.pitch" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt id="jaxlie.hints.RollPitchYaw.yaw">
-<code class="sig-name descname"><span class="pre">yaw</span></code><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie.hints.RollPitchYaw.yaw">
+<span class="sig-name descname"><span class="pre">yaw</span></span><em class="property"> <span class="pre">:Scalar</span></em><a class="headerlink" href="#jaxlie.hints.RollPitchYaw.yaw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

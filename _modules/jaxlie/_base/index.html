@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
 
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -157,7 +160,7 @@
             
   <h1>Source code for jaxlie._base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">abc</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
@@ -176,16 +179,16 @@
     <span class="c1"># Class properties</span>
     <span class="c1"># &gt; These will be set in `_utils.register_lie_group()`</span>
 
-    <span class="n">matrix_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">matrix_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of square matrix output from `.as_matrix()`.&quot;&quot;&quot;</span>
 
-    <span class="n">parameters_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">parameters_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of underlying parameters, `.parameters()`.&quot;&quot;&quot;</span>
 
-    <span class="n">tangent_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">tangent_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of tangent space.&quot;&quot;&quot;</span>
 
-    <span class="n">space_dim</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">space_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of coordinates that can be transformed.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">):</span>

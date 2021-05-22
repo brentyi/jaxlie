@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
 
   
@@ -30,6 +32,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
@@ -175,8 +178,8 @@
 </tbody>
 </table>
 <dl class="py class">
-<dt id="jaxlie._se2.SE2">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">jaxlie._se2.</span></code><code class="sig-name descname"><span class="pre">SE2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">jaxlie._se2.</span></span><span class="sig-name descname"><span class="pre">SE2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../_base/#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._base.SEBase</span></code></a>[<a class="reference internal" href="../_so2/#jaxlie._so2.SO2" title="jaxlie._so2.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._so2.SO2</span></code></a>]</p>
 <div class="graphviz"><img src="../../../_images/inheritance-769cc5a2859f82eb98e96844a1dfdcc966cdad67.png" alt="Inheritance diagram of jaxlie._se2.SE2" usemap="#inheritance397a0d84b2" class="inheritance graphviz" /></div>
 <map id="inheritance397a0d84b2" name="inheritance397a0d84b2">
@@ -185,14 +188,14 @@
 <area shape="rect" id="node5" href="../#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="477,55,549,80"/>
 </map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
 <dl class="py attribute">
-<dt id="jaxlie._se2.SE2.unit_complex_xy">
-<code class="sig-name descname"><span class="pre">unit_complex_xy</span></code><em class="property"> <span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie._se2.SE2.unit_complex_xy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.unit_complex_xy">
+<span class="sig-name descname"><span class="pre">unit_complex_xy</span></span><em class="property"> <span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie._se2.SE2.unit_complex_xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.__repr__">
-<code class="sig-name descname"><span class="pre">__repr__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.__repr__" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.__repr__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return repr(self).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -202,8 +205,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.from_xy_theta">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_xy_theta</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_xy_theta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_xy_theta" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.from_xy_theta">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_xy_theta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_xy_theta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_xy_theta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a transformation from standard 2D pose parameters. Note that this
 is not the same as integrating over a length-3 twist.</p>
 <dl class="field-list simple">
@@ -221,8 +224,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.from_rotation_and_translation">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_rotation_and_translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.from_rotation_and_translation">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_rotation_and_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_rotation_and_translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a rigid transform from a rotation and a translation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -241,8 +244,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.rotation">
-<code class="sig-name descname"><span class="pre">rotation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.rotation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.rotation">
+<span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.rotation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a transform’s rotation term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -252,8 +255,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.translation">
-<code class="sig-name descname"><span class="pre">translation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.translation" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.translation">
+<span class="sig-name descname"><span class="pre">translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.translation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a transform’s translation term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -263,8 +266,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.identity">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">identity</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.identity" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.identity">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.identity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -277,8 +280,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.from_matrix">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">from_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.from_matrix">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.from_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -294,8 +297,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.parameters">
-<code class="sig-name descname"><span class="pre">parameters</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.parameters" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -305,8 +308,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.as_matrix">
-<code class="sig-name descname"><span class="pre">as_matrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.as_matrix" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.as_matrix">
+<span class="sig-name descname"><span class="pre">as_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.as_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
@@ -316,8 +319,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.exp">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">exp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.exp" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.exp">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.exp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -333,8 +336,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.log">
-<code class="sig-name descname"><span class="pre">log</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.log" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.log">
+<span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.log" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">vee(logm(transformation</span> <span class="pre">matrix))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -350,8 +353,8 @@ is not the same as integrating over a length-3 twist.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.adjoint">
-<code class="sig-name descname"><span class="pre">adjoint</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.adjoint" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.adjoint">
+<span class="sig-name descname"><span class="pre">adjoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.adjoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.adjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the adjoint, which transforms tangent vectors between tangent spaces.</p>
 <p>More precisely, for a transform <code class="docutils literal notranslate"><span class="pre">GroupType</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GroupType</span> <span class="o">@</span> <span class="n">exp</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">Adj_T</span> <span class="o">@</span> <span class="n">omega</span><span class="p">)</span> <span class="o">@</span> <span class="n">GroupType</span>
@@ -373,8 +376,8 @@ between our spatial and body representations.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="jaxlie._se2.SE2.sample_uniform">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">sample_uniform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.sample_uniform" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="jaxlie._se2.SE2.sample_uniform">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.sample_uniform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Draw a uniform sample from the group. Translations are in the range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
