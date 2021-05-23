@@ -285,20 +285,30 @@ class SO3(_base.SOBase):
         assert tangent.shape == (3,)
 
         theta_squared = tangent @ tangent
-        theta = jnp.sqrt(theta_squared)
-        half_theta = 0.5 * theta
         theta_pow_4 = theta_squared * theta_squared
+        use_taylor = theta_squared < get_epsilon(tangent.dtype)
 
-        use_taylor = theta < get_epsilon(tangent.dtype)
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        safe_theta = jnp.sqrt(
+            jnp.where(
+                use_taylor,
+                0.0,  # Any constant value should do here
+                theta_squared,
+            )
+        )
+        safe_half_theta = 0.5 * safe_theta
+
         real_factor = jnp.where(
             use_taylor,
             1.0 - theta_squared / 8.0 + theta_pow_4 / 384.0,
-            jnp.cos(half_theta),
+            jnp.cos(safe_half_theta),
         )
+
         imaginary_factor = jnp.where(
             use_taylor,
             0.5 - theta_squared / 48.0 + theta_pow_4 / 3840.0,
-            jnp.sin(half_theta) / theta,
+            jnp.sin(safe_half_theta) / safe_theta,
         )
 
         return SO3(
@@ -317,15 +327,25 @@ class SO3(_base.SOBase):
 
         w = self.wxyz[..., 0]
         norm_sq = self.wxyz[..., 1:] @ self.wxyz[..., 1:]
-        norm = jnp.sqrt(norm_sq)
-        use_taylor = norm < get_epsilon(norm_sq.dtype)
+        use_taylor = norm_sq < get_epsilon(norm_sq.dtype)
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        norm_safe = jnp.sqrt(
+            jnp.where(
+                use_taylor,
+                1.0,  # Any non-zero value should do here
+                norm_sq,
+            )
+        )
+
         atan_factor = jnp.where(
             use_taylor,
             2.0 / w - 2.0 / 3.0 * norm_sq / (w ** 3),
             jnp.where(
                 jnp.abs(w) < get_epsilon(w.dtype),
-                jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm,
-                2.0 * jnp.arctan(norm / w) / norm,
+                jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm_safe,
+                2.0 * jnp.arctan(norm_safe / w) / norm_safe,
             ),
         )
 

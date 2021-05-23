@@ -108,16 +108,25 @@ class SE2(_base.SEBase[SO2]):
 
         theta = tangent[2]
         use_taylor = jnp.abs(theta) < get_epsilon(tangent.dtype)
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        safe_theta = jnp.where(
+            use_taylor,
+            1.0,
+            theta,  # Any non-zero value should do here
+        )
+
         theta_sq = theta ** 2
         sin_over_theta = jnp.where(
             use_taylor,
             1.0 - theta_sq / 6.0,
-            jnp.sin(theta) / theta,
+            jnp.sin(safe_theta) / safe_theta,
         )
         one_minus_cos_over_theta = jnp.where(
             use_taylor,
             0.5 * theta - theta * theta_sq / 24.0,
-            (1.0 - jnp.cos(theta)) / theta,
+            (1.0 - jnp.cos(safe_theta)) / safe_theta,
         )
 
         V = jnp.array(
@@ -144,12 +153,21 @@ class SE2(_base.SEBase[SO2]):
         cos_minus_one = cos - 1.0
         half_theta = theta / 2.0
         use_taylor = jnp.abs(cos_minus_one) < get_epsilon(theta.dtype)
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        safe_cos_minus_one = jnp.where(
+            use_taylor,
+            1.0,  # Any non-zero value should do here
+            cos_minus_one,
+        )
+
         half_theta_over_tan_half_theta = jnp.where(
             use_taylor,
-            # First-order Taylor approximation
+            # Taylor approximation
             1.0 - (theta ** 2) / 12.0,
             # Default
-            -(half_theta * jnp.sin(theta)) / cos_minus_one,
+            -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
         )
 
         V_inv = jnp.array(

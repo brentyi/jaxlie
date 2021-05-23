@@ -1,7 +1,6 @@
 import abc
 from typing import ClassVar, Generic, Type, TypeVar, overload
 
-import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides

@@ -37,7 +37,7 @@ def sample_transform(Group: Type[T]) -> T:
 
 
 def general_group_test(
-    f: Callable[[Type[jaxlie.MatrixLieGroup]], None], max_examples: int = 100
+    f: Callable[[Type[jaxlie.MatrixLieGroup]], None], max_examples: int = 30
 ) -> Callable[[Type[jaxlie.MatrixLieGroup], Any], None]:
     """Decorator for defining tests that run on all group types."""
 

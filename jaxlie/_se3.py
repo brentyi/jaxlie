@@ -110,17 +110,27 @@ class SE3(_base.SEBase[SO3]):
         rotation = SO3.exp(tangent[3:])
 
         theta_squared = tangent[3:] @ tangent[3:]
-        theta = jnp.sqrt(theta_squared)
+        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        theta_squared_safe = jnp.where(
+            use_taylor,
+            1.0,  # Any non-zero value should do here
+            theta_squared,
+        )
+        del theta_squared
+        theta_safe = jnp.sqrt(theta_squared_safe)
+
         skew_omega = _skew(tangent[3:])
-        use_small_theta = theta < get_epsilon(theta_squared.dtype)
         V = jnp.where(
-            use_small_theta,
+            use_taylor,
             rotation.as_matrix(),
             (
                 jnp.eye(3)
-                + (1.0 - jnp.cos(theta)) / (theta_squared) * skew_omega
-                + (theta - jnp.sin(theta))
-                / (theta_squared * theta)
+                + (1.0 - jnp.cos(theta_safe)) / (theta_squared_safe) * skew_omega
+                + (theta_safe - jnp.sin(theta_safe))
+                / (theta_squared_safe * theta_safe)
                 * (skew_omega @ skew_omega)
             ),
         )
@@ -136,18 +146,34 @@ class SE3(_base.SEBase[SO3]):
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
         theta_squared = omega @ omega
+        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
         skew_omega = _skew(omega)
-        theta = jnp.sqrt(theta_squared)
-        half_theta = theta / 2.0
-        use_small_theta = theta < get_epsilon(theta_squared.dtype)
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for
+        # reverse-mode AD
+        theta_squared_safe = jnp.where(
+            use_taylor,
+            1.0,  # Any non-zero value should do here
+            theta_squared,
+        )
+        del theta_squared
+        theta_safe = jnp.sqrt(theta_squared_safe)
+        half_theta_safe = theta_safe / 2.0
+
         V_inv = jnp.where(
-            use_small_theta,
+            use_taylor,
             jnp.eye(3) - 0.5 * skew_omega + (skew_omega @ skew_omega) / 12.0,
             (
                 jnp.eye(3)
                 - 0.5 * skew_omega
-                + (1.0 - theta * jnp.cos(half_theta) / (2.0 * jnp.sin(half_theta)))
-                / theta_squared
+                + (
+                    1.0
+                    - theta_safe
+                    * jnp.cos(half_theta_safe)
+                    / (2.0 * jnp.sin(half_theta_safe))
+                )
+                / theta_squared_safe
                 * (skew_omega @ skew_omega)
             ),
         )
