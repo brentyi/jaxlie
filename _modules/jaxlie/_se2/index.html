@@ -269,16 +269,25 @@
 
         <span class="n">theta</span> <span class="o">=</span> <span class="n">tangent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>
+            <span class="n">theta</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+        <span class="p">)</span>
+
         <span class="n">theta_sq</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">**</span> <span class="mi">2</span>
         <span class="n">sin_over_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
             <span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta_sq</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">,</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">theta</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">safe_theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">safe_theta</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">one_minus_cos_over_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
             <span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">theta_sq</span> <span class="o">/</span> <span class="mf">24.0</span><span class="p">,</span>
-            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">theta</span><span class="p">,</span>
+            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">safe_theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">safe_theta</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">V</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -305,12 +314,21 @@
         <span class="n">cos_minus_one</span> <span class="o">=</span> <span class="n">cos</span> <span class="o">-</span> <span class="mf">1.0</span>
         <span class="n">half_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span>
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cos_minus_one</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">safe_cos_minus_one</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="n">cos_minus_one</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="n">half_theta_over_tan_half_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="c1"># First-order Taylor approximation</span>
+            <span class="c1"># Taylor approximation</span>
             <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">theta</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">,</span>
             <span class="c1"># Default</span>
-            <span class="o">-</span><span class="p">(</span><span class="n">half_theta</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">cos_minus_one</span><span class="p">,</span>
+            <span class="o">-</span><span class="p">(</span><span class="n">half_theta</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">safe_cos_minus_one</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">V_inv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>

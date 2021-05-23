@@ -446,20 +446,30 @@
         <span class="k">assert</span> <span class="n">tangent</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
 
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">tangent</span> <span class="o">@</span> <span class="n">tangent</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
-        <span class="n">half_theta</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span>
         <span class="n">theta_pow_4</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">*</span> <span class="n">theta_squared</span>
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">use_taylor</span><span class="p">,</span>
+                <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Any constant value should do here</span>
+                <span class="n">theta_squared</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">safe_half_theta</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">safe_theta</span>
+
         <span class="n">real_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
             <span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">8.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">384.0</span><span class="p">,</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta</span><span class="p">),</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">safe_half_theta</span><span class="p">),</span>
         <span class="p">)</span>
+
         <span class="n">imaginary_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
             <span class="mf">0.5</span> <span class="o">-</span> <span class="n">theta_squared</span> <span class="o">/</span> <span class="mf">48.0</span> <span class="o">+</span> <span class="n">theta_pow_4</span> <span class="o">/</span> <span class="mf">3840.0</span><span class="p">,</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">theta</span><span class="p">,</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">safe_half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="n">safe_theta</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span>
@@ -478,15 +488,25 @@
 
         <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">norm_sq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span>
-        <span class="n">norm</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_sq</span><span class="p">)</span>
-        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">norm</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">norm_sq</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">norm_sq</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">norm_sq</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">norm_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">use_taylor</span><span class="p">,</span>
+                <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+                <span class="n">norm_sq</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
         <span class="n">atan_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
             <span class="mf">2.0</span> <span class="o">/</span> <span class="n">w</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">norm_sq</span> <span class="o">/</span> <span class="p">(</span><span class="n">w</span> <span class="o">**</span> <span class="mi">3</span><span class="p">),</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
-                <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">norm</span> <span class="o">/</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm</span><span class="p">,</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm_safe</span><span class="p">,</span>
+                <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">norm_safe</span> <span class="o">/</span> <span class="n">w</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm_safe</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 

@@ -271,17 +271,27 @@
         <span class="n">rotation</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
 
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span> <span class="o">@</span> <span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">theta_squared_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="n">theta_squared</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">del</span> <span class="n">theta_squared</span>
+        <span class="n">theta_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared_safe</span><span class="p">)</span>
+
         <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">tangent</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
-        <span class="n">use_small_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">V</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">use_small_theta</span><span class="p">,</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
             <span class="n">rotation</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">(),</span>
             <span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-                <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span> <span class="o">*</span> <span class="n">skew_omega</span>
-                <span class="o">+</span> <span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
-                <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared</span> <span class="o">*</span> <span class="n">theta</span><span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_safe</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared_safe</span><span class="p">)</span> <span class="o">*</span> <span class="n">skew_omega</span>
+                <span class="o">+</span> <span class="p">(</span><span class="n">theta_safe</span> <span class="o">-</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_safe</span><span class="p">))</span>
+                <span class="o">/</span> <span class="p">(</span><span class="n">theta_squared_safe</span> <span class="o">*</span> <span class="n">theta_safe</span><span class="p">)</span>
                 <span class="o">*</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span>
@@ -297,18 +307,34 @@
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
         <span class="n">theta_squared</span> <span class="o">=</span> <span class="n">omega</span> <span class="o">@</span> <span class="n">omega</span>
+        <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
         <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
-        <span class="n">theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">)</span>
-        <span class="n">half_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span>
-        <span class="n">use_small_theta</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
+        <span class="c1"># reverse-mode AD</span>
+        <span class="n">theta_squared_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="n">theta_squared</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">del</span> <span class="n">theta_squared</span>
+        <span class="n">theta_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">theta_squared_safe</span><span class="p">)</span>
+        <span class="n">half_theta_safe</span> <span class="o">=</span> <span class="n">theta_safe</span> <span class="o">/</span> <span class="mf">2.0</span>
+
         <span class="n">V_inv</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">use_small_theta</span><span class="p">,</span>
+            <span class="n">use_taylor</span><span class="p">,</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">skew_omega</span> <span class="o">+</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">,</span>
             <span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
                 <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">skew_omega</span>
-                <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta</span><span class="p">)))</span>
-                <span class="o">/</span> <span class="n">theta_squared</span>
+                <span class="o">+</span> <span class="p">(</span>
+                    <span class="mf">1.0</span>
+                    <span class="o">-</span> <span class="n">theta_safe</span>
+                    <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">half_theta_safe</span><span class="p">)</span>
+                    <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">half_theta_safe</span><span class="p">))</span>
+                <span class="p">)</span>
+                <span class="o">/</span> <span class="n">theta_squared_safe</span>
                 <span class="o">*</span> <span class="p">(</span><span class="n">skew_omega</span> <span class="o">@</span> <span class="n">skew_omega</span><span class="p">)</span>
             <span class="p">),</span>
         <span class="p">)</span>
