@@ -1,9 +1,10 @@
 import random
-from typing import Any, Callable, Type, TypeVar, cast
+from typing import Any, Callable, List, Type, TypeVar, cast
 
 import jax
 import numpy as onp
 import pytest
+import scipy.optimize
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
@@ -20,7 +21,19 @@ T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 def sample_transform(Group: Type[T]) -> T:
     """Sample a random transform from a group."""
     seed = random.getrandbits(32)
-    return cast(T, Group.sample_uniform(key=jax.random.PRNGKey(seed=seed)))
+    strategy = random.randint(0, 2)
+
+    if strategy == 0:
+        # Uniform sampling
+        return cast(T, Group.sample_uniform(key=jax.random.PRNGKey(seed=seed)))
+    elif strategy == 1:
+        # Sample from normally-sampled tangent vector
+        return cast(T, Group.exp(onp.random.randn(Group.tangent_dim)))
+    elif strategy == 2:
+        # Sample near identity
+        return cast(T, Group.exp(onp.random.randn(Group.tangent_dim) * 1e-7))
+    else:
+        assert False
 
 
 def general_group_test(
@@ -33,7 +46,7 @@ def general_group_test(
         f(Group)
 
     # Disable timing check (first run requires JIT tracing and will be slower)
-    f_wrapped = settings(deadline=None)(f_wrapped)
+    f_wrapped = settings(deadline=None, max_examples=max_examples)(f_wrapped)
 
     # Add _random_module parameter
     f_wrapped = given(_random_module=st.random_module())(f_wrapped)
@@ -71,9 +84,35 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
     assert_arrays_close(p1, p2)
 
 
-def assert_arrays_close(*arrays: jaxlie.hints.Array):
+def assert_arrays_close(
+    *arrays: jaxlie.hints.Array,
+    rtol: float = 1e-8,
+    atol: float = 1e-8,
+):
     """Make sure two arrays are close. (and not NaN)"""
     for array1, array2 in zip(arrays[:-1], arrays[1:]):
-        onp.testing.assert_allclose(array1, array2, rtol=1e-8, atol=1e-8)
+        onp.testing.assert_allclose(array1, array2, rtol=rtol, atol=atol)
         assert not onp.any(onp.isnan(array1))
         assert not onp.any(onp.isnan(array2))
+
+
+def jacnumerical(
+    f: Callable[[jaxlie.hints.Array], jaxlie.hints.ArrayJax]
+) -> Callable[[jaxlie.hints.Array], jaxlie.hints.ArrayJax]:
+    """Decorator for computing numerical Jacobians of vector->vector functions."""
+
+    def wrapped(params: jaxlie.hints.Array) -> jaxlie.hints.ArrayJax:
+        output_dim: int
+        (output_dim,) = f(params).shape
+
+        jacobian_rows: List[onp.ndarray] = []
+        for i in range(output_dim):
+            jacobian_row: onp.ndarray = scipy.optimize.approx_fprime(
+                params, lambda p: f(p)[i], epsilon=1e-5
+            )
+            assert jacobian_row.shape == params.shape
+            jacobian_rows.append(jacobian_row)
+
+        return jnp.stack(jacobian_rows, axis=0)
+
+    return wrapped
