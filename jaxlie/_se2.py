@@ -113,8 +113,8 @@ class SE2(_base.SEBase[SO2]):
         # reverse-mode AD
         safe_theta = jnp.where(
             use_taylor,
-            1.0,
-            theta,  # Any non-zero value should do here
+            1.0,  # Any non-zero value should do here
+            theta,
         )
 
         theta_sq = theta ** 2

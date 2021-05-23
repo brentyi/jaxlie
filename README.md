@@ -47,8 +47,9 @@ Implements Lie groups as high-level (data)classes:
 
 Each group supports:
 
-- **`exp()`**, **`log()`**, **`adjoint()`**, **`multiply()`**, **`inverse()`**,
-  and **`identity()`** operations
+- Forward- and reverse-mode AD-friendly **`exp()`**, **`log()`**,
+  **`adjoint()`**, **`apply`**, **`multiply()`**, **`inverse()`**, and
+  **`identity()`** operations
 - Helpers + analytical Jacobians for on-manifold optimization
   (<code>jaxlie.<strong>manifold</strong></code>)
 - (Un)flattening as pytree nodes

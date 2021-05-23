@@ -96,18 +96,18 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @abc.abstractmethod
     def apply(self: GroupType, target: hints.Vector) -> hints.VectorJax:
-        """Applies the group action.
+        """Applies group action to a point.
 
         Args:
-            target: Vector to transform.
+            target: Point to transform.
 
         Returns:
-            Transformed vector.
+            Transformed point.
         """
 
     @abc.abstractmethod
     def multiply(self: GroupType, other: GroupType) -> GroupType:
-        """Left-multiplies this transformations with another.
+        """Composes this transformation with another.
 
         Returns:
             self @ other

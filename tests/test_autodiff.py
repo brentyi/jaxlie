@@ -1,4 +1,4 @@
-"""Test autodiff.
+"""Compare forward- and reverse-mode Jacobians with a numerical Jacobian.
 """
 
 from typing import Callable, Dict, Tuple, Type, cast
@@ -6,9 +6,9 @@ from typing import Callable, Dict, Tuple, Type, cast
 import jax
 import numpy as onp
 from jax import numpy as jnp
-from utils import assert_arrays_close, general_group_test, jacnumerical
 
 import jaxlie
+from utils import assert_arrays_close, general_group_test, jacnumerical
 
 # Helper methods to test + shared Jacobian helpers
 # We cache JITed Jacobian helpers to improve runtime
@@ -33,7 +33,7 @@ def _assert_jacobians_close(
     jacobian_fwd = jacfwd(Group, primal)
     jacobian_rev = jacrev(Group, primal)
     jacobian_numerical = jacnumerical(
-        lambda params: jax.jit(f, static_argnums=0)(Group, params)
+        lambda primal: jax.jit(f, static_argnums=0)(Group, primal)
     )(primal)
 
     assert_arrays_close(jacobian_fwd, jacobian_rev)
@@ -41,7 +41,6 @@ def _assert_jacobians_close(
 
 
 # Exp
-@jax.partial(jax.jit, static_argnums=0)
 def _exp(
     Group: Type[jaxlie.MatrixLieGroup], generator: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -105,7 +104,6 @@ def test_adjoint_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Apply
-@jax.partial(jax.jit, static_argnums=0)
 def _apply(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -127,7 +125,6 @@ def test_apply_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Multiply
-@jax.partial(jax.jit, static_argnums=0)
 def _multiply(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -149,7 +146,6 @@ def test_multiply_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Inverse
-@jax.partial(jax.jit, static_argnums=0)
 def _inverse(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:

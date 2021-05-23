@@ -101,16 +101,16 @@ def jacnumerical(
 ) -> Callable[[jaxlie.hints.Array], jaxlie.hints.ArrayJax]:
     """Decorator for computing numerical Jacobians of vector->vector functions."""
 
-    def wrapped(params: jaxlie.hints.Array) -> jaxlie.hints.ArrayJax:
+    def wrapped(primal: jaxlie.hints.Array) -> jaxlie.hints.ArrayJax:
         output_dim: int
-        (output_dim,) = f(params).shape
+        (output_dim,) = f(primal).shape
 
         jacobian_rows: List[onp.ndarray] = []
         for i in range(output_dim):
             jacobian_row: onp.ndarray = scipy.optimize.approx_fprime(
-                params, lambda p: f(p)[i], epsilon=1e-5
+                primal, lambda p: f(p)[i], epsilon=1e-5
             )
-            assert jacobian_row.shape == params.shape
+            assert jacobian_row.shape == primal.shape
             jacobian_rows.append(jacobian_row)
 
         return jnp.stack(jacobian_rows, axis=0)
