@@ -274,8 +274,8 @@
         <span class="c1"># reverse-mode AD</span>
         <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">1.0</span><span class="p">,</span>
-            <span class="n">theta</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="n">theta</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">theta_sq</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">**</span> <span class="mi">2</span>

@@ -112,17 +112,17 @@ Classes
    .. method:: apply(self, target)
       :abstractmethod:
 
-      Applies the group action.
+      Applies group action to a point.
 
-      :param target: Vector to transform.
+      :param target: Point to transform.
 
-      :returns: Transformed vector.
+      :returns: Transformed point.
 
 
    .. method:: multiply(self, other)
       :abstractmethod:
 
-      Left-multiplies this transformations with another.
+      Composes this transformation with another.
 
       :returns: self @ other
 
@@ -230,16 +230,16 @@ Classes
 
    .. method:: apply(self, target)
 
-      Applies the group action.
+      Applies group action to a point.
 
-      :param target: Vector to transform.
+      :param target: Point to transform.
 
-      :returns: Transformed vector.
+      :returns: Transformed point.
 
 
    .. method:: multiply(self, other)
 
-      Left-multiplies this transformations with another.
+      Composes this transformation with another.
 
       :returns: self @ other
 
@@ -567,16 +567,16 @@ Classes
 
    .. method:: apply(self, target)
 
-      Applies the group action.
+      Applies group action to a point.
 
-      :param target: Vector to transform.
+      :param target: Point to transform.
 
-      :returns: Transformed vector.
+      :returns: Transformed point.
 
 
    .. method:: multiply(self, other)
 
-      Left-multiplies this transformations with another.
+      Composes this transformation with another.
 
       :returns: self @ other
 
@@ -783,16 +783,16 @@ Classes
 
    .. method:: apply(self, target)
 
-      Applies the group action.
+      Applies group action to a point.
 
-      :param target: Vector to transform.
+      :param target: Point to transform.
 
-      :returns: Transformed vector.
+      :returns: Transformed point.
 
 
    .. method:: multiply(self, other)
 
-      Left-multiplies this transformations with another.
+      Composes this transformation with another.
 
       :returns: self @ other
 

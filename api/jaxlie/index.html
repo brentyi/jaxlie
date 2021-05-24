@@ -316,16 +316,16 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.apply">
 <em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the group action.</p>
+<dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Vector to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<em>GroupType</em>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Transformed vector.</p>
+<dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
@@ -336,7 +336,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.multiply">
 <em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.multiply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Left-multiplies this transformations with another.</p>
+<dd><p>Composes this transformation with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>self &#64; other</p>
@@ -526,13 +526,13 @@ translation vector.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SEBase.apply">
 <span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the group action.</p>
+<dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Vector to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Transformed vector.</p>
+<dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
@@ -543,7 +543,7 @@ translation vector.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SEBase.multiply">
 <span class="sig-name descname"><span class="pre">multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#SEBase.multiply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SEBase.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Left-multiplies this transformations with another.</p>
+<dd><p>Composes this transformation with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>self &#64; other</p>
@@ -1130,16 +1130,16 @@ between our spatial and body representations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.apply">
 <span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the group action.</p>
+<dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Vector to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Transformed vector.</p>
+<dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
@@ -1150,7 +1150,7 @@ between our spatial and body representations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.multiply">
 <span class="sig-name descname"><span class="pre">multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.multiply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Left-multiplies this transformations with another.</p>
+<dd><p>Composes this transformation with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>self &#64; other</p>
@@ -1532,16 +1532,16 @@ Uses the ZYX mobile robot convention.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.apply">
 <span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies the group action.</p>
+<dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Vector to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Transformed vector.</p>
+<dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
@@ -1552,7 +1552,7 @@ Uses the ZYX mobile robot convention.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.multiply">
 <span class="sig-name descname"><span class="pre">multiply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.multiply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.multiply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Left-multiplies this transformations with another.</p>
+<dd><p>Composes this transformation with another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>self &#64; other</p>

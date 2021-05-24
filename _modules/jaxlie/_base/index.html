@@ -257,18 +257,18 @@
 
 <div class="viewcode-block" id="MatrixLieGroup.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Applies the group action.</span>
+        <span class="sd">&quot;&quot;&quot;Applies group action to a point.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            target: Vector to transform.</span>
+<span class="sd">            target: Point to transform.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Transformed vector.</span>
+<span class="sd">            Transformed point.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.multiply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Left-multiplies this transformations with another.</span>
+        <span class="sd">&quot;&quot;&quot;Composes this transformation with another.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            self @ other</span>
