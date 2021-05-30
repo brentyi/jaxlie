@@ -48,26 +48,6 @@ Attributes
 
 
    * Sets static dimensionality attributes
-   * Makes the group hashable
-   * Marks all functions for JIT compilation
-   * Adds flattening/unflattening ops for use as a PyTree node
-   * Adds serialization ops for ``flax.serialization``
-
-   Note that a significant amount of functionality here could be replaced by
-   ``flax.struct``\ , but ``flax.struct`` doesn't work very well with jedi or mypy.
-
-   Example:
-
-   .. code-block::
-
-      @register_lie_group(
-          matrix_dim=2,
-          parameters_dim=2,
-          tangent_dim=1,
-          space_dim=2,
-      )
-      @dataclasses.dataclass(frozen=True)
-      class SO2(_base.MatrixLieGroup):
-          ...
+   * Marks all methods for JIT compilation
 
 

@@ -159,24 +159,10 @@
            <div itemprop="articleBody">
             
   <h1>Source code for jaxlie.utils._utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">dataclasses</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
-    <span class="n">Any</span><span class="p">,</span>
-    <span class="n">Callable</span><span class="p">,</span>
-    <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">Hashable</span><span class="p">,</span>
-    <span class="n">Sequence</span><span class="p">,</span>
-    <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">Type</span><span class="p">,</span>
-    <span class="n">TypeVar</span><span class="p">,</span>
-<span class="p">)</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
 
-<span class="kn">import</span> <span class="nn">flax</span>
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
-
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">hints</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
@@ -209,26 +195,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;Decorator for registering Lie group dataclasses.</span>
 <span class="sd">    - Sets static dimensionality attributes</span>
-<span class="sd">    - Makes the group hashable</span>
-<span class="sd">    - Marks all functions for JIT compilation</span>
-<span class="sd">    - Adds flattening/unflattening ops for use as a PyTree node</span>
-<span class="sd">    - Adds serialization ops for `flax.serialization`</span>
-
-<span class="sd">    Note that a significant amount of functionality here could be replaced by</span>
-<span class="sd">    `flax.struct`, but `flax.struct` doesn&#39;t work very well with jedi or mypy.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">    ```</span>
-<span class="sd">    @register_lie_group(</span>
-<span class="sd">        matrix_dim=2,</span>
-<span class="sd">        parameters_dim=2,</span>
-<span class="sd">        tangent_dim=1,</span>
-<span class="sd">        space_dim=2,</span>
-<span class="sd">    )</span>
-<span class="sd">    @dataclasses.dataclass(frozen=True)</span>
-<span class="sd">    class SO2(_base.MatrixLieGroup):</span>
-<span class="sd">        ...</span>
-<span class="sd">    ```</span>
+<span class="sd">    - Marks all methods for JIT compilation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
@@ -238,51 +205,12 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">tangent_dim</span> <span class="o">=</span> <span class="n">tangent_dim</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">space_dim</span> <span class="o">=</span> <span class="n">space_dim</span>
 
-        <span class="c1"># Hash based on object ID, rather than contents (arrays are not hashable)</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;__hash__&quot;</span><span class="p">,</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__hash__</span><span class="p">)</span>
-
-        <span class="c1"># JIT for all functions</span>
+        <span class="c1"># JIT for all methods</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)),</span>
             <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>
         <span class="p">):</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)))</span>
-
-        <span class="c1"># Register as a PyTree node to make JIT compilation, etc easier in Jax</span>
-        <span class="k">def</span> <span class="nf">_flatten_group</span><span class="p">(</span>
-            <span class="n">v</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
-            <span class="sd">&quot;&quot;&quot;Flatten a dataclass for use as a PyTree.&quot;&quot;&quot;</span>
-            <span class="n">as_dict</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">as_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-
-        <span class="k">def</span> <span class="nf">_unflatten_group</span><span class="p">(</span><span class="n">treedef</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">children</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-            <span class="sd">&quot;&quot;&quot;Unflatten a dataclass for use as a PyTree.&quot;&quot;&quot;</span>
-            <span class="c1"># Treedef is names of fields</span>
-            <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">treedef</span><span class="p">,</span> <span class="n">children</span><span class="p">)))</span>  <span class="c1"># type: ignore</span>
-
-        <span class="n">jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">_flatten_group</span><span class="p">,</span> <span class="n">_unflatten_group</span><span class="p">)</span>
-
-        <span class="c1"># Make object flax-serializable</span>
-        <span class="k">def</span> <span class="nf">_ty_to_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="p">{</span>
-                <span class="n">key</span><span class="p">:</span> <span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">to_state_dict</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">}</span>
-
-        <span class="k">def</span> <span class="nf">_ty_from_state_dict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">:</span>
-            <span class="n">updates</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">updates</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">from_state_dict</span><span class="p">(</span>
-                    <span class="nb">getattr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">value</span>
-                <span class="p">)</span>
-            <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">**</span><span class="n">updates</span><span class="p">)</span>
-
-        <span class="n">flax</span><span class="o">.</span><span class="n">serialization</span><span class="o">.</span><span class="n">register_serialization_state</span><span class="p">(</span>
-            <span class="n">ty</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span>
-            <span class="n">ty_to_state_dict</span><span class="o">=</span><span class="n">_ty_to_state_dict</span><span class="p">,</span>
-            <span class="n">ty_from_state_dict</span><span class="o">=</span><span class="n">_ty_from_state_dict</span><span class="p">,</span>
-        <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">cls</span>
 
