@@ -6,9 +6,9 @@ from typing import Callable, Dict, Tuple, Type, cast
 import jax
 import numpy as onp
 from jax import numpy as jnp
+from utils import assert_arrays_close, general_group_test, jacnumerical
 
 import jaxlie
-from utils import assert_arrays_close, general_group_test, jacnumerical
 
 # Helper methods to test + shared Jacobian helpers
 # We cache JITed Jacobian helpers to improve runtime

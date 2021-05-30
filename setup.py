@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="1.2.5",
+    version="1.2.6",
     description="Matrix Lie groups in Jax",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,6 +21,7 @@ setup(
         "jax",
         "jaxlib",
         "numpy",
+        "jax_dataclasses",
         # `overrides` should not be updated until the following issues are resolved:
         # > https://github.com/mkorpela/overrides/issues/65
         # > https://github.com/mkorpela/overrides/issues/63

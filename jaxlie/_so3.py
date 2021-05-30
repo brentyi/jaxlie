@@ -1,6 +1,5 @@
-import dataclasses
-
 import jax
+import jax_dataclasses
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -15,7 +14,7 @@ from .utils import get_epsilon, register_lie_group
     tangent_dim=3,
     space_dim=3,
 )
-@dataclasses.dataclass(frozen=True)
+@jax_dataclasses.dataclass
 class SO3(_base.SOBase):
     """Special orthogonal group for 3D rotations."""
 

@@ -1,6 +1,5 @@
-import dataclasses
-
 import jax
+import jax_dataclasses
 import numpy as onp
 from jax import numpy as jnp
 from overrides import overrides
@@ -29,7 +28,7 @@ def _skew(omega: hints.Vector) -> hints.MatrixJax:
     tangent_dim=6,
     space_dim=3,
 )
-@dataclasses.dataclass(frozen=True)
+@jax_dataclasses.dataclass
 class SE3(_base.SEBase[SO3]):
     """Special Euclidean group for proper rigid transforms in 3D."""
 
