@@ -176,7 +176,7 @@
     <span class="n">tangent_dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">space_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">dataclass</span>
+<span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SE2</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO2</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 2D.&quot;&quot;&quot;</span>
 
