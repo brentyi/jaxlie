@@ -21,7 +21,7 @@ setup(
         "jax",
         "jaxlib",
         "numpy",
-        "jax_dataclasses",
+        "jax_dataclasses>=1.0.0",
         # `overrides` should not be updated until the following issues are resolved:
         # > https://github.com/mkorpela/overrides/issues/65
         # > https://github.com/mkorpela/overrides/issues/63

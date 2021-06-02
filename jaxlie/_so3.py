@@ -14,7 +14,7 @@ from .utils import get_epsilon, register_lie_group
     tangent_dim=3,
     space_dim=3,
 )
-@jax_dataclasses.dataclass
+@jax_dataclasses.pytree_dataclass
 class SO3(_base.SOBase):
     """Special orthogonal group for 3D rotations."""
 

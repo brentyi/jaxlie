@@ -15,7 +15,7 @@ from .utils import get_epsilon, register_lie_group
     tangent_dim=3,
     space_dim=2,
 )
-@jax_dataclasses.dataclass
+@jax_dataclasses.pytree_dataclass
 class SE2(_base.SEBase[SO2]):
     """Special Euclidean group for proper rigid transforms in 2D."""
 

@@ -14,7 +14,7 @@ from .utils import register_lie_group
     tangent_dim=1,
     space_dim=2,
 )
-@jax_dataclasses.dataclass
+@jax_dataclasses.pytree_dataclass
 class SO2(_base.SOBase):
     """Special orthogonal group for 2D rotations."""
 
