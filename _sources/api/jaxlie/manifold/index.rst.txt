@@ -55,7 +55,7 @@ Functions
    .. code-block::
 
       def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
-          # Since transform objects are PyTree containers, note that `jacfwd` returns a
+          # Since transform objects are pytree containers, note that `jacfwd` returns a
           # transformation object itself and that the Jacobian terms corresponding to the
           # parameters are grabbed explicitly.
           return jax.jacfwd(

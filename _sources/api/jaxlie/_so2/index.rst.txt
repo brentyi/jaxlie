@@ -29,6 +29,9 @@ Classes
 
    Special orthogonal group for 2D rotations.
 
+   Internal parameterization is ``(cos, sin)``.
+   Tangent parameterization is ``(omega,)``.
+
    .. attribute:: unit_complex
       :annotation: :jaxlie.hints.Vector
 

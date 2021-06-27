@@ -29,6 +29,9 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 2D.
 
+   Internal parameterization is ``(cos, sin, x, y)``.
+   Tangent parameterization is ``(vx, vy, omega)``.
+
    .. attribute:: unit_complex_xy
       :annotation: :jaxlie.hints.Vector
 

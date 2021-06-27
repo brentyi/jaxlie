@@ -200,7 +200,7 @@
 <span class="sd">    Equivalent to --</span>
 <span class="sd">    ```</span>
 <span class="sd">    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -&gt; jnp.ndarray:</span>
-<span class="sd">        # Since transform objects are PyTree containers, note that `jacfwd` returns a</span>
+<span class="sd">        # Since transform objects are pytree containers, note that `jacfwd` returns a</span>
 <span class="sd">        # transformation object itself and that the Jacobian terms corresponding to the</span>
 <span class="sd">        # parameters are grabbed explicitly.</span>
 <span class="sd">        return jax.jacfwd(</span>

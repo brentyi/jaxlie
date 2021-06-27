@@ -191,7 +191,11 @@
 <span class="p">)</span>
 <span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SE3</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO3</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.</span>
+
+<span class="sd">    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`.</span>
+<span class="sd">    Tangent parameterization is `(vx, vy, vz, omega_x, omega_y, omega_z)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># SE3-specific</span>
 

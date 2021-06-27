@@ -29,6 +29,9 @@ Classes
 
    Special orthogonal group for 3D rotations.
 
+   Internal parameterization is ``(qw, qx, qy, qz)``.
+   Tangent parameterization is ``(omega_x, omega_y, omega_z)``.
+
    .. attribute:: wxyz
       :annotation: :jaxlie.hints.Vector
 

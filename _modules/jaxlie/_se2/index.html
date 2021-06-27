@@ -178,7 +178,11 @@
 <span class="p">)</span>
 <span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SE2</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO2</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 2D.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 2D.</span>
+
+<span class="sd">    Internal parameterization is `(cos, sin, x, y)`.</span>
+<span class="sd">    Tangent parameterization is `(vx, vy, omega)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># SE2-specific</span>
 

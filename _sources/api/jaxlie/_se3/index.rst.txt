@@ -29,6 +29,9 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 3D.
 
+   Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``.
+   Tangent parameterization is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
+
    .. attribute:: wxyz_xyz
       :annotation: :jaxlie.hints.Vector
 

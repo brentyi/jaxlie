@@ -177,7 +177,11 @@
 <span class="p">)</span>
 <span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SO2</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SOBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Special orthogonal group for 2D rotations.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Special orthogonal group for 2D rotations.</span>
+
+<span class="sd">    Internal parameterization is `(cos, sin)`.</span>
+<span class="sd">    Tangent parameterization is `(omega,)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># SO2-specific</span>
 
@@ -235,7 +239,7 @@
 <div class="viewcode-block" id="SO2.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.apply">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span> <span class="o">@</span> <span class="n">target</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span> <span class="o">@</span> <span class="n">target</span>  <span class="c1"># type: ignore</span></div>
 
 <div class="viewcode-block" id="SO2.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.multiply">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
