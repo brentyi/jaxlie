@@ -16,7 +16,11 @@ from .utils import register_lie_group
 )
 @jax_dataclasses.pytree_dataclass
 class SO2(_base.SOBase):
-    """Special orthogonal group for 2D rotations."""
+    """Special orthogonal group for 2D rotations.
+
+    Internal parameterization is `(cos, sin)`.
+    Tangent parameterization is `(omega,)`.
+    """
 
     # SO2-specific
 
@@ -74,7 +78,7 @@ class SO2(_base.SOBase):
     @overrides
     def apply(self: "SO2", target: hints.Vector) -> hints.VectorJax:
         assert target.shape == (2,)
-        return self.as_matrix() @ target
+        return self.as_matrix() @ target  # type: ignore
 
     @overrides
     def multiply(self: "SO2", other: "SO2") -> "SO2":

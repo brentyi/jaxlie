@@ -1,6 +1,7 @@
 import abc
 from typing import ClassVar, Generic, Type, TypeVar, overload
 
+import jax_dataclasses
 import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
@@ -223,7 +224,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     @final
     @overrides
     def apply(self, target: hints.Vector) -> hints.VectorJax:
-        return self.rotation() @ target + self.translation()
+        return self.rotation() @ target + self.translation()  # type: ignore
 
     @final
     @overrides

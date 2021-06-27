@@ -16,7 +16,11 @@ from .utils import get_epsilon, register_lie_group
 )
 @jax_dataclasses.pytree_dataclass
 class SO3(_base.SOBase):
-    """Special orthogonal group for 3D rotations."""
+    """Special orthogonal group for 3D rotations.
+
+    Internal parameterization is `(qw, qx, qy, qz)`.
+    Tangent parameterization is `(omega_x, omega_y, omega_z)`.
+    """
 
     # SO3-specific
 

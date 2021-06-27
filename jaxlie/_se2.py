@@ -17,7 +17,11 @@ from .utils import get_epsilon, register_lie_group
 )
 @jax_dataclasses.pytree_dataclass
 class SE2(_base.SEBase[SO2]):
-    """Special Euclidean group for proper rigid transforms in 2D."""
+    """Special Euclidean group for proper rigid transforms in 2D.
+
+    Internal parameterization is `(cos, sin, x, y)`.
+    Tangent parameterization is `(vx, vy, omega)`.
+    """
 
     # SE2-specific
 

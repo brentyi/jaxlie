@@ -17,7 +17,7 @@ import jaxlie
 
 @general_group_test
 def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check closure property."""
+    """Check rplus and rminus on random inputs."""
     T_wa = sample_transform(Group)
     T_wb = sample_transform(Group)
     T_ab = T_wa.inverse() @ T_wb
@@ -28,7 +28,7 @@ def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check closure property."""
+    """Check analytical rplus Jacobian.."""
     T_wa = sample_transform(Group)
 
     J_ours = jaxlie.manifold.rplus_jacobian_parameters_wrt_delta(T_wa)
