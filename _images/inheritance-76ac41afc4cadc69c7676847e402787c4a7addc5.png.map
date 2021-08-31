@@ -1,10 +1,10 @@
 <map id="inheritance87ef044eaa" name="inheritance87ef044eaa">
-<area shape="rect" id="node1" href="api/jaxlie/#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="5,104,167,129"/>
-<area shape="rect" id="node3" href="api/jaxlie/#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="215,55,326,80"/>
-<area shape="rect" id="node7" href="api/jaxlie/#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="215,104,327,129"/>
-<area shape="rect" id="node2" href="api/jaxlie/#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="375,5,462,31"/>
-<area shape="rect" id="node4" href="api/jaxlie/#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="375,55,462,80"/>
-<area shape="rect" id="node5" title="Abstract base class for generic types." alt="" coords="27,55,145,80"/>
-<area shape="rect" id="node6" href="api/jaxlie/#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="375,104,463,129"/>
-<area shape="rect" id="node8" href="api/jaxlie/#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="375,153,463,179"/>
+<area shape="rect" id="node1" href="api/jaxlie/#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="5,104,168,129"/>
+<area shape="rect" id="node3" href="api/jaxlie/#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="217,55,327,80"/>
+<area shape="rect" id="node7" href="api/jaxlie/#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="216,104,328,129"/>
+<area shape="rect" id="node2" href="api/jaxlie/#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="377,5,463,31"/>
+<area shape="rect" id="node4" href="api/jaxlie/#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="377,55,463,80"/>
+<area shape="rect" id="node5" title="Abstract base class for generic types." alt="" coords="28,55,145,80"/>
+<area shape="rect" id="node6" href="api/jaxlie/#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="376,104,464,129"/>
+<area shape="rect" id="node8" href="api/jaxlie/#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="376,153,464,179"/>
 </map>

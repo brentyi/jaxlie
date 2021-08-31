@@ -1,7 +1,7 @@
 <map id="inheritanceed2b2fd741" name="inheritanceed2b2fd741">
 <area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="37,5,109,31"/>
-<area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,309,56"/>
+<area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,311,56"/>
 <area shape="rect" id="node2" title="Use this as the parent class for your custom classes" alt="" coords="5,55,140,80"/>
-<area shape="rect" id="node5" href="../#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="357,31,429,56"/>
-<area shape="rect" id="node4" href="../#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="477,31,549,56"/>
+<area shape="rect" id="node5" href="../#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="359,31,431,56"/>
+<area shape="rect" id="node4" href="../#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="479,31,551,56"/>
 </map>
