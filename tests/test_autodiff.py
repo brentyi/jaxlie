@@ -1,6 +1,6 @@
-"""Compare forward- and reverse-mode Jacobians with a numerical Jacobian.
-"""
+"""Compare forward- and reverse-mode Jacobians with a numerical Jacobian."""
 
+from functools import lru_cache
 from typing import Callable, Dict, Tuple, Type, cast
 
 import jax
@@ -10,9 +10,14 @@ from utils import assert_arrays_close, general_group_test, jacnumerical
 
 import jaxlie
 
-# Helper methods to test + shared Jacobian helpers
-# We cache JITed Jacobian helpers to improve runtime
-_jacfwd_jacrev_cache: Dict[Callable, Tuple[Callable, Callable]] = {}
+# We cache JITed Jacobians to improve runtime.
+cached_jacfwd = lru_cache(maxsize=None)(
+    lambda f: jax.jit(jax.jacfwd(f, argnums=1), static_argnums=0)
+)
+cached_jacrev = lru_cache(maxsize=None)(
+    lambda f: jax.jit(jax.jacrev(f, argnums=1), static_argnums=0)
+)
+cached_jit = lru_cache(maxsize=None)(jax.jit)
 
 
 def _assert_jacobians_close(
@@ -23,17 +28,10 @@ def _assert_jacobians_close(
     primal: jaxlie.hints.Array,
 ) -> None:
 
-    if f not in _jacfwd_jacrev_cache:
-        _jacfwd_jacrev_cache[f] = (
-            jax.jit(jax.jacfwd(f, argnums=1), static_argnums=0),
-            jax.jit(jax.jacrev(f, argnums=1), static_argnums=0),
-        )
-
-    jacfwd, jacrev = _jacfwd_jacrev_cache[f]
-    jacobian_fwd = jacfwd(Group, primal)
-    jacobian_rev = jacrev(Group, primal)
+    jacobian_fwd = cached_jacfwd(f)(Group, primal)
+    jacobian_rev = cached_jacrev(f)(Group, primal)
     jacobian_numerical = jacnumerical(
-        lambda primal: jax.jit(f, static_argnums=0)(Group, primal)
+        lambda primal: cached_jit(f, static_argnums=0)(Group, primal)
     )(primal)
 
     assert_arrays_close(jacobian_fwd, jacobian_rev)
@@ -56,7 +54,8 @@ def test_exp_random(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_exp_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that exp Jacobians are consistent, with transforms close to the identity."""
+    """Check that exp Jacobians are consistent, with transforms close to the
+    identity."""
     generator = onp.random.randn(Group.tangent_dim) * 1e-6
     _assert_jacobians_close(Group=Group, f=_exp, primal=generator)
 
@@ -77,7 +76,8 @@ def test_log_random(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_log_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that log Jacobians are consistent, with transforms close to the identity."""
+    """Check that log Jacobians are consistent, with transforms close to the
+    identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_log, primal=params)
 
@@ -98,7 +98,8 @@ def test_adjoint_random(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_adjoint_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that adjoint Jacobians are consistent, with transforms close to the identity."""
+    """Check that adjoint Jacobians are consistent, with transforms close to the
+    identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_adjoint, primal=params)
 
@@ -119,7 +120,8 @@ def test_apply_random(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_apply_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that apply Jacobians are consistent, with transforms close to the identity."""
+    """Check that apply Jacobians are consistent, with transforms close to the
+    identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_apply, primal=params)
 
@@ -133,14 +135,16 @@ def _multiply(
 
 @general_group_test
 def test_multiply_random(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that multiply Jacobians are consistent, with randomly sampled transforms."""
+    """Check that multiply Jacobians are consistent, with randomly sampled
+    transforms."""
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_multiply, primal=params)
 
 
 @general_group_test
 def test_multiply_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that multiply Jacobians are consistent, with transforms close to the identity."""
+    """Check that multiply Jacobians are consistent, with transforms close to the
+    identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_multiply, primal=params)
 
@@ -161,6 +165,7 @@ def test_inverse_random(Group: Type[jaxlie.MatrixLieGroup]):
 
 @general_group_test
 def test_inverse_identity(Group: Type[jaxlie.MatrixLieGroup]):
-    """Check that inverse Jacobians are consistent, with transforms close to the identity."""
+    """Check that inverse Jacobians are consistent, with transforms close to the
+    identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_inverse, primal=params)

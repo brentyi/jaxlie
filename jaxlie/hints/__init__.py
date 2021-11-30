@@ -6,31 +6,26 @@ from jax import numpy as jnp
 # Type aliases for JAX/Numpy arrays; primarily for function inputs
 
 Array = Union[onp.ndarray, jnp.ndarray]
-"""Type alias for `Union[jnp.ndarray, onp.ndarray]`.
-"""
+"""Type alias for `Union[jnp.ndarray, onp.ndarray]`."""
 
 Scalar = Union[float, Array]
-"""Type alias for `Union[float, Array]`.
-"""
+"""Type alias for `Union[float, Array]`."""
 
 Matrix = Array
 """Type alias for `Array`. Should not be instantiated.
 
 Refers to a square matrix, typically with shape `(Group.matrix_dim, Group.matrix_dim)`.
-For adjoints, shape should be `(Group.tangent_dim, Group.tangent_dim)`.
-"""
+For adjoints, shape should be `(Group.tangent_dim, Group.tangent_dim)`."""
 
 Vector = Array
 """Type alias for `Array`. Should not be instantiated.
 
-Refers to a general 1D array.
-"""
+Refers to a general 1D array."""
 
 TangentVector = Array
 """Type alias for `Array`. Should not be instantiated.
 
-Refers to a 1D array with shape `(Group.tangent_dim,)`.
-"""
+Refers to a 1D array with shape `(Group.tangent_dim,)`."""
 
 # Type aliases for JAX arrays; primarily for function outputs
 

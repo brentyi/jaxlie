@@ -8,10 +8,12 @@
 **[ [API reference](https://brentyi.github.io/jaxlie) ]** **[
 [PyPI](https://pypi.org/project/jaxlie/) ]**
 
-`jaxlie` is a Lie theory library for rigid body transformations and optimization
-in JAX.
+`jaxlie` is a library containing implementations of Lie groups commonly used for
+rigid body transformations, targeted at computer vision &amp; robotics
+applications written in JAX. Heavily inspired by the C++ library
+[Sophus](https://github.com/strasdat/Sophus).
 
-Implements Lie groups as high-level (data)classes:
+We implement Lie groups as high-level (data)classes:
 
 <table>
   <thead>
@@ -45,24 +47,26 @@ Implements Lie groups as high-level (data)classes:
   </tbody>
 </table>
 
-Each group supports:
+Where each group supports:
 
 - Forward- and reverse-mode AD-friendly **`exp()`**, **`log()`**,
-  **`adjoint()`**, **`apply`**, **`multiply()`**, **`inverse()`**, and
-  **`identity()`** operations
-- Helpers + analytical Jacobians for on-manifold optimization
-  (<code>jaxlie.<strong>manifold</strong></code>)
-- (Un)flattening as pytree nodes
-- Serialization using [flax](https://github.com/google/flax)
+  **`adjoint()`**, **`apply()`**, **`multiply()`**, **`inverse()`**,
+  **`identity()`**, **`from_matrix()`**, and **`as_matrix()`** operations.
+- Helpers + analytical Jacobians for manifold optimization
+  (<code>jaxlie.<strong>manifold</strong></code>).
+- (Un)flattening as pytree nodes.
+- Serialization using [flax](https://github.com/google/flax).
 
-Heavily inspired by (and some operations ported from) the C++ library
-[Sophus](https://github.com/strasdat/Sophus).
+We also implement various common utilities for things like uniform random
+sampling (**`sample_uniform()`**) and converting from/to Euler angles (in the
+`SO3` class).
 
 ---
 
-##### Install (Python >=3.6)
+##### Install (Python >=3.7)
 
 ```bash
+# Python 3.6 releases also exist, but are no longer being updated.
 pip install jaxlie
 ```
 
@@ -153,6 +157,6 @@ adjoint_T_w_b = T_w_b.adjoint()
 print(adjoint_T_w_b)
 
 # Recover our twist, equivalent to `vee(logm(T_w_b.as_matrix()))`:
-twist = T_w_b.log()
-print(twist)
+twist_recovered = T_w_b.log()
+print(twist_recovered)
 ```

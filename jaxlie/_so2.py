@@ -18,8 +18,7 @@ from .utils import register_lie_group
 class SO2(_base.SOBase):
     """Special orthogonal group for 2D rotations.
 
-    Internal parameterization is `(cos, sin)`.
-    Tangent parameterization is `(omega,)`.
+    Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.
     """
 
     # SO2-specific
@@ -112,7 +111,7 @@ class SO2(_base.SOBase):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jnp.ndarray) -> "SO2":
+    def sample_uniform(key: jax.random.KeyArray) -> "SO2":
         return SO2.from_radians(
             jax.random.uniform(key=key, minval=0.0, maxval=2.0 * jnp.pi)
         )

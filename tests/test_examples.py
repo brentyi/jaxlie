@@ -1,5 +1,4 @@
-"""Tests with explicit examples.
-"""
+"""Tests with explicit examples."""
 
 
 import numpy as onp

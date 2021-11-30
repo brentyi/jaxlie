@@ -1,5 +1,5 @@
-"""Test transform serialization, for things like saving calibrated transforms to disk.
-"""
+"""Test transform serialization, for things like saving calibrated transforms to
+disk."""
 
 from typing import Type
 

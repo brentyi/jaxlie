@@ -80,5 +80,5 @@ adjoint_T_w_b = T_w_b.adjoint()
 print(adjoint_T_w_b)
 
 # Recover our twist, equivalent to `vee(logm(T_w_b.as_matrix()))`:
-twist = T_w_b.log()
-print(twist)
+recovered_twist = T_w_b.log()
+print(recovered_twist)

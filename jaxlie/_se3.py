@@ -32,8 +32,8 @@ def _skew(omega: hints.Vector) -> hints.MatrixJax:
 class SE3(_base.SEBase[SO3]):
     """Special Euclidean group for proper rigid transforms in 3D.
 
-    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`.
-    Tangent parameterization is `(vx, vy, vz, omega_x, omega_y, omega_z)`.
+    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization
+    is `(vx, vy, vz, omega_x, omega_y, omega_z)`.
     """
 
     # SE3-specific
@@ -194,7 +194,7 @@ class SE3(_base.SEBase[SO3]):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jnp.ndarray) -> "SE3":
+    def sample_uniform(key: jax.random.KeyArray) -> "SE3":
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0),

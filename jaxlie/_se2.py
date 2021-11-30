@@ -19,8 +19,8 @@ from .utils import get_epsilon, register_lie_group
 class SE2(_base.SEBase[SO2]):
     """Special Euclidean group for proper rigid transforms in 2D.
 
-    Internal parameterization is `(cos, sin, x, y)`.
-    Tangent parameterization is `(vx, vy, omega)`.
+    Internal parameterization is `(cos, sin, x, y)`. Tangent parameterization is `(vx,
+    vy, omega)`.
     """
 
     # SE2-specific
@@ -36,8 +36,10 @@ class SE2(_base.SEBase[SO2]):
 
     @staticmethod
     def from_xy_theta(x: hints.Scalar, y: hints.Scalar, theta: hints.Scalar) -> "SE2":
-        """Construct a transformation from standard 2D pose parameters. Note that this
-        is not the same as integrating over a length-3 twist."""
+        """Construct a transformation from standard 2D pose parameters.
+
+        Note that this is not the same as integrating over a length-3 twist.
+        """
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))
@@ -196,7 +198,7 @@ class SE2(_base.SEBase[SO2]):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jnp.ndarray) -> "SE2":
+    def sample_uniform(key: jax.random.KeyArray) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(
             rotation=SO2.sample_uniform(key0),

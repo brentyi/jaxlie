@@ -18,8 +18,8 @@ from .utils import get_epsilon, register_lie_group
 class SO3(_base.SOBase):
     """Special orthogonal group for 3D rotations.
 
-    Internal parameterization is `(qw, qx, qy, qz)`.
-    Tangent parameterization is `(omega_x, omega_y, omega_z)`.
+    Internal parameterization is `(qw, qx, qy, qz)`. Tangent parameterization is
+    `(omega_x, omega_y, omega_z)`.
     """
 
     # SO3-specific
@@ -74,8 +74,8 @@ class SO3(_base.SOBase):
         pitch: hints.Scalar,
         yaw: hints.Scalar,
     ) -> "SO3":
-        """Generates a transform from a set of Euler angles.
-        Uses the ZYX mobile robot convention.
+        """Generates a transform from a set of Euler angles. Uses the ZYX mobile robot
+        convention.
 
         Args:
             roll: X rotation, in radians. Applied first.
@@ -112,8 +112,7 @@ class SO3(_base.SOBase):
         return jnp.roll(self.wxyz, shift=-1)
 
     def as_rpy_radians(self) -> hints.RollPitchYaw:
-        """Computes roll, pitch, and yaw angles.
-        Uses the ZYX mobile robot convention.
+        """Computes roll, pitch, and yaw angles. Uses the ZYX mobile robot convention.
 
         Returns:
             Named tuple containing Euler angles in radians.
@@ -125,8 +124,7 @@ class SO3(_base.SOBase):
         )
 
     def compute_roll_radians(self) -> hints.ScalarJax:
-        """Compute roll angle.
-        Uses the ZYX mobile robot convention.
+        """Compute roll angle. Uses the ZYX mobile robot convention.
 
         Returns:
             Euler angle in radians.
@@ -136,8 +134,7 @@ class SO3(_base.SOBase):
         return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
 
     def compute_pitch_radians(self) -> hints.ScalarJax:
-        """Compute pitch angle.
-        Uses the ZYX mobile robot convention.
+        """Compute pitch angle. Uses the ZYX mobile robot convention.
 
         Returns:
             Euler angle in radians.
@@ -147,8 +144,7 @@ class SO3(_base.SOBase):
         return jnp.arcsin(2 * (q0 * q2 - q3 * q1))
 
     def compute_yaw_radians(self) -> hints.ScalarJax:
-        """Compute yaw angle.
-        Uses the ZYX mobile robot convention.
+        """Compute yaw angle. Uses the ZYX mobile robot convention.
 
         Returns:
             Euler angle in radians.
@@ -342,13 +338,17 @@ class SO3(_base.SOBase):
             )
         )
 
+        atan_n_over_w = jnp.arctan2(
+            jnp.where(w < 0, -norm_safe, norm_safe),
+            jnp.abs(w),
+        )
         atan_factor = jnp.where(
             use_taylor,
             2.0 / w - 2.0 / 3.0 * norm_sq / (w ** 3),
             jnp.where(
                 jnp.abs(w) < get_epsilon(w.dtype),
                 jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm_safe,
-                2.0 * jnp.arctan(norm_safe / w) / norm_safe,
+                2.0 * atan_n_over_w / norm_safe,
             ),
         )
 
@@ -369,7 +369,7 @@ class SO3(_base.SOBase):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jnp.ndarray) -> "SO3":
+    def sample_uniform(key: jax.random.KeyArray) -> "SO3":
         # Uniformly sample over S^4
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(

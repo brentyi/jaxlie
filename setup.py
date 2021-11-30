@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="1.2.6",
+    version="1.2.7",
     description="Matrix Lie groups in Jax",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -17,23 +17,19 @@ setup(
     package_data={"jaxlie": ["py.typed"]},
     python_requires=">=3.7",
     install_requires=[
-        "flax",
-        "jax",
-        "jaxlib",
-        "numpy",
+        "jax>=0.2.20",
+        "jaxlib>=0.1.71",
         "jax_dataclasses>=1.0.0",
-        # `overrides` should not be updated until the following issues are resolved:
-        # > https://github.com/mkorpela/overrides/issues/65
-        # > https://github.com/mkorpela/overrides/issues/63
-        # > https://github.com/mkorpela/overrides/issues/61
+        "numpy",
         "overrides!=4",
     ],
     extras_require={
         "testing": [
-            "pytest",
-            "pytest-cov",
+            "flax",
             "hypothesis",
             "hypothesis[numpy]",
+            "pytest",
+            "pytest-cov",
         ]
     },
     classifiers=[

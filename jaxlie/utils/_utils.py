@@ -33,6 +33,7 @@ def register_lie_group(
     space_dim: int,
 ) -> Callable[[Type[T]], Type[T]]:
     """Decorator for registering Lie group dataclasses.
+
     - Sets static dimensionality attributes
     - Marks all methods for JIT compilation
     """

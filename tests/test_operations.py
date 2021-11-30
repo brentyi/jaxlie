@@ -1,5 +1,4 @@
-"""Tests for general operation definitions.
-"""
+"""Tests for general operation definitions."""
 
 from typing import Type
 

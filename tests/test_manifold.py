@@ -1,5 +1,4 @@
-"""Test manifold helpers.
-"""
+"""Test manifold helpers."""
 from typing import Type
 
 import jax

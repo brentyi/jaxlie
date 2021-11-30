@@ -1,7 +1,7 @@
 import abc
 from typing import ClassVar, Generic, Type, TypeVar, overload
 
-import jax_dataclasses
+import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
@@ -136,15 +136,16 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @abc.abstractmethod
     def adjoint(self: GroupType) -> hints.MatrixJax:
-        """Computes the adjoint, which transforms tangent vectors between tangent spaces.
+        """Computes the adjoint, which transforms tangent vectors between tangent
+        spaces.
 
         More precisely, for a transform `GroupType`:
         ```
         GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
         ```
 
-        In robotics, typically used for converting twists, wrenches, and Jacobians
-        between our spatial and body representations.
+        In robotics, typically used for transforming twists, wrenches, and Jacobians
+        across different reference frames.
 
         Returns:
             Output. Shape should be `(tangent_dim, tangent_dim)`.
@@ -168,8 +169,9 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[GroupType], key: jnp.ndarray) -> GroupType:
-        """Draw a uniform sample from the group. Translations are in the range [-1, 1].
+    def sample_uniform(cls: Type[GroupType], key: jax.random.KeyArray) -> GroupType:
+        """Draw a uniform sample from the group. Translations (if applicable) are in the
+        range [-1, 1].
 
         Args:
             key: PRNG key, as returned by `jax.random.PRNGKey()`.
@@ -190,7 +192,8 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     """Base class for special Euclidean groups.
 
     Each SE(N) group member contains an SO(N) rotation, as well as an N-dimensional
-    translation vector."""
+    translation vector.
+    """
 
     # SE-specific interface
 
