@@ -1,72 +1,32 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>jaxlie._se3 &mdash; jaxlie  documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
-
-  
-  
-
-  
-  
-
-  
-
-  
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
     <link rel="search" title="Search" href="../../../search/" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
             <a href="../../../" class="icon icon-home"> jaxlie
-          
-
-          
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -74,18 +34,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
@@ -95,69 +44,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../">jaxlie</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../../">Module code</a> &raquo;</li>
-        
       <li>jaxlie._se3</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for jaxlie._se3</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">jax_dataclasses</span>
@@ -193,8 +103,8 @@
 <span class="k">class</span> <span class="nc">SE3</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO3</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.</span>
 
-<span class="sd">    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`.</span>
-<span class="sd">    Tangent parameterization is `(vx, vy, vz, omega_x, omega_y, omega_z)`.</span>
+<span class="sd">    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization</span>
+<span class="sd">    is `(vx, vy, vz, omega_x, omega_y, omega_z)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># SE3-specific</span>
@@ -355,7 +265,7 @@
 
 <div class="viewcode-block" id="SE3.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="n">key0</span><span class="p">,</span> <span class="n">key1</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">SO3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">key0</span><span class="p">),</span>
@@ -366,46 +276,30 @@
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2020.
-
-    </p>
+    <p>&#169; Copyright 2020.</p>
   </div>
-    
-    
-    
-    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

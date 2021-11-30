@@ -156,7 +156,8 @@ Attributes
    .. method:: adjoint(self)
       :abstractmethod:
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -164,8 +165,8 @@ Attributes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -190,7 +191,8 @@ Attributes
       :classmethod:
       :abstractmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 

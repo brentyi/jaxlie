@@ -149,7 +149,8 @@ Classes
    .. method:: adjoint(self)
       :abstractmethod:
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -157,8 +158,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -183,7 +184,8 @@ Classes
       :classmethod:
       :abstractmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
@@ -280,8 +282,8 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 2D.
 
-   Internal parameterization is ``(cos, sin, x, y)``.
-   Tangent parameterization is ``(vx, vy, omega)``.
+   Internal parameterization is ``(cos, sin, x, y)``. Tangent parameterization is ``(vx,
+   vy, omega)``.
 
    .. attribute:: unit_complex_xy
       :annotation: :jaxlie.hints.Vector
@@ -297,8 +299,9 @@ Classes
    .. method:: from_xy_theta(x, y, theta)
       :staticmethod:
 
-      Construct a transformation from standard 2D pose parameters. Note that this
-      is not the same as integrating over a length-3 twist.
+      Construct a transformation from standard 2D pose parameters.
+
+      Note that this is not the same as integrating over a length-3 twist.
 
 
    .. method:: from_rotation_and_translation(rotation, translation)
@@ -369,7 +372,8 @@ Classes
 
    .. method:: adjoint(self)
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -377,8 +381,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -386,7 +390,8 @@ Classes
    .. method:: sample_uniform(key)
       :staticmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
@@ -404,8 +409,8 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 3D.
 
-   Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``.
-   Tangent parameterization is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
+   Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``. Tangent parameterization
+   is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz_xyz
       :annotation: :jaxlie.hints.Vector
@@ -486,7 +491,8 @@ Classes
 
    .. method:: adjoint(self)
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -494,8 +500,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -503,7 +509,8 @@ Classes
    .. method:: sample_uniform(key)
       :staticmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
@@ -521,8 +528,7 @@ Classes
 
    Special orthogonal group for 2D rotations.
 
-   Internal parameterization is ``(cos, sin)``.
-   Tangent parameterization is ``(omega,)``.
+   Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
 
    .. attribute:: unit_complex
       :annotation: :jaxlie.hints.Vector
@@ -609,7 +615,8 @@ Classes
 
    .. method:: adjoint(self)
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -617,8 +624,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -640,7 +647,8 @@ Classes
    .. method:: sample_uniform(key)
       :staticmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
@@ -658,8 +666,8 @@ Classes
 
    Special orthogonal group for 3D rotations.
 
-   Internal parameterization is ``(qw, qx, qy, qz)``.
-   Tangent parameterization is ``(omega_x, omega_y, omega_z)``.
+   Internal parameterization is ``(qw, qx, qy, qz)``. Tangent parameterization is
+   ``(omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz
       :annotation: :jaxlie.hints.Vector
@@ -705,8 +713,8 @@ Classes
    .. method:: from_rpy_radians(roll, pitch, yaw)
       :staticmethod:
 
-      Generates a transform from a set of Euler angles.
-      Uses the ZYX mobile robot convention.
+      Generates a transform from a set of Euler angles. Uses the ZYX mobile robot
+      convention.
 
       :param roll: X rotation, in radians. Applied first.
       :param pitch: Y rotation, in radians. Applied second.
@@ -735,32 +743,28 @@ Classes
 
    .. method:: as_rpy_radians(self)
 
-      Computes roll, pitch, and yaw angles.
-      Uses the ZYX mobile robot convention.
+      Computes roll, pitch, and yaw angles. Uses the ZYX mobile robot convention.
 
       :returns: Named tuple containing Euler angles in radians.
 
 
    .. method:: compute_roll_radians(self)
 
-      Compute roll angle.
-      Uses the ZYX mobile robot convention.
+      Compute roll angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
 
    .. method:: compute_pitch_radians(self)
 
-      Compute pitch angle.
-      Uses the ZYX mobile robot convention.
+      Compute pitch angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
 
    .. method:: compute_yaw_radians(self)
 
-      Compute yaw angle.
-      Uses the ZYX mobile robot convention.
+      Compute yaw angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
@@ -828,7 +832,8 @@ Classes
 
    .. method:: adjoint(self)
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -836,8 +841,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -859,7 +864,8 @@ Classes
    .. method:: sample_uniform(key)
       :staticmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 

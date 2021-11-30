@@ -29,8 +29,8 @@ Classes
 
    Special Euclidean group for proper rigid transforms in 3D.
 
-   Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``.
-   Tangent parameterization is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
+   Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``. Tangent parameterization
+   is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz_xyz
       :annotation: :jaxlie.hints.Vector
@@ -111,7 +111,8 @@ Classes
 
    .. method:: adjoint(self)
 
-      Computes the adjoint, which transforms tangent vectors between tangent spaces.
+      Computes the adjoint, which transforms tangent vectors between tangent
+      spaces.
 
       More precisely, for a transform ``GroupType``\ :
 
@@ -119,8 +120,8 @@ Classes
 
          GroupType @ exp(omega) = exp(Adj_T @ omega) @ GroupType
 
-      In robotics, typically used for converting twists, wrenches, and Jacobians
-      between our spatial and body representations.
+      In robotics, typically used for transforming twists, wrenches, and Jacobians
+      across different reference frames.
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
@@ -128,7 +129,8 @@ Classes
    .. method:: sample_uniform(key)
       :staticmethod:
 
-      Draw a uniform sample from the group. Translations are in the range [-1, 1].
+      Draw a uniform sample from the group. Translations (if applicable) are in the
+      range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
