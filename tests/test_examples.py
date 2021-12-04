@@ -47,9 +47,12 @@ def test_se3_rotation():
         rotation=jaxlie.SO3.from_rpy_radians(onp.pi / 2.0, 0.0, 0.0),
         translation=onp.zeros(3),
     )
+    T_w_b_alt = jaxlie.SE3.from_rotation(
+        jaxlie.SO3.from_rpy_radians(onp.pi / 2.0, 0.0, 0.0),
+    )
     p_b = onp.array([0.0, 1.0, 0.0])
     p_w = onp.array([0.0, 0.0, 1.0])
-    assert_arrays_close(T_w_b @ p_b, p_w)
+    assert_arrays_close(T_w_b @ p_b, T_w_b_alt @ p_b, p_w)
 
 
 def test_so3_xyzw_basic():

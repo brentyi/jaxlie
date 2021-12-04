@@ -1,7 +1,7 @@
 """Compare forward- and reverse-mode Jacobians with a numerical Jacobian."""
 
 from functools import lru_cache
-from typing import Callable, Dict, Tuple, Type, cast
+from typing import Callable, Type, cast
 
 import jax
 import numpy as onp
@@ -38,7 +38,7 @@ def _assert_jacobians_close(
     assert_arrays_close(jacobian_fwd, jacobian_numerical, rtol=5e-4, atol=5e-4)
 
 
-# Exp
+# Exp tests.
 def _exp(
     Group: Type[jaxlie.MatrixLieGroup], generator: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -60,7 +60,7 @@ def test_exp_identity(Group: Type[jaxlie.MatrixLieGroup]):
     _assert_jacobians_close(Group=Group, f=_exp, primal=generator)
 
 
-# Log
+# Log tests.
 def _log(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -82,7 +82,7 @@ def test_log_identity(Group: Type[jaxlie.MatrixLieGroup]):
     _assert_jacobians_close(Group=Group, f=_log, primal=params)
 
 
-# Adjoint
+# Adjoint tests.
 def _adjoint(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -104,7 +104,7 @@ def test_adjoint_identity(Group: Type[jaxlie.MatrixLieGroup]):
     _assert_jacobians_close(Group=Group, f=_adjoint, primal=params)
 
 
-# Apply
+# Apply tests.
 def _apply(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -126,7 +126,7 @@ def test_apply_identity(Group: Type[jaxlie.MatrixLieGroup]):
     _assert_jacobians_close(Group=Group, f=_apply, primal=params)
 
 
-# Multiply
+# Multiply tests.
 def _multiply(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:
@@ -149,7 +149,7 @@ def test_multiply_identity(Group: Type[jaxlie.MatrixLieGroup]):
     _assert_jacobians_close(Group=Group, f=_multiply, primal=params)
 
 
-# Inverse
+# Inverse tests.
 def _inverse(
     Group: Type[jaxlie.MatrixLieGroup], params: jaxlie.hints.Array
 ) -> jaxlie.hints.ArrayJax:

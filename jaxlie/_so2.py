@@ -21,7 +21,7 @@ class SO2(_base.SOBase):
     Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.
     """
 
-    # SO2-specific
+    # SO2-specific.
 
     unit_complex: hints.Vector
     """Internal parameters. `(cos, sin)`."""
@@ -43,7 +43,7 @@ class SO2(_base.SOBase):
         radians = self.log()[..., 0]
         return radians
 
-    # Factory
+    # Factory.
 
     @staticmethod
     @overrides
@@ -56,7 +56,7 @@ class SO2(_base.SOBase):
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=matrix[:, 0])
 
-    # Accessors
+    # Accessors.
 
     @overrides
     def as_matrix(self) -> hints.MatrixJax:
@@ -72,7 +72,7 @@ class SO2(_base.SOBase):
     def parameters(self) -> hints.Vector:
         return self.unit_complex
 
-    # Operations
+    # Operations.
 
     @overrides
     def apply(self: "SO2", target: hints.Vector) -> hints.VectorJax:

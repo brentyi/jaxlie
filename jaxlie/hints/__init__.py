@@ -3,7 +3,7 @@ from typing import NamedTuple, Union
 import numpy as onp
 from jax import numpy as jnp
 
-# Type aliases for JAX/Numpy arrays; primarily for function inputs
+# Type aliases for JAX/Numpy arrays; primarily for function inputs.
 
 Array = Union[onp.ndarray, jnp.ndarray]
 """Type alias for `Union[jnp.ndarray, onp.ndarray]`."""
@@ -27,7 +27,7 @@ TangentVector = Array
 
 Refers to a 1D array with shape `(Group.tangent_dim,)`."""
 
-# Type aliases for JAX arrays; primarily for function outputs
+# Type aliases for JAX arrays; primarily for function outputs.
 
 ArrayJax = jnp.ndarray
 """Type alias for jnp.ndarray."""

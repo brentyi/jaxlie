@@ -19,7 +19,7 @@ import jaxlie
 @general_group_test
 def test_sample_uniform_valid(Group: Type[jaxlie.MatrixLieGroup]):
     """Check that sample_uniform() returns valid group members."""
-    T = sample_transform(Group)  # Calls sample_uniform under the hood
+    T = sample_transform(Group)  # Calls sample_uniform under the hood.
     assert_transforms_close(T, T.normalize())
 
 
@@ -105,7 +105,7 @@ def test_apply(Group: Type[jaxlie.MatrixLieGroup]):
             T_w_b.as_matrix() @ p_b,
         )
     else:
-        # Homogeneous coordinates
+        # Homogeneous coordinates.
         assert Group.matrix_dim == Group.space_dim + 1
         assert_arrays_close(
             T_w_b @ p_b,

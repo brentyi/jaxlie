@@ -71,10 +71,10 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
         transform_se2 = cast(SE2, transform)
         J = jnp.zeros((4, 3))
 
-        # Translation terms
+        # Translation terms.
         J = J.at[2:, :2].set(transform_se2.rotation().as_matrix())
 
-        # Rotation terms
+        # Rotation terms.
         J = J.at[:2, 2:3].set(
             rplus_jacobian_parameters_wrt_delta(transform_se2.rotation())
         )
@@ -107,10 +107,10 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
         transform_se3 = cast(SE3, transform)
         J = jnp.zeros((7, 6))
 
-        # Translation terms
+        # Translation terms.
         J = J.at[4:, :3].set(transform_se3.rotation().as_matrix())
 
-        # Rotation terms
+        # Rotation terms.
         J = J.at[:4, 3:6].set(
             rplus_jacobian_parameters_wrt_delta(transform_se3.rotation())
         )

@@ -39,13 +39,13 @@ def register_lie_group(
     """
 
     def _wrap(cls: Type[T]) -> Type[T]:
-        # Register dimensions as class attributes
+        # Register dimensions as class attributes.
         cls.matrix_dim = matrix_dim
         cls.parameters_dim = parameters_dim
         cls.tangent_dim = tangent_dim
         cls.space_dim = space_dim
 
-        # JIT for all methods
+        # JIT all methods.
         for f in filter(
             lambda f: not f.startswith("_") and callable(getattr(cls, f)),
             dir(cls),

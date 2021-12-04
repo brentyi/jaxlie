@@ -22,7 +22,7 @@ class SO3(_base.SOBase):
     `(omega_x, omega_y, omega_z)`.
     """
 
-    # SO3-specific
+    # SO3-specific.
 
     wxyz: hints.Vector
     """Internal parameters. `(w, x, y, z)` quaternion."""
@@ -153,7 +153,7 @@ class SO3(_base.SOBase):
         q0, q1, q2, q3 = self.wxyz
         return jnp.arctan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 ** 2 + q3 ** 2))
 
-    # Factory
+    # Factory.
 
     @staticmethod
     @overrides
@@ -189,7 +189,7 @@ class SO3(_base.SOBase):
             q = jnp.array([t, m[2, 1] - m[1, 2], m[0, 2] - m[2, 0], m[1, 0] - m[0, 1]])
             return t, q
 
-        # Compute four cases, then pick the most precise one
+        # Compute four cases, then pick the most precise one.
         # Probably worth revisiting this!
         case0_t, case0_q = case0(matrix)
         case1_t, case1_q = case1(matrix)
@@ -211,7 +211,7 @@ class SO3(_base.SOBase):
             jnp.where(cond2, case2_q, case3_q),
         )
 
-        # # We can also choose to branch, but this is slower
+        # We can also choose to branch, but this is slower.
         # t, q = jax.lax.cond(
         #     matrix[2, 2] < 0,
         #     true_fun=lambda matrix: jax.lax.cond(
@@ -231,7 +231,7 @@ class SO3(_base.SOBase):
 
         return SO3(wxyz=q * 0.5 / jnp.sqrt(t))
 
-    # Accessors
+    # Accessors.
 
     @overrides
     def as_matrix(self) -> hints.MatrixJax:
@@ -250,13 +250,13 @@ class SO3(_base.SOBase):
     def parameters(self) -> hints.Vector:
         return self.wxyz
 
-    # Operations
+    # Operations.
 
     @overrides
     def apply(self: "SO3", target: hints.Vector) -> hints.VectorJax:
         assert target.shape == (3,)
 
-        # Compute using quaternion multiplys
+        # Compute using quaternion multiplys.
         padded_target = jnp.zeros(4).at[1:].set(target)
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
@@ -288,11 +288,11 @@ class SO3(_base.SOBase):
         use_taylor = theta_squared < get_epsilon(tangent.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                0.0,  # Any constant value should do here
+                0.0,  # Any constant value should do here.
                 theta_squared,
             )
         )
@@ -329,11 +329,11 @@ class SO3(_base.SOBase):
         use_taylor = norm_sq < get_epsilon(norm_sq.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         norm_safe = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                1.0,  # Any non-zero value should do here
+                1.0,  # Any non-zero value should do here.
                 norm_sq,
             )
         )
@@ -360,7 +360,7 @@ class SO3(_base.SOBase):
 
     @overrides
     def inverse(self: "SO3") -> "SO3":
-        # Negate complex terms
+        # Negate complex terms.
         return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))
 
     @overrides
@@ -370,7 +370,7 @@ class SO3(_base.SOBase):
     @staticmethod
     @overrides
     def sample_uniform(key: jax.random.KeyArray) -> "SO3":
-        # Uniformly sample over S^4
+        # Uniformly sample over S^4.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(
             key=key,

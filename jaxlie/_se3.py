@@ -36,7 +36,7 @@ class SE3(_base.SEBase[SO3]):
     is `(vx, vy, vz, omega_x, omega_y, omega_z)`.
     """
 
-    # SE3-specific
+    # SE3-specific.
 
     wxyz_xyz: hints.Vector
     """Internal parameters. wxyz quaternion followed by xyz translation."""
@@ -47,7 +47,7 @@ class SE3(_base.SEBase[SO3]):
         trans = jnp.round(self.wxyz_xyz[..., 4:], 5)
         return f"{self.__class__.__name__}(wxyz={quat}, xyz={trans})"
 
-    # SE-specific
+    # SE-specific.
 
     @staticmethod
     @overrides
@@ -66,7 +66,7 @@ class SE3(_base.SEBase[SO3]):
     def translation(self) -> hints.Vector:
         return self.wxyz_xyz[..., 4:]
 
-    # Factory
+    # Factory.
 
     @staticmethod
     @overrides
@@ -77,13 +77,13 @@ class SE3(_base.SEBase[SO3]):
     @overrides
     def from_matrix(matrix: hints.Matrix) -> "SE3":
         assert matrix.shape == (4, 4)
-        # Currently assumes bottom row is [0, 0, 0, 1]
+        # Currently assumes bottom row is [0, 0, 0, 1].
         return SE3.from_rotation_and_translation(
             rotation=SO3.from_matrix(matrix[:3, :3]),
             translation=matrix[:3, 3],
         )
 
-    # Accessors
+    # Accessors.
 
     @overrides
     def as_matrix(self) -> hints.MatrixJax:
@@ -99,7 +99,7 @@ class SE3(_base.SEBase[SO3]):
     def parameters(self) -> hints.Vector:
         return self.wxyz_xyz
 
-    # Operations
+    # Operations.
 
     @staticmethod
     @overrides
@@ -116,10 +116,10 @@ class SE3(_base.SEBase[SO3]):
         use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         theta_squared_safe = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here
+            1.0,  # Any non-zero value should do here.
             theta_squared,
         )
         del theta_squared
@@ -154,10 +154,10 @@ class SE3(_base.SEBase[SO3]):
         skew_omega = _skew(omega)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         theta_squared_safe = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here
+            1.0,  # Any non-zero value should do here.
             theta_squared,
         )
         del theta_squared

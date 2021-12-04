@@ -23,7 +23,7 @@ class SE2(_base.SEBase[SO2]):
     vy, omega)`.
     """
 
-    # SE2-specific
+    # SE2-specific.
 
     unit_complex_xy: hints.Vector
     """Internal parameters. `(cos, sin, x, y)`."""
@@ -44,7 +44,7 @@ class SE2(_base.SEBase[SO2]):
         sin = jnp.sin(theta)
         return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))
 
-    # SE-specific
+    # SE-specific.
 
     @staticmethod
     @overrides
@@ -65,7 +65,7 @@ class SE2(_base.SEBase[SO2]):
     def translation(self) -> hints.Vector:
         return self.unit_complex_xy[..., 2:]
 
-    # Factory
+    # Factory.
 
     @staticmethod
     @overrides
@@ -76,13 +76,13 @@ class SE2(_base.SEBase[SO2]):
     @overrides
     def from_matrix(matrix: hints.Matrix) -> "SE2":
         assert matrix.shape == (3, 3)
-        # Currently assumes bottom row is [0, 0, 1]
+        # Currently assumes bottom row is [0, 0, 1].
         return SE2.from_rotation_and_translation(
             rotation=SO2.from_matrix(matrix[:2, :2]),
             translation=matrix[:2, 2],
         )
 
-    # Accessors
+    # Accessors.
 
     @overrides
     def parameters(self) -> hints.Vector:
@@ -99,7 +99,7 @@ class SE2(_base.SEBase[SO2]):
             ]
         )
 
-    # Operations
+    # Operations.
 
     @staticmethod
     @overrides
@@ -115,10 +115,10 @@ class SE2(_base.SEBase[SO2]):
         use_taylor = jnp.abs(theta) < get_epsilon(tangent.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         safe_theta = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here
+            1.0,  # Any non-zero value should do here.
             theta,
         )
 
@@ -160,18 +160,18 @@ class SE2(_base.SEBase[SO2]):
         use_taylor = jnp.abs(cos_minus_one) < get_epsilon(theta.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD
+        # reverse-mode AD.
         safe_cos_minus_one = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here
+            1.0,  # Any non-zero value should do here.
             cos_minus_one,
         )
 
         half_theta_over_tan_half_theta = jnp.where(
             use_taylor,
-            # Taylor approximation
+            # Taylor approximation.
             1.0 - (theta ** 2) / 12.0,
-            # Default
+            # Default.
             -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
         )
 

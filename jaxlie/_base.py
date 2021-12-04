@@ -15,8 +15,8 @@ SEGroupType = TypeVar("SEGroupType", bound="SEBase")
 class MatrixLieGroup(abc.ABC, EnforceOverrides):
     """Interface definition for matrix Lie groups."""
 
-    # Class properties
-    # > These will be set in `_utils.register_lie_group()`
+    # Class properties.
+    # > These will be set in `_utils.register_lie_group()`.
 
     matrix_dim: ClassVar[int]
     """Dimension of square matrix output from `.as_matrix()`."""
@@ -30,14 +30,19 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     space_dim: ClassVar[int]
     """Dimension of coordinates that can be transformed."""
 
-    def __init__(self, parameters: hints.Vector):
+    def __init__(
+        # Notes:
+        # - For the constructor signature to be consistent with subclasses, `parameters`
+        #   should be marked as positional-only. But this isn't possible in Python 3.7.
+        # - This method is implicitly overriden by the dataclass decorator and
+        #   should _not_ be marked abstract.
+        self,
+        parameters: hints.Vector,
+    ):
         """Construct a group object from its underlying parameters."""
-
-        # Note that this method is implicitly overriden by the dataclass decorator and
-        # should _not_ be marked abstract.
         raise NotImplementedError()
 
-    # Shared implementations
+    # Shared implementations.
 
     @overload
     def __matmul__(self: GroupType, other: GroupType) -> GroupType:
@@ -55,12 +60,13 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
         if isinstance(other, (onp.ndarray, jnp.ndarray)):
             return self.apply(target=other)
-        if isinstance(other, MatrixLieGroup):
+        elif isinstance(other, MatrixLieGroup):
+            assert self.space_dim == other.space_dim
             return self.multiply(other=other)
         else:
-            assert False, "Invalid argument"
+            assert False, f"Invalid argument type for `@` operator: {type(other)}"
 
-    # Factory
+    # Factory.
 
     @classmethod
     @abc.abstractmethod
@@ -83,7 +89,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
             Group member.
         """
 
-    # Accessors
+    # Accessors.
 
     @abc.abstractmethod
     def as_matrix(self) -> hints.MatrixJax:
@@ -93,7 +99,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     def parameters(self) -> hints.Vector:
         """Get underlying representation."""
 
-    # Operations
+    # Operations.
 
     @abc.abstractmethod
     def apply(self: GroupType, target: hints.Vector) -> hints.VectorJax:
@@ -195,7 +201,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     translation vector.
     """
 
-    # SE-specific interface
+    # SE-specific interface.
 
     @classmethod
     @abc.abstractmethod
@@ -214,6 +220,14 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
             Constructed transformation.
         """
 
+    @final
+    @classmethod
+    def from_rotation(cls: Type[SEGroupType], rotation: ContainedSOType) -> SEGroupType:
+        return cls.from_rotation_and_translation(
+            rotation=rotation,
+            translation=onp.zeros(cls.space_dim, dtype=rotation.parameters().dtype),
+        )
+
     @abc.abstractmethod
     def rotation(self) -> ContainedSOType:
         """Returns a transform's rotation term."""
@@ -222,7 +236,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     def translation(self) -> hints.Vector:
         """Returns a transform's translation term."""
 
-    # Overrides
+    # Overrides.
 
     @final
     @overrides
