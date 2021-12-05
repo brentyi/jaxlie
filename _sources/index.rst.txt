@@ -42,6 +42,7 @@ Source code on `Github <https://github.com/brentyi/jaxlie>`_.
    :caption: Example usage
 
    se3_overview
+   vmap_usage
 
 
 .. |build| image:: https://github.com/brentyi/jaxlie/workflows/build/badge.svg

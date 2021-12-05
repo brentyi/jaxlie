@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -107,7 +108,7 @@
 <span class="sd">    is `(vx, vy, vz, omega_x, omega_y, omega_z)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># SE3-specific</span>
+    <span class="c1"># SE3-specific.</span>
 
     <span class="n">wxyz_xyz</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. wxyz quaternion followed by xyz translation.&quot;&quot;&quot;</span>
@@ -118,7 +119,7 @@
         <span class="n">trans</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:],</span> <span class="mi">5</span><span class="p">)</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(wxyz=</span><span class="si">{</span><span class="n">quat</span><span class="si">}</span><span class="s2">, xyz=</span><span class="si">{</span><span class="n">trans</span><span class="si">}</span><span class="s2">)&quot;</span></div>
 
-    <span class="c1"># SE-specific</span>
+    <span class="c1"># SE-specific.</span>
 
 <div class="viewcode-block" id="SE3.from_rotation_and_translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.from_rotation_and_translation">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -137,7 +138,7 @@
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:]</span></div>
 
-    <span class="c1"># Factory</span>
+    <span class="c1"># Factory.</span>
 
 <div class="viewcode-block" id="SE3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -148,13 +149,13 @@
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-        <span class="c1"># Currently assumes bottom row is [0, 0, 0, 1]</span>
+        <span class="c1"># Currently assumes bottom row is [0, 0, 0, 1].</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">SO3</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]),</span>
             <span class="n">translation</span><span class="o">=</span><span class="n">matrix</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
         <span class="p">)</span></div>
 
-    <span class="c1"># Accessors</span>
+    <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="SE3.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
@@ -170,7 +171,7 @@
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span></div>
 
-    <span class="c1"># Operations</span>
+    <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="SE3.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -187,10 +188,10 @@
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta_squared</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">theta_squared_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here.</span>
             <span class="n">theta_squared</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">del</span> <span class="n">theta_squared</span>
@@ -225,10 +226,10 @@
         <span class="n">skew_omega</span> <span class="o">=</span> <span class="n">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">theta_squared_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here.</span>
             <span class="n">theta_squared</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">del</span> <span class="n">theta_squared</span>

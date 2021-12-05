@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -142,10 +143,10 @@
         <span class="n">transform_se2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
-        <span class="c1"># Translation terms</span>
+        <span class="c1"># Translation terms.</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
-        <span class="c1"># Rotation terms</span>
+        <span class="c1"># Rotation terms.</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
         <span class="p">)</span>
@@ -178,10 +179,10 @@
         <span class="n">transform_se3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
-        <span class="c1"># Translation terms</span>
+        <span class="c1"># Translation terms.</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">4</span><span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
-        <span class="c1"># Rotation terms</span>
+        <span class="c1"># Rotation terms.</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
         <span class="p">)</span>

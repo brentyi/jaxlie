@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -94,7 +95,7 @@
 <span class="sd">    vy, omega)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># SE2-specific</span>
+    <span class="c1"># SE2-specific.</span>
 
     <span class="n">unit_complex_xy</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin, x, y)`.&quot;&quot;&quot;</span>
@@ -115,7 +116,7 @@
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="p">(</span><span class="n">unit_complex_xy</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]))</span></div>
 
-    <span class="c1"># SE-specific</span>
+    <span class="c1"># SE-specific.</span>
 
 <div class="viewcode-block" id="SE2.from_rotation_and_translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_rotation_and_translation">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -136,7 +137,7 @@
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex_xy</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:]</span></div>
 
-    <span class="c1"># Factory</span>
+    <span class="c1"># Factory.</span>
 
 <div class="viewcode-block" id="SE2.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -147,13 +148,13 @@
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="c1"># Currently assumes bottom row is [0, 0, 1]</span>
+        <span class="c1"># Currently assumes bottom row is [0, 0, 1].</span>
         <span class="k">return</span> <span class="n">SE2</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">SO2</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]),</span>
             <span class="n">translation</span><span class="o">=</span><span class="n">matrix</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
         <span class="p">)</span></div>
 
-    <span class="c1"># Accessors</span>
+    <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="SE2.parameters"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.parameters">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
@@ -170,7 +171,7 @@
             <span class="p">]</span>
         <span class="p">)</span></div>
 
-    <span class="c1"># Operations</span>
+    <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="SE2.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -186,10 +187,10 @@
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here.</span>
             <span class="n">theta</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -231,18 +232,18 @@
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">cos_minus_one</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">theta</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">safe_cos_minus_one</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+            <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here.</span>
             <span class="n">cos_minus_one</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">half_theta_over_tan_half_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="c1"># Taylor approximation</span>
+            <span class="c1"># Taylor approximation.</span>
             <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">theta</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span><span class="p">,</span>
-            <span class="c1"># Default</span>
+            <span class="c1"># Default.</span>
             <span class="o">-</span><span class="p">(</span><span class="n">half_theta</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">/</span> <span class="n">safe_cos_minus_one</span><span class="p">,</span>
         <span class="p">)</span>
 

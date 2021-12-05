@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -86,8 +87,8 @@
 <div class="viewcode-block" id="MatrixLieGroup"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup">[docs]</a><span class="k">class</span> <span class="nc">MatrixLieGroup</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">,</span> <span class="n">EnforceOverrides</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Interface definition for matrix Lie groups.&quot;&quot;&quot;</span>
 
-    <span class="c1"># Class properties</span>
-    <span class="c1"># &gt; These will be set in `_utils.register_lie_group()`</span>
+    <span class="c1"># Class properties.</span>
+    <span class="c1"># &gt; These will be set in `_utils.register_lie_group()`.</span>
 
     <span class="n">matrix_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of square matrix output from `.as_matrix()`.&quot;&quot;&quot;</span>
@@ -101,14 +102,19 @@
     <span class="n">space_dim</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Dimension of coordinates that can be transformed.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="c1"># Notes:</span>
+        <span class="c1"># - For the constructor signature to be consistent with subclasses, `parameters`</span>
+        <span class="c1">#   should be marked as positional-only. But this isn&#39;t possible in Python 3.7.</span>
+        <span class="c1"># - This method is implicitly overriden by the dataclass decorator and</span>
+        <span class="c1">#   should _not_ be marked abstract.</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct a group object from its underlying parameters.&quot;&quot;&quot;</span>
-
-        <span class="c1"># Note that this method is implicitly overriden by the dataclass decorator and</span>
-        <span class="c1"># should _not_ be marked abstract.</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
-    <span class="c1"># Shared implementations</span>
+    <span class="c1"># Shared implementations.</span>
 
     <span class="nd">@overload</span>
     <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
@@ -126,12 +132,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="p">(</span><span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">space_dim</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">space_dim</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">other</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Invalid argument&quot;</span></div>
+            <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Invalid argument type for `@` operator: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
-    <span class="c1"># Factory</span>
+    <span class="c1"># Factory.</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.identity">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -154,7 +161,7 @@
 <span class="sd">            Group member.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-    <span class="c1"># Accessors</span>
+    <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.as_matrix">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
@@ -164,7 +171,7 @@
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get underlying representation.&quot;&quot;&quot;</span></div>
 
-    <span class="c1"># Operations</span>
+    <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
@@ -266,7 +273,7 @@
 <span class="sd">    translation vector.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># SE-specific interface</span>
+    <span class="c1"># SE-specific interface.</span>
 
 <div class="viewcode-block" id="SEBase.from_rotation_and_translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.from_rotation_and_translation">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -285,6 +292,14 @@
 <span class="sd">            Constructed transformation.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
+<div class="viewcode-block" id="SEBase.from_rotation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.from_rotation">[docs]</a>    <span class="nd">@final</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_rotation</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SEGroupType</span><span class="p">],</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">ContainedSOType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
+            <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span>
+            <span class="n">translation</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">space_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rotation</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
 <div class="viewcode-block" id="SEBase.rotation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.rotation">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContainedSOType</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a transform&#39;s rotation term.&quot;&quot;&quot;</span></div>
@@ -293,7 +308,7 @@
     <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a transform&#39;s translation term.&quot;&quot;&quot;</span></div>
 
-    <span class="c1"># Overrides</span>
+    <span class="c1"># Overrides.</span>
 
 <div class="viewcode-block" id="SEBase.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.apply">[docs]</a>    <span class="nd">@final</span>
     <span class="nd">@overrides</span>

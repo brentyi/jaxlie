@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -110,13 +111,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
-        <span class="c1"># Register dimensions as class attributes</span>
+        <span class="c1"># Register dimensions as class attributes.</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">matrix_dim</span> <span class="o">=</span> <span class="n">matrix_dim</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">parameters_dim</span> <span class="o">=</span> <span class="n">parameters_dim</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">tangent_dim</span> <span class="o">=</span> <span class="n">tangent_dim</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">space_dim</span> <span class="o">=</span> <span class="n">space_dim</span>
 
-        <span class="c1"># JIT for all methods</span>
+        <span class="c1"># JIT all methods.</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)),</span>
             <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>

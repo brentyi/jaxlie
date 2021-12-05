@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -74,7 +75,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
-<span class="c1"># Type aliases for JAX/Numpy arrays; primarily for function inputs</span>
+<span class="c1"># Type aliases for JAX/Numpy arrays; primarily for function inputs.</span>
 
 <span class="n">Array</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
 <span class="sd">&quot;&quot;&quot;Type alias for `Union[jnp.ndarray, onp.ndarray]`.&quot;&quot;&quot;</span>
@@ -98,7 +99,7 @@
 
 <span class="sd">Refers to a 1D array with shape `(Group.tangent_dim,)`.&quot;&quot;&quot;</span>
 
-<span class="c1"># Type aliases for JAX arrays; primarily for function outputs</span>
+<span class="c1"># Type aliases for JAX arrays; primarily for function outputs.</span>
 
 <span class="n">ArrayJax</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
 <span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>

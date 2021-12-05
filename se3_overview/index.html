@@ -19,6 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex/" />
     <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="jax.vmap Usage" href="../vmap_usage/" />
     <link rel="prev" title="jaxlie.utils" href="../api/jaxlie/utils/" /> 
 </head>
 
@@ -44,6 +45,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -77,11 +79,11 @@
 <span class="kn">from</span> <span class="nn">jaxlie</span> <span class="kn">import</span> <span class="n">SE3</span>
 
 <span class="c1">#############################</span>
-<span class="c1"># (1) Constructing transforms</span>
+<span class="c1"># (1) Constructing transforms.</span>
 <span class="c1">#############################</span>
 
 <span class="c1"># We can compute a w&lt;-b transform by integrating over an se(3) screw, equivalent</span>
-<span class="c1"># to `SE3.from_matrix(expm(wedge(twist)))`</span>
+<span class="c1"># to `SE3.from_matrix(expm(wedge(twist)))`.</span>
 <span class="n">twist</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
 <span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">twist</span><span class="p">)</span>
 
@@ -92,8 +94,8 @@
 <span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">translation</span><span class="p">())</span>
 
 <span class="c1"># Or the underlying parameters; this is a length-7 (quaternion, translation) array:</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>  <span class="c1"># Helper shared by all groups</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>  <span class="c1"># Helper shared by all groups.</span>
 
 <span class="c1"># There are also other helpers to generate transforms, eg from matrices:</span>
 <span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
@@ -109,7 +111,7 @@
 
 
 <span class="c1">#############################</span>
-<span class="c1"># (2) Applying transforms</span>
+<span class="c1"># (2) Applying transforms.</span>
 <span class="c1">#############################</span>
 
 <span class="c1"># Transform points with the `@` operator:</span>
@@ -127,7 +129,7 @@
 
 
 <span class="c1">#############################</span>
-<span class="c1"># (3) Composing transforms</span>
+<span class="c1"># (3) Composing transforms.</span>
 <span class="c1">#############################</span>
 
 <span class="c1"># Compose transforms with the `@` operator:</span>
@@ -141,7 +143,7 @@
 
 
 <span class="c1">#############################</span>
-<span class="c1"># (4) Misc</span>
+<span class="c1"># (4) Misc.</span>
 <span class="c1">#############################</span>
 
 <span class="c1"># Compute inverses:</span>
@@ -165,6 +167,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../api/jaxlie/utils/" class="btn btn-neutral float-left" title="jaxlie.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../vmap_usage/" class="btn btn-neutral float-right" title="jax.vmap Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -42,6 +42,7 @@
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
         </div>
@@ -93,7 +94,7 @@
 <span class="sd">    `(omega_x, omega_y, omega_z)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># SO3-specific</span>
+    <span class="c1"># SO3-specific.</span>
 
     <span class="n">wxyz</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. `(w, x, y, z)` quaternion.&quot;&quot;&quot;</span>
@@ -224,7 +225,7 @@
         <span class="n">q0</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q0</span> <span class="o">*</span> <span class="n">q3</span> <span class="o">+</span> <span class="n">q1</span> <span class="o">*</span> <span class="n">q2</span><span class="p">),</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">q2</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">q3</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span></div>
 
-    <span class="c1"># Factory</span>
+    <span class="c1"># Factory.</span>
 
 <div class="viewcode-block" id="SO3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
@@ -260,7 +261,7 @@
             <span class="n">q</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t</span><span class="p">,</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">m</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
             <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">q</span>
 
-        <span class="c1"># Compute four cases, then pick the most precise one</span>
+        <span class="c1"># Compute four cases, then pick the most precise one.</span>
         <span class="c1"># Probably worth revisiting this!</span>
         <span class="n">case0_t</span><span class="p">,</span> <span class="n">case0_q</span> <span class="o">=</span> <span class="n">case0</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
         <span class="n">case1_t</span><span class="p">,</span> <span class="n">case1_q</span> <span class="o">=</span> <span class="n">case1</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>
@@ -282,7 +283,7 @@
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cond2</span><span class="p">,</span> <span class="n">case2_q</span><span class="p">,</span> <span class="n">case3_q</span><span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="c1"># # We can also choose to branch, but this is slower</span>
+        <span class="c1"># We can also choose to branch, but this is slower.</span>
         <span class="c1"># t, q = jax.lax.cond(</span>
         <span class="c1">#     matrix[2, 2] &lt; 0,</span>
         <span class="c1">#     true_fun=lambda matrix: jax.lax.cond(</span>
@@ -302,7 +303,7 @@
 
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">q</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">t</span><span class="p">))</span></div>
 
-    <span class="c1"># Accessors</span>
+    <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="SO3.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
@@ -321,13 +322,13 @@
     <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span></div>
 
-    <span class="c1"># Operations</span>
+    <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="SO3.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.apply">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO3&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
 
-        <span class="c1"># Compute using quaternion multiplys</span>
+        <span class="c1"># Compute using quaternion multiplys.</span>
         <span class="n">padded_target</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="bp">self</span> <span class="o">@</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">padded_target</span><span class="p">)</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse</span><span class="p">())</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span></div>
 
@@ -359,11 +360,11 @@
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">theta_squared</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">tangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">use_taylor</span><span class="p">,</span>
-                <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Any constant value should do here</span>
+                <span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># Any constant value should do here.</span>
                 <span class="n">theta_squared</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -400,11 +401,11 @@
         <span class="n">use_taylor</span> <span class="o">=</span> <span class="n">norm_sq</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">norm_sq</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="c1"># Shim to avoid NaNs in jnp.where branches, which cause failures for</span>
-        <span class="c1"># reverse-mode AD</span>
+        <span class="c1"># reverse-mode AD.</span>
         <span class="n">norm_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">use_taylor</span><span class="p">,</span>
-                <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here</span>
+                <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any non-zero value should do here.</span>
                 <span class="n">norm_sq</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -431,7 +432,7 @@
 
 <div class="viewcode-block" id="SO3.inverse"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.inverse">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
-        <span class="c1"># Negate complex terms</span>
+        <span class="c1"># Negate complex terms.</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span> <span class="o">*</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO3.normalize"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.normalize">[docs]</a>    <span class="nd">@overrides</span>
@@ -441,7 +442,7 @@
 <div class="viewcode-block" id="SO3.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
-        <span class="c1"># Uniformly sample over S^4</span>
+        <span class="c1"># Uniformly sample over S^4.</span>
         <span class="c1"># &gt; Reference: http://planning.cs.uiuc.edu/node198.html</span>
         <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
             <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>

@@ -241,6 +241,10 @@ Attributes
       :returns: Constructed transformation.
 
 
+   .. method:: from_rotation(cls, rotation)
+      :classmethod:
+
+
    .. method:: rotation(self)
       :abstractmethod:
 
