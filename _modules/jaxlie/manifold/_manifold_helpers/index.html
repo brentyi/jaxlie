@@ -86,7 +86,7 @@
 
 
 <div class="viewcode-block" id="rplus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rplus">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Manifold right plus.</span>
 
 <span class="sd">    Computes `T_wb = T_wa @ exp(delta)`.</span>
@@ -102,22 +102,20 @@
 
 
 <div class="viewcode-block" id="rplus_jacobian_parameters_wrt_delta"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rplus_jacobian_parameters_wrt_delta">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero</span>
 <span class="sd">    local delta.</span>
 
-<span class="sd">    Useful for on-manifold optimization.</span>
+<span class="sd">    Sometimes useful for manifold optimization.</span>
 
 <span class="sd">    Equivalent to --</span>
 <span class="sd">    ```</span>
-<span class="sd">    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -&gt; jnp.ndarray:</span>
-<span class="sd">        # Since transform objects are pytree containers, note that `jacfwd` returns a</span>
-<span class="sd">        # transformation object itself and that the Jacobian terms corresponding to the</span>
-<span class="sd">        # parameters are grabbed explicitly.</span>
+<span class="sd">    def rplus_jacobian_parameters_wrt_delta(</span>
+<span class="sd">        transform: jaxlie.MatrixLieGroup,</span>
+<span class="sd">    ) -&gt; jnp.ndarray:</span>
 <span class="sd">        return jax.jacfwd(</span>
-<span class="sd">            jaxlie.manifold.rplus,  # Args are (transform, delta)</span>
-<span class="sd">            argnums=1,  # Jacobian wrt delta</span>
-<span class="sd">        )(transform, onp.zeros(transform.tangent_dim)).parameters()</span>
+<span class="sd">            lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()</span>
+<span class="sd">        )(onp.zeros(transform.tangent_dim))</span>
 <span class="sd">    ```</span>
 
 <span class="sd">    Args:</span>
@@ -126,7 +124,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SO2</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: cos, sin</span>
         <span class="c1"># Jacobian col indices: theta</span>
 
@@ -136,7 +134,7 @@
         <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="n">transform_so2</span><span class="o">.</span><span class="n">unit_complex</span>
         <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE2</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SE2</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: cos, sin, x, y</span>
         <span class="c1"># Jacobian col indices: vx, vy, omega</span>
 
@@ -151,7 +149,7 @@
             <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
         <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SO3</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: qw, qx, qy, qz</span>
         <span class="c1"># Jacobian col indices: omega x, omega y, omega z</span>
 
@@ -172,7 +170,7 @@
             <span class="o">/</span> <span class="mf">2.0</span>
         <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE3</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SE3</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: qw, qx, qy, qz, x, y, z</span>
         <span class="c1"># Jacobian col indices: vx, vy, vz, omega x, omega y, omega z</span>
 
@@ -195,7 +193,7 @@
 
 
 <div class="viewcode-block" id="rminus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._manifold_helpers.rminus">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVectorJax</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">T</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Manifold right minus.</span>
 
 <span class="sd">    Computes `delta = (T_wa.inverse() @ T_wb).log()`.</span>

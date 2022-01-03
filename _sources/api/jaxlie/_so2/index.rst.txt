@@ -22,7 +22,7 @@ Classes
 .. class:: SO2(parameters)
 
 
-   Bases: :py:obj:`jaxlie.SOBase`
+   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._so2.SO2
       :parts: 1
@@ -32,7 +32,7 @@ Classes
    Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
 
    .. attribute:: unit_complex
-      :annotation: :jaxlie.hints.Vector
+      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (2), jax.numpy.floating]
 
       Internal parameters. ``(cos, sin)``.
 

@@ -22,7 +22,7 @@ Classes
 .. class:: SO3(parameters)
 
 
-   Bases: :py:obj:`jaxlie.SOBase`
+   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie._so3.SO3
       :parts: 1
@@ -33,7 +33,7 @@ Classes
    ``(omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz
-      :annotation: :jaxlie.hints.Vector
+      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (4), jax.numpy.floating]
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 

@@ -117,7 +117,7 @@
 <dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">T_ab.log()</span></code></p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -131,7 +131,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>transform</strong> (<em>T</em>) – <code class="docutils literal notranslate"><span class="pre">T_wa</span></code></p></li>
-<li><p><strong>delta</strong> (<em>jaxlie.hints.TangentVector</em>) – <code class="docutils literal notranslate"><span class="pre">T_ab.log()</span></code></p></li>
+<li><p><strong>delta</strong> (<em>jaxlie.hints.Array</em>) – <code class="docutils literal notranslate"><span class="pre">T_ab.log()</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -148,16 +148,14 @@
 <span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus_jacobian_parameters_wrt_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="Permalink to this definition"></a></dt>
 <dd><p>Analytical Jacobians for <code class="docutils literal notranslate"><span class="pre">jaxlie.manifold.rplus()</span></code>, linearized around a zero
 local delta.</p>
-<p>Useful for on-manifold optimization.</p>
+<p>Sometimes useful for manifold optimization.</p>
 <p>Equivalent to –</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="c1"># Since transform objects are pytree containers, note that `jacfwd` returns a</span>
-    <span class="c1"># transformation object itself and that the Jacobian terms corresponding to the</span>
-    <span class="c1"># parameters are grabbed explicitly.</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">MatrixLieGroup</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">jacfwd</span><span class="p">(</span>
-        <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">,</span>  <span class="c1"># Args are (transform, delta)</span>
-        <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Jacobian wrt delta</span>
-    <span class="p">)(</span><span class="n">transform</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+        <span class="k">lambda</span> <span class="n">delta</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+    <span class="p">)(</span><span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
@@ -168,7 +166,7 @@ local delta.</p>
 <dd class="field-even"><p>Jacobian. Shape should be <code class="docutils literal notranslate"><span class="pre">(Group.parameters_dim,</span> <span class="pre">Group.tangent_dim)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

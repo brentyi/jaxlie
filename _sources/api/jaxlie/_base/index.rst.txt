@@ -76,7 +76,7 @@ Attributes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: jaxlie.hints.Vector) -> jaxlie.hints.VectorJax
+               __matmul__(self: GroupType, other: jaxlie.hints.Array) -> jax.numpy.ndarray
 
       Overload for the ``@`` operator.
 
@@ -197,6 +197,16 @@ Attributes
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
       :returns: Sampled group member.
+
+
+   .. method:: get_batch_axes(self)
+      :abstractmethod:
+
+      Return any leading batch axes in contained parameters. If an array of shape
+      ``(100, 4)`` is placed in the wxyz field of an SO3 object, for example, this will
+      return ``(100,)``.
+
+      This should generally be implemented by ``jdc.EnforcedAnnotationsMixin``.
 
 
 

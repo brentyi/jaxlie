@@ -106,8 +106,7 @@
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;Decorator for registering Lie group dataclasses.</span>
 
-<span class="sd">    - Sets static dimensionality attributes</span>
-<span class="sd">    - Marks all methods for JIT compilation</span>
+<span class="sd">    Sets dimensionality class variables, and marks all methods for JIT compilation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>

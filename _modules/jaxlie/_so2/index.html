@@ -71,10 +71,10 @@
              
   <h1>Source code for jaxlie._so2</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax_dataclasses</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_base</span><span class="p">,</span> <span class="n">hints</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">register_lie_group</span>
@@ -86,8 +86,8 @@
     <span class="n">tangent_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">space_dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
-<span class="k">class</span> <span class="nc">SO2</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SOBase</span><span class="p">):</span>
+<span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
+<span class="k">class</span> <span class="nc">SO2</span><span class="p">(</span><span class="n">jdc</span><span class="o">.</span><span class="n">EnforcedAnnotationsMixin</span><span class="p">,</span> <span class="n">_base</span><span class="o">.</span><span class="n">SOBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Special orthogonal group for 2D rotations.</span>
 
 <span class="sd">    Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.</span>
@@ -95,7 +95,11 @@
 
     <span class="c1"># SO2-specific.</span>
 
-    <span class="n">unit_complex</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
+    <span class="n">unit_complex</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">2</span><span class="p">,),</span>  <span class="c1"># Shape.</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>  <span class="c1"># Data-type.</span>
+    <span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin)`.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SO2.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.__repr__">[docs]</a>    <span class="nd">@overrides</span>
@@ -110,7 +114,7 @@
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">]))</span></div>
 
-<div class="viewcode-block" id="SO2.as_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.as_radians">[docs]</a>    <span class="k">def</span> <span class="nf">as_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">ScalarJax</span><span class="p">:</span>
+<div class="viewcode-block" id="SO2.as_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.as_radians">[docs]</a>    <span class="k">def</span> <span class="nf">as_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Compute a scalar angle from a rotation object.&quot;&quot;&quot;</span>
         <span class="n">radians</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">()[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">radians</span></div>
@@ -120,34 +124,38 @@
 <div class="viewcode-block" id="SO2.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO2.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span></div>
 
     <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="SO2.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
-        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="n">cos_sin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
-                <span class="p">[</span><span class="n">cos</span><span class="p">,</span> <span class="o">-</span><span class="n">sin</span><span class="p">],</span>
-                <span class="p">[</span><span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">],</span>
+                <span class="c1"># [cos, -sin],</span>
+                <span class="n">cos_sin</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                <span class="c1"># [sin, cos],</span>
+                <span class="n">cos_sin</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
             <span class="p">]</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="SO2.parameters"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.parameters">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span></div>
 
     <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="SO2.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.apply">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">target</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span> <span class="o">@</span> <span class="n">target</span>  <span class="c1"># type: ignore</span></div>
 
@@ -157,20 +165,20 @@
 
 <div class="viewcode-block" id="SO2.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
         <span class="p">(</span><span class="n">theta</span><span class="p">,)</span> <span class="o">=</span> <span class="n">tangent</span>
         <span class="n">cos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO2.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.log">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SO2.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.adjoint">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SO2&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SO2.inverse"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.inverse">[docs]</a>    <span class="nd">@overrides</span>

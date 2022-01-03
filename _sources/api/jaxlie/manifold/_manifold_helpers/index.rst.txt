@@ -51,20 +51,18 @@ Attributes
    Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
    local delta.
 
-   Useful for on-manifold optimization.
+   Sometimes useful for manifold optimization.
 
    Equivalent to --
 
    .. code-block::
 
-      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
-          # Since transform objects are pytree containers, note that `jacfwd` returns a
-          # transformation object itself and that the Jacobian terms corresponding to the
-          # parameters are grabbed explicitly.
+      def rplus_jacobian_parameters_wrt_delta(
+          transform: jaxlie.MatrixLieGroup,
+      ) -> jnp.ndarray:
           return jax.jacfwd(
-              jaxlie.manifold.rplus,  # Args are (transform, delta)
-              argnums=1,  # Jacobian wrt delta
-          )(transform, onp.zeros(transform.tangent_dim)).parameters()
+              lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()
+          )(onp.zeros(transform.tangent_dim))
 
    :param transform:
 

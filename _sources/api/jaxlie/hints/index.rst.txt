@@ -24,14 +24,6 @@ Attributes
 
    jaxlie.hints.Array
    jaxlie.hints.Scalar
-   jaxlie.hints.Matrix
-   jaxlie.hints.Vector
-   jaxlie.hints.TangentVector
-   jaxlie.hints.ArrayJax
-   jaxlie.hints.ScalarJax
-   jaxlie.hints.MatrixJax
-   jaxlie.hints.VectorJax
-   jaxlie.hints.TangentVectorJax
 
 
 .. data:: Array
@@ -44,61 +36,6 @@ Attributes
    
 
    Type alias for ``Union[float, Array]``.
-
-
-.. data:: Matrix
-   
-
-   Type alias for ``Array``. Should not be instantiated.
-
-   Refers to a square matrix, typically with shape ``(Group.matrix_dim, Group.matrix_dim)``.
-   For adjoints, shape should be ``(Group.tangent_dim, Group.tangent_dim)``.
-
-
-.. data:: Vector
-   
-
-   Type alias for ``Array``. Should not be instantiated.
-
-   Refers to a general 1D array.
-
-
-.. data:: TangentVector
-   
-
-   Type alias for ``Array``. Should not be instantiated.
-
-   Refers to a 1D array with shape ``(Group.tangent_dim,)``.
-
-
-.. data:: ArrayJax
-   
-
-   Type alias for jnp.ndarray.
-
-
-.. data:: ScalarJax
-   
-
-   Type alias for jnp.ndarray.
-
-
-.. data:: MatrixJax
-   
-
-   Type alias for jnp.ndarray.
-
-
-.. data:: VectorJax
-   
-
-   Type alias for jnp.ndarray.
-
-
-.. data:: TangentVectorJax
-   
-
-   Type alias for jnp.ndarray.
 
 
 .. class:: RollPitchYaw

@@ -71,17 +71,17 @@
              
   <h1>Source code for jaxlie._se3</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax_dataclasses</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_base</span><span class="p">,</span> <span class="n">hints</span>
 <span class="kn">from</span> <span class="nn">._so3</span> <span class="kn">import</span> <span class="n">SO3</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_epsilon</span><span class="p">,</span> <span class="n">register_lie_group</span>
 
 
-<span class="k">def</span> <span class="nf">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns the skew-symmetric form of a length-3 vector.&quot;&quot;&quot;</span>
 
     <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span><span class="p">,</span> <span class="n">wz</span> <span class="o">=</span> <span class="n">omega</span>
@@ -100,8 +100,8 @@
     <span class="n">tangent_dim</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
     <span class="n">space_dim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="nd">@jax_dataclasses</span><span class="o">.</span><span class="n">pytree_dataclass</span>
-<span class="k">class</span> <span class="nc">SE3</span><span class="p">(</span><span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO3</span><span class="p">]):</span>
+<span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
+<span class="k">class</span> <span class="nc">SE3</span><span class="p">(</span><span class="n">jdc</span><span class="o">.</span><span class="n">EnforcedAnnotationsMixin</span><span class="p">,</span> <span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO3</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.</span>
 
 <span class="sd">    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization</span>
@@ -110,7 +110,11 @@
 
     <span class="c1"># SE3-specific.</span>
 
-    <span class="n">wxyz_xyz</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span>
+    <span class="n">wxyz_xyz</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="p">(</span><span class="mi">7</span><span class="p">,),</span>  <span class="c1"># Shape.</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>  <span class="c1"># Data-type.</span>
+    <span class="p">]</span>
     <span class="sd">&quot;&quot;&quot;Internal parameters. wxyz quaternion followed by xyz translation.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE3.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.__repr__">[docs]</a>    <span class="nd">@overrides</span>
@@ -125,7 +129,7 @@
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
         <span class="n">rotation</span><span class="p">:</span> <span class="n">SO3</span><span class="p">,</span>
-        <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
+        <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">translation</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">rotation</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">translation</span><span class="p">]))</span></div>
@@ -135,7 +139,7 @@
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SE3.translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.translation">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:]</span></div>
 
     <span class="c1"># Factory.</span>
@@ -143,11 +147,11 @@
 <div class="viewcode-block" id="SE3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
+        <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SE3.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="c1"># Currently assumes bottom row is [0, 0, 0, 1].</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
@@ -158,7 +162,7 @@
     <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="SE3.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.as_matrix">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
             <span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -168,14 +172,14 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SE3.parameters"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.parameters">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz_xyz</span></div>
 
     <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="SE3.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761</span>
 
@@ -216,7 +220,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SE3.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.log">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
@@ -255,7 +259,7 @@
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">V_inv</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">(),</span> <span class="n">omega</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SE3.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.adjoint">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">block</span><span class="p">(</span>
             <span class="p">[</span>

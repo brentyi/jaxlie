@@ -158,7 +158,7 @@
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.__matmul__">
 <span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GroupType</span></span></span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.__matmul__" title="Permalink to this definition"></a></dt>
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Vector" title="jaxlie.hints.Vector"><span class="pre">jaxlie.hints.Vector</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hints/#jaxlie.hints.VectorJax" title="jaxlie.hints.VectorJax"><span class="pre">jaxlie.hints.VectorJax</span></a></span></span></dt>
+<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="hints/#jaxlie.hints.Array" title="jaxlie.hints.Array"><span class="pre">jaxlie.hints.Array</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">jax.numpy.ndarray</span></span></span></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
 <p>Switches between the group action (<code class="docutils literal notranslate"><span class="pre">.apply()</span></code>) and multiplication
 (<code class="docutils literal notranslate"><span class="pre">.multiply()</span></code>) based on the type of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
@@ -188,7 +188,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix</strong> (<em>jaxlie.hints.Matrix</em>) – Matrix representaiton.</p></li>
+<li><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p></li>
 <li><p><strong>cls</strong> (<em>Type</em><em>[</em><em>GroupType</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -207,7 +207,7 @@
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -218,7 +218,7 @@
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -230,7 +230,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<em>GroupType</em>) – </p></li>
 </ul>
 </dd>
@@ -238,7 +238,7 @@
 <dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -270,7 +270,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tangent</strong> (<em>jaxlie.hints.TangentVector</em>) – Tangent vector to take the exponential of.</p></li>
+<li><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p></li>
 <li><p><strong>cls</strong> (<em>Type</em><em>[</em><em>GroupType</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -295,7 +295,7 @@
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -319,7 +319,7 @@ across different reference frames.</p>
 <dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -379,6 +379,20 @@ range [-1, 1].</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.get_batch_axes">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_batch_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.get_batch_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.get_batch_axes" title="Permalink to this definition"></a></dt>
+<dd><p>Return any leading batch axes in contained parameters. If an array of shape
+<code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">4)</span></code> is placed in the wxyz field of an SO3 object, for example, this will
+return <code class="docutils literal notranslate"><span class="pre">(100,)</span></code>.</p>
+<p>This should generally be implemented by <code class="docutils literal notranslate"><span class="pre">jdc.EnforcedAnnotationsMixin</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, Ellipsis]</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -400,7 +414,7 @@ translation vector.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rotation</strong> (<em>ContainedSOType</em>) – Rotation term.</p></li>
-<li><p><strong>translation</strong> (<em>jaxlie.hints.Vector</em>) – translation term.</p></li>
+<li><p><strong>translation</strong> (<em>jaxlie.hints.Array</em>) – translation term.</p></li>
 <li><p><strong>cls</strong> (<em>Type</em><em>[</em><em>SEGroupType</em><em>]</em>) – </p></li>
 </ul>
 </dd>
@@ -446,7 +460,7 @@ translation vector.</p>
 <dd><p>Returns a transform’s translation term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -457,13 +471,13 @@ translation vector.</p>
 <dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p>
+<dd class="field-odd"><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -538,18 +552,18 @@ translation vector.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SE2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SE2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_base/#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._base.SEBase</span></code></a>[<a class="reference internal" href="_so2/#jaxlie._so2.SO2" title="jaxlie._so2.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._so2.SO2</span></code></a>]</p>
-<div class="graphviz"><img src="../../_images/inheritance-e3366d18102cc771b2c93e6fef79288705cfa13a.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="_base/#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._base.SEBase</span></code></a>[<a class="reference internal" href="_so2/#jaxlie._so2.SO2" title="jaxlie._so2.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._so2.SO2</span></code></a>]</p>
+<div class="graphviz"><img src="../../_images/inheritance-70b4798194824debd770df901a6eca004350a284.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
 <map id="inheritance181a071670" name="inheritance181a071670">
-<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,311,55"/>
-<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="359,55,431,80"/>
-<area shape="rect" id="node5" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="479,55,551,80"/>
+<area shape="rect" id="node5" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,311,55"/>
+<area shape="rect" id="node6" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="600,79,672,104"/>
+<area shape="rect" id="node7" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="419,53,491,79"/>
 </map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>. Tangent parameterization is <code class="docutils literal notranslate"><span class="pre">(vx,</span>
 <span class="pre">vy,</span> <span class="pre">omega)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie.SE2.unit_complex_xy">
-<span class="sig-name descname"><span class="pre">unit_complex_xy</span></span><em class="property"><span class="w"> </span><span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie.SE2.unit_complex_xy" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">unit_complex_xy</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(4),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie.SE2.unit_complex_xy" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>.</p>
 </dd></dl>
 
@@ -591,7 +605,7 @@ translation vector.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rotation</strong> (<a class="reference internal" href="_so2/#jaxlie._so2.SO2" title="jaxlie._so2.SO2"><em>jaxlie._so2.SO2</em></a>) – Rotation term.</p></li>
-<li><p><strong>translation</strong> (<em>jaxlie.hints.Vector</em>) – translation term.</p></li>
+<li><p><strong>translation</strong> (<em>jaxlie.hints.Array</em>) – translation term.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -620,7 +634,7 @@ translation vector.</p>
 <dd><p>Returns a transform’s translation term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -645,7 +659,7 @@ translation vector.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Matrix</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
@@ -662,7 +676,7 @@ translation vector.</p>
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -673,7 +687,7 @@ translation vector.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -684,7 +698,7 @@ translation vector.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.TangentVector</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -707,7 +721,7 @@ translation vector.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><em>SE2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -731,7 +745,7 @@ across different reference frames.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><em>SE2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -759,18 +773,18 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SE3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SE3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="_base/#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._base.SEBase</span></code></a>[<a class="reference internal" href="_so3/#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._so3.SO3</span></code></a>]</p>
-<div class="graphviz"><img src="../../_images/inheritance-2abe177e39650da66c14941936cb6d0d5d929e15.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="_base/#jaxlie._base.SEBase" title="jaxlie._base.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._base.SEBase</span></code></a>[<a class="reference internal" href="_so3/#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie._so3.SO3</span></code></a>]</p>
+<div class="graphviz"><img src="../../_images/inheritance-3eeea8262fac0f00554b91ca15cb0596c0bab366.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
 <map id="inheritance122bbc4208" name="inheritance122bbc4208">
-<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,311,55"/>
-<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="359,55,431,80"/>
-<area shape="rect" id="node5" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="479,55,551,80"/>
+<area shape="rect" id="node5" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,311,55"/>
+<area shape="rect" id="node6" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="600,79,672,104"/>
+<area shape="rect" id="node7" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="419,53,491,79"/>
 </map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(qw,</span> <span class="pre">qx,</span> <span class="pre">qy,</span> <span class="pre">qz,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code>. Tangent parameterization
 is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <span class="pre">vy,</span> <span class="pre">vz,</span> <span class="pre">omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie.SE3.wxyz_xyz">
-<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(7),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. wxyz quaternion followed by xyz translation.</p>
 </dd></dl>
 
@@ -793,7 +807,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rotation</strong> (<a class="reference internal" href="_so3/#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>jaxlie._so3.SO3</em></a>) – Rotation term.</p></li>
-<li><p><strong>translation</strong> (<em>jaxlie.hints.Vector</em>) – translation term.</p></li>
+<li><p><strong>translation</strong> (<em>jaxlie.hints.Array</em>) – translation term.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -822,7 +836,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Returns a transform’s translation term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -847,7 +861,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Matrix</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
@@ -864,7 +878,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -875,7 +889,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -886,7 +900,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.TangentVector</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -909,7 +923,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3"><em>SE3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -933,7 +947,7 @@ across different reference frames.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3"><em>SE3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -961,17 +975,17 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SO2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SO2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-fd817a9ff0e6733079262c6439920697d5d5b832.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
+<div class="graphviz"><img src="../../_images/inheritance-7a6404216218e991ce1acd61749760cf2707dc6f.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
 <map id="inheritancea272fb6a93" name="inheritancea272fb6a93">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,311,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="359,31,431,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="479,31,551,56"/>
+<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,311,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="600,56,672,81"/>
+<area shape="rect" id="node6" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="419,31,491,56"/>
 </map><p>Special orthogonal group for 2D rotations.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin)</span></code>. Tangent parameterization is <code class="docutils literal notranslate"><span class="pre">(omega,)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie.SO2.unit_complex">
-<span class="sig-name descname"><span class="pre">unit_complex</span></span><em class="property"><span class="w"> </span><span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie.SO2.unit_complex" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">unit_complex</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(2),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie.SO2.unit_complex" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin)</span></code>.</p>
 </dd></dl>
 
@@ -1006,7 +1020,7 @@ range [-1, 1].</p>
 <dd><p>Compute a scalar angle from a rotation object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.ScalarJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1031,7 +1045,7 @@ range [-1, 1].</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Matrix</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
@@ -1048,7 +1062,7 @@ range [-1, 1].</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1059,7 +1073,7 @@ range [-1, 1].</p>
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1071,7 +1085,7 @@ range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p></li>
 </ul>
 </dd>
@@ -1079,7 +1093,7 @@ range [-1, 1].</p>
 <dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1110,7 +1124,7 @@ range [-1, 1].</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.TangentVector</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -1133,7 +1147,7 @@ range [-1, 1].</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1157,7 +1171,7 @@ across different reference frames.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><em>SO2</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1219,18 +1233,18 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SO3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SO3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-390a2c54e53d22a6c96c9fa7f319429a31c0899c.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
+<div class="graphviz"><img src="../../_images/inheritance-5937fdd862f92cb3de3b9872139f4e0235d87f88.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
 <map id="inheritance6555072674" name="inheritance6555072674">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,311,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="359,31,431,56"/>
-<area shape="rect" id="node4" href="#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="479,31,551,56"/>
+<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,31,311,56"/>
+<area shape="rect" id="node5" href="#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="600,56,672,81"/>
+<area shape="rect" id="node6" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="419,31,491,56"/>
 </map><p>Special orthogonal group for 3D rotations.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(qw,</span> <span class="pre">qx,</span> <span class="pre">qy,</span> <span class="pre">qz)</span></code>. Tangent parameterization is
 <code class="docutils literal notranslate"><span class="pre">(omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie.SO3.wxyz">
-<span class="sig-name descname"><span class="pre">wxyz</span></span><em class="property"><span class="w"> </span><span class="pre">:jaxlie.hints.Vector</span></em><a class="headerlink" href="#jaxlie.SO3.wxyz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wxyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(4),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie.SO3.wxyz" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> quaternion.</p>
 </dd></dl>
 
@@ -1335,7 +1349,7 @@ convention.</p>
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Vector</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (4,).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -1352,7 +1366,7 @@ constructor.</p>
 <dd><p>Grab parameters as xyzw quaternion.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1380,7 +1394,7 @@ constructor.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
+<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1394,7 +1408,7 @@ constructor.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
+<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1408,7 +1422,7 @@ constructor.</p>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jaxlie.hints.ScalarJax</p>
+<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1433,7 +1447,7 @@ constructor.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Matrix</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
@@ -1450,7 +1464,7 @@ constructor.</p>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1461,7 +1475,7 @@ constructor.</p>
 <dd><p>Get underlying representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.Vector</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1473,7 +1487,7 @@ constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Vector</em>) – Point to transform.</p></li>
+<li><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p></li>
 <li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p></li>
 </ul>
 </dd>
@@ -1481,7 +1495,7 @@ constructor.</p>
 <dd class="field-even"><p>Transformed point.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.VectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1512,7 +1526,7 @@ constructor.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.TangentVector</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
@@ -1535,7 +1549,7 @@ constructor.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.TangentVectorJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1559,7 +1573,7 @@ across different reference frames.</p>
 <dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><em>SO3</em></a>) – </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jaxlie.hints.MatrixJax</p>
+<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

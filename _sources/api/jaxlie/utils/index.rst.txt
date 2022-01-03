@@ -31,8 +31,6 @@ Functions
 
    Decorator for registering Lie group dataclasses.
 
-
-   * Sets static dimensionality attributes
-   * Marks all methods for JIT compilation
+   Sets dimensionality class variables, and marks all methods for JIT compilation.
 
 

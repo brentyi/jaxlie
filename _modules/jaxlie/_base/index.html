@@ -71,7 +71,7 @@
              
   <h1>Source code for jaxlie._base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">abc</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">overload</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
@@ -109,7 +109,7 @@
         <span class="c1"># - This method is implicitly overriden by the dataclass decorator and</span>
         <span class="c1">#   should _not_ be marked abstract.</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">parameters</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
+        <span class="n">parameters</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Construct a group object from its underlying parameters.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
@@ -121,7 +121,7 @@
         <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="o">...</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.__matmul__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.__matmul__">[docs]</a>    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
@@ -151,7 +151,7 @@
 
 <div class="viewcode-block" id="MatrixLieGroup.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.from_matrix">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get group member from matrix representation.</span>
 
 <span class="sd">        Args:</span>
@@ -164,17 +164,17 @@
     <span class="c1"># Accessors.</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.as_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.as_matrix">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">as_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get transformation as a matrix. Homogeneous for SE groups.&quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.parameters"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.parameters">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Get underlying representation.&quot;&quot;&quot;</span></div>
 
     <span class="c1"># Operations.</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Applies group action to a point.</span>
 
 <span class="sd">        Args:</span>
@@ -194,7 +194,7 @@
 
 <div class="viewcode-block" id="MatrixLieGroup.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.exp">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes `expm(wedge(tangent))`.</span>
 
 <span class="sd">        Args:</span>
@@ -205,7 +205,7 @@
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.log">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">TangentVectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes `vee(logm(transformation matrix))`.</span>
 
 <span class="sd">        Returns:</span>
@@ -213,7 +213,7 @@
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="MatrixLieGroup.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.adjoint">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">MatrixJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Computes the adjoint, which transforms tangent vectors between tangent</span>
 <span class="sd">        spaces.</span>
 
@@ -256,7 +256,15 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Sampled group member.</span>
-<span class="sd">        &quot;&quot;&quot;</span></div></div>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="MatrixLieGroup.get_batch_axes"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.get_batch_axes">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_batch_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Return any leading batch axes in contained parameters. If an array of shape</span>
+<span class="sd">        `(100, 4)` is placed in the wxyz field of an SO3 object, for example, this will</span>
+<span class="sd">        return `(100,)`.</span>
+
+<span class="sd">        This should generally be implemented by `jdc.EnforcedAnnotationsMixin`.&quot;&quot;&quot;</span></div></div>
 
 
 <div class="viewcode-block" id="SOBase"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SOBase">[docs]</a><span class="k">class</span> <span class="nc">SOBase</span><span class="p">(</span><span class="n">MatrixLieGroup</span><span class="p">):</span>
@@ -280,7 +288,7 @@
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
         <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SEGroupType</span><span class="p">],</span>
         <span class="n">rotation</span><span class="p">:</span> <span class="n">ContainedSOType</span><span class="p">,</span>
-        <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">,</span>
+        <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Construct a rigid transform from a rotation and a translation.</span>
 
@@ -305,14 +313,14 @@
         <span class="sd">&quot;&quot;&quot;Returns a transform&#39;s rotation term.&quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="SEBase.translation"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.translation">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">translation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a transform&#39;s translation term.&quot;&quot;&quot;</span></div>
 
     <span class="c1"># Overrides.</span>
 
 <div class="viewcode-block" id="SEBase.apply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.apply">[docs]</a>    <span class="nd">@final</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Vector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">hints</span><span class="o">.</span><span class="n">VectorJax</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span> <span class="o">@</span> <span class="n">target</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">()</span>  <span class="c1"># type: ignore</span></div>
 
 <div class="viewcode-block" id="SEBase.multiply"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.multiply">[docs]</a>    <span class="nd">@final</span>

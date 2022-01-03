@@ -83,39 +83,6 @@
 <span class="n">Scalar</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Array</span><span class="p">]</span>
 <span class="sd">&quot;&quot;&quot;Type alias for `Union[float, Array]`.&quot;&quot;&quot;</span>
 
-<span class="n">Matrix</span> <span class="o">=</span> <span class="n">Array</span>
-<span class="sd">&quot;&quot;&quot;Type alias for `Array`. Should not be instantiated.</span>
-
-<span class="sd">Refers to a square matrix, typically with shape `(Group.matrix_dim, Group.matrix_dim)`.</span>
-<span class="sd">For adjoints, shape should be `(Group.tangent_dim, Group.tangent_dim)`.&quot;&quot;&quot;</span>
-
-<span class="n">Vector</span> <span class="o">=</span> <span class="n">Array</span>
-<span class="sd">&quot;&quot;&quot;Type alias for `Array`. Should not be instantiated.</span>
-
-<span class="sd">Refers to a general 1D array.&quot;&quot;&quot;</span>
-
-<span class="n">TangentVector</span> <span class="o">=</span> <span class="n">Array</span>
-<span class="sd">&quot;&quot;&quot;Type alias for `Array`. Should not be instantiated.</span>
-
-<span class="sd">Refers to a 1D array with shape `(Group.tangent_dim,)`.&quot;&quot;&quot;</span>
-
-<span class="c1"># Type aliases for JAX arrays; primarily for function outputs.</span>
-
-<span class="n">ArrayJax</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
-<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
-
-<span class="n">ScalarJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
-<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
-
-<span class="n">MatrixJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
-<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
-
-<span class="n">VectorJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
-<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
-
-<span class="n">TangentVectorJax</span> <span class="o">=</span> <span class="n">ArrayJax</span>
-<span class="sd">&quot;&quot;&quot;Type alias for jnp.ndarray.&quot;&quot;&quot;</span>
-
 
 <div class="viewcode-block" id="RollPitchYaw"><a class="viewcode-back" href="../../../api/jaxlie/hints/#jaxlie.hints.RollPitchYaw">[docs]</a><span class="k">class</span> <span class="nc">RollPitchYaw</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Tuple containing roll, pitch, and yaw Euler angles.&quot;&quot;&quot;</span>
@@ -128,14 +95,6 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;Array&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Scalar&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Matrix&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Vector&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TangentVector&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ArrayJax&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ScalarJax&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;MatrixJax&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;VectorJax&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TangentVectorJax&quot;</span><span class="p">,</span>
     <span class="s2">&quot;RollPitchYaw&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
