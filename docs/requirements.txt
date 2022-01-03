@@ -4,3 +4,6 @@ sphinx_math_dollar
 sphinx-autoapi==1.8.1
 graphviz
 m2r
+
+# Workaround for https://github.com/miyakogi/m2r/issues/66
+mistune<2.0.0
