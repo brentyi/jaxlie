@@ -34,8 +34,7 @@ def register_lie_group(
 ) -> Callable[[Type[T]], Type[T]]:
     """Decorator for registering Lie group dataclasses.
 
-    - Sets static dimensionality attributes
-    - Marks all methods for JIT compilation
+    Sets dimensionality class variables, and marks all methods for JIT compilation.
     """
 
     def _wrap(cls: Type[T]) -> Type[T]:

@@ -97,11 +97,11 @@ def assert_arrays_close(
 
 
 def jacnumerical(
-    f: Callable[[jaxlie.hints.Array], jaxlie.hints.ArrayJax]
-) -> Callable[[jaxlie.hints.Array], jaxlie.hints.ArrayJax]:
+    f: Callable[[jaxlie.hints.Array], jnp.ndarray]
+) -> Callable[[jaxlie.hints.Array], jnp.ndarray]:
     """Decorator for computing numerical Jacobians of vector->vector functions."""
 
-    def wrapped(primal: jaxlie.hints.Array) -> jaxlie.hints.ArrayJax:
+    def wrapped(primal: jaxlie.hints.Array) -> jnp.ndarray:
         output_dim: int
         (output_dim,) = f(primal).shape
 

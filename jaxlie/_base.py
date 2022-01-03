@@ -1,5 +1,5 @@
 import abc
-from typing import ClassVar, Generic, Type, TypeVar, overload
+from typing import ClassVar, Generic, Tuple, Type, TypeVar, overload
 
 import jax
 import numpy as onp
@@ -37,7 +37,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         # - This method is implicitly overriden by the dataclass decorator and
         #   should _not_ be marked abstract.
         self,
-        parameters: hints.Vector,
+        parameters: jnp.ndarray,
     ):
         """Construct a group object from its underlying parameters."""
         raise NotImplementedError()
@@ -49,7 +49,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self: GroupType, other: hints.Vector) -> hints.VectorJax:
+    def __matmul__(self: GroupType, other: hints.Array) -> jnp.ndarray:
         ...
 
     def __matmul__(self, other):
@@ -79,7 +79,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[GroupType], matrix: hints.Matrix) -> GroupType:
+    def from_matrix(cls: Type[GroupType], matrix: hints.Array) -> GroupType:
         """Get group member from matrix representation.
 
         Args:
@@ -92,17 +92,17 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Accessors.
 
     @abc.abstractmethod
-    def as_matrix(self) -> hints.MatrixJax:
+    def as_matrix(self) -> jnp.ndarray:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @abc.abstractmethod
-    def parameters(self) -> hints.Vector:
+    def parameters(self) -> jnp.ndarray:
         """Get underlying representation."""
 
     # Operations.
 
     @abc.abstractmethod
-    def apply(self: GroupType, target: hints.Vector) -> hints.VectorJax:
+    def apply(self: GroupType, target: hints.Array) -> jnp.ndarray:
         """Applies group action to a point.
 
         Args:
@@ -122,7 +122,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def exp(cls: Type[GroupType], tangent: hints.TangentVector) -> GroupType:
+    def exp(cls: Type[GroupType], tangent: hints.Array) -> GroupType:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -133,7 +133,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def log(self: GroupType) -> hints.TangentVectorJax:
+    def log(self: GroupType) -> jnp.ndarray:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -141,7 +141,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def adjoint(self: GroupType) -> hints.MatrixJax:
+    def adjoint(self: GroupType) -> jnp.ndarray:
         """Computes the adjoint, which transforms tangent vectors between tangent
         spaces.
 
@@ -186,6 +186,14 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
             Sampled group member.
         """
 
+    @abc.abstractmethod
+    def get_batch_axes(self) -> Tuple[int, ...]:
+        """Return any leading batch axes in contained parameters. If an array of shape
+        `(100, 4)` is placed in the wxyz field of an SO3 object, for example, this will
+        return `(100,)`.
+
+        This should generally be implemented by `jdc.EnforcedAnnotationsMixin`."""
+
 
 class SOBase(MatrixLieGroup):
     """Base class for special orthogonal groups."""
@@ -208,7 +216,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     def from_rotation_and_translation(
         cls: Type[SEGroupType],
         rotation: ContainedSOType,
-        translation: hints.Vector,
+        translation: hints.Array,
     ) -> SEGroupType:
         """Construct a rigid transform from a rotation and a translation.
 
@@ -233,14 +241,14 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod
-    def translation(self) -> hints.Vector:
+    def translation(self) -> jnp.ndarray:
         """Returns a transform's translation term."""
 
     # Overrides.
 
     @final
     @overrides
-    def apply(self, target: hints.Vector) -> hints.VectorJax:
+    def apply(self, target: hints.Array) -> jnp.ndarray:
         return self.rotation() @ target + self.translation()  # type: ignore
 
     @final

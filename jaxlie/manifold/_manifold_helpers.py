@@ -14,7 +14,7 @@ T = TypeVar("T", bound=MatrixLieGroup)
 
 
 @jax.jit
-def rplus(transform: T, delta: hints.TangentVector) -> T:
+def rplus(transform: T, delta: hints.Array) -> T:
     """Manifold right plus.
 
     Computes `T_wb = T_wa @ exp(delta)`.
@@ -30,22 +30,20 @@ def rplus(transform: T, delta: hints.TangentVector) -> T:
 
 
 @jax.jit
-def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.MatrixJax:
+def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
     """Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero
     local delta.
 
-    Useful for on-manifold optimization.
+    Sometimes useful for manifold optimization.
 
     Equivalent to --
     ```
-    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
-        # Since transform objects are pytree containers, note that `jacfwd` returns a
-        # transformation object itself and that the Jacobian terms corresponding to the
-        # parameters are grabbed explicitly.
+    def rplus_jacobian_parameters_wrt_delta(
+        transform: jaxlie.MatrixLieGroup,
+    ) -> jnp.ndarray:
         return jax.jacfwd(
-            jaxlie.manifold.rplus,  # Args are (transform, delta)
-            argnums=1,  # Jacobian wrt delta
-        )(transform, onp.zeros(transform.tangent_dim)).parameters()
+            lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()
+        )(onp.zeros(transform.tangent_dim))
     ```
 
     Args:
@@ -54,7 +52,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
     Returns:
         Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.
     """
-    if type(transform) is SO2:
+    if isinstance(transform, SO2):
         # Jacobian row indices: cos, sin
         # Jacobian col indices: theta
 
@@ -64,7 +62,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
         cos, sin = transform_so2.unit_complex
         J = J.at[0].set(-sin).at[1].set(cos)
 
-    elif type(transform) is SE2:
+    elif isinstance(transform, SE2):
         # Jacobian row indices: cos, sin, x, y
         # Jacobian col indices: vx, vy, omega
 
@@ -79,7 +77,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
             rplus_jacobian_parameters_wrt_delta(transform_se2.rotation())
         )
 
-    elif type(transform) is SO3:
+    elif isinstance(transform, SO3):
         # Jacobian row indices: qw, qx, qy, qz
         # Jacobian col indices: omega x, omega y, omega z
 
@@ -100,7 +98,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
             / 2.0
         )
 
-    elif type(transform) is SE3:
+    elif isinstance(transform, SE3):
         # Jacobian row indices: qw, qx, qy, qz, x, y, z
         # Jacobian col indices: vx, vy, vz, omega x, omega y, omega z
 
@@ -123,7 +121,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> hints.Matr
 
 
 @jax.jit
-def rminus(a: T, b: T) -> hints.TangentVectorJax:
+def rminus(a: T, b: T) -> jnp.ndarray:
     """Manifold right minus.
 
     Computes `delta = (T_wa.inverse() @ T_wb).log()`.

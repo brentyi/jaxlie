@@ -31,7 +31,6 @@ def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup]):
     T_wa = sample_transform(Group)
 
     J_ours = jaxlie.manifold.rplus_jacobian_parameters_wrt_delta(T_wa)
-
     J_jacfwd = _rplus_jacobian_parameters_wrt_delta(T_wa)
 
     assert_arrays_close(J_ours, J_jacfwd)
@@ -43,6 +42,5 @@ def _rplus_jacobian_parameters_wrt_delta(
 ) -> jnp.ndarray:
     # Copied from docstring for `rplus_jacobian_parameters_wrt_delta()`.
     return jax.jacfwd(
-        jaxlie.manifold.rplus,  # Args are (transform, delta).
-        argnums=1,  # Jacobian wrt delta.
-    )(transform, onp.zeros(transform.tangent_dim)).parameters()
+        lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()
+    )(onp.zeros(transform.tangent_dim))

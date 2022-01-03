@@ -1,8 +1,8 @@
 import jax
-import jax_dataclasses
-import numpy as onp
+import jax_dataclasses as jdc
 from jax import numpy as jnp
 from overrides import overrides
+from typing_extensions import Annotated
 
 from . import _base, hints
 from .utils import get_epsilon, register_lie_group
@@ -14,8 +14,8 @@ from .utils import get_epsilon, register_lie_group
     tangent_dim=3,
     space_dim=3,
 )
-@jax_dataclasses.pytree_dataclass
-class SO3(_base.SOBase):
+@jdc.pytree_dataclass
+class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     """Special orthogonal group for 3D rotations.
 
     Internal parameterization is `(qw, qx, qy, qz)`. Tangent parameterization is
@@ -24,7 +24,11 @@ class SO3(_base.SOBase):
 
     # SO3-specific.
 
-    wxyz: hints.Vector
+    wxyz: Annotated[
+        jnp.ndarray,
+        (4,),  # Shape.
+        jnp.floating,  # Data-type.
+    ]
     """Internal parameters. `(w, x, y, z)` quaternion."""
 
     @overrides
@@ -92,7 +96,7 @@ class SO3(_base.SOBase):
         )
 
     @staticmethod
-    def from_quaternion_xyzw(xyzw: hints.Vector) -> "SO3":
+    def from_quaternion_xyzw(xyzw: hints.Array) -> "SO3":
         """Construct a rotation from an `xyzw` quaternion.
 
         Note that `wxyz` quaternions can be constructed using the default dataclass
@@ -107,7 +111,7 @@ class SO3(_base.SOBase):
         assert xyzw.shape == (4,)
         return SO3(jnp.roll(xyzw, shift=1))
 
-    def as_quaternion_xyzw(self) -> hints.VectorJax:
+    def as_quaternion_xyzw(self) -> jnp.ndarray:
         """Grab parameters as xyzw quaternion."""
         return jnp.roll(self.wxyz, shift=-1)
 
@@ -123,7 +127,7 @@ class SO3(_base.SOBase):
             yaw=self.compute_yaw_radians(),
         )
 
-    def compute_roll_radians(self) -> hints.ScalarJax:
+    def compute_roll_radians(self) -> jnp.ndarray:
         """Compute roll angle. Uses the ZYX mobile robot convention.
 
         Returns:
@@ -133,7 +137,7 @@ class SO3(_base.SOBase):
         q0, q1, q2, q3 = self.wxyz
         return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
 
-    def compute_pitch_radians(self) -> hints.ScalarJax:
+    def compute_pitch_radians(self) -> jnp.ndarray:
         """Compute pitch angle. Uses the ZYX mobile robot convention.
 
         Returns:
@@ -143,7 +147,7 @@ class SO3(_base.SOBase):
         q0, q1, q2, q3 = self.wxyz
         return jnp.arcsin(2 * (q0 * q2 - q3 * q1))
 
-    def compute_yaw_radians(self) -> hints.ScalarJax:
+    def compute_yaw_radians(self) -> jnp.ndarray:
         """Compute yaw angle. Uses the ZYX mobile robot convention.
 
         Returns:
@@ -158,11 +162,11 @@ class SO3(_base.SOBase):
     @staticmethod
     @overrides
     def identity() -> "SO3":
-        return SO3(wxyz=onp.array([1.0, 0.0, 0.0, 0.0]))
+        return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Matrix) -> "SO3":
+    def from_matrix(matrix: hints.Array) -> "SO3":
         assert matrix.shape == (3, 3)
 
         # Modified from:
@@ -171,22 +175,50 @@ class SO3(_base.SOBase):
 
         def case0(m):
             t = 1 + m[0, 0] - m[1, 1] - m[2, 2]
-            q = jnp.array([m[2, 1] - m[1, 2], t, m[1, 0] + m[0, 1], m[0, 2] + m[2, 0]])
+            q = jnp.array(
+                [
+                    m[2, 1] - m[1, 2],
+                    t,
+                    m[1, 0] + m[0, 1],
+                    m[0, 2] + m[2, 0],
+                ]
+            )
             return t, q
 
         def case1(m):
             t = 1 - m[0, 0] + m[1, 1] - m[2, 2]
-            q = jnp.array([m[0, 2] - m[2, 0], m[1, 0] + m[0, 1], t, m[2, 1] + m[1, 2]])
+            q = jnp.array(
+                [
+                    m[0, 2] - m[2, 0],
+                    m[1, 0] + m[0, 1],
+                    t,
+                    m[2, 1] + m[1, 2],
+                ]
+            )
             return t, q
 
         def case2(m):
             t = 1 - m[0, 0] - m[1, 1] + m[2, 2]
-            q = jnp.array([m[1, 0] - m[0, 1], m[0, 2] + m[2, 0], m[2, 1] + m[1, 2], t])
+            q = jnp.array(
+                [
+                    m[1, 0] - m[0, 1],
+                    m[0, 2] + m[2, 0],
+                    m[2, 1] + m[1, 2],
+                    t,
+                ]
+            )
             return t, q
 
         def case3(m):
             t = 1 + m[0, 0] + m[1, 1] + m[2, 2]
-            q = jnp.array([t, m[2, 1] - m[1, 2], m[0, 2] - m[2, 0], m[1, 0] - m[0, 1]])
+            q = jnp.array(
+                [
+                    t,
+                    m[2, 1] - m[1, 2],
+                    m[0, 2] - m[2, 0],
+                    m[1, 0] - m[0, 1],
+                ]
+            )
             return t, q
 
         # Compute four cases, then pick the most precise one.
@@ -234,7 +266,7 @@ class SO3(_base.SOBase):
     # Accessors.
 
     @overrides
-    def as_matrix(self) -> hints.MatrixJax:
+    def as_matrix(self) -> jnp.ndarray:
         norm = self.wxyz @ self.wxyz
         q = self.wxyz * jnp.sqrt(2.0 / norm)
         q = jnp.outer(q, q)
@@ -247,13 +279,13 @@ class SO3(_base.SOBase):
         )
 
     @overrides
-    def parameters(self) -> hints.Vector:
+    def parameters(self) -> jnp.ndarray:
         return self.wxyz
 
     # Operations.
 
     @overrides
-    def apply(self: "SO3", target: hints.Vector) -> hints.VectorJax:
+    def apply(self: "SO3", target: hints.Array) -> jnp.ndarray:
         assert target.shape == (3,)
 
         # Compute using quaternion multiplys.
@@ -277,7 +309,7 @@ class SO3(_base.SOBase):
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.TangentVector) -> "SO3":
+    def exp(tangent: hints.Array) -> "SO3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583
 
@@ -320,7 +352,7 @@ class SO3(_base.SOBase):
         )
 
     @overrides
-    def log(self: "SO3") -> hints.TangentVectorJax:
+    def log(self: "SO3") -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
@@ -355,13 +387,13 @@ class SO3(_base.SOBase):
         return atan_factor * self.wxyz[1:]
 
     @overrides
-    def adjoint(self: "SO3") -> hints.MatrixJax:
+    def adjoint(self: "SO3") -> jnp.ndarray:
         return self.as_matrix()
 
     @overrides
     def inverse(self: "SO3") -> "SO3":
         # Negate complex terms.
-        return SO3(wxyz=self.wxyz * onp.array([1, -1, -1, -1]))
+        return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
 
     @overrides
     def normalize(self: "SO3") -> "SO3":

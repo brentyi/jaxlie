@@ -1,7 +1,6 @@
 """Tests with explicit examples."""
-
-
 import numpy as onp
+import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from utils import assert_arrays_close, assert_transforms_close, sample_transform
@@ -58,9 +57,21 @@ def test_se3_rotation():
 def test_so3_xyzw_basic():
     """Check that we can create an SO3 object from an xyzw quaternion."""
     assert_transforms_close(
-        jaxlie.SO3.from_quaternion_xyzw(onp.array([0, 0, 0, 1])),
+        jaxlie.SO3.from_quaternion_xyzw(onp.array([0.0, 0.0, 0.0, 1.0])),
         jaxlie.SO3.identity(),
     )
+
+
+def test_so3_xyzw_dtype_error():
+    """Check that an incorrect data-type results in an AssertionError."""
+    with pytest.raises(AssertionError):
+        jaxlie.SO3(onp.array([1, 0, 0, 0])),
+
+
+def test_so3_xyzw_shape_error():
+    """Check that an incorrect shape results in an AssertionError."""
+    with pytest.raises(AssertionError):
+        jaxlie.SO3(onp.array([1.0, 0.0, 0.0, 0.0, 0.0]))
 
 
 @settings(deadline=None)

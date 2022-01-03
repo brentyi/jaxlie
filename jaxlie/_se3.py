@@ -1,15 +1,15 @@
 import jax
-import jax_dataclasses
-import numpy as onp
+import jax_dataclasses as jdc
 from jax import numpy as jnp
 from overrides import overrides
+from typing_extensions import Annotated
 
 from . import _base, hints
 from ._so3 import SO3
 from .utils import get_epsilon, register_lie_group
 
 
-def _skew(omega: hints.Vector) -> hints.MatrixJax:
+def _skew(omega: hints.Array) -> jnp.ndarray:
     """Returns the skew-symmetric form of a length-3 vector."""
 
     wx, wy, wz = omega
@@ -28,8 +28,8 @@ def _skew(omega: hints.Vector) -> hints.MatrixJax:
     tangent_dim=6,
     space_dim=3,
 )
-@jax_dataclasses.pytree_dataclass
-class SE3(_base.SEBase[SO3]):
+@jdc.pytree_dataclass
+class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
     """Special Euclidean group for proper rigid transforms in 3D.
 
     Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization
@@ -38,7 +38,11 @@ class SE3(_base.SEBase[SO3]):
 
     # SE3-specific.
 
-    wxyz_xyz: hints.Vector
+    wxyz_xyz: Annotated[
+        jnp.ndarray,
+        (7,),  # Shape.
+        jnp.floating,  # Data-type.
+    ]
     """Internal parameters. wxyz quaternion followed by xyz translation."""
 
     @overrides
@@ -53,7 +57,7 @@ class SE3(_base.SEBase[SO3]):
     @overrides
     def from_rotation_and_translation(
         rotation: SO3,
-        translation: hints.Vector,
+        translation: hints.Array,
     ) -> "SE3":
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
@@ -63,7 +67,7 @@ class SE3(_base.SEBase[SO3]):
         return SO3(wxyz=self.wxyz_xyz[..., :4])
 
     @overrides
-    def translation(self) -> hints.Vector:
+    def translation(self) -> jnp.ndarray:
         return self.wxyz_xyz[..., 4:]
 
     # Factory.
@@ -71,11 +75,11 @@ class SE3(_base.SEBase[SO3]):
     @staticmethod
     @overrides
     def identity() -> "SE3":
-        return SE3(wxyz_xyz=onp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
+        return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Matrix) -> "SE3":
+    def from_matrix(matrix: hints.Array) -> "SE3":
         assert matrix.shape == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1].
         return SE3.from_rotation_and_translation(
@@ -86,7 +90,7 @@ class SE3(_base.SEBase[SO3]):
     # Accessors.
 
     @overrides
-    def as_matrix(self) -> hints.MatrixJax:
+    def as_matrix(self) -> jnp.ndarray:
         return (
             jnp.eye(4)
             .at[:3, :3]
@@ -96,14 +100,14 @@ class SE3(_base.SEBase[SO3]):
         )
 
     @overrides
-    def parameters(self) -> hints.Vector:
+    def parameters(self) -> jnp.ndarray:
         return self.wxyz_xyz
 
     # Operations.
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.TangentVector) -> "SE3":
+    def exp(tangent: hints.Array) -> "SE3":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
 
@@ -144,7 +148,7 @@ class SE3(_base.SEBase[SO3]):
         )
 
     @overrides
-    def log(self: "SE3") -> hints.TangentVectorJax:
+    def log(self: "SE3") -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
@@ -183,7 +187,7 @@ class SE3(_base.SEBase[SO3]):
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
     @overrides
-    def adjoint(self: "SE3") -> hints.MatrixJax:
+    def adjoint(self: "SE3") -> jnp.ndarray:
         R = self.rotation().as_matrix()
         return jnp.block(
             [

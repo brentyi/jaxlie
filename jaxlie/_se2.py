@@ -1,8 +1,8 @@
 import jax
-import jax_dataclasses
-import numpy as onp
+import jax_dataclasses as jdc
 from jax import numpy as jnp
 from overrides import overrides
+from typing_extensions import Annotated
 
 from . import _base, hints
 from ._so2 import SO2
@@ -15,8 +15,8 @@ from .utils import get_epsilon, register_lie_group
     tangent_dim=3,
     space_dim=2,
 )
-@jax_dataclasses.pytree_dataclass
-class SE2(_base.SEBase[SO2]):
+@jdc.pytree_dataclass
+class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
     """Special Euclidean group for proper rigid transforms in 2D.
 
     Internal parameterization is `(cos, sin, x, y)`. Tangent parameterization is `(vx,
@@ -25,7 +25,11 @@ class SE2(_base.SEBase[SO2]):
 
     # SE2-specific.
 
-    unit_complex_xy: hints.Vector
+    unit_complex_xy: Annotated[
+        jnp.ndarray,
+        (4,),  # Shape.
+        jnp.floating,  # Data-type.
+    ]
     """Internal parameters. `(cos, sin, x, y)`."""
 
     @overrides
@@ -50,7 +54,7 @@ class SE2(_base.SEBase[SO2]):
     @overrides
     def from_rotation_and_translation(
         rotation: SO2,
-        translation: hints.Vector,
+        translation: hints.Array,
     ) -> "SE2":
         assert translation.shape == (2,)
         return SE2(
@@ -62,7 +66,7 @@ class SE2(_base.SEBase[SO2]):
         return SO2(unit_complex=self.unit_complex_xy[..., :2])
 
     @overrides
-    def translation(self) -> hints.Vector:
+    def translation(self) -> jnp.ndarray:
         return self.unit_complex_xy[..., 2:]
 
     # Factory.
@@ -70,11 +74,11 @@ class SE2(_base.SEBase[SO2]):
     @staticmethod
     @overrides
     def identity() -> "SE2":
-        return SE2(unit_complex_xy=onp.array([1.0, 0.0, 0.0, 0.0]))
+        return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Matrix) -> "SE2":
+    def from_matrix(matrix: hints.Array) -> "SE2":
         assert matrix.shape == (3, 3)
         # Currently assumes bottom row is [0, 0, 1].
         return SE2.from_rotation_and_translation(
@@ -85,11 +89,11 @@ class SE2(_base.SEBase[SO2]):
     # Accessors.
 
     @overrides
-    def parameters(self) -> hints.Vector:
+    def parameters(self) -> jnp.ndarray:
         return self.unit_complex_xy
 
     @overrides
-    def as_matrix(self) -> hints.MatrixJax:
+    def as_matrix(self) -> jnp.ndarray:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
@@ -103,7 +107,7 @@ class SE2(_base.SEBase[SO2]):
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.TangentVector) -> "SE2":
+    def exp(tangent: hints.Array) -> "SE2":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
         # Also see:
@@ -146,7 +150,7 @@ class SE2(_base.SEBase[SO2]):
         )
 
     @overrides
-    def log(self: "SE2") -> hints.TangentVectorJax:
+    def log(self: "SE2") -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
@@ -186,7 +190,7 @@ class SE2(_base.SEBase[SO2]):
         return tangent
 
     @overrides
-    def adjoint(self: "SE2") -> hints.MatrixJax:
+    def adjoint(self: "SE2") -> jnp.ndarray:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [

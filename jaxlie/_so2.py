@@ -1,8 +1,8 @@
 import jax
-import jax_dataclasses
-import numpy as onp
+import jax_dataclasses as jdc
 from jax import numpy as jnp
 from overrides import overrides
+from typing_extensions import Annotated
 
 from . import _base, hints
 from .utils import register_lie_group
@@ -14,8 +14,8 @@ from .utils import register_lie_group
     tangent_dim=1,
     space_dim=2,
 )
-@jax_dataclasses.pytree_dataclass
-class SO2(_base.SOBase):
+@jdc.pytree_dataclass
+class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     """Special orthogonal group for 2D rotations.
 
     Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.
@@ -23,7 +23,11 @@ class SO2(_base.SOBase):
 
     # SO2-specific.
 
-    unit_complex: hints.Vector
+    unit_complex: Annotated[
+        jnp.ndarray,
+        (2,),  # Shape.
+        jnp.floating,  # Data-type.
+    ]
     """Internal parameters. `(cos, sin)`."""
 
     @overrides
@@ -38,7 +42,7 @@ class SO2(_base.SOBase):
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
-    def as_radians(self) -> hints.ScalarJax:
+    def as_radians(self) -> jnp.ndarray:
         """Compute a scalar angle from a rotation object."""
         radians = self.log()[..., 0]
         return radians
@@ -48,34 +52,38 @@ class SO2(_base.SOBase):
     @staticmethod
     @overrides
     def identity() -> "SO2":
-        return SO2(unit_complex=onp.array([1.0, 0.0]))
+        return SO2(unit_complex=jnp.array([1.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Matrix) -> "SO2":
+    def from_matrix(matrix: hints.Array) -> "SO2":
         assert matrix.shape == (2, 2)
-        return SO2(unit_complex=matrix[:, 0])
+        return SO2(unit_complex=jnp.asarray(matrix[:, 0]))
 
     # Accessors.
 
     @overrides
-    def as_matrix(self) -> hints.MatrixJax:
-        cos, sin = self.unit_complex
-        return jnp.array(
+    def as_matrix(self) -> jnp.ndarray:
+        cos_sin = self.unit_complex
+        out = jnp.array(
             [
-                [cos, -sin],
-                [sin, cos],
+                # [cos, -sin],
+                cos_sin.at[1].multiply(-1),
+                # [sin, cos],
+                cos_sin[::-1],
             ]
         )
+        assert out.shape == (2, 2)
+        return out
 
     @overrides
-    def parameters(self) -> hints.Vector:
+    def parameters(self) -> jnp.ndarray:
         return self.unit_complex
 
     # Operations.
 
     @overrides
-    def apply(self: "SO2", target: hints.Vector) -> hints.VectorJax:
+    def apply(self: "SO2", target: hints.Array) -> jnp.ndarray:
         assert target.shape == (2,)
         return self.as_matrix() @ target  # type: ignore
 
@@ -85,20 +93,20 @@ class SO2(_base.SOBase):
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.TangentVector) -> "SO2":
+    def exp(tangent: hints.Array) -> "SO2":
         (theta,) = tangent
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides
-    def log(self: "SO2") -> hints.TangentVectorJax:
+    def log(self: "SO2") -> jnp.ndarray:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
     @overrides
-    def adjoint(self: "SO2") -> hints.MatrixJax:
+    def adjoint(self: "SO2") -> jnp.ndarray:
         return jnp.eye(1)
 
     @overrides
