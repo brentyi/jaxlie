@@ -6,7 +6,7 @@ from typing_extensions import Annotated
 
 from . import _base, hints
 from ._so2 import SO2
-from .utils import get_epsilon, register_lie_group
+from .utils import get_epsilon, register_lie_group, KeyArray
 
 
 @register_lie_group(
@@ -202,7 +202,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.KeyArray) -> "SE2":
+    def sample_uniform(key: KeyArray) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(
             rotation=SO2.sample_uniform(key0),

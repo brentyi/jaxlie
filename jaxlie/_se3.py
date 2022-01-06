@@ -6,7 +6,7 @@ from typing_extensions import Annotated
 
 from . import _base, hints
 from ._so3 import SO3
-from .utils import get_epsilon, register_lie_group
+from .utils import get_epsilon, register_lie_group, KeyArray
 
 
 def _skew(omega: hints.Array) -> jnp.ndarray:
@@ -198,7 +198,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.KeyArray) -> "SE3":
+    def sample_uniform(key: KeyArray) -> "SE3":
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0),

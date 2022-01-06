@@ -5,6 +5,7 @@ import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
+from .utils import KeyArray
 
 from . import hints
 
@@ -175,7 +176,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[GroupType], key: jax.random.KeyArray) -> GroupType:
+    def sample_uniform(cls: Type[GroupType], key: KeyArray) -> GroupType:
         """Draw a uniform sample from the group. Translations (if applicable) are in the
         range [-1, 1].
 
