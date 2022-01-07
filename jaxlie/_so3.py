@@ -5,7 +5,7 @@ from overrides import overrides
 from typing_extensions import Annotated
 
 from . import _base, hints
-from .utils import get_epsilon, register_lie_group, KeyArray
+from .utils import get_epsilon, register_lie_group
 
 
 @register_lie_group(
@@ -401,7 +401,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: KeyArray) -> "SO3":
+    def sample_uniform(key: hints.KeyArray) -> "SO3":
         # Uniformly sample over S^4.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(

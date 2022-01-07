@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING, Callable, Type, TypeVar
 
 import jax
 from jax import numpy as jnp
-from jax._src.random import KeyArray
 
 if TYPE_CHECKING:
     from .._base import MatrixLieGroup

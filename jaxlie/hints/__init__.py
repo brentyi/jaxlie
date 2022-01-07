@@ -1,4 +1,4 @@
-from typing import NamedTuple, Union
+from typing import Any, NamedTuple, Union
 
 import numpy as onp
 from jax import numpy as jnp
@@ -20,8 +20,18 @@ class RollPitchYaw(NamedTuple):
     yaw: Scalar
 
 
+try:
+    # This is only exposed in `jax>=0.2.21`.
+    from jax.random import KeyArray
+except ImportError:
+    KeyArray = Any
+
+
+"""Backward-compatible alias for `jax.random.KeyArray`."""
+
 __all__ = [
     "Array",
     "Scalar",
     "RollPitchYaw",
+    "KeyArray",
 ]
