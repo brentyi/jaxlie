@@ -26,9 +26,9 @@ setup(
     extras_require={
         "testing": [
             "flax",
-            "hypothesis",
             "hypothesis[numpy]",
             "pytest",
+            "pytest-xdist[psutil]",
             "pytest-cov",
         ]
     },

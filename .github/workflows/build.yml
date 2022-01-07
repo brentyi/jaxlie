@@ -25,4 +25,6 @@ jobs:
           pip install -e ".[testing]"
       - name: Test with pytest
         run: |
-          pytest
+          # `-n auto` tells pytest-xdist to create 1 worker per CPU core. For
+          # GitHub actions, this typically results in 2 workers.
+          pytest -n auto
