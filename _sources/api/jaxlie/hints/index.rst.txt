@@ -24,6 +24,7 @@ Attributes
 
    jaxlie.hints.Array
    jaxlie.hints.Scalar
+   jaxlie.hints.KeyArray
 
 
 .. data:: Array
@@ -62,4 +63,9 @@ Attributes
 
       
 
+
+.. data:: KeyArray
+   
+
+   
 

@@ -191,7 +191,7 @@
 
 <div class="viewcode-block" id="SO2.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO2&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="o">.</span><span class="n">from_radians</span><span class="p">(</span>
             <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="p">)</span></div></div>
