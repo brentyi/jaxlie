@@ -25,9 +25,8 @@ try:
     from jax.random import KeyArray
 except ImportError:
     KeyArray = Any  # type: ignore
+    """Backward-compatible alias for `jax.random.KeyArray`."""
 
-
-"""Backward-compatible alias for `jax.random.KeyArray`."""
 
 __all__ = [
     "Array",
