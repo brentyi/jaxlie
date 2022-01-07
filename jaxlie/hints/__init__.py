@@ -24,7 +24,7 @@ try:
     # This is only exposed in `jax>=0.2.21`.
     from jax.random import KeyArray
 except ImportError:
-    KeyArray = Any
+    KeyArray = Any  # type: ignore
 
 
 """Backward-compatible alias for `jax.random.KeyArray`."""
