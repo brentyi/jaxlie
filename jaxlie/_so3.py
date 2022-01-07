@@ -401,7 +401,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: jax.random.KeyArray) -> "SO3":
+    def sample_uniform(key: hints.KeyArray) -> "SO3":
         # Uniformly sample over S^4.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(

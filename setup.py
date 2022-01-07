@@ -17,9 +17,9 @@ setup(
     package_data={"jaxlie": ["py.typed"]},
     python_requires=">=3.7",
     install_requires=[
-        "jax>=0.2.20",
-        "jaxlib>=0.1.71",
-        "jax_dataclasses>=1.0.0",
+        "jax>=0.2.14",  # jax==0.2.14 introduces `ndarray.at[].multiply()`.
+        "jaxlib>=0.1.67",
+        "jax_dataclasses>=1.2.0",  # Required for shape/data-type annotations.
         "numpy",
         "overrides!=4",
     ],

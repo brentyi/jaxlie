@@ -1,7 +1,6 @@
 import abc
 from typing import ClassVar, Generic, Tuple, Type, TypeVar, overload
 
-import jax
 import numpy as onp
 from jax import numpy as jnp
 from overrides import EnforceOverrides, final, overrides
@@ -175,7 +174,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[GroupType], key: jax.random.KeyArray) -> GroupType:
+    def sample_uniform(cls: Type[GroupType], key: hints.KeyArray) -> GroupType:
         """Draw a uniform sample from the group. Translations (if applicable) are in the
         range [-1, 1].
 
