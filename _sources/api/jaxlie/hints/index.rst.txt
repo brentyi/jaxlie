@@ -67,5 +67,6 @@ Attributes
 .. data:: KeyArray
    
 
-   
+   Backward-compatible alias for ``jax.random.KeyArray``.
+
 
