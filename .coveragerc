@@ -22,3 +22,6 @@ exclude_lines =
 
     # or anything that's not implemented
     NotImplementedError()
+
+    # or fallback imports
+    except ImportError:
