@@ -22,7 +22,7 @@ Classes
 .. class:: SE3(parameters)
 
 
-   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie._base.SEBase`\ [\ :py:obj:`jaxlie._so3.SO3`\ ]
+   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SEBase`\ [\ :py:obj:`jaxlie.SO3`\ ]
 
    .. autoapi-inheritance-diagram:: jaxlie._se3.SE3
       :parts: 1
