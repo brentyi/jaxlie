@@ -198,9 +198,12 @@ autoapi_options = [
 ]
 autoapi_add_toctree_entry = False
 
-# Generate inheritance aliases
-def _gen_inheritance_alias():
-    inheritance_alias = {}
+# Generate name aliases
+def _gen_name_aliases():
+    """Generate a name alias dictionary, which maps private names to ones in the public
+    API. A little bit hardcoded/hacky."""
+
+    name_alias = {}
 
     def recurse(module, prefixes):
         if hasattr(module, "__name__") and module.__name__.startswith("jaxlie"):
@@ -232,21 +235,49 @@ def _gen_inheritance_alias():
                     shortened_name += "." + p
 
                 if success and shortened_name != full_name:
-                    if full_name in inheritance_alias:
-                        assert full_name == inheritance_alias[shortened_name], full_name
+                    if full_name in name_alias:
+                        assert full_name == name_alias[shortened_name], full_name
                     else:
-                        inheritance_alias[full_name] = shortened_name
+                        name_alias[full_name] = shortened_name
             elif not member_name.startswith("__"):
                 recurse(member, prefixes + [member_name])
 
     import jaxlie
 
     recurse(jaxlie, prefixes=[])
-    return inheritance_alias
+    return name_alias
 
+
+_name_aliases = _gen_name_aliases()
 
 # Set inheritance_alias setting for inheritance diagrams
-inheritance_alias = _gen_inheritance_alias()
+inheritance_alias = _name_aliases
+
+
+def _apply_name_aliases(name: Optional[str]) -> Optional[str]:
+    if name is None:
+        return None
+
+    name = name.strip()
+
+    if "[" in name:
+        # Generics.
+        name, _, suffix = name.partition("[")
+        assert suffix[-1] == "]"
+        suffix = suffix[:-1]
+        if "," in suffix:
+            suffix = ", ".join(_apply_name_aliases(x) for x in suffix.split(","))  # type: ignore
+        else:
+            suffix = _apply_name_aliases(suffix)  # type: ignore
+        suffix = "[" + suffix + "]"
+    else:
+        suffix = ""
+
+    if name in _name_aliases:
+        name = _name_aliases[name]
+
+    return name + suffix  # type: ignore
+
 
 # Apply our inheritance alias to autoapi base classes
 def _override_class_documenter():
@@ -256,16 +287,68 @@ def _override_class_documenter():
 
     def __init__(self, obj, **kwargs):
         bases = obj["bases"]
-        for i, base in enumerate(bases):
-            if base in inheritance_alias:
-                bases[i] = inheritance_alias[base]
-                print(bases[i])
+        for i in range(len(bases)):
+            bases[i] = _apply_name_aliases(bases[i])
+
+        args = obj["args"]
+        if args is not None:
+            for i in range(len(args)):
+                assert isinstance(args[i], tuple) and len(args[i]) == 4
+                args[i] = (
+                    args[i][0],
+                    args[i][1],
+                    _apply_name_aliases(args[i][2]),
+                    args[i][3],
+                )
         orig_init(self, obj, **kwargs)
 
     autoapi.mappers.python.PythonClass.__init__ = __init__
 
 
 _override_class_documenter()
+
+
+# Apply our inheritance alias to autoapi type annotations
+def _override_function_documenter():
+    import autoapi
+
+    orig_init = autoapi.mappers.python.PythonFunction.__init__
+
+    def __init__(self, obj, **kwargs):
+        args = obj["args"]
+        if args is not None:
+            for i in range(len(args)):
+                assert isinstance(args[i], tuple) and len(args[i]) == 4
+                args[i] = (
+                    args[i][0],
+                    args[i][1],
+                    _apply_name_aliases(args[i][2]),
+                    args[i][3],
+                )
+
+        obj["return_annotation"] = _apply_name_aliases(obj["return_annotation"])
+        orig_init(self, obj, **kwargs)
+
+    autoapi.mappers.python.PythonFunction.__init__ = __init__
+
+
+_override_function_documenter()
+
+# Apply our inheritance alias to autoapi attribute annotations
+def _override_attribute_documenter():
+    import autoapi
+
+    orig_init = autoapi.mappers.python.PythonAttribute.__init__
+
+    def __init__(self, obj, **kwargs):
+        obj["annotation"] = _apply_name_aliases(obj["annotation"])
+        orig_init(self, obj, **kwargs)
+
+    autoapi.mappers.python.PythonAttribute.__init__ = __init__
+
+
+_override_attribute_documenter()
+
 
 # -- Options for todo extension ----------------------------------------------
 
