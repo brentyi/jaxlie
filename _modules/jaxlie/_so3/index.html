@@ -474,7 +474,7 @@
 <div class="viewcode-block" id="SO3.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SO3&quot;</span><span class="p">:</span>
-        <span class="c1"># Uniformly sample over S^4.</span>
+        <span class="c1"># Uniformly sample over S^3.</span>
         <span class="c1"># &gt; Reference: http://planning.cs.uiuc.edu/node198.html</span>
         <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
             <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
