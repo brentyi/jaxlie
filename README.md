@@ -27,7 +27,7 @@ We implement Lie groups as high-level (data)classes:
     <tr>
       <td><code>jaxlie.<strong>SO2</strong></code></td>
       <td>Rotations in 2D.</td>
-      <td><em>(real, imaginary):</em> unit complex (∈ S<sup>2</sup>)</td>
+      <td><em>(real, imaginary):</em> unit complex (∈ S<sup>1</sup>)</td>
     </tr>
     <tr>
       <td><code>jaxlie.<strong>SE2</strong></code></td>
@@ -37,7 +37,7 @@ We implement Lie groups as high-level (data)classes:
     <tr>
       <td><code>jaxlie.<strong>SO3</strong></code></td>
       <td>Rotations in 3D.</td>
-      <td><em>(qw, qx, qy, qz):</em> wxyz quaternion (∈ S<sup>4</sup>)</td>
+      <td><em>(qw, qx, qy, qz):</em> wxyz quaternion (∈ S<sup>3</sup>)</td>
     </tr>
     <tr>
       <td><code>jaxlie.<strong>SE3</strong></code></td>

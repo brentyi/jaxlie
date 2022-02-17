@@ -126,7 +126,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             theta,
         )
 
-        theta_sq = theta ** 2
+        theta_sq = theta**2
         sin_over_theta = jnp.where(
             use_taylor,
             1.0 - theta_sq / 6.0,
@@ -174,7 +174,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         half_theta_over_tan_half_theta = jnp.where(
             use_taylor,
             # Taylor approximation.
-            1.0 - (theta ** 2) / 12.0,
+            1.0 - theta**2 / 12.0,
             # Default.
             -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
         )

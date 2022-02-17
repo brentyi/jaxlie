@@ -135,7 +135,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
-        return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 ** 2 + q2 ** 2))
+        return jnp.arctan2(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1**2 + q2**2))
 
     def compute_pitch_radians(self) -> jnp.ndarray:
         """Compute pitch angle. Uses the ZYX mobile robot convention.
@@ -155,7 +155,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         """
         # https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
         q0, q1, q2, q3 = self.wxyz
-        return jnp.arctan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2 ** 2 + q3 ** 2))
+        return jnp.arctan2(2 * (q0 * q3 + q1 * q2), 1 - 2 * (q2**2 + q3**2))
 
     # Factory.
 
@@ -376,7 +376,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         )
         atan_factor = jnp.where(
             use_taylor,
-            2.0 / w - 2.0 / 3.0 * norm_sq / (w ** 3),
+            2.0 / w - 2.0 / 3.0 * norm_sq / w**3,
             jnp.where(
                 jnp.abs(w) < get_epsilon(w.dtype),
                 jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm_safe,
@@ -402,7 +402,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     @staticmethod
     @overrides
     def sample_uniform(key: hints.KeyArray) -> "SO3":
-        # Uniformly sample over S^4.
+        # Uniformly sample over S^3.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(
             key=key,
