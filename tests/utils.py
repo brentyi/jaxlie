@@ -1,3 +1,4 @@
+import functools
 import random
 from typing import Any, Callable, List, Type, TypeVar, cast
 
@@ -62,6 +63,9 @@ def general_group_test(
         ],
     )(f_wrapped)
     return f_wrapped
+
+
+general_group_test_faster = functools.partial(general_group_test, max_examples=5)
 
 
 def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):

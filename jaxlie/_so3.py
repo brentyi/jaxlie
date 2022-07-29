@@ -26,7 +26,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     wxyz: Annotated[
         jnp.ndarray,
-        (4,),  # Shape.
+        (..., 4),  # Shape.
         jnp.floating,  # Data-type.
     ]
     """Internal parameters. `(w, x, y, z)` quaternion."""

@@ -40,7 +40,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     wxyz_xyz: Annotated[
         jnp.ndarray,
-        (7,),  # Shape.
+        (..., 7),  # Shape.
         jnp.floating,  # Data-type.
     ]
     """Internal parameters. wxyz quaternion followed by xyz translation."""

@@ -22,7 +22,7 @@ Current functionality:
 
 - Pytree registration for all dataclasses.
 
-- Helpers + analytical Jacobians for on-manifold optimization
+- Helpers + analytical Jacobians for tangent-space optimization
   (:code:`jaxlie.manifold`).
 
 Source code on `Github <https://github.com/brentyi/jaxlie>`_.
@@ -42,6 +42,7 @@ Source code on `Github <https://github.com/brentyi/jaxlie>`_.
    :caption: Example usage
 
    se3_overview
+   tangent_space_adam
    vmap_usage
 
 

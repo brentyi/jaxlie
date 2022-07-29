@@ -51,13 +51,15 @@ Where each group supports:
 
 - Forward- and reverse-mode AD-friendly **`exp()`**, **`log()`**,
   **`adjoint()`**, **`apply()`**, **`multiply()`**, **`inverse()`**,
-  **`identity()`**, **`from_matrix()`**, and **`as_matrix()`** operations.
-- Helpers + analytical Jacobians for manifold optimization
-  (<code>jaxlie.<strong>manifold</strong></code>).
+  **`identity()`**, **`from_matrix()`**, and **`as_matrix()`** operations. (see
+  [./examples/se3_example.py](./examples/se3_example.py))
+- Helpers + analytical Jacobians for tangent-space optimization (see
+  [./examples/tangent_space_adam.py](./examples/tangent_space_adam.py),
+  <code>jaxlie.<strong>manifold.\*</strong></code>).
+- Compatibility with standard JAX function transformations. (see
+  [./examples/vmap_example.py](./examples/vmap_example.py))
 - (Un)flattening as pytree nodes.
 - Serialization using [flax](https://github.com/google/flax).
-- Compatibility with standard JAX function transformations. (we've included some
-  [examples](./scripts/vmap_example.py) for use with `jax.vmap`)
 
 We also implement various common utilities for things like uniform random
 sampling (**`sample_uniform()`**) and converting from/to Euler angles (in the

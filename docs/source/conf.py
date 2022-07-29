@@ -259,24 +259,9 @@ def _apply_name_aliases(name: Optional[str]) -> Optional[str]:
         return None
 
     name = name.strip()
-
-    if "[" in name:
-        # Generics.
-        name, _, suffix = name.partition("[")
-        assert suffix[-1] == "]"
-        suffix = suffix[:-1]
-        if "," in suffix:
-            suffix = ", ".join(_apply_name_aliases(x) for x in suffix.split(","))  # type: ignore
-        else:
-            suffix = _apply_name_aliases(suffix)  # type: ignore
-        suffix = "[" + suffix + "]"
-    else:
-        suffix = ""
-
-    if name in _name_aliases:
-        name = _name_aliases[name]
-
-    return name + suffix  # type: ignore
+    for k, v in _name_aliases.items():
+        name = name.replace(k, v)
+    return name  # type: ignore
 
 
 # Apply our inheritance alias to autoapi base classes

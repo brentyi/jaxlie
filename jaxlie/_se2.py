@@ -27,7 +27,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     unit_complex_xy: Annotated[
         jnp.ndarray,
-        (4,),  # Shape.
+        (..., 4),  # Shape.
         jnp.floating,  # Data-type.
     ]
     """Internal parameters. `(cos, sin, x, y)`."""

@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="1.2.11",
+    version="1.3.0",
     description="Matrix Lie groups in Jax",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setup(
     install_requires=[
         "jax>=0.2.14",  # jax==0.2.14 introduces `ndarray.at[].multiply()`.
         "jaxlib>=0.1.67",
-        "jax_dataclasses>=1.2.0",  # Required for shape/data-type annotations.
+        "jax_dataclasses>=1.3.0",  # Required for shape/data-type annotations.
         "numpy",
         "overrides!=4",
     ],

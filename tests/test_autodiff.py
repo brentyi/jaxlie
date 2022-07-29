@@ -25,7 +25,6 @@ def _assert_jacobians_close(
     f: Callable[[Type[jaxlie.MatrixLieGroup], jnp.ndarray], jnp.ndarray],
     primal: jaxlie.hints.Array,
 ) -> None:
-
     jacobian_fwd = cached_jacfwd(f)(Group, primal)
     jacobian_rev = cached_jacrev(f)(Group, primal)
     jacobian_numerical = jacnumerical(
