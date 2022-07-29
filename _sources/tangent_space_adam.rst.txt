@@ -2,6 +2,6 @@ Tangent-space ADAM
 ==========================================
 
 
-.. literalinclude:: ../../scripts/tangent_space_adam.py
+.. literalinclude:: ../../examples/tangent_space_adam.py
    :language: python
 

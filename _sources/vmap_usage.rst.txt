@@ -2,6 +2,6 @@
 ==========================================
 
 
-.. literalinclude:: ../../scripts/vmap_example.py
+.. literalinclude:: ../../examples/vmap_example.py
    :language: python
 
