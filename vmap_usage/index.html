@@ -75,6 +75,105 @@
              
   <section id="jax-vmap-usage">
 <h1><cite>jax.vmap</cite> Usage<a class="headerlink" href="#jax-vmap-usage" title="Permalink to this heading"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Examples of vectorizing transformations via vmap.</span>
+
+<span class="sd">Omitted for brevity here, but note that in practice we usually want to JIT after</span>
+<span class="sd">vmapping!&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+<span class="kn">from</span> <span class="nn">jaxlie</span> <span class="kn">import</span> <span class="n">SO3</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (1) Setup.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># We start by creating two rotation objects:</span>
+<span class="c1"># - R_single contains a standard single rotation.</span>
+<span class="c1"># - R_stacked contained `N` rotations stacked together! Note that all Lie group objects</span>
+<span class="c1">#   are PyTrees, so this has the same structure as R_single but with a batch axis in the</span>
+<span class="c1">#   contained parameters array.</span>
+
+<span class="n">R_single</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">from_x_radians</span><span class="p">(</span><span class="n">onp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">R_single</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+
+<span class="n">R_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">SO3</span><span class="o">.</span><span class="n">from_x_radians</span><span class="p">)(</span>
+    <span class="n">onp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="n">onp</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,))</span>
+<span class="p">)</span>
+<span class="k">assert</span> <span class="n">R_stacked</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># We can also create two arrays containing points: one is a single point, the other is</span>
+<span class="c1"># `N` points stacked.</span>
+<span class="n">p_single</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,))</span>
+<span class="n">p_stacked</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (2) Applying 1 transformation to 1 point.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># Recall that these two approaches to transforming a point:</span>
+<span class="n">p_transformed_single</span> <span class="o">=</span> <span class="n">R_single</span> <span class="o">@</span> <span class="n">p_single</span>
+<span class="k">assert</span> <span class="n">p_transformed_single</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+<span class="n">p_transformed_single</span> <span class="o">=</span> <span class="n">R_single</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">p_single</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_single</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+
+<span class="c1"># Are just syntactic sugar for calling:</span>
+<span class="n">p_transformed_single</span> <span class="o">=</span> <span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">R_single</span><span class="p">,</span> <span class="n">p_single</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_single</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+
+
+<span class="c1">#############################</span>
+<span class="c1"># (3) Applying 1 transformation to N points.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># This follows standard vmap semantics!</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">R_single</span><span class="o">.</span><span class="n">apply</span><span class="p">)(</span><span class="n">p_stacked</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># Note that this is equivalent to:</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">R_single</span><span class="p">,</span> <span class="n">p</span><span class="p">))(</span><span class="n">p_stacked</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (4) Applying N transformations to N points.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># R_stacked and p_stacked both have an (N,) batch dimension compared to their &quot;single&quot;</span>
+<span class="c1"># counterparts. We can therefore vmap over both arguments of SO3.apply:</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">)(</span><span class="n">R_stacked</span><span class="p">,</span> <span class="n">p_stacked</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (5) Applying N transformations to 1 point.</span>
+<span class="c1">#############################</span>
+
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">R</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">p_single</span><span class="p">))(</span><span class="n">R_stacked</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (6) Multiplying transformations.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># The same concepts as above apply to other operations!</span>
+<span class="c1"># For multiplication, these are all the same:</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">R_single</span> <span class="o">@</span> <span class="n">R_single</span><span class="p">)</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">R_single</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">R_single</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">SO3</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">R_single</span><span class="p">,</span> <span class="n">R_single</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+
+<span class="c1"># And therefore we can also do 1 x N multiplication:</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">R_single</span><span class="o">.</span><span class="n">multiply</span><span class="p">)(</span><span class="n">R_stacked</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">R</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">R_single</span><span class="p">,</span> <span class="n">R</span><span class="p">))(</span><span class="n">R_stacked</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Or N x N multiplication:</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">SO3</span><span class="o">.</span><span class="n">multiply</span><span class="p">)(</span><span class="n">R_stacked</span><span class="p">,</span> <span class="n">R_stacked</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Or N x 1 multiplication:</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">R</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">R_single</span><span class="p">))(</span><span class="n">R_stacked</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 
 

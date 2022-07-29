@@ -76,6 +76,92 @@
              
   <section id="se-3-overview">
 <h1>SE(3) Overview<a class="headerlink" href="#se-3-overview" title="Permalink to this heading"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+
+<span class="kn">from</span> <span class="nn">jaxlie</span> <span class="kn">import</span> <span class="n">SE3</span>
+
+<span class="c1">#############################</span>
+<span class="c1"># (1) Constructing transforms.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># We can compute a w&lt;-b transform by integrating over an se(3) screw, equivalent</span>
+<span class="c1"># to `SE3.from_matrix(expm(wedge(twist)))`.</span>
+<span class="n">twist</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">twist</span><span class="p">)</span>
+
+<span class="c1"># We can print the (quaternion) rotation term; this is an `SO3` object:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
+
+<span class="c1"># Or print the translation; this is a simple array with shape (3,):</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">translation</span><span class="p">())</span>
+
+<span class="c1"># Or the underlying parameters; this is a length-7 (quaternion, translation) array:</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>  <span class="c1"># SE3-specific field.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>  <span class="c1"># Helper shared by all groups.</span>
+
+<span class="c1"># There are also other helpers to generate transforms, eg from matrices:</span>
+<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_matrix</span><span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
+
+<span class="c1"># Or from explicit rotation and translation terms:</span>
+<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
+    <span class="n">rotation</span><span class="o">=</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">rotation</span><span class="p">(),</span>
+    <span class="n">translation</span><span class="o">=</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">translation</span><span class="p">(),</span>
+<span class="p">)</span>
+
+<span class="c1"># Or with the dataclass constructor + the underlying length-7 parameterization:</span>
+<span class="n">T_w_b</span> <span class="o">=</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">wxyz_xyz</span><span class="p">)</span>
+
+
+<span class="c1">#############################</span>
+<span class="c1"># (2) Applying transforms.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># Transform points with the `@` operator:</span>
+<span class="n">p_b</span> <span class="o">=</span> <span class="n">onp</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">p_w</span> <span class="o">=</span> <span class="n">T_w_b</span> <span class="o">@</span> <span class="n">p_b</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_w</span><span class="p">)</span>
+
+<span class="c1"># or `.apply()`:</span>
+<span class="n">p_w</span> <span class="o">=</span> <span class="n">T_w_b</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">p_b</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_w</span><span class="p">)</span>
+
+<span class="c1"># or the homogeneous matrix form:</span>
+<span class="n">p_w</span> <span class="o">=</span> <span class="p">(</span><span class="n">T_w_b</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span> <span class="o">@</span> <span class="n">onp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p_b</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">p_w</span><span class="p">)</span>
+
+
+<span class="c1">#############################</span>
+<span class="c1"># (3) Composing transforms.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># Compose transforms with the `@` operator:</span>
+<span class="n">T_b_a</span> <span class="o">=</span> <span class="n">SE3</span><span class="o">.</span><span class="n">identity</span><span class="p">()</span>
+<span class="n">T_w_a</span> <span class="o">=</span> <span class="n">T_w_b</span> <span class="o">@</span> <span class="n">T_b_a</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_a</span><span class="p">)</span>
+
+<span class="c1"># or `.multiply()`:</span>
+<span class="n">T_w_a</span> <span class="o">=</span> <span class="n">T_w_b</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">T_b_a</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">T_w_a</span><span class="p">)</span>
+
+
+<span class="c1">#############################</span>
+<span class="c1"># (4) Misc.</span>
+<span class="c1">#############################</span>
+
+<span class="c1"># Compute inverses:</span>
+<span class="n">T_b_w</span> <span class="o">=</span> <span class="n">T_w_b</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span>
+<span class="n">identity</span> <span class="o">=</span> <span class="n">T_w_b</span> <span class="o">@</span> <span class="n">T_b_w</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+
+<span class="c1"># Compute adjoints:</span>
+<span class="n">adjoint_T_w_b</span> <span class="o">=</span> <span class="n">T_w_b</span><span class="o">.</span><span class="n">adjoint</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">adjoint_T_w_b</span><span class="p">)</span>
+
+<span class="c1"># Recover our twist, equivalent to `vee(logm(T_w_b.as_matrix()))`:</span>
+<span class="n">recovered_twist</span> <span class="o">=</span> <span class="n">T_w_b</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">recovered_twist</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 
 
