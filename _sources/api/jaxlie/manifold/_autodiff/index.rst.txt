@@ -15,9 +15,9 @@ Functions
 
 .. autoapisummary::
 
+   jaxlie.manifold._autodiff.zero_tangents
    jaxlie.manifold._autodiff.grad
    jaxlie.manifold._autodiff.value_and_grad
-   jaxlie.manifold._autodiff.zero_tangents
 
 
 
@@ -30,6 +30,12 @@ Attributes
    jaxlie.manifold._autodiff.P
 
 
+.. function:: zero_tangents(pytree)
+
+   Replace all values in a Pytree with zero vectors on the corresponding tangent
+   spaces.
+
+
 .. data:: AxisName
    
 
@@ -40,21 +46,17 @@ Attributes
 
    
 
-.. function:: grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+.. function:: grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, jaxlie.manifold._tree_utils.TangentPytree]
+              grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]
 
    Same as ``jax.grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
 
 
-.. function:: value_and_grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+.. function:: value_and_grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, jaxlie.manifold._tree_utils.TangentPytree]]
+              value_and_grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]]
 
    Same as ``jax.value_and_grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
-
-
-.. function:: zero_tangents(pytree)
-
-   Replace all values in a Pytree with zero vectors on the corresponding tangent
-   spaces.
 
 

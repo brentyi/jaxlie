@@ -47,7 +47,7 @@ Attributes
    
 
 .. function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
-              rplus(transform: PytreeType, delta: PytreeType) -> PytreeType
+              rplus(transform: PytreeType, delta: jaxlie.manifold._tree_utils.TangentPytree) -> PytreeType
 
    Manifold right plus. Computes ``T' = T @ exp(delta)``.
 
@@ -56,7 +56,7 @@ Attributes
 
 
 .. function:: rminus(a: GroupType, b: GroupType) -> jax.numpy.ndarray
-              rminus(a: PytreeType, b: PytreeType) -> PytreeType
+              rminus(a: PytreeType, b: PytreeType) -> jaxlie.manifold._tree_utils.TangentPytree
 
    Manifold right minus. Computes
    ``delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()``.

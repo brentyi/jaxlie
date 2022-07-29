@@ -6,3 +6,11 @@
 .. py:module:: jaxlie.manifold._tree_utils
 
 
+Module Contents
+---------------
+
+.. data:: TangentPytree
+   
+
+   
+

@@ -72,18 +72,70 @@
            <div itemprop="articleBody">
              
   <h1>Source code for jaxlie.manifold._autodiff</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">Generic</span><span class="p">,</span>
+    <span class="n">NewType</span><span class="p">,</span>
+    <span class="n">Sequence</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+    <span class="n">overload</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">ParamSpec</span>
 
 <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_rplus_rminus</span><span class="p">,</span> <span class="n">_tree_utils</span>
 
+
+<div class="viewcode-block" id="zero_tangents"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.zero_tangents">[docs]</a><span class="k">def</span> <span class="nf">zero_tangents</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Replace all values in a Pytree with zero vectors on the corresponding tangent</span>
+<span class="sd">    spaces.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">tangent_zero</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">,))</span>
+
+    <span class="k">return</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">_map_group_trees</span><span class="p">(</span>
+        <span class="n">tangent_zero</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">array</span><span class="p">),</span>
+        <span class="n">pytree</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
 <span class="n">AxisName</span> <span class="o">=</span> <span class="n">Any</span>
 
 <span class="n">P</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">)</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">grad</span><span class="p">(</span>
+    <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">argnums</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">]:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">grad</span><span class="p">(</span>
+    <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">argnums</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">,</span> <span class="o">...</span><span class="p">]]:</span>
+    <span class="o">...</span>
 
 
 <div class="viewcode-block" id="grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.grad">[docs]</a><span class="k">def</span> <span class="nf">grad</span><span class="p">(</span>
@@ -93,7 +145,7 @@
     <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Same as `jax.grad`, but computes gradients of Lie groups with respect to</span>
 <span class="sd">    tangent spaces.&quot;&quot;&quot;</span>
 
@@ -108,6 +160,30 @@
     <span class="k">return</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">compute_value_and_grad</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># type: ignore</span></div>
 
 
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">value_and_grad</span><span class="p">(</span>
+    <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">argnums</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">]]:</span>
+    <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span> <span class="nf">value_and_grad</span><span class="p">(</span>
+    <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">argnums</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">,</span> <span class="o">...</span><span class="p">]]]:</span>
+    <span class="o">...</span>
+
+
 <div class="viewcode-block" id="value_and_grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.value_and_grad">[docs]</a><span class="k">def</span> <span class="nf">value_and_grad</span><span class="p">(</span>
     <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">argnums</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -115,7 +191,7 @@
     <span class="n">holomorphic</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">allow_int</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">reduce_axes</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">AxisName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Same as `jax.value_and_grad`, but computes gradients of Lie groups with respect to</span>
 <span class="sd">    tangent spaces.&quot;&quot;&quot;</span>
 
@@ -127,8 +203,8 @@
             <span class="p">)</span>
 
         <span class="c1"># Put arguments onto tangent space.</span>
-        <span class="n">tangent_args</span> <span class="o">=</span> <span class="n">zero_tangents</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-        <span class="n">tangent_kwargs</span> <span class="o">=</span> <span class="n">zero_tangents</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">tangent_args</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">zero_tangents</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+        <span class="n">tangent_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">zero_tangents</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 
         <span class="n">value</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span>
             <span class="n">fun</span><span class="o">=</span><span class="n">tangent_fun</span><span class="p">,</span>
@@ -141,26 +217,6 @@
         <span class="k">return</span> <span class="n">value</span><span class="p">,</span> <span class="n">grad</span>
 
     <span class="k">return</span> <span class="n">wrapped_grad</span>  <span class="c1"># type: ignore</span></div>
-
-
-<span class="c1"># An annotation that would work in most cases here is:</span>
-<span class="c1">#     def zero_tangents(structure: PytreeType) -&gt; PytreeType</span>
-<span class="c1">#</span>
-<span class="c1"># But this is leaky; note that an input of List[SE3] should be output List[jnp.ndarray].</span>
-<span class="c1">#</span>
-<span class="c1"># This is too difficult to annotate, so we just mark all of the types as `Any`.</span>
-<div class="viewcode-block" id="zero_tangents"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.zero_tangents">[docs]</a><span class="k">def</span> <span class="nf">zero_tangents</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Replace all values in a Pytree with zero vectors on the corresponding tangent</span>
-<span class="sd">    spaces.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">tangent_zero</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">,))</span>
-
-    <span class="k">return</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">_map_group_trees</span><span class="p">(</span>
-        <span class="n">tangent_zero</span><span class="p">,</span>
-        <span class="k">lambda</span> <span class="n">array</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">array</span><span class="p">),</span>
-        <span class="n">pytree</span><span class="p">,</span>
-    <span class="p">)</span></div>
 </pre></div>
 
            </div>

@@ -22,13 +22,15 @@ Functions
 
 
 
-.. function:: grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+.. function:: grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, jaxlie.manifold._tree_utils.TangentPytree]
+              grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]
 
    Same as ``jax.grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
 
 
-.. function:: value_and_grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+.. function:: value_and_grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, jaxlie.manifold._tree_utils.TangentPytree]]
+              value_and_grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]]
 
    Same as ``jax.value_and_grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
@@ -41,7 +43,7 @@ Functions
 
 
 .. function:: rminus(a: GroupType, b: GroupType) -> jax.numpy.ndarray
-              rminus(a: PytreeType, b: PytreeType) -> PytreeType
+              rminus(a: PytreeType, b: PytreeType) -> jaxlie.manifold._tree_utils.TangentPytree
 
    Manifold right minus. Computes
    ``delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()``.
@@ -51,7 +53,7 @@ Functions
 
 
 .. function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
-              rplus(transform: PytreeType, delta: PytreeType) -> PytreeType
+              rplus(transform: PytreeType, delta: jaxlie.manifold._tree_utils.TangentPytree) -> PytreeType
 
    Manifold right plus. Computes ``T' = T @ exp(delta)``.
 

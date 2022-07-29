@@ -82,8 +82,7 @@
 
 <span class="sd">This has better stability, equivariance, and convergence characteristics than naive</span>
 <span class="sd">approaches to optimization over poses (parameterizing via exponential coordinates, Euler</span>
-<span class="sd">angles, projected gradient descent, etc).</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">angles, projected gradient descent, etc). &quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
@@ -92,6 +91,7 @@
 <span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">import</span> <span class="nn">optax</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">reveal_type</span>
 
 <span class="kn">import</span> <span class="nn">jaxlie</span>
 
@@ -102,8 +102,7 @@
 
 <span class="sd">    Note that there&#39;s redundancy here: given T_ab and T_bc, T_ca can be computed as</span>
 <span class="sd">    (T_ab @ T_bc).inverse(). Our optimization will be focused on making these redundant</span>
-<span class="sd">    transforms consistent with each other.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    transforms consistent with each other.&quot;&quot;&quot;</span>
 
     <span class="n">T_ab</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span>
     <span class="n">T_bc</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span>
@@ -118,9 +117,9 @@
 
 
 <span class="k">def</span> <span class="nf">initialize</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Initialize the state of our system. Note that the transforms parameters won&#39;t</span>
-<span class="sd">    initially be consistent; `T_ab @ T_bc != T_ca.inverse()`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Initialize the state of our system. Transforms won&#39;t initially be consistent;</span>
+<span class="sd">    `T_ab @ T_bc != T_ca.inverse()`.&quot;&quot;&quot;</span>
+
     <span class="n">prngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span>
         <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">prngs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
@@ -155,10 +154,13 @@
         <span class="n">grads</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">optimizer_state</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># type: ignore</span>
     <span class="p">)</span>
 
+    <span class="c1"># (3) We replace standard addition (optax.apply_updates) with a topology-aware</span>
+    <span class="c1"># `rplus` operator.</span>
+    <span class="n">new_params</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+    <span class="n">delt</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rminus</span><span class="p">(</span><span class="n">new_params</span><span class="p">,</span> <span class="n">new_params</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">State</span><span class="p">(</span>
-        <span class="c1"># (3) Note that we replace standard addition (optax.apply_updates) with a</span>
-        <span class="c1"># topology-aware retraction.</span>
-        <span class="n">params</span><span class="o">=</span><span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">),</span>  <span class="c1"># type: ignore</span>
+        <span class="n">params</span><span class="o">=</span><span class="n">new_params</span><span class="p">,</span>  <span class="c1"># type: ignore</span>
         <span class="n">optimizer</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span>
         <span class="n">optimizer_state</span><span class="o">=</span><span class="n">new_optimizer_state</span><span class="p">,</span>
     <span class="p">)</span>
