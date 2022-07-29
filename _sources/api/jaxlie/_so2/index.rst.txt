@@ -32,7 +32,7 @@ Classes
    Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
 
    .. attribute:: unit_complex
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (2), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 2), jax.numpy.floating]
 
       Internal parameters. ``(cos, sin)``.
 

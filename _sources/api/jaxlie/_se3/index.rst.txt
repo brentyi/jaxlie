@@ -33,7 +33,7 @@ Classes
    is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz_xyz
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (7), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 7), jax.numpy.floating]
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 

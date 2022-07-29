@@ -1,0 +1,60 @@
+:orphan:
+
+:mod:`jaxlie.manifold._autodiff`
+================================
+
+.. py:module:: jaxlie.manifold._autodiff
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._autodiff.grad
+   jaxlie.manifold._autodiff.value_and_grad
+   jaxlie.manifold._autodiff.zero_tangents
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._autodiff.AxisName
+   jaxlie.manifold._autodiff.P
+
+
+.. data:: AxisName
+   
+
+   
+
+.. data:: P
+   
+
+   
+
+.. function:: grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+
+   Same as ``jax.grad``\ , but computes gradients of Lie groups with respect to
+   tangent spaces.
+
+
+.. function:: value_and_grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
+
+   Same as ``jax.value_and_grad``\ , but computes gradients of Lie groups with respect to
+   tangent spaces.
+
+
+.. function:: zero_tangents(pytree)
+
+   Replace all values in a Pytree with zero vectors on the corresponding tangent
+   spaces.
+
+

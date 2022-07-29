@@ -15,6 +15,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
@@ -79,94 +80,102 @@
            <div itemprop="articleBody">
              
   <section id="module-jaxlie.manifold">
-<span id="jaxlie-manifold"></span><h1><a class="reference internal" href="#module-jaxlie.manifold" title="jaxlie.manifold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a><a class="headerlink" href="#module-jaxlie.manifold" title="Permalink to this headline"></a></h1>
+<span id="jaxlie-manifold"></span><h1><a class="reference internal" href="#module-jaxlie.manifold" title="jaxlie.manifold"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code></a><a class="headerlink" href="#module-jaxlie.manifold" title="Permalink to this heading"></a></h1>
 <section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline"></a></h2>
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading"></a></h2>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rminus" title="jaxlie.manifold.rminus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rminus</span></code></a>(a, b)</p></td>
-<td><p>Manifold right minus.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.grad" title="jaxlie.manifold.grad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grad</span></code></a>(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())</p></td>
+<td><p>Same as <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>, but computes gradients of Lie groups with respect to</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus" title="jaxlie.manifold.rplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus</span></code></a>(transform, delta)</p></td>
-<td><p>Manifold right plus.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.value_and_grad" title="jaxlie.manifold.value_and_grad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">value_and_grad</span></code></a>(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())</p></td>
+<td><p>Same as <code class="docutils literal notranslate"><span class="pre">jax.value_and_grad</span></code>, but computes gradients of Lie groups with respect to</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="jaxlie.manifold.rplus_jacobian_parameters_wrt_delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></code></a>(transform)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.zero_tangents" title="jaxlie.manifold.zero_tangents"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zero_tangents</span></code></a>(pytree)</p></td>
+<td><p>Replace all values in a Pytree with zero vectors on the corresponding tangent</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rminus" title="jaxlie.manifold.rminus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rminus</span></code></a>(…)</p></td>
+<td><p>Manifold right minus. Computes</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus" title="jaxlie.manifold.rplus"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus</span></code></a>(…)</p></td>
+<td><p>Manifold right plus. Computes <code class="docutils literal notranslate"><span class="pre">T'</span> <span class="pre">=</span> <span class="pre">T</span> <span class="pre">&#64;</span> <span class="pre">exp(delta)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="jaxlie.manifold.rplus_jacobian_parameters_wrt_delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></code></a>(transform)</p></td>
 <td><p>Analytical Jacobians for <code class="docutils literal notranslate"><span class="pre">jaxlie.manifold.rplus()</span></code>, linearized around a zero</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
+<dt class="sig sig-object py" id="jaxlie.manifold.grad">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argnums</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holomorphic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_autodiff/#grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.grad" title="Permalink to this definition"></a></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code>, but computes gradients of Lie groups with respect to
+tangent spaces.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jaxlie.manifold.value_and_grad">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">value_and_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argnums</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">has_aux</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holomorphic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduce_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_autodiff/#value_and_grad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.value_and_grad" title="Permalink to this definition"></a></dt>
+<dd><p>Same as <code class="docutils literal notranslate"><span class="pre">jax.value_and_grad</span></code>, but computes gradients of Lie groups with respect to
+tangent spaces.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jaxlie.manifold.zero_tangents">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">zero_tangents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pytree</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_autodiff/#zero_tangents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.zero_tangents" title="Permalink to this definition"></a></dt>
+<dd><p>Replace all values in a Pytree with zero vectors on the corresponding tangent
+spaces.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="jaxlie.manifold.rminus">
-<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rminus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rminus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rminus" title="Permalink to this definition"></a></dt>
-<dd><p>Manifold right minus.</p>
-<p>Computes <code class="docutils literal notranslate"><span class="pre">delta</span> <span class="pre">=</span> <span class="pre">(T_wa.inverse()</span> <span class="pre">&#64;</span> <span class="pre">T_wb).log()</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>T</em>) – <code class="docutils literal notranslate"><span class="pre">T_wa</span></code></p></li>
-<li><p><strong>b</strong> (<em>T</em>) – <code class="docutils literal notranslate"><span class="pre">T_wb</span></code></p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">T_ab.log()</span></code></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rminus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">jax.numpy.ndarray</span></span></span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_rplus_rminus/#rminus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rminus" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rminus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PytreeType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PytreeType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PytreeType</span></span></span></dt>
+<dd><p>Manifold right minus. Computes
+<code class="docutils literal notranslate"><span class="pre">delta</span> <span class="pre">=</span> <span class="pre">T_ab.log()</span> <span class="pre">=</span> <span class="pre">(T_wa.inverse()</span> <span class="pre">&#64;</span> <span class="pre">T_wb).log()</span></code>.</p>
+<p>Supports pytrees containing Lie group instances recursively; simple Euclidean
+subtraction will be performed for all other arrays.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jaxlie.manifold.rplus">
-<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus" title="Permalink to this definition"></a></dt>
-<dd><p>Manifold right plus.</p>
-<p>Computes <code class="docutils literal notranslate"><span class="pre">T_wb</span> <span class="pre">=</span> <span class="pre">T_wa</span> <span class="pre">&#64;</span> <span class="pre">exp(delta)</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>transform</strong> (<em>T</em>) – <code class="docutils literal notranslate"><span class="pre">T_wa</span></code></p></li>
-<li><p><strong>delta</strong> (<em>jaxlie.hints.Array</em>) – <code class="docutils literal notranslate"><span class="pre">T_ab.log()</span></code></p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>T</em> – <code class="docutils literal notranslate"><span class="pre">T_wb</span></code></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>T</p>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxlie.hints.Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GroupType</span></span></span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_rplus_rminus/#rplus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PytreeType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PytreeType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PytreeType</span></span></span></dt>
+<dd><p>Manifold right plus. Computes <code class="docutils literal notranslate"><span class="pre">T'</span> <span class="pre">=</span> <span class="pre">T</span> <span class="pre">&#64;</span> <span class="pre">exp(delta)</span></code>.</p>
+<p>Supports pytrees containing Lie group instances recursively; simple Euclidean
+addition will be performed for all other arrays.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="jaxlie.manifold.rplus_jacobian_parameters_wrt_delta">
-<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_manifold_helpers/#rplus_jacobian_parameters_wrt_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">jaxlie.manifold.</span></span><span class="sig-name descname"><span class="pre">rplus_jacobian_parameters_wrt_delta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/manifold/_rplus_rminus/#rplus_jacobian_parameters_wrt_delta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.manifold.rplus_jacobian_parameters_wrt_delta" title="Permalink to this definition"></a></dt>
 <dd><p>Analytical Jacobians for <code class="docutils literal notranslate"><span class="pre">jaxlie.manifold.rplus()</span></code>, linearized around a zero
 local delta.</p>
-<p>Sometimes useful for manifold optimization.</p>
+<p>Mostly useful for reducing JIT compile times for tangent-space optimization.</p>
 <p>Equivalent to –</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">MatrixLieGroup</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="c1"># Since transform objects are pytree containers, note that `jacfwd` returns a</span>
+    <span class="c1"># transformation object itself and that the Jacobian terms corresponding to the</span>
+    <span class="c1"># parameters are grabbed explicitly.</span>
     <span class="k">return</span> <span class="n">jax</span><span class="o">.</span><span class="n">jacfwd</span><span class="p">(</span>
-        <span class="k">lambda</span> <span class="n">delta</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
-    <span class="p">)(</span><span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span>
+        <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">,</span>  <span class="c1"># Args are (transform, delta)</span>
+        <span class="n">argnums</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Jacobian wrt delta</span>
+    <span class="p">)(</span><span class="n">transform</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">))</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
 </pre></div>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>transform</strong> (<a class="reference internal" href="../#jaxlie.MatrixLieGroup" title="jaxlie.MatrixLieGroup"><em>jaxlie.MatrixLieGroup</em></a>) – </p>
+<dd class="field-odd"><p><strong>transform</strong> – Transform to linearize around.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Jacobian. Shape should be <code class="docutils literal notranslate"><span class="pre">(Group.parameters_dim,</span> <span class="pre">Group.tangent_dim)</span></code>.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

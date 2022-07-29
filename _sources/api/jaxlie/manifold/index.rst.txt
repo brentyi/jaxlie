@@ -13,34 +13,50 @@ Functions
 
 .. autoapisummary::
 
+   jaxlie.manifold.grad
+   jaxlie.manifold.value_and_grad
+   jaxlie.manifold.zero_tangents
    jaxlie.manifold.rminus
    jaxlie.manifold.rplus
    jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
 
 
 
-.. function:: rminus(a, b)
+.. function:: grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
 
-   Manifold right minus.
-
-   Computes ``delta = (T_wa.inverse() @ T_wb).log()``.
-
-   :param a: ``T_wa``
-   :param b: ``T_wb``
-
-   :returns: ``T_ab.log()``
+   Same as ``jax.grad``\ , but computes gradients of Lie groups with respect to
+   tangent spaces.
 
 
-.. function:: rplus(transform, delta)
+.. function:: value_and_grad(fun, argnums = 0, has_aux = False, holomorphic = False, allow_int = False, reduce_axes = ())
 
-   Manifold right plus.
+   Same as ``jax.value_and_grad``\ , but computes gradients of Lie groups with respect to
+   tangent spaces.
 
-   Computes ``T_wb = T_wa @ exp(delta)``.
 
-   :param transform: ``T_wa``
-   :param delta: ``T_ab.log()``
+.. function:: zero_tangents(pytree)
 
-   :returns: *T* -- ``T_wb``
+   Replace all values in a Pytree with zero vectors on the corresponding tangent
+   spaces.
+
+
+.. function:: rminus(a: GroupType, b: GroupType) -> jax.numpy.ndarray
+              rminus(a: PytreeType, b: PytreeType) -> PytreeType
+
+   Manifold right minus. Computes
+   ``delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()``.
+
+   Supports pytrees containing Lie group instances recursively; simple Euclidean
+   subtraction will be performed for all other arrays.
+
+
+.. function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
+              rplus(transform: PytreeType, delta: PytreeType) -> PytreeType
+
+   Manifold right plus. Computes ``T' = T @ exp(delta)``.
+
+   Supports pytrees containing Lie group instances recursively; simple Euclidean
+   addition will be performed for all other arrays.
 
 
 .. function:: rplus_jacobian_parameters_wrt_delta(transform)
@@ -48,20 +64,22 @@ Functions
    Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
    local delta.
 
-   Sometimes useful for manifold optimization.
+   Mostly useful for reducing JIT compile times for tangent-space optimization.
 
    Equivalent to --
 
    .. code-block::
 
-      def rplus_jacobian_parameters_wrt_delta(
-          transform: jaxlie.MatrixLieGroup,
-      ) -> jnp.ndarray:
+      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+          # Since transform objects are pytree containers, note that `jacfwd` returns a
+          # transformation object itself and that the Jacobian terms corresponding to the
+          # parameters are grabbed explicitly.
           return jax.jacfwd(
-              lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()
-          )(onp.zeros(transform.tangent_dim))
+              jaxlie.manifold.rplus,  # Args are (transform, delta)
+              argnums=1,  # Jacobian wrt delta
+          )(transform, onp.zeros(transform.tangent_dim)).parameters()
 
-   :param transform:
+   :param transform: Transform to linearize around.
 
    :returns: Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
 

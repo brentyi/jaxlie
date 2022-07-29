@@ -15,6 +15,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
@@ -79,12 +80,12 @@
            <div itemprop="articleBody">
              
   <section id="module-jaxlie.utils">
-<span id="jaxlie-utils"></span><h1><a class="reference internal" href="#module-jaxlie.utils" title="jaxlie.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a><a class="headerlink" href="#module-jaxlie.utils" title="Permalink to this headline"></a></h1>
+<span id="jaxlie-utils"></span><h1><a class="reference internal" href="#module-jaxlie.utils" title="jaxlie.utils"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie.utils</span></code></a><a class="headerlink" href="#module-jaxlie.utils" title="Permalink to this heading"></a></h1>
 <section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline"></a></h2>
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading"></a></h2>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -104,13 +105,10 @@
 <dd><p>Helper for grabbing type-specific precision constants.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dtype</strong> (<em>jax.numpy.dtype</em>) – Datatype.</p>
+<dd class="field-odd"><p><strong>dtype</strong> – Datatype.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output float.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -120,19 +118,6 @@
 <span class="sig-prename descclassname"><span class="pre">jaxlie.utils.</span></span><span class="sig-name descname"><span class="pre">register_lie_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tangent_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space_dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/utils/_utils/#register_lie_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils.register_lie_group" title="Permalink to this definition"></a></dt>
 <dd><p>Decorator for registering Lie group dataclasses.</p>
 <p>Sets dimensionality class variables, and marks all methods for JIT compilation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>matrix_dim</strong> (<em>int</em>) – </p></li>
-<li><p><strong>parameters_dim</strong> (<em>int</em>) – </p></li>
-<li><p><strong>tangent_dim</strong> (<em>int</em>) – </p></li>
-<li><p><strong>space_dim</strong> (<em>int</em>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>Callable[[Type[T]], Type[T]]</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

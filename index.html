@@ -15,6 +15,7 @@
         <script data-url_root="#" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex/" />
@@ -72,7 +73,7 @@
            <div itemprop="articleBody">
              
   <section id="jaxlie-documentation">
-<h1>jaxlie documentation<a class="headerlink" href="#jaxlie-documentation" title="Permalink to this headline"></a></h1>
+<h1>jaxlie documentation<a class="headerlink" href="#jaxlie-documentation" title="Permalink to this heading"></a></h1>
 <p><img alt="Build status icon" src="https://github.com/brentyi/jaxlie/workflows/build/badge.svg" /> <img alt="Mypy status icon" src="https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg?branch=master" /> <img alt="Lint status icon" src="https://github.com/brentyi/jaxlie/workflows/lint/badge.svg" /> <a class="reference external" href="https://codecov.io/gh/brentyi/jaxlie"><img alt="Test coverage status icon" src="https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg" /></a></p>
 <p><code class="code docutils literal notranslate"><span class="pre">jaxlie</span></code> is a Lie theory library for rigid body transformations and
 optimization in JAX.</p>
@@ -92,7 +93,7 @@ dataclasses.</p></li>
 <li><p><code class="code docutils literal notranslate"><span class="pre">exp()</span></code>, <code class="code docutils literal notranslate"><span class="pre">log()</span></code>, <code class="code docutils literal notranslate"><span class="pre">adjoint()</span></code>, <code class="code docutils literal notranslate"><span class="pre">multiply()</span></code>,
 <code class="code docutils literal notranslate"><span class="pre">inverse()</span></code>, and <code class="code docutils literal notranslate"><span class="pre">identity()</span></code> implementations for each Lie group.</p></li>
 <li><p>Pytree registration for all dataclasses.</p></li>
-<li><p>Helpers + analytical Jacobians for on-manifold optimization
+<li><p>Helpers + analytical Jacobians for tangent-space optimization
 (<code class="code docutils literal notranslate"><span class="pre">jaxlie.manifold</span></code>).</p></li>
 </ul>
 <p>Source code on <a class="reference external" href="https://github.com/brentyi/jaxlie">Github</a>.</p>

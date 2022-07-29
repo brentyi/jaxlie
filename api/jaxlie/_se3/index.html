@@ -15,6 +15,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
@@ -71,12 +72,12 @@
            <div itemprop="articleBody">
              
   <section id="module-jaxlie._se3">
-<span id="jaxlie-se3"></span><h1><a class="reference internal" href="#module-jaxlie._se3" title="jaxlie._se3"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._se3</span></code></a><a class="headerlink" href="#module-jaxlie._se3" title="Permalink to this headline"></a></h1>
+<span id="jaxlie-se3"></span><h1><a class="reference internal" href="#module-jaxlie._se3" title="jaxlie._se3"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._se3</span></code></a><a class="headerlink" href="#module-jaxlie._se3" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -101,7 +102,7 @@
 is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <span class="pre">vy,</span> <span class="pre">vz,</span> <span class="pre">omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.wxyz_xyz">
-<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(7),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._se3.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(Ellipsis,</span> <span class="pre">7),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._se3.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. wxyz quaternion followed by xyz translation.</p>
 </dd></dl>
 
@@ -109,11 +110,6 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.__repr__">
 <span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3.__repr__" title="Permalink to this definition"></a></dt>
 <dd><p>Return repr(self).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -123,15 +119,12 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> (<a class="reference internal" href="../#jaxlie.SO3" title="jaxlie.SO3"><em>jaxlie.SO3</em></a>) – Rotation term.</p></li>
-<li><p><strong>translation</strong> (<em>jaxlie.hints.Array</em>) – translation term.</p></li>
+<li><p><strong>rotation</strong> – Rotation term.</p></li>
+<li><p><strong>translation</strong> – translation term.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Constructed transformation.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3">SE3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -140,22 +133,12 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.rotation">
 <span class="sig-name descname"><span class="pre">rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3.rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3.rotation" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a transform’s rotation term.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="../#jaxlie.SO3" title="jaxlie.SO3">jaxlie.SO3</a></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.translation">
 <span class="sig-name descname"><span class="pre">translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3.translation" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a transform’s translation term.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -166,9 +149,6 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Identity element.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3">SE3</a></p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -178,13 +158,10 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3">SE3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -193,22 +170,12 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.as_matrix">
 <span class="sig-name descname"><span class="pre">as_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3.as_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.parameters">
 <span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3.parameters" title="Permalink to this definition"></a></dt>
 <dd><p>Get underlying representation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -217,13 +184,10 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3">SE3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -235,12 +199,6 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3"><em>SE3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -260,12 +218,6 @@ across different reference frames.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3"><em>SE3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -276,13 +228,10 @@ across different reference frames.</p>
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jaxlie.hints.KeyArray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Sampled group member.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._se3.SE3" title="jaxlie._se3.SE3">SE3</a></p>
 </dd>
 </dl>
 </dd></dl>

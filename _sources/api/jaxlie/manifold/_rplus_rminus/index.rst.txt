@@ -1,0 +1,92 @@
+:orphan:
+
+:mod:`jaxlie.manifold._rplus_rminus`
+====================================
+
+.. py:module:: jaxlie.manifold._rplus_rminus
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._rplus_rminus.rplus
+   jaxlie.manifold._rplus_rminus.rminus
+   jaxlie.manifold._rplus_rminus.rplus_jacobian_parameters_wrt_delta
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._rplus_rminus.PytreeType
+   jaxlie.manifold._rplus_rminus.GroupType
+   jaxlie.manifold._rplus_rminus.CallableType
+
+
+.. data:: PytreeType
+   
+
+   
+
+.. data:: GroupType
+   
+
+   
+
+.. data:: CallableType
+   
+
+   
+
+.. function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
+              rplus(transform: PytreeType, delta: PytreeType) -> PytreeType
+
+   Manifold right plus. Computes ``T' = T @ exp(delta)``.
+
+   Supports pytrees containing Lie group instances recursively; simple Euclidean
+   addition will be performed for all other arrays.
+
+
+.. function:: rminus(a: GroupType, b: GroupType) -> jax.numpy.ndarray
+              rminus(a: PytreeType, b: PytreeType) -> PytreeType
+
+   Manifold right minus. Computes
+   ``delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()``.
+
+   Supports pytrees containing Lie group instances recursively; simple Euclidean
+   subtraction will be performed for all other arrays.
+
+
+.. function:: rplus_jacobian_parameters_wrt_delta(transform)
+
+   Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
+   local delta.
+
+   Mostly useful for reducing JIT compile times for tangent-space optimization.
+
+   Equivalent to --
+
+   .. code-block::
+
+      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+          # Since transform objects are pytree containers, note that `jacfwd` returns a
+          # transformation object itself and that the Jacobian terms corresponding to the
+          # parameters are grabbed explicitly.
+          return jax.jacfwd(
+              jaxlie.manifold.rplus,  # Args are (transform, delta)
+              argnums=1,  # Jacobian wrt delta
+          )(transform, onp.zeros(transform.tangent_dim)).parameters()
+
+   :param transform: Transform to linearize around.
+
+   :returns: Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
+
+

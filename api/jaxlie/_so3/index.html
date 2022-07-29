@@ -15,6 +15,7 @@
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
         <script src="../../../_static/jquery.js"></script>
         <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
@@ -71,12 +72,12 @@
            <div itemprop="articleBody">
              
   <section id="module-jaxlie._so3">
-<span id="jaxlie-so3"></span><h1><a class="reference internal" href="#module-jaxlie._so3" title="jaxlie._so3"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._so3</span></code></a><a class="headerlink" href="#module-jaxlie._so3" title="Permalink to this headline"></a></h1>
+<span id="jaxlie-so3"></span><h1><a class="reference internal" href="#module-jaxlie._so3" title="jaxlie._so3"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie._so3</span></code></a><a class="headerlink" href="#module-jaxlie._so3" title="Permalink to this heading"></a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading"></a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline"></a></h3>
-<table class="longtable docutils align-default">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -101,7 +102,7 @@
 <code class="docutils literal notranslate"><span class="pre">(omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie._so3.SO3.wxyz">
-<span class="sig-name descname"><span class="pre">wxyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(4),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._so3.SO3.wxyz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wxyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(Ellipsis,</span> <span class="pre">4),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._so3.SO3.wxyz" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> quaternion.</p>
 </dd></dl>
 
@@ -109,11 +110,6 @@
 <dt class="sig sig-object py" id="jaxlie._so3.SO3.__repr__">
 <span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.__repr__" title="Permalink to this definition"></a></dt>
 <dd><p>Return repr(self).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -122,16 +118,10 @@
 <dd><p>Generates a x-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>angle</strong> – X rotation, in radians.</p></li>
-<li><p><strong>theta</strong> (<em>jaxlie.hints.Scalar</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>angle</strong> – X rotation, in radians.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -142,16 +132,10 @@
 <dd><p>Generates a y-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>angle</strong> – Y rotation, in radians.</p></li>
-<li><p><strong>theta</strong> (<em>jaxlie.hints.Scalar</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>angle</strong> – Y rotation, in radians.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -162,16 +146,10 @@
 <dd><p>Generates a z-axis rotation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>angle</strong> – Z rotation, in radians.</p></li>
-<li><p><strong>theta</strong> (<em>jaxlie.hints.Scalar</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>angle</strong> – Z rotation, in radians.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -184,16 +162,13 @@ convention.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>roll</strong> (<em>jaxlie.hints.Scalar</em>) – X rotation, in radians. Applied first.</p></li>
-<li><p><strong>pitch</strong> (<em>jaxlie.hints.Scalar</em>) – Y rotation, in radians. Applied second.</p></li>
-<li><p><strong>yaw</strong> (<em>jaxlie.hints.Scalar</em>) – Z rotation, in radians. Applied last.</p></li>
+<li><p><strong>roll</strong> – X rotation, in radians. Applied first.</p></li>
+<li><p><strong>pitch</strong> – Y rotation, in radians. Applied second.</p></li>
+<li><p><strong>yaw</strong> – Z rotation, in radians. Applied last.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -206,13 +181,10 @@ convention.</p>
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> – xyzw quaternion. Shape should be (4,).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -221,11 +193,6 @@ constructor.</p>
 <dt class="sig sig-object py" id="jaxlie._so3.SO3.as_quaternion_xyzw">
 <span class="sig-name descname"><span class="pre">as_quaternion_xyzw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_quaternion_xyzw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_quaternion_xyzw" title="Permalink to this definition"></a></dt>
 <dd><p>Grab parameters as xyzw quaternion.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -235,9 +202,6 @@ constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Named tuple containing Euler angles in radians.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="../hints/#jaxlie.hints.RollPitchYaw" title="jaxlie.hints.RollPitchYaw">jaxlie.hints.RollPitchYaw</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -250,9 +214,6 @@ constructor.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -263,9 +224,6 @@ constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Euler angle in radians.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -278,9 +236,6 @@ constructor.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Euler angle in radians.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>jax.numpy.ndarray</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -292,9 +247,6 @@ constructor.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Identity element.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -304,13 +256,10 @@ constructor.</p>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>matrix</strong> (<em>jaxlie.hints.Array</em>) – Matrix representaiton.</p>
+<dd class="field-odd"><p><strong>matrix</strong> – Matrix representaiton.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Group member.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -319,22 +268,12 @@ constructor.</p>
 <dt class="sig sig-object py" id="jaxlie._so3.SO3.as_matrix">
 <span class="sig-name descname"><span class="pre">as_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.as_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.as_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Get transformation as a matrix. Homogeneous for SE groups.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._so3.SO3.parameters">
 <span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_so3/#SO3.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._so3.SO3.parameters" title="Permalink to this definition"></a></dt>
 <dd><p>Get underlying representation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -343,16 +282,10 @@ constructor.</p>
 <dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p></li>
-<li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>target</strong> – Point to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Transformed point.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -365,15 +298,6 @@ constructor.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>self &#64; other</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><ul class="simple">
-<li><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p></li>
-<li><p><strong>other</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -383,13 +307,10 @@ constructor.</p>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>tangent</strong> (<em>jaxlie.hints.Array</em>) – Tangent vector to take the exponential of.</p>
+<dd class="field-odd"><p><strong>tangent</strong> – Tangent vector to take the exponential of.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Output.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -401,12 +322,6 @@ constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -426,12 +341,6 @@ across different reference frames.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -442,12 +351,6 @@ across different reference frames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output.</p>
-</dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -460,12 +363,6 @@ across different reference frames.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3"><em>SO3</em></a>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -476,13 +373,10 @@ across different reference frames.</p>
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jaxlie.hints.KeyArray</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><p><strong>key</strong> – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Sampled group member.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._so3.SO3" title="jaxlie._so3.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
