@@ -1,5 +1,5 @@
 import abc
-from typing import ClassVar, Generic, Tuple, Type, TypeVar, overload
+from typing import ClassVar, Generic, Tuple, Type, TypeVar, Union, overload
 
 import numpy as onp
 from jax import numpy as jnp
@@ -48,10 +48,12 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self: GroupType, other: hints.Array) -> jnp.ndarray:
+    def __matmul__(self, other: hints.Array) -> jnp.ndarray:
         ...
 
-    def __matmul__(self, other):
+    def __matmul__(
+        self: GroupType, other: Union[GroupType, hints.Array]
+    ) -> Union[GroupType, jnp.ndarray]:
         """Overload for the `@` operator.
 
         Switches between the group action (`.apply()`) and multiplication
@@ -101,7 +103,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Operations.
 
     @abc.abstractmethod
-    def apply(self: GroupType, target: hints.Array) -> jnp.ndarray:
+    def apply(self, target: hints.Array) -> jnp.ndarray:
         """Applies group action to a point.
 
         Args:
@@ -132,7 +134,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def log(self: GroupType) -> jnp.ndarray:
+    def log(self) -> jnp.ndarray:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -140,7 +142,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def adjoint(self: GroupType) -> jnp.ndarray:
+    def adjoint(self) -> jnp.ndarray:
         """Computes the adjoint, which transforms tangent vectors between tangent
         spaces.
 

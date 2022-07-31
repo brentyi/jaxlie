@@ -41,8 +41,8 @@ Source code on `Github <https://github.com/brentyi/jaxlie>`_.
    :maxdepth: 5
    :caption: Example usage
 
-   se3_overview
-   tangent_space_adam
+   se3_basics
+   se3_optimization
    vmap_usage
 
 

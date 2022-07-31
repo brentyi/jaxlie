@@ -1,24 +1,13 @@
 from __future__ import annotations
 
-from typing import (
-    Any,
-    Callable,
-    Generic,
-    NewType,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-    overload,
-)
+from typing import Any, Callable, Sequence, Tuple, Union, overload
 
 import jax
-import jax_dataclasses as jdc
 from jax import numpy as jnp
 from typing_extensions import ParamSpec
 
 from .._base import MatrixLieGroup
-from . import _rplus_rminus, _tree_utils
+from . import _deltas, _tree_utils
 
 
 def zero_tangents(pytree: Any) -> _tree_utils.TangentPytree:
@@ -124,8 +113,8 @@ def value_and_grad(
     def wrapped_grad(*args, **kwargs):
         def tangent_fun(*tangent_args, **tangent_kwargs):
             return fun(  # type: ignore
-                *_rplus_rminus.rplus(args, tangent_args),
-                **_rplus_rminus.rplus(kwargs, tangent_kwargs),
+                *_deltas.rplus(args, tangent_args),
+                **_deltas.rplus(kwargs, tangent_kwargs),
             )
 
         # Put arguments onto tangent space.

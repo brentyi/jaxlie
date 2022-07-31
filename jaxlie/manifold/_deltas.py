@@ -1,3 +1,5 @@
+"""Helpers for recursively applying tangent-space deltas."""
+
 from typing import Any, Callable, TypeVar, Union, cast, overload
 
 import jax

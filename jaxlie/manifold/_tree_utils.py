@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, NewType
+from typing import Any, Callable, List, TypeVar
 
 import numpy as onp
 from jax import numpy as jnp
@@ -76,3 +76,22 @@ def _map_group_trees(
                 for j in range(len(children[0]))
             ],
         )
+
+
+PytreeType = TypeVar("PytreeType")
+
+
+def project_all(pytree: PytreeType) -> PytreeType:
+    """Call `.normalize()` on each Lie group instance in a pytree.
+
+    Results in a naive projection of each group instance to its respective manifold.
+    """
+
+    def _project(t: MatrixLieGroup) -> MatrixLieGroup:
+        return t.normalize()
+
+    return _map_group_trees(
+        _project,
+        lambda x: x,
+        pytree,
+    )

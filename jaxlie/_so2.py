@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
@@ -36,7 +38,7 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return f"{self.__class__.__name__}(unit_complex={unit_complex})"
 
     @staticmethod
-    def from_radians(theta: hints.Scalar) -> "SO2":
+    def from_radians(theta: hints.Scalar) -> SO2:
         """Construct a rotation object from a scalar angle."""
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
@@ -51,12 +53,12 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @overrides
-    def identity() -> "SO2":
+    def identity() -> SO2:
         return SO2(unit_complex=jnp.array([1.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Array) -> "SO2":
+    def from_matrix(matrix: hints.Array) -> SO2:
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=jnp.asarray(matrix[:, 0]))
 
@@ -83,43 +85,43 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     # Operations.
 
     @overrides
-    def apply(self: "SO2", target: hints.Array) -> jnp.ndarray:
+    def apply(self, target: hints.Array) -> jnp.ndarray:
         assert target.shape == (2,)
         return self.as_matrix() @ target  # type: ignore
 
     @overrides
-    def multiply(self: "SO2", other: "SO2") -> "SO2":
+    def multiply(self, other: SO2) -> SO2:
         return SO2(unit_complex=self.as_matrix() @ other.unit_complex)
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.Array) -> "SO2":
+    def exp(tangent: hints.Array) -> SO2:
         (theta,) = tangent
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
         return SO2(unit_complex=jnp.array([cos, sin]))
 
     @overrides
-    def log(self: "SO2") -> jnp.ndarray:
+    def log(self) -> jnp.ndarray:
         return jnp.arctan2(
             self.unit_complex[..., 1, None], self.unit_complex[..., 0, None]
         )
 
     @overrides
-    def adjoint(self: "SO2") -> jnp.ndarray:
+    def adjoint(self) -> jnp.ndarray:
         return jnp.eye(1)
 
     @overrides
-    def inverse(self: "SO2") -> "SO2":
+    def inverse(self) -> SO2:
         return SO2(unit_complex=self.unit_complex * jnp.array([1, -1]))
 
     @overrides
-    def normalize(self: "SO2") -> "SO2":
+    def normalize(self) -> SO2:
         return SO2(unit_complex=self.unit_complex / jnp.linalg.norm(self.unit_complex))
 
     @staticmethod
     @overrides
-    def sample_uniform(key: hints.KeyArray) -> "SO2":
+    def sample_uniform(key: hints.KeyArray) -> SO2:
         return SO2.from_radians(
             jax.random.uniform(key=key, minval=0.0, maxval=2.0 * jnp.pi)
         )

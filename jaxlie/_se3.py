@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
@@ -58,7 +60,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
     def from_rotation_and_translation(
         rotation: SO3,
         translation: hints.Array,
-    ) -> "SE3":
+    ) -> SE3:
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
@@ -74,12 +76,12 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @staticmethod
     @overrides
-    def identity() -> "SE3":
+    def identity() -> SE3:
         return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Array) -> "SE3":
+    def from_matrix(matrix: hints.Array) -> SE3:
         assert matrix.shape == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1].
         return SE3.from_rotation_and_translation(
@@ -107,7 +109,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.Array) -> "SE3":
+    def exp(tangent: hints.Array) -> SE3:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
 
@@ -148,7 +150,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         )
 
     @overrides
-    def log(self: "SE3") -> jnp.ndarray:
+    def log(self) -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
@@ -187,7 +189,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
     @overrides
-    def adjoint(self: "SE3") -> jnp.ndarray:
+    def adjoint(self) -> jnp.ndarray:
         R = self.rotation().as_matrix()
         return jnp.block(
             [
@@ -198,7 +200,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @staticmethod
     @overrides
-    def sample_uniform(key: hints.KeyArray) -> "SE3":
+    def sample_uniform(key: hints.KeyArray) -> SE3:
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0),

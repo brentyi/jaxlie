@@ -52,9 +52,9 @@ Where each group supports:
 - Forward- and reverse-mode AD-friendly **`exp()`**, **`log()`**,
   **`adjoint()`**, **`apply()`**, **`multiply()`**, **`inverse()`**,
   **`identity()`**, **`from_matrix()`**, and **`as_matrix()`** operations. (see
-  [./examples/se3_example.py](./examples/se3_example.py))
-- Helpers + analytical Jacobians for tangent-space optimization (see
-  [./examples/tangent_space_adam.py](./examples/tangent_space_adam.py),
+  [./examples/se3_example.py](./examples/se3_basics.py))
+- Helpers for optimization on manifolds (see
+  [./examples/se3_optimization.py](./examples/se3_optimization.py),
   <code>jaxlie.<strong>manifold.\*</strong></code>).
 - Compatibility with standard JAX function transformations. (see
   [./examples/vmap_example.py](./examples/vmap_example.py))

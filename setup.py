@@ -22,6 +22,7 @@ setup(
         "jax_dataclasses>=1.3.0",  # Required for shape/data-type annotations.
         "numpy",
         "overrides!=4",
+        "dcargs",  # Only used in examples.
     ],
     extras_require={
         "testing": [

@@ -150,7 +150,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         )
 
     @overrides
-    def log(self: "SE2") -> jnp.ndarray:
+    def log(self) -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:

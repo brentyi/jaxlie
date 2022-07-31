@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
@@ -37,7 +39,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return f"{self.__class__.__name__}(wxyz={wxyz})"
 
     @staticmethod
-    def from_x_radians(theta: hints.Scalar) -> "SO3":
+    def from_x_radians(theta: hints.Scalar) -> SO3:
         """Generates a x-axis rotation.
 
         Args:
@@ -49,7 +51,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return SO3.exp(jnp.array([theta, 0.0, 0.0]))
 
     @staticmethod
-    def from_y_radians(theta: hints.Scalar) -> "SO3":
+    def from_y_radians(theta: hints.Scalar) -> SO3:
         """Generates a y-axis rotation.
 
         Args:
@@ -61,7 +63,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return SO3.exp(jnp.array([0.0, theta, 0.0]))
 
     @staticmethod
-    def from_z_radians(theta: hints.Scalar) -> "SO3":
+    def from_z_radians(theta: hints.Scalar) -> SO3:
         """Generates a z-axis rotation.
 
         Args:
@@ -77,7 +79,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         roll: hints.Scalar,
         pitch: hints.Scalar,
         yaw: hints.Scalar,
-    ) -> "SO3":
+    ) -> SO3:
         """Generates a transform from a set of Euler angles. Uses the ZYX mobile robot
         convention.
 
@@ -96,7 +98,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         )
 
     @staticmethod
-    def from_quaternion_xyzw(xyzw: hints.Array) -> "SO3":
+    def from_quaternion_xyzw(xyzw: hints.Array) -> SO3:
         """Construct a rotation from an `xyzw` quaternion.
 
         Note that `wxyz` quaternions can be constructed using the default dataclass
@@ -161,12 +163,12 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @overrides
-    def identity() -> "SO3":
+    def identity() -> SO3:
         return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
     @overrides
-    def from_matrix(matrix: hints.Array) -> "SO3":
+    def from_matrix(matrix: hints.Array) -> SO3:
         assert matrix.shape == (3, 3)
 
         # Modified from:
@@ -285,7 +287,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     # Operations.
 
     @overrides
-    def apply(self: "SO3", target: hints.Array) -> jnp.ndarray:
+    def apply(self, target: hints.Array) -> jnp.ndarray:
         assert target.shape == (3,)
 
         # Compute using quaternion multiplys.
@@ -293,7 +295,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
     @overrides
-    def multiply(self: "SO3", other: "SO3") -> "SO3":
+    def multiply(self, other: SO3) -> SO3:
         w0, x0, y0, z0 = self.wxyz
         w1, x1, y1, z1 = other.wxyz
         return SO3(
@@ -309,7 +311,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @overrides
-    def exp(tangent: hints.Array) -> "SO3":
+    def exp(tangent: hints.Array) -> SO3:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583
 
@@ -352,7 +354,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         )
 
     @overrides
-    def log(self: "SO3") -> jnp.ndarray:
+    def log(self) -> jnp.ndarray:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
@@ -387,21 +389,21 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         return atan_factor * self.wxyz[1:]
 
     @overrides
-    def adjoint(self: "SO3") -> jnp.ndarray:
+    def adjoint(self) -> jnp.ndarray:
         return self.as_matrix()
 
     @overrides
-    def inverse(self: "SO3") -> "SO3":
+    def inverse(self) -> SO3:
         # Negate complex terms.
         return SO3(wxyz=self.wxyz * jnp.array([1, -1, -1, -1]))
 
     @overrides
-    def normalize(self: "SO3") -> "SO3":
+    def normalize(self) -> SO3:
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz))
 
     @staticmethod
     @overrides
-    def sample_uniform(key: hints.KeyArray) -> "SO3":
+    def sample_uniform(key: hints.KeyArray) -> SO3:
         # Uniformly sample over S^3.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(
