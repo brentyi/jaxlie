@@ -201,7 +201,6 @@
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;tangent_space&quot;</span><span class="p">:</span>
             <span class="c1"># Initialize gradient statistics as on the tangent space.</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span>
             <span class="n">optimizer_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">zero_tangents</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">global_params</span>
         <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;projected&quot;</span><span class="p">:</span>
