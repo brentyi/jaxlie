@@ -42,8 +42,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tangent_space_adam/">Tangent-space ADAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
@@ -72,7 +70,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for jaxlie._se3</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">jax</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">overrides</span> <span class="kn">import</span> <span class="n">overrides</span>
@@ -132,7 +132,7 @@
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
         <span class="n">rotation</span><span class="p">:</span> <span class="n">SO3</span><span class="p">,</span>
         <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">translation</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">rotation</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">translation</span><span class="p">]))</span></div>
 
@@ -148,12 +148,12 @@
 
 <div class="viewcode-block" id="SE3.identity"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.identity">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="p">(</span><span class="n">wxyz_xyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SE3.from_matrix"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.from_matrix">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="c1"># Currently assumes bottom row is [0, 0, 0, 1].</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
@@ -181,7 +181,7 @@
 
 <div class="viewcode-block" id="SE3.exp"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.exp">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761</span>
 
@@ -222,7 +222,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SE3.log"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.log">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223</span>
         <span class="n">omega</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
@@ -261,7 +261,7 @@
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">V_inv</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">(),</span> <span class="n">omega</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="SE3.adjoint"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.adjoint">[docs]</a>    <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;SE3&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">adjoint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">block</span><span class="p">(</span>
             <span class="p">[</span>
@@ -272,7 +272,7 @@
 
 <div class="viewcode-block" id="SE3.sample_uniform"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.sample_uniform">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="nd">@overrides</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE3&quot;</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">KeyArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SE3</span><span class="p">:</span>
         <span class="n">key0</span><span class="p">,</span> <span class="n">key1</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SE3</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">SO3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">key0</span><span class="p">),</span>

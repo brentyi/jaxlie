@@ -1,7 +1,7 @@
-SE(3) Overview
+Basics
 ==========================================
 
 
-.. literalinclude:: ../../examples/se3_example.py
+.. literalinclude:: ../../examples/se3_basics.py
    :language: python
 

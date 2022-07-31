@@ -19,6 +19,7 @@ Functions
    jaxlie.manifold.rminus
    jaxlie.manifold.rplus
    jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
+   jaxlie.manifold.project_all
 
 
 
@@ -84,5 +85,12 @@ Functions
    :param transform: Transform to linearize around.
 
    :returns: Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
+
+
+.. function:: project_all(pytree)
+
+   Call ``.normalize()`` on each Lie group instance in a pytree.
+
+   Results in a naive projection of each group instance to its respective manifold.
 
 

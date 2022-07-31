@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jaxlie.manifold._tree_utils &mdash; jaxlie  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex/" />
+    <link rel="search" title="Search" href="../../../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../" class="icon icon-home"> jaxlie
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../">jaxlie</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../">Module code</a> &raquo;</li>
+      <li>jaxlie.manifold._tree_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for jaxlie.manifold._tree_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">from</span> <span class="nn">jax._src.tree_util</span> <span class="kn">import</span> <span class="n">_registry</span>  <span class="c1"># Dangerous!</span>
+
+<span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
+
+<span class="c1"># Tangent structures are difficult to annotate, so we just mark everything via Any.</span>
+<span class="c1">#</span>
+<span class="c1"># An annotation that would work in most cases is:</span>
+<span class="c1">#</span>
+<span class="c1">#     def zero_tangents(structure: T) -&gt; T</span>
+<span class="c1">#</span>
+<span class="c1"># But this is leaky; note that an input of List[SE3] should output List[jnp.ndarray],</span>
+<span class="c1"># Dict[str, SE3] should output Dict[str, SE3], etc.</span>
+<span class="c1">#</span>
+<span class="c1"># Another tempting option is to define a wrapper class:</span>
+<span class="c1">#</span>
+<span class="c1">#     @jdc.pytree_dataclass</span>
+<span class="c1">#     class TangentPytree(Generic[PytreeType]):</span>
+<span class="c1">#         wrapped: Any</span>
+<span class="c1">#</span>
+<span class="c1"># And have zero_tangents() return:</span>
+<span class="c1">#</span>
+<span class="c1">#     def zero_tangents(structure: T) -&gt; TangentPytree[T]</span>
+<span class="c1">#</span>
+<span class="c1"># which we could also use to make `jaxlie.manifold.rplus()` type safe by adding</span>
+<span class="c1"># overloads to make sure that the delta input is a TangentPytree, but it would be hard</span>
+<span class="c1"># to accurately annotate the `grad()` and `value_and_grad()` functions with this wrapper</span>
+<span class="c1"># type without sacrificing the ability to use them as drop-in replacements for</span>
+<span class="c1"># `jax.grad()` and `jax.value_and_grad()`.</span>
+<span class="c1">#</span>
+<span class="c1"># Finally, NewType is also attractive:</span>
+<span class="c1">#</span>
+<span class="c1">#     TangentPytree: TypeAlias = NewType(&quot;TangentPytree&quot;, object)</span>
+<span class="c1">#</span>
+<span class="c1"># This seems reasonable, but doesn&#39;t play nice with how optax currently (a) annotates</span>
+<span class="c1"># everything using chex.ArrayTree and (b) doesn&#39;t use any generics, leading to a mess of</span>
+<span class="c1"># casts and `type: ignore` directives. We might consider using this if optax&#39;s gradient</span>
+<span class="c1"># transform annotations change.</span>
+<span class="n">TangentPytree</span> <span class="o">=</span> <span class="n">Any</span>
+
+
+<span class="k">def</span> <span class="nf">_map_group_trees</span><span class="p">(</span>
+    <span class="n">f_lie_groups</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">f_other_arrays</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">tree_args</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree_args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">MatrixLieGroup</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">f_lie_groups</span><span class="p">(</span><span class="o">*</span><span class="n">tree_args</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree_args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">f_other_arrays</span><span class="p">(</span><span class="o">*</span><span class="n">tree_args</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Handle PyTrees recursively.</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">tree_args</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">registry_entry</span> <span class="o">=</span> <span class="n">_registry</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">tree_args</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>  <span class="c1"># type: ignore</span>
+
+        <span class="n">children</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">metadata</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="n">tree_args</span><span class="p">:</span>
+            <span class="n">childs</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">registry_entry</span><span class="o">.</span><span class="n">to_iter</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+            <span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">childs</span><span class="p">)</span>
+            <span class="n">metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">metadata</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">registry_entry</span><span class="o">.</span><span class="n">from_iter</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">[</span>
+                <span class="n">_map_group_trees</span><span class="p">(</span>
+                    <span class="n">f_lie_groups</span><span class="p">,</span>
+                    <span class="n">f_other_arrays</span><span class="p">,</span>
+                    <span class="o">*</span><span class="nb">list</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">))),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+
+
+<span class="n">PytreeType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;PytreeType&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="project_all"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._tree_utils.project_all">[docs]</a><span class="k">def</span> <span class="nf">project_all</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">PytreeType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PytreeType</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Call `.normalize()` on each Lie group instance in a pytree.</span>
+
+<span class="sd">    Results in a naive projection of each group instance to its respective manifold.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_project</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatrixLieGroup</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">_map_group_trees</span><span class="p">(</span>
+        <span class="n">_project</span><span class="p">,</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+        <span class="n">pytree</span><span class="p">,</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

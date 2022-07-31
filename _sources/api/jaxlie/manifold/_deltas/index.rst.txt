@@ -1,9 +1,14 @@
 :orphan:
 
-:mod:`jaxlie.manifold._rplus_rminus`
-====================================
+:mod:`jaxlie.manifold._deltas`
+==============================
 
-.. py:module:: jaxlie.manifold._rplus_rminus
+.. py:module:: jaxlie.manifold._deltas
+
+.. autoapi-nested-parse::
+
+   Helpers for recursively applying tangent-space deltas.
+
 
 
 Module Contents
@@ -15,9 +20,9 @@ Functions
 
 .. autoapisummary::
 
-   jaxlie.manifold._rplus_rminus.rplus
-   jaxlie.manifold._rplus_rminus.rminus
-   jaxlie.manifold._rplus_rminus.rplus_jacobian_parameters_wrt_delta
+   jaxlie.manifold._deltas.rplus
+   jaxlie.manifold._deltas.rminus
+   jaxlie.manifold._deltas.rplus_jacobian_parameters_wrt_delta
 
 
 
@@ -26,9 +31,9 @@ Attributes
 
 .. autoapisummary::
 
-   jaxlie.manifold._rplus_rminus.PytreeType
-   jaxlie.manifold._rplus_rminus.GroupType
-   jaxlie.manifold._rplus_rminus.CallableType
+   jaxlie.manifold._deltas.PytreeType
+   jaxlie.manifold._deltas.GroupType
+   jaxlie.manifold._deltas.CallableType
 
 
 .. data:: PytreeType

@@ -43,8 +43,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../se3_overview/">SE(3) Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tangent_space_adam/">Tangent-space ADAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
@@ -161,7 +159,7 @@
 <dt class="sig sig-object py" id="jaxlie._base.MatrixLieGroup.__matmul__">
 <span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GroupType</span></span></span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.__matmul__" title="Permalink to this definition"></a></dt>
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxlie.hints.Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">jax.numpy.ndarray</span></span></span></dt>
+<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxlie.hints.Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">jax.numpy.ndarray</span></span></span></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
 <p>Switches between the group action (<code class="docutils literal notranslate"><span class="pre">.apply()</span></code>) and multiplication
 (<code class="docutils literal notranslate"><span class="pre">.multiply()</span></code>) based on the type of <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
@@ -232,10 +230,7 @@
 <dd><p>Applies group action to a point.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p></li>
-<li><p><strong>self</strong> (<em>GroupType</em>) – </p></li>
-</ul>
+<dd class="field-odd"><p><strong>target</strong> (<em>jaxlie.hints.Array</em>) – Point to transform.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Transformed point.</p>
@@ -294,11 +289,8 @@
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,)</span></code>.</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -318,11 +310,8 @@ across different reference frames.</p>
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Output. Shape should be <code class="docutils literal notranslate"><span class="pre">(tangent_dim,</span> <span class="pre">tangent_dim)</span></code>.</p>
 </dd>
-<dt class="field-even">Parameters</dt>
-<dd class="field-even"><p><strong>self</strong> (<em>GroupType</em>) – </p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>jax.numpy.ndarray</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>jax.numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>

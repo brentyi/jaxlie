@@ -1,9 +1,9 @@
 :orphan:
 
-:mod:`jaxlie.manifold._autodiff`
+:mod:`jaxlie.manifold._backprop`
 ================================
 
-.. py:module:: jaxlie.manifold._autodiff
+.. py:module:: jaxlie.manifold._backprop
 
 
 Module Contents
@@ -15,9 +15,9 @@ Functions
 
 .. autoapisummary::
 
-   jaxlie.manifold._autodiff.zero_tangents
-   jaxlie.manifold._autodiff.grad
-   jaxlie.manifold._autodiff.value_and_grad
+   jaxlie.manifold._backprop.zero_tangents
+   jaxlie.manifold._backprop.grad
+   jaxlie.manifold._backprop.value_and_grad
 
 
 
@@ -26,8 +26,8 @@ Attributes
 
 .. autoapisummary::
 
-   jaxlie.manifold._autodiff.AxisName
-   jaxlie.manifold._autodiff.P
+   jaxlie.manifold._backprop.AxisName
+   jaxlie.manifold._backprop.P
 
 
 .. function:: zero_tangents(pytree)

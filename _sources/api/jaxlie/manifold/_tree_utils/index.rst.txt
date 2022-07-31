@@ -9,8 +9,39 @@
 Module Contents
 ---------------
 
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._tree_utils.project_all
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   jaxlie.manifold._tree_utils.TangentPytree
+   jaxlie.manifold._tree_utils.PytreeType
+
+
 .. data:: TangentPytree
    
 
    
+
+.. data:: PytreeType
+   
+
+   
+
+.. function:: project_all(pytree)
+
+   Call ``.normalize()`` on each Lie group instance in a pytree.
+
+   Results in a naive projection of each group instance to its respective manifold.
+
 

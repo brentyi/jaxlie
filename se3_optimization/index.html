@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SE(3) Optimization &mdash; jaxlie  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> jaxlie
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/jaxlie/"><code class="xref py py-mod docutils literal notranslate"><span class="pre">jaxlie</span></code></a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">jaxlie</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>SE(3) Optimization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/se3_optimization.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="se-3-optimization">
+<h1>SE(3) Optimization<a class="headerlink" href="#se-3-optimization" title="Permalink to this heading"></a></h1>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Example that uses helpers in `jaxlie.manifold.*` to compare algorithms for running an</span>
+<span class="sd">ADAM optimizer on SE(3) variables.</span>
+
+<span class="sd">We compare three approaches:</span>
+
+<span class="sd">(1) Tangent-space ADAM: computing updates on a local tangent space, which are then</span>
+<span class="sd">retracted back to the global parameterization at each step. This should generally be the</span>
+<span class="sd">most stable.</span>
+
+<span class="sd">(2) Projected ADAM: running standard ADAM directly on the global parameterization, then</span>
+<span class="sd">projecting after each step.</span>
+
+<span class="sd">(3) Standard ADAM with exponential coordinates: using a log-space underlying</span>
+<span class="sd">parameterization lets us run ADAM without any modifications.</span>
+
+<span class="sd">Note that the number of training steps and learning rate can be configured, see:</span>
+
+<span class="sd">    python se3_optimization.py --help</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">dcargs</span>
+<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">optax</span>
+<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">assert_never</span>
+
+<span class="kn">import</span> <span class="nn">jaxlie</span>
+
+
+<span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
+<span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Parameters to optimize over, in their global representation. Rotations are</span>
+<span class="sd">    quaternions under the hood.</span>
+
+<span class="sd">    Note that there&#39;s redundancy here: given T_ab and T_bc, T_ca can be computed as</span>
+<span class="sd">    (T_ab @ T_bc).inverse(). Our optimization will be focused on making these redundant</span>
+<span class="sd">    transforms consistent with each other.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">T_ab</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span>
+    <span class="n">T_bc</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span>
+    <span class="n">T_ca</span><span class="p">:</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span>
+
+
+<span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
+<span class="k">class</span> <span class="nc">ExponentialCoordinatesParameters</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Same as `Parameters`, but using exponential coordinates.&quot;&quot;&quot;</span>
+
+    <span class="n">log_T_ab</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">log_T_bc</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="n">log_T_ca</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T_ab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_ab</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_bc</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">T_ca</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_ca</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_global</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">T_ab</span><span class="o">.</span><span class="n">log</span><span class="p">(),</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">T_bc</span><span class="o">.</span><span class="n">log</span><span class="p">(),</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">T_ca</span><span class="o">.</span><span class="n">log</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;As our loss, we enforce (a) priors on our transforms and (b) a consistency</span>
+<span class="sd">    constraint.&quot;&quot;&quot;</span>
+    <span class="n">T_ba_prior</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+    <span class="n">T_cb_prior</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+        <span class="c1"># Consistency term.</span>
+        <span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">T_ab</span> <span class="o">@</span> <span class="n">params</span><span class="o">.</span><span class="n">T_bc</span> <span class="o">@</span> <span class="n">params</span><span class="o">.</span><span class="n">T_ca</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="c1"># Priors.</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">T_ab</span> <span class="o">@</span> <span class="n">T_ba_prior</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">T_bc</span> <span class="o">@</span> <span class="n">T_cb_prior</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="p">)</span>
+
+
+<span class="n">Algorithm</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;tangent_space&quot;</span><span class="p">,</span> <span class="s2">&quot;projected&quot;</span><span class="p">,</span> <span class="s2">&quot;exponential_coordinates&quot;</span><span class="p">]</span>
+
+
+<span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
+<span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">GradientTransformation</span> <span class="o">=</span> <span class="n">jdc</span><span class="o">.</span><span class="n">static_field</span><span class="p">()</span>
+    <span class="n">optimizer_state</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">OptState</span>
+    <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span> <span class="o">=</span> <span class="n">jdc</span><span class="o">.</span><span class="n">static_field</span><span class="p">()</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the state of our optimization problem. Note that the transforms</span>
+<span class="sd">        parameters won&#39;t initially be consistent; `T_ab @ T_bc != T_ca.inverse()`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">global_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span>
+            <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">prngs</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">prngs</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">prngs</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Make optimizer.</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">learning_rate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;tangent_space&quot;</span><span class="p">:</span>
+            <span class="c1"># Initialize gradient statistics as on the tangent space.</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span>
+            <span class="n">optimizer_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">zero_tangents</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">global_params</span>
+        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;projected&quot;</span><span class="p">:</span>
+            <span class="c1"># Initialize gradient statistics directly in quaternion space.</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">global_params</span>
+            <span class="n">optimizer_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">elif</span> <span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;exponential_coordinates&quot;</span><span class="p">:</span>
+            <span class="c1"># Switch to a log-space parameterization.</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">ExponentialCoordinatesParameters</span><span class="o">.</span><span class="n">from_global</span><span class="p">(</span><span class="n">global_params</span><span class="p">)</span>
+            <span class="n">optimizer_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">assert_never</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">State</span><span class="p">(</span>
+            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+            <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+            <span class="n">optimizer_state</span><span class="o">=</span><span class="n">optimizer_state</span><span class="p">,</span>
+            <span class="n">algorithm</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">State</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Take one ADAM optimization step.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;tangent_space&quot;</span><span class="p">:</span>
+            <span class="c1"># ADAM step on manifold.</span>
+            <span class="c1">#</span>
+            <span class="c1"># `jaxlie.manifold.value_and_grad()` is a drop-in replacement for</span>
+            <span class="c1"># `jax.value_and_grad()`, but for Lie group instances computes gradients on</span>
+            <span class="c1"># the tangent space.</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">compute_loss</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">updates</span><span class="p">,</span> <span class="n">new_optimizer_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">grads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">new_params</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;projected&quot;</span><span class="p">:</span>
+            <span class="c1"># Projection-based approach.</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">compute_loss</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">updates</span><span class="p">,</span> <span class="n">new_optimizer_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">grads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">new_params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+            <span class="c1"># Project back to manifold.</span>
+            <span class="n">new_params</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">manifold</span><span class="o">.</span><span class="n">project_all</span><span class="p">(</span><span class="n">new_params</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;exponential_coordinates&quot;</span><span class="p">:</span>
+            <span class="c1"># If we parameterize with exponential coordinates, we can</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">compute_loss</span><span class="p">)(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">updates</span><span class="p">,</span> <span class="n">new_optimizer_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">grads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">optimizer_state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span>  <span class="c1"># type: ignore</span>
+            <span class="p">)</span>
+            <span class="n">new_params</span> <span class="o">=</span> <span class="n">optax</span><span class="o">.</span><span class="n">apply_updates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">updates</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">assert_never</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span><span class="p">)</span>
+
+        <span class="c1"># Return updated structure.</span>
+        <span class="k">with</span> <span class="n">jdc</span><span class="o">.</span><span class="n">copy_and_mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">new_state</span><span class="p">:</span>
+            <span class="n">new_state</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">new_params</span>  <span class="c1"># type: ignore</span>
+            <span class="n">new_state</span><span class="o">.</span><span class="n">optimizer_state</span> <span class="o">=</span> <span class="n">new_optimizer_state</span>
+
+        <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">new_state</span>
+
+
+<span class="k">def</span> <span class="nf">run_experiment</span><span class="p">(</span>
+    <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Run the optimization problem, either using a tangent-space approach or via</span>
+<span class="sd">    projection.&quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">State</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>  <span class="c1"># Don&#39;t include JIT compile in timing.</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">train_steps</span><span class="p">):</span>
+        <span class="n">loss</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">20</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">(step </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">) Loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Converged in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">After optimization, the following transforms should be consistent:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_ab</span> <span class="o">@</span> <span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_bc</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_ca</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">losses</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Run pose optimization experiments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        train_steps: Number of training steps to take.</span>
+<span class="sd">        learning_rate: Learning rate for our ADAM optimizers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">train_steps</span><span class="p">)</span>
+
+    <span class="n">algorithms</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Algorithm</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;tangent_space&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;projected&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;exponential_coordinates&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="n">algorithms</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">xs</span><span class="p">,</span>
+            <span class="n">run_experiment</span><span class="p">(</span><span class="n">algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">,</span> <span class="n">train_steps</span><span class="p">),</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">algorithm</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">dcargs</span><span class="o">.</span><span class="n">cli</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

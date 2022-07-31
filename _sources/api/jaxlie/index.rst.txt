@@ -69,7 +69,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self: GroupType, other: jaxlie.hints.Array) -> jax.numpy.ndarray
+               __matmul__(self, other: jaxlie.hints.Array) -> jax.numpy.ndarray
 
       Overload for the ``@`` operator.
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>jaxlie.manifold._autodiff &mdash; jaxlie  documentation</title>
+  <title>jaxlie.manifold._backprop &mdash; jaxlie  documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
@@ -42,8 +42,6 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Example usage</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../se3_overview/">SE(3) Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tangent_space_adam/">Tangent-space ADAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../vmap_usage/"><cite>jax.vmap</cite> Usage</a></li>
 </ul>
 
@@ -62,7 +60,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../../" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../../">Module code</a> &raquo;</li>
-      <li>jaxlie.manifold._autodiff</li>
+      <li>jaxlie.manifold._backprop</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -71,31 +69,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for jaxlie.manifold._autodiff</h1><div class="highlight"><pre>
+  <h1>Source code for jaxlie.manifold._backprop</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Any</span><span class="p">,</span>
-    <span class="n">Callable</span><span class="p">,</span>
-    <span class="n">Generic</span><span class="p">,</span>
-    <span class="n">NewType</span><span class="p">,</span>
-    <span class="n">Sequence</span><span class="p">,</span>
-    <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">TypeVar</span><span class="p">,</span>
-    <span class="n">Union</span><span class="p">,</span>
-    <span class="n">overload</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">overload</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">ParamSpec</span>
 
 <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_rplus_rminus</span><span class="p">,</span> <span class="n">_tree_utils</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_deltas</span><span class="p">,</span> <span class="n">_tree_utils</span>
 
 
-<div class="viewcode-block" id="zero_tangents"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.zero_tangents">[docs]</a><span class="k">def</span> <span class="nf">zero_tangents</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">:</span>
+<div class="viewcode-block" id="zero_tangents"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._backprop.zero_tangents">[docs]</a><span class="k">def</span> <span class="nf">zero_tangents</span><span class="p">(</span><span class="n">pytree</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Replace all values in a Pytree with zero vectors on the corresponding tangent</span>
 <span class="sd">    spaces.&quot;&quot;&quot;</span>
 
@@ -138,7 +125,7 @@
     <span class="o">...</span>
 
 
-<div class="viewcode-block" id="grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.grad">[docs]</a><span class="k">def</span> <span class="nf">grad</span><span class="p">(</span>
+<div class="viewcode-block" id="grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._backprop.grad">[docs]</a><span class="k">def</span> <span class="nf">grad</span><span class="p">(</span>
     <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">argnums</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -184,7 +171,7 @@
     <span class="o">...</span>
 
 
-<div class="viewcode-block" id="value_and_grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._autodiff.value_and_grad">[docs]</a><span class="k">def</span> <span class="nf">value_and_grad</span><span class="p">(</span>
+<div class="viewcode-block" id="value_and_grad"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._backprop.value_and_grad">[docs]</a><span class="k">def</span> <span class="nf">value_and_grad</span><span class="p">(</span>
     <span class="n">fun</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">argnums</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">has_aux</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -198,8 +185,8 @@
     <span class="k">def</span> <span class="nf">wrapped_grad</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">tangent_fun</span><span class="p">(</span><span class="o">*</span><span class="n">tangent_args</span><span class="p">,</span> <span class="o">**</span><span class="n">tangent_kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">fun</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
-                <span class="o">*</span><span class="n">_rplus_rminus</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">tangent_args</span><span class="p">),</span>
-                <span class="o">**</span><span class="n">_rplus_rminus</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">tangent_kwargs</span><span class="p">),</span>
+                <span class="o">*</span><span class="n">_deltas</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">tangent_args</span><span class="p">),</span>
+                <span class="o">**</span><span class="n">_deltas</span><span class="o">.</span><span class="n">rplus</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">tangent_kwargs</span><span class="p">),</span>
             <span class="p">)</span>
 
         <span class="c1"># Put arguments onto tangent space.</span>
