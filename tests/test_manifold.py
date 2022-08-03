@@ -5,6 +5,7 @@ import jax
 import numpy as onp
 import pytest
 from jax import numpy as jnp
+from jax import tree_util
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
@@ -74,11 +75,11 @@ def test_rplus_euclidean():
 
 def test_rminus_auto_vmap():
     deltas = jaxlie.manifold.rminus(
-        jax.tree_map(
+        tree_util.tree_map(
             lambda *args: jnp.stack(args),
             [jaxlie.SE3.sample_uniform(jax.random.PRNGKey(0)), jaxlie.SE3.identity()],
         ),
-        jax.tree_map(
+        tree_util.tree_map(
             lambda *args: jnp.stack(args),
             [jaxlie.SE3.identity(), jaxlie.SE3.sample_uniform(jax.random.PRNGKey(0))],
         ),
