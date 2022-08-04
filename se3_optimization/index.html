@@ -180,9 +180,9 @@
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
-    <span class="n">optimizer</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">GradientTransformation</span> <span class="o">=</span> <span class="n">jdc</span><span class="o">.</span><span class="n">static_field</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="n">jdc</span><span class="o">.</span><span class="n">Static</span><span class="p">[</span><span class="n">optax</span><span class="o">.</span><span class="n">GradientTransformation</span><span class="p">]</span>
     <span class="n">optimizer_state</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">OptState</span>
-    <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span> <span class="o">=</span> <span class="n">jdc</span><span class="o">.</span><span class="n">static_field</span><span class="p">()</span>
+    <span class="n">algorithm</span><span class="p">:</span> <span class="n">jdc</span><span class="o">.</span><span class="n">Static</span><span class="p">[</span><span class="n">Algorithm</span><span class="p">]</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
