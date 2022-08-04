@@ -102,9 +102,9 @@ Algorithm = Literal["tangent_space", "projected", "exponential_coordinates"]
 @jdc.pytree_dataclass
 class State:
     params: Union[Parameters, ExponentialCoordinatesParameters]
-    optimizer: optax.GradientTransformation = jdc.static_field()
+    optimizer: jdc.Static[optax.GradientTransformation]
     optimizer_state: optax.OptState
-    algorithm: Algorithm = jdc.static_field()
+    algorithm: jdc.Static[Algorithm]
 
     @staticmethod
     def initialize(algorithm: Algorithm, learning_rate: float) -> State:
