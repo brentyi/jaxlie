@@ -19,7 +19,7 @@ setup(
     install_requires=[
         "jax>=0.2.14",  # jax==0.2.14 introduces `ndarray.at[].multiply()`.
         "jaxlib>=0.1.67",
-        "jax_dataclasses>=1.3.0",  # Required for shape/data-type annotations.
+        "jax_dataclasses>=1.4.4",
         "numpy",
         "overrides!=4",
         "dcargs",  # Only used in examples.
