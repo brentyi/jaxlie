@@ -15,7 +15,7 @@ Functions
 
 .. autoapisummary::
 
-   jaxlie.manifold._tree_utils.project_all
+   jaxlie.manifold._tree_utils.normalize_all
 
 
 
@@ -38,7 +38,7 @@ Attributes
 
    
 
-.. function:: project_all(pytree)
+.. function:: normalize_all(pytree)
 
    Call ``.normalize()`` on each Lie group instance in a pytree.
 
