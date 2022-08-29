@@ -81,7 +81,7 @@ def _map_group_trees(
 PytreeType = TypeVar("PytreeType")
 
 
-def project_all(pytree: PytreeType) -> PytreeType:
+def normalize_all(pytree: PytreeType) -> PytreeType:
     """Call `.normalize()` on each Lie group instance in a pytree.
 
     Results in a naive projection of each group instance to its respective manifold.

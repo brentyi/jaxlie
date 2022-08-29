@@ -1,6 +1,6 @@
 from ._backprop import grad, value_and_grad, zero_tangents
 from ._deltas import rminus, rplus, rplus_jacobian_parameters_wrt_delta
-from ._tree_utils import project_all
+from ._tree_utils import normalize_all
 
 __all__ = [
     "grad",
@@ -9,5 +9,5 @@ __all__ = [
     "rminus",
     "rplus",
     "rplus_jacobian_parameters_wrt_delta",
-    "project_all",
+    "normalize_all",
 ]

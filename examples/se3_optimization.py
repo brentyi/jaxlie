@@ -168,7 +168,7 @@ class State:
             new_params = optax.apply_updates(self.params, updates)  # type: ignore
 
             # Project back to manifold.
-            new_params = jaxlie.manifold.project_all(new_params)
+            new_params = jaxlie.manifold.normalize_all(new_params)
 
         elif self.algorithm == "exponential_coordinates":
             # If we parameterize with exponential coordinates, we can

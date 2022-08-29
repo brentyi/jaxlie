@@ -87,11 +87,11 @@ def test_rminus_auto_vmap():
     assert_arrays_close(deltas[0], -deltas[1])
 
 
-def test_project():
+def test_normalize():
     container = {"key": (jaxlie.SO3(jnp.array([2.0, 0.0, 0.0, 0.0])),)}
     container_valid = {"key": (jaxlie.SO3(jnp.array([1.0, 0.0, 0.0, 0.0])),)}
     with pytest.raises(AssertionError):
         assert_transforms_close(container["key"][0], container_valid["key"][0])
     assert_transforms_close(
-        jaxlie.manifold.project_all(container)["key"][0], container_valid["key"][0]
+        jaxlie.manifold.normalize_all(container)["key"][0], container_valid["key"][0]
     )
