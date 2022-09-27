@@ -26,6 +26,11 @@ setup(
     ],
     extras_require={
         "testing": [
+            # jax==0.3.18 makes some big typing changes via jax.Array that break mypy.
+            # We should revisit this whenever jax.Array becomes stable.
+            # https://github.com/google/jax/releases/tag/jax-v0.3.18
+            "mypy",
+            "jax<=0.3.17",
             "flax",
             "hypothesis[numpy]",
             "pytest",
