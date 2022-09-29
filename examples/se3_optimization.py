@@ -84,8 +84,8 @@ def compute_loss(
 ) -> jnp.ndarray:
     """As our loss, we enforce (a) priors on our transforms and (b) a consistency
     constraint."""
-    T_ba_prior = jaxlie.SE3.sample_uniform(jax.random.PRNGKey(4))
-    T_cb_prior = jaxlie.SE3.sample_uniform(jax.random.PRNGKey(5))
+    T_ba_prior = jaxlie.SE3.sample_uniform(jax.random.PRNGKey(1))
+    T_cb_prior = jaxlie.SE3.sample_uniform(jax.random.PRNGKey(2))
 
     return jnp.sum(
         # Consistency term.
@@ -216,7 +216,7 @@ def run_experiment(
     return losses
 
 
-def main(train_steps: int = 250, learning_rate: float = 1e-1) -> None:
+def main(train_steps: int = 1000, learning_rate: float = 1e-1) -> None:
     """Run pose optimization experiments.
 
     Args:
