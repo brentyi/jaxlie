@@ -22,7 +22,7 @@ setup(
         "jax_dataclasses>=1.4.4",
         "numpy",
         "overrides!=4",
-        "dcargs",  # Only used in examples.
+        "tyro",  # Only used in examples.
     ],
     extras_require={
         "testing": [

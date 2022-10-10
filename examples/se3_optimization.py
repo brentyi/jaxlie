@@ -24,7 +24,7 @@ from __future__ import annotations
 import time
 from typing import List, Literal, Tuple, Union
 
-import dcargs
+import tyro
 import jax
 import jax_dataclasses as jdc
 import matplotlib.pyplot as plt
@@ -243,4 +243,4 @@ def main(train_steps: int = 1000, learning_rate: float = 1e-1) -> None:
 
 
 if __name__ == "__main__":
-    dcargs.cli(main)
+    tyro.cli(main)
