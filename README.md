@@ -4,6 +4,7 @@
 ![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg?branch=master)
 ![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
+[![pypi_dowlnoads](https://pepy.tech/badge/jaxlie)](https://pypi.org/project/jaxlie)
 
 **[ [API reference](https://brentyi.github.io/jaxlie) ]** **[
 [PyPI](https://pypi.org/project/jaxlie/) ]**
