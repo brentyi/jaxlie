@@ -46,7 +46,9 @@ def register_lie_group(
 
         # JIT all methods.
         for f in filter(
-            lambda f: not f.startswith("_") and callable(getattr(cls, f)),
+            lambda f: not f.startswith("_")
+            and callable(getattr(cls, f))
+            and f != "get_batch_axes",  # Avoid returning tracers.
             dir(cls),
         ):
             setattr(cls, f, jax.jit(getattr(cls, f)))
