@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../">Module code</a> &raquo;</li>
-      <li>jaxlie.manifold._deltas</li>
+      <li><a href="../../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie.manifold._deltas</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -140,7 +140,7 @@
     <span class="n">transform</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
     <span class="n">delta</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Manifold right plus. Computes `T&#39; = T @ exp(delta)`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manifold right plus. Computes `T&#39; = T @ exp(delta)`.</span>
 
 <span class="sd">    Supports pytrees containing Lie group instances recursively; simple Euclidean</span>
 <span class="sd">    addition will be performed for all other arrays.</span>
@@ -168,7 +168,7 @@
 <div class="viewcode-block" id="rminus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._deltas.rminus">[docs]</a><span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span>
     <span class="n">a</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Manifold right minus. Computes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manifold right minus. Computes</span>
 <span class="sd">    `delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()`.</span>
 
 <span class="sd">    Supports pytrees containing Lie group instances recursively; simple Euclidean</span>
@@ -179,7 +179,7 @@
 
 <div class="viewcode-block" id="rplus_jacobian_parameters_wrt_delta"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._deltas.rplus_jacobian_parameters_wrt_delta">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
 <span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero</span>
 <span class="sd">    local delta.</span>
 
 <span class="sd">    Mostly useful for reducing JIT compile times for tangent-space optimization.</span>

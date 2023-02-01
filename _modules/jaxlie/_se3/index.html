@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../">Module code</a> &raquo;</li>
-      <li>jaxlie._se3</li>
+      <li><a href="../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie._se3</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -86,7 +86,7 @@
 
 
 <span class="k">def</span> <span class="nf">_skew</span><span class="p">(</span><span class="n">omega</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Returns the skew-symmetric form of a length-3 vector.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the skew-symmetric form of a length-3 vector.&quot;&quot;&quot;</span>
 
     <span class="n">wx</span><span class="p">,</span> <span class="n">wy</span><span class="p">,</span> <span class="n">wz</span> <span class="o">=</span> <span class="n">omega</span>
     <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -106,7 +106,7 @@
 <span class="p">)</span>
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SE3</span><span class="p">(</span><span class="n">jdc</span><span class="o">.</span><span class="n">EnforcedAnnotationsMixin</span><span class="p">,</span> <span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO3</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 3D.</span>
 
 <span class="sd">    Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization</span>
 <span class="sd">    is `(vx, vy, vz, omega_x, omega_y, omega_z)`.</span>
@@ -119,7 +119,7 @@
         <span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>  <span class="c1"># Shape.</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>  <span class="c1"># Data-type.</span>
     <span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Internal parameters. wxyz quaternion followed by xyz translation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal parameters. wxyz quaternion followed by xyz translation.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE3.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se3.SE3.__repr__">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../">Module code</a> &raquo;</li>
-      <li>jaxlie._se2</li>
+      <li><a href="../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie._se2</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -91,7 +91,7 @@
 <span class="p">)</span>
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SE2</span><span class="p">(</span><span class="n">jdc</span><span class="o">.</span><span class="n">EnforcedAnnotationsMixin</span><span class="p">,</span> <span class="n">_base</span><span class="o">.</span><span class="n">SEBase</span><span class="p">[</span><span class="n">SO2</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 2D.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special Euclidean group for proper rigid transforms in 2D.</span>
 
 <span class="sd">    Internal parameterization is `(cos, sin, x, y)`. Tangent parameterization is `(vx,</span>
 <span class="sd">    vy, omega)`.</span>
@@ -104,7 +104,7 @@
         <span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>  <span class="c1"># Shape.</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>  <span class="c1"># Data-type.</span>
     <span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin, x, y)`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin, x, y)`.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SE2.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.__repr__">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -114,7 +114,7 @@
 
 <div class="viewcode-block" id="SE2.from_xy_theta"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._se2.SE2.from_xy_theta">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_xy_theta</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SE2&quot;</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Construct a transformation from standard 2D pose parameters.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a transformation from standard 2D pose parameters.</span>
 
 <span class="sd">        Note that this is not the same as integrating over a length-3 twist.</span>
 <span class="sd">        &quot;&quot;&quot;</span>

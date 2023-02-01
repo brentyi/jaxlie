@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../">Module code</a> &raquo;</li>
-      <li>jaxlie.hints</li>
+      <li><a href="../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie.hints</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -87,7 +87,7 @@
 
 
 <div class="viewcode-block" id="RollPitchYaw"><a class="viewcode-back" href="../../../api/jaxlie/hints/#jaxlie.hints.RollPitchYaw">[docs]</a><span class="k">class</span> <span class="nc">RollPitchYaw</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Tuple containing roll, pitch, and yaw Euler angles.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tuple containing roll, pitch, and yaw Euler angles.&quot;&quot;&quot;</span>
 
     <span class="n">roll</span><span class="p">:</span> <span class="n">Scalar</span>
     <span class="n">pitch</span><span class="p">:</span> <span class="n">Scalar</span>
@@ -99,7 +99,7 @@
     <span class="kn">from</span> <span class="nn">jax.random</span> <span class="kn">import</span> <span class="n">KeyArray</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">KeyArray</span> <span class="o">=</span> <span class="n">Any</span>  <span class="c1"># type: ignore</span>
-    <span class="sd">&quot;&quot;&quot;Backward-compatible alias for `jax.random.KeyArray`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Backward-compatible alias for `jax.random.KeyArray`.&quot;&quot;&quot;</span>
 
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>

@@ -63,8 +63,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
-      <li>SE(3) Optimization</li>
+      <li><a href="../" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">SE(3) Optimization</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/se3_optimization.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -115,7 +115,7 @@
 
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Parameters to optimize over, in their global representation. Rotations are</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters to optimize over, in their global representation. Rotations are</span>
 <span class="sd">    quaternions under the hood.</span>
 
 <span class="sd">    Note that there&#39;s redundancy here: given T_ab and T_bc, T_ca can be computed as</span>
@@ -130,7 +130,7 @@
 
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">ExponentialCoordinatesParameters</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Same as `Parameters`, but using exponential coordinates.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Same as `Parameters`, but using exponential coordinates.&quot;&quot;&quot;</span>
 
     <span class="n">log_T_ab</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
     <span class="n">log_T_bc</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span>
@@ -160,7 +160,7 @@
 <span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;As our loss, we enforce (a) priors on our transforms and (b) a consistency</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;As our loss, we enforce (a) priors on our transforms and (b) a consistency</span>
 <span class="sd">    constraint.&quot;&quot;&quot;</span>
     <span class="n">T_ba_prior</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">T_cb_prior</span> <span class="o">=</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">sample_uniform</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
@@ -186,7 +186,7 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the state of our optimization problem. Note that the transforms</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the state of our optimization problem. Note that the transforms</span>
 <span class="sd">        parameters won&#39;t initially be consistent; `T_ab @ T_bc != T_ca.inverse()`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">prngs</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -223,7 +223,7 @@
 
     <span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
     <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">State</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Take one ADAM optimization step.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Take one ADAM optimization step.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;tangent_space&quot;</span><span class="p">:</span>
             <span class="c1"># ADAM step on manifold.</span>
@@ -270,7 +270,7 @@
 <span class="k">def</span> <span class="nf">run_experiment</span><span class="p">(</span>
     <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Run the optimization problem, either using a tangent-space approach or via</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the optimization problem, either using a tangent-space approach or via</span>
 <span class="sd">    projection.&quot;&quot;&quot;</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">algorithm</span><span class="p">)</span>
@@ -285,17 +285,17 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">(step </span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">) Loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">loss</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Converged in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">Converged in </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_time</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">After optimization, the following transforms should be consistent:&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_ab</span> <span class="o">@</span> <span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_bc</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_ab</span><span class="w"> </span><span class="o">@</span><span class="w"> </span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_bc</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t</span><span class="si">{</span><span class="n">state</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">T_ca</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">losses</span>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Run pose optimization experiments.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run pose optimization experiments.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        train_steps: Number of training steps to take.</span>

@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../">Module code</a> &raquo;</li>
-      <li>jaxlie.utils._utils</li>
+      <li><a href="../../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie.utils._utils</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,7 +85,7 @@
 
 
 <div class="viewcode-block" id="get_epsilon"><a class="viewcode-back" href="../../../../api/jaxlie/utils/#jaxlie.utils._utils.get_epsilon">[docs]</a><span class="k">def</span> <span class="nf">get_epsilon</span><span class="p">(</span><span class="n">dtype</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Helper for grabbing type-specific precision constants.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper for grabbing type-specific precision constants.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        dtype: Datatype.</span>
@@ -106,7 +106,7 @@
     <span class="n">tangent_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">space_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]],</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Decorator for registering Lie group dataclasses.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator for registering Lie group dataclasses.</span>
 
 <span class="sd">    Sets dimensionality class variables, and marks all methods for JIT compilation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -120,7 +120,9 @@
 
         <span class="c1"># JIT all methods.</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)),</span>
+            <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="ow">and</span> <span class="n">f</span> <span class="o">!=</span> <span class="s2">&quot;get_batch_axes&quot;</span><span class="p">,</span>  <span class="c1"># Avoid returning tracers.</span>
             <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>
         <span class="p">):</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)))</span>

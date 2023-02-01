@@ -60,9 +60,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../">Module code</a> &raquo;</li>
-      <li>jaxlie._so2</li>
+      <li><a href="../../../" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../">Module code</a></li>
+      <li class="breadcrumb-item active">jaxlie._so2</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,7 +92,7 @@
 <span class="p">)</span>
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
 <span class="k">class</span> <span class="nc">SO2</span><span class="p">(</span><span class="n">jdc</span><span class="o">.</span><span class="n">EnforcedAnnotationsMixin</span><span class="p">,</span> <span class="n">_base</span><span class="o">.</span><span class="n">SOBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Special orthogonal group for 2D rotations.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Special orthogonal group for 2D rotations.</span>
 
 <span class="sd">    Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -104,7 +104,7 @@
         <span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>  <span class="c1"># Shape.</span>
         <span class="n">jnp</span><span class="o">.</span><span class="n">floating</span><span class="p">,</span>  <span class="c1"># Data-type.</span>
     <span class="p">]</span>
-    <span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin)`.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Internal parameters. `(cos, sin)`.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SO2.__repr__"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.__repr__">[docs]</a>    <span class="nd">@overrides</span>
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -113,13 +113,13 @@
 
 <div class="viewcode-block" id="SO2.from_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.from_radians">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_radians</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Scalar</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Construct a rotation object from a scalar angle.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a rotation object from a scalar angle.&quot;&quot;&quot;</span>
         <span class="n">cos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="SO2.as_radians"><a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.as_radians">[docs]</a>    <span class="k">def</span> <span class="nf">as_radians</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Compute a scalar angle from a rotation object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute a scalar angle from a rotation object.&quot;&quot;&quot;</span>
         <span class="n">radians</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">()[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">radians</span></div>
 
