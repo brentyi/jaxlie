@@ -26,11 +26,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../" class="icon icon-home"> jaxlie
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            jaxlie
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -60,7 +64,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../" class="icon icon-home"></a></li>
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../">Module code</a></li>
       <li class="breadcrumb-item active">jaxlie._so3</li>
       <li class="wy-breadcrumbs-aside">
@@ -445,14 +449,14 @@
                 <span class="n">norm_sq</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
-
+        <span class="n">w_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">use_taylor</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">atan_n_over_w</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">norm_safe</span><span class="p">,</span> <span class="n">norm_safe</span><span class="p">),</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="n">atan_factor</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
             <span class="n">use_taylor</span><span class="p">,</span>
-            <span class="mf">2.0</span> <span class="o">/</span> <span class="n">w</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">norm_sq</span> <span class="o">/</span> <span class="n">w</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span>
+            <span class="mf">2.0</span> <span class="o">/</span> <span class="n">w_safe</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">norm_sq</span> <span class="o">/</span> <span class="n">w_safe</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">get_epsilon</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
                 <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">w</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">norm_safe</span><span class="p">,</span>
