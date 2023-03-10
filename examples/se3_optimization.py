@@ -24,11 +24,11 @@ from __future__ import annotations
 import time
 from typing import List, Literal, Tuple, Union
 
-import tyro
 import jax
 import jax_dataclasses as jdc
 import matplotlib.pyplot as plt
 import optax
+import tyro
 from jax import numpy as jnp
 from typing_extensions import assert_never
 

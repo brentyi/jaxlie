@@ -40,6 +40,21 @@ def _exp(Group: Type[jaxlie.MatrixLieGroup], generator: jnp.ndarray) -> jnp.ndar
     return cast(jnp.ndarray, Group.exp(generator).parameters())
 
 
+def test_so3_nan():
+    """Make sure we don't get NaNs from division when w == 0.
+
+    https://github.com/brentyi/jaxlie/issues/9"""
+
+    @jax.jit
+    @jax.grad
+    def func(x):
+        return jaxlie.SO3.exp(x).log().sum()
+
+    for omega in jnp.eye(3) * jnp.pi:
+        a = jnp.array(omega, dtype=jnp.float32)
+        assert all(onp.logical_not(onp.isnan(func(a))))
+
+
 @general_group_test
 def test_exp_random(Group: Type[jaxlie.MatrixLieGroup]):
     """Check that exp Jacobians are consistent, with randomly sampled transforms."""

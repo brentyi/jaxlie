@@ -371,14 +371,14 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
                 norm_sq,
             )
         )
-
+        w_safe = jnp.where(use_taylor, w, 1.0)
         atan_n_over_w = jnp.arctan2(
             jnp.where(w < 0, -norm_safe, norm_safe),
             jnp.abs(w),
         )
         atan_factor = jnp.where(
             use_taylor,
-            2.0 / w - 2.0 / 3.0 * norm_sq / w**3,
+            2.0 / w_safe - 2.0 / 3.0 * norm_sq / w_safe**3,
             jnp.where(
                 jnp.abs(w) < get_epsilon(w.dtype),
                 jnp.where(w > 0, 1.0, -1.0) * jnp.pi / norm_safe,
