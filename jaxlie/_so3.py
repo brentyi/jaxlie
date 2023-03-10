@@ -372,7 +372,6 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
             )
         )
         w_safe = jnp.where(use_taylor, w, 1.0)
-
         atan_n_over_w = jnp.arctan2(
             jnp.where(w < 0, -norm_safe, norm_safe),
             jnp.abs(w),
