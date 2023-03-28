@@ -326,7 +326,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                0.0,  # Any constant value should do here.
+                1.0,  # Any constant value should do here.
                 theta_squared,
             )
         )
