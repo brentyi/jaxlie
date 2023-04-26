@@ -42,7 +42,7 @@ def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup]):
 @jax.jit
 def _rplus_jacobian_parameters_wrt_delta(
     transform: jaxlie.MatrixLieGroup,
-) -> jnp.ndarray:
+) -> jax.Array:
     # Copied from docstring for `rplus_jacobian_parameters_wrt_delta()`.
     return jax.jacfwd(
         lambda delta: jaxlie.manifold.rplus(transform, delta).parameters()

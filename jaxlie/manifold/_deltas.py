@@ -39,9 +39,9 @@ def _naive_auto_vmap(f: CallableType) -> CallableType:
 
 
 @_naive_auto_vmap
-def _rplus(transform: GroupType, delta: jnp.ndarray) -> GroupType:
+def _rplus(transform: GroupType, delta: jax.Array) -> GroupType:
     assert isinstance(transform, MatrixLieGroup)
-    assert isinstance(delta, (jnp.ndarray, onp.ndarray))
+    assert isinstance(delta, (jax.Array, onp.ndarray))
     return transform @ type(transform).exp(delta)
 
 
@@ -75,13 +75,13 @@ def rplus(
 
 
 @_naive_auto_vmap
-def _rminus(a: GroupType, b: GroupType) -> jnp.ndarray:
+def _rminus(a: GroupType, b: GroupType) -> jax.Array:
     assert isinstance(a, MatrixLieGroup) and isinstance(b, MatrixLieGroup)
     return (a.inverse() @ b).log()
 
 
 @overload
-def rminus(a: GroupType, b: GroupType) -> jnp.ndarray:
+def rminus(a: GroupType, b: GroupType) -> jax.Array:
     ...
 
 
@@ -93,7 +93,7 @@ def rminus(a: PytreeType, b: PytreeType) -> _tree_utils.TangentPytree:
 # Using our typevars in the overloaded signature will cause errors.
 def rminus(
     a: Union[MatrixLieGroup, Any], b: Union[MatrixLieGroup, Any]
-) -> Union[jnp.ndarray, _tree_utils.TangentPytree]:
+) -> Union[jax.Array, _tree_utils.TangentPytree]:
     """Manifold right minus. Computes
     `delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()`.
 
@@ -104,7 +104,7 @@ def rminus(
 
 
 @jax.jit
-def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
     """Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero
     local delta.
 
@@ -112,7 +112,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarra
 
     Equivalent to --
     ```
-    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
         # Since transform objects are pytree containers, note that `jacfwd` returns a
         # transformation object itself and that the Jacobian terms corresponding to the
         # parameters are grabbed explicitly.

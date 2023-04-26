@@ -14,7 +14,7 @@ def zero_tangents(pytree: Any) -> _tree_utils.TangentPytree:
     """Replace all values in a Pytree with zero vectors on the corresponding tangent
     spaces."""
 
-    def tangent_zero(t: MatrixLieGroup) -> jnp.ndarray:
+    def tangent_zero(t: MatrixLieGroup) -> jax.Array:
         return jnp.zeros(t.get_batch_axes() + (t.tangent_dim,))
 
     return _tree_utils._map_group_trees(

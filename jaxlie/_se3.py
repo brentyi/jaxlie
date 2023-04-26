@@ -1,17 +1,18 @@
 from __future__ import annotations
 
+from typing import cast
+
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
-from overrides import overrides
-from typing_extensions import Annotated
+from typing_extensions import Annotated, override
 
 from . import _base, hints
 from ._so3 import SO3
 from .utils import get_epsilon, register_lie_group
 
 
-def _skew(omega: hints.Array) -> jnp.ndarray:
+def _skew(omega: hints.Array) -> jax.Array:
     """Returns the skew-symmetric form of a length-3 vector."""
 
     wx, wy, wz = omega
@@ -41,13 +42,13 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
     # SE3-specific.
 
     wxyz_xyz: Annotated[
-        jnp.ndarray,
+        jax.Array,
         (..., 7),  # Shape.
         jnp.floating,  # Data-type.
     ]
     """Internal parameters. wxyz quaternion followed by xyz translation."""
 
-    @overrides
+    @override
     def __repr__(self) -> str:
         quat = jnp.round(self.wxyz_xyz[..., :4], 5)
         trans = jnp.round(self.wxyz_xyz[..., 4:], 5)
@@ -56,7 +57,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
     # SE-specific.
 
     @staticmethod
-    @overrides
+    @override
     def from_rotation_and_translation(
         rotation: SO3,
         translation: hints.Array,
@@ -64,23 +65,23 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         assert translation.shape == (3,)
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
 
-    @overrides
+    @override
     def rotation(self) -> SO3:
         return SO3(wxyz=self.wxyz_xyz[..., :4])
 
-    @overrides
-    def translation(self) -> jnp.ndarray:
+    @override
+    def translation(self) -> jax.Array:
         return self.wxyz_xyz[..., 4:]
 
     # Factory.
 
     @staticmethod
-    @overrides
+    @override
     def identity() -> SE3:
         return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
-    @overrides
+    @override
     def from_matrix(matrix: hints.Array) -> SE3:
         assert matrix.shape == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1].
@@ -91,8 +92,8 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     # Accessors.
 
-    @overrides
-    def as_matrix(self) -> jnp.ndarray:
+    @override
+    def as_matrix(self) -> jax.Array:
         return (
             jnp.eye(4)
             .at[:3, :3]
@@ -101,14 +102,14 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
             .set(self.translation())
         )
 
-    @overrides
-    def parameters(self) -> jnp.ndarray:
+    @override
+    def parameters(self) -> jax.Array:
         return self.wxyz_xyz
 
     # Operations.
 
     @staticmethod
-    @overrides
+    @override
     def exp(tangent: hints.Array) -> SE3:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
@@ -123,10 +124,13 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
         # reverse-mode AD.
-        theta_squared_safe = jnp.where(
-            use_taylor,
-            1.0,  # Any non-zero value should do here.
-            theta_squared,
+        theta_squared_safe = cast(
+            jax.Array,
+            jnp.where(
+                use_taylor,
+                1.0,  # Any non-zero value should do here.
+                theta_squared,
+            ),
         )
         del theta_squared
         theta_safe = jnp.sqrt(theta_squared_safe)
@@ -149,8 +153,8 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
             translation=V @ tangent[:3],
         )
 
-    @overrides
-    def log(self) -> jnp.ndarray:
+    @override
+    def log(self) -> jax.Array:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
@@ -188,8 +192,8 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         )
         return jnp.concatenate([V_inv @ self.translation(), omega])
 
-    @overrides
-    def adjoint(self) -> jnp.ndarray:
+    @override
+    def adjoint(self) -> jax.Array:
         R = self.rotation().as_matrix()
         return jnp.block(
             [
@@ -199,7 +203,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         )
 
     @staticmethod
-    @overrides
+    @override
     def sample_uniform(key: hints.KeyArray) -> SE3:
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(

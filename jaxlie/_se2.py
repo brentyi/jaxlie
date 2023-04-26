@@ -1,8 +1,9 @@
+from typing import cast
+
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
-from overrides import overrides
-from typing_extensions import Annotated
+from typing_extensions import Annotated, override
 
 from . import _base, hints
 from ._so2 import SO2
@@ -26,13 +27,13 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
     # SE2-specific.
 
     unit_complex_xy: Annotated[
-        jnp.ndarray,
+        jax.Array,
         (..., 4),  # Shape.
         jnp.floating,  # Data-type.
     ]
     """Internal parameters. `(cos, sin, x, y)`."""
 
-    @overrides
+    @override
     def __repr__(self) -> str:
         unit_complex = jnp.round(self.unit_complex_xy[..., :2], 5)
         xy = jnp.round(self.unit_complex_xy[..., 2:], 5)
@@ -51,7 +52,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
     # SE-specific.
 
     @staticmethod
-    @overrides
+    @override
     def from_rotation_and_translation(
         rotation: SO2,
         translation: hints.Array,
@@ -61,23 +62,23 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             unit_complex_xy=jnp.concatenate([rotation.unit_complex, translation])
         )
 
-    @overrides
+    @override
     def rotation(self) -> SO2:
         return SO2(unit_complex=self.unit_complex_xy[..., :2])
 
-    @overrides
-    def translation(self) -> jnp.ndarray:
+    @override
+    def translation(self) -> jax.Array:
         return self.unit_complex_xy[..., 2:]
 
     # Factory.
 
     @staticmethod
-    @overrides
+    @override
     def identity() -> "SE2":
         return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
     @staticmethod
-    @overrides
+    @override
     def from_matrix(matrix: hints.Array) -> "SE2":
         assert matrix.shape == (3, 3)
         # Currently assumes bottom row is [0, 0, 1].
@@ -88,12 +89,12 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     # Accessors.
 
-    @overrides
-    def parameters(self) -> jnp.ndarray:
+    @override
+    def parameters(self) -> jax.Array:
         return self.unit_complex_xy
 
-    @overrides
-    def as_matrix(self) -> jnp.ndarray:
+    @override
+    def as_matrix(self) -> jax.Array:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
@@ -106,7 +107,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
     # Operations.
 
     @staticmethod
-    @overrides
+    @override
     def exp(tangent: hints.Array) -> "SE2":
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L558
@@ -120,22 +121,31 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
         # reverse-mode AD.
-        safe_theta = jnp.where(
-            use_taylor,
-            1.0,  # Any non-zero value should do here.
-            theta,
+        safe_theta = cast(
+            jax.Array,
+            jnp.where(
+                use_taylor,
+                1.0,  # Any non-zero value should do here.
+                theta,
+            ),
         )
 
         theta_sq = theta**2
-        sin_over_theta = jnp.where(
-            use_taylor,
-            1.0 - theta_sq / 6.0,
-            jnp.sin(safe_theta) / safe_theta,
+        sin_over_theta = cast(
+            jax.Array,
+            jnp.where(
+                use_taylor,
+                1.0 - theta_sq / 6.0,
+                jnp.sin(safe_theta) / safe_theta,
+            ),
         )
-        one_minus_cos_over_theta = jnp.where(
-            use_taylor,
-            0.5 * theta - theta * theta_sq / 24.0,
-            (1.0 - jnp.cos(safe_theta)) / safe_theta,
+        one_minus_cos_over_theta = cast(
+            jax.Array,
+            jnp.where(
+                use_taylor,
+                0.5 * theta - theta * theta_sq / 24.0,
+                (1.0 - jnp.cos(safe_theta)) / safe_theta,
+            ),
         )
 
         V = jnp.array(
@@ -149,8 +159,8 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             translation=V @ tangent[:2],
         )
 
-    @overrides
-    def log(self) -> jnp.ndarray:
+    @override
+    def log(self) -> jax.Array:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
@@ -189,8 +199,8 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         tangent = jnp.concatenate([V_inv @ self.translation(), theta[None]])
         return tangent
 
-    @overrides
-    def adjoint(self: "SE2") -> jnp.ndarray:
+    @override
+    def adjoint(self: "SE2") -> jax.Array:
         cos, sin, x, y = self.unit_complex_xy
         return jnp.array(
             [
@@ -201,7 +211,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         )
 
     @staticmethod
-    @overrides
+    @override
     def sample_uniform(key: hints.KeyArray) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(

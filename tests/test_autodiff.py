@@ -22,7 +22,7 @@ cached_jit = lru_cache(maxsize=None)(jax.jit)
 
 def _assert_jacobians_close(
     Group: Type[jaxlie.MatrixLieGroup],
-    f: Callable[[Type[jaxlie.MatrixLieGroup], jnp.ndarray], jnp.ndarray],
+    f: Callable[[Type[jaxlie.MatrixLieGroup], jax.Array], jax.Array],
     primal: jaxlie.hints.Array,
 ) -> None:
     jacobian_fwd = cached_jacfwd(f)(Group, primal)
@@ -36,8 +36,8 @@ def _assert_jacobians_close(
 
 
 # Exp tests.
-def _exp(Group: Type[jaxlie.MatrixLieGroup], generator: jnp.ndarray) -> jnp.ndarray:
-    return cast(jnp.ndarray, Group.exp(generator).parameters())
+def _exp(Group: Type[jaxlie.MatrixLieGroup], generator: jax.Array) -> jax.Array:
+    return cast(jax.Array, Group.exp(generator).parameters())
 
 
 def test_so3_nan():
@@ -71,7 +71,7 @@ def test_exp_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Log tests.
-def _log(Group: Type[jaxlie.MatrixLieGroup], params: jnp.ndarray) -> jnp.ndarray:
+def _log(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
     return Group.log(Group(params))
 
 
@@ -91,8 +91,8 @@ def test_log_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Adjoint tests.
-def _adjoint(Group: Type[jaxlie.MatrixLieGroup], params: jnp.ndarray) -> jnp.ndarray:
-    return cast(jnp.ndarray, Group(params).adjoint().flatten())
+def _adjoint(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
+    return cast(jax.Array, Group(params).adjoint().flatten())
 
 
 @general_group_test
@@ -111,7 +111,7 @@ def test_adjoint_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Apply tests.
-def _apply(Group: Type[jaxlie.MatrixLieGroup], params: jnp.ndarray) -> jnp.ndarray:
+def _apply(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
     return Group(params) @ onp.ones(Group.space_dim)
 
 
@@ -131,8 +131,8 @@ def test_apply_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Multiply tests.
-def _multiply(Group: Type[jaxlie.MatrixLieGroup], params: jnp.ndarray) -> jnp.ndarray:
-    return cast(jnp.ndarray, (Group(params) @ Group(params)).parameters())
+def _multiply(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
+    return cast(jax.Array, (Group(params) @ Group(params)).parameters())
 
 
 @general_group_test
@@ -152,8 +152,8 @@ def test_multiply_identity(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 # Inverse tests.
-def _inverse(Group: Type[jaxlie.MatrixLieGroup], params: jnp.ndarray) -> jnp.ndarray:
-    return cast(jnp.ndarray, Group(params).inverse().parameters())
+def _inverse(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
+    return cast(jax.Array, Group(params).inverse().parameters())
 
 
 @general_group_test

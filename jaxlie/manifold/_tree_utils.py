@@ -1,7 +1,7 @@
 from typing import Any, Callable, List, TypeVar
 
+import jax
 import numpy as onp
-from jax import numpy as jnp
 from jax._src.tree_util import _registry  # Dangerous!
 
 from .._base import MatrixLieGroup
@@ -12,7 +12,7 @@ from .._base import MatrixLieGroup
 #
 #     def zero_tangents(structure: T) -> T
 #
-# But this is leaky; note that an input of List[SE3] should output List[jnp.ndarray],
+# But this is leaky; note that an input of List[SE3] should output List[jax.Array],
 # Dict[str, SE3] should output Dict[str, SE3], etc.
 #
 # Another tempting option is to define a wrapper class:
@@ -49,7 +49,7 @@ def _map_group_trees(
 ) -> Any:
     if isinstance(tree_args[0], MatrixLieGroup):
         return f_lie_groups(*tree_args)
-    elif isinstance(tree_args[0], (jnp.ndarray, onp.ndarray)):
+    elif isinstance(tree_args[0], (jax.Array, onp.ndarray)):
         return f_other_arrays(*tree_args)
     else:
         # Handle PyTrees recursively.

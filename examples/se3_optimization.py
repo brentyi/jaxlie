@@ -54,9 +54,9 @@ class Parameters:
 class ExponentialCoordinatesParameters:
     """Same as `Parameters`, but using exponential coordinates."""
 
-    log_T_ab: jnp.ndarray
-    log_T_bc: jnp.ndarray
-    log_T_ca: jnp.ndarray
+    log_T_ab: jax.Array
+    log_T_bc: jax.Array
+    log_T_ca: jax.Array
 
     @property
     def T_ab(self) -> jaxlie.SE3:
@@ -81,7 +81,7 @@ class ExponentialCoordinatesParameters:
 
 def compute_loss(
     params: Union[Parameters, ExponentialCoordinatesParameters]
-) -> jnp.ndarray:
+) -> jax.Array:
     """As our loss, we enforce (a) priors on our transforms and (b) a consistency
     constraint."""
     T_ba_prior = jaxlie.SE3.sample_uniform(jax.random.PRNGKey(1))
@@ -144,7 +144,7 @@ class State:
         )
 
     @jax.jit
-    def step(self: State) -> Tuple[jnp.ndarray, State]:
+    def step(self: State) -> Tuple[jax.Array, State]:
         """Take one ADAM optimization step."""
 
         if self.algorithm == "tangent_space":

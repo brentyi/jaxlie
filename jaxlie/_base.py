@@ -1,9 +1,9 @@
 import abc
 from typing import ClassVar, Generic, Tuple, Type, TypeVar, Union, overload
 
+import jax
 import numpy as onp
-from jax import numpy as jnp
-from overrides import EnforceOverrides, final, overrides
+from typing_extensions import final, override
 
 from . import hints
 
@@ -11,7 +11,7 @@ GroupType = TypeVar("GroupType", bound="MatrixLieGroup")
 SEGroupType = TypeVar("SEGroupType", bound="SEBase")
 
 
-class MatrixLieGroup(abc.ABC, EnforceOverrides):
+class MatrixLieGroup(abc.ABC):
     """Interface definition for matrix Lie groups."""
 
     # Class properties.
@@ -36,7 +36,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         # - This method is implicitly overriden by the dataclass decorator and
         #   should _not_ be marked abstract.
         self,
-        parameters: jnp.ndarray,
+        parameters: jax.Array,
     ):
         """Construct a group object from its underlying parameters."""
         raise NotImplementedError()
@@ -48,18 +48,18 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         ...
 
     @overload
-    def __matmul__(self, other: hints.Array) -> jnp.ndarray:
+    def __matmul__(self, other: hints.Array) -> jax.Array:
         ...
 
     def __matmul__(
         self: GroupType, other: Union[GroupType, hints.Array]
-    ) -> Union[GroupType, jnp.ndarray]:
+    ) -> Union[GroupType, jax.Array]:
         """Overload for the `@` operator.
 
         Switches between the group action (`.apply()`) and multiplication
         (`.multiply()`) based on the type of `other`.
         """
-        if isinstance(other, (onp.ndarray, jnp.ndarray)):
+        if isinstance(other, (onp.ndarray, jax.Array)):
             return self.apply(target=other)
         elif isinstance(other, MatrixLieGroup):
             assert self.space_dim == other.space_dim
@@ -93,17 +93,17 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
     # Accessors.
 
     @abc.abstractmethod
-    def as_matrix(self) -> jnp.ndarray:
+    def as_matrix(self) -> jax.Array:
         """Get transformation as a matrix. Homogeneous for SE groups."""
 
     @abc.abstractmethod
-    def parameters(self) -> jnp.ndarray:
+    def parameters(self) -> jax.Array:
         """Get underlying representation."""
 
     # Operations.
 
     @abc.abstractmethod
-    def apply(self, target: hints.Array) -> jnp.ndarray:
+    def apply(self, target: hints.Array) -> jax.Array:
         """Applies group action to a point.
 
         Args:
@@ -134,7 +134,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def log(self) -> jnp.ndarray:
+    def log(self) -> jax.Array:
         """Computes `vee(logm(transformation matrix))`.
 
         Returns:
@@ -142,7 +142,7 @@ class MatrixLieGroup(abc.ABC, EnforceOverrides):
         """
 
     @abc.abstractmethod
-    def adjoint(self) -> jnp.ndarray:
+    def adjoint(self) -> jax.Array:
         """Computes the adjoint, which transforms tangent vectors between tangent
         spaces.
 
@@ -242,18 +242,18 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
         """Returns a transform's rotation term."""
 
     @abc.abstractmethod
-    def translation(self) -> jnp.ndarray:
+    def translation(self) -> jax.Array:
         """Returns a transform's translation term."""
 
     # Overrides.
 
     @final
-    @overrides
-    def apply(self, target: hints.Array) -> jnp.ndarray:
+    @override
+    def apply(self, target: hints.Array) -> jax.Array:
         return self.rotation() @ target + self.translation()  # type: ignore
 
     @final
-    @overrides
+    @override
     def multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType:
         return type(self).from_rotation_and_translation(
             rotation=self.rotation() @ other.rotation(),
@@ -261,7 +261,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
         )
 
     @final
-    @overrides
+    @override
     def inverse(self: SEGroupType) -> SEGroupType:
         R_inv = self.rotation().inverse()
         return type(self).from_rotation_and_translation(
@@ -270,7 +270,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
         )
 
     @final
-    @overrides
+    @override
     def normalize(self: SEGroupType) -> SEGroupType:
         return type(self).from_rotation_and_translation(
             rotation=self.rotation().normalize(),
