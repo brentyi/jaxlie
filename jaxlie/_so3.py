@@ -290,7 +290,7 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         assert target.shape == (3,)
 
         # Compute using quaternion multiplys.
-        padded_target = jnp.zeros(4).at[1:].set(target)
+        padded_target = jnp.concatenate([jnp.zeros(1), target])
         return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[1:]
 
     @override

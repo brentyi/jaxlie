@@ -69,7 +69,7 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
         out = jnp.array(
             [
                 # [cos, -sin],
-                cos_sin.at[1].multiply(-1),
+                cos_sin * jnp.array([1, -1]),
                 # [sin, cos],
                 cos_sin[::-1],
             ]
