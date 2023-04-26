@@ -92,7 +92,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Replace all values in a Pytree with zero vectors on the corresponding tangent</span>
 <span class="sd">    spaces.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">tangent_zero</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">tangent_zero</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">,))</span>
 
     <span class="k">return</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">_map_group_trees</span><span class="p">(</span>

@@ -44,7 +44,7 @@ Attributes
 .. class:: MatrixLieGroup(parameters)
 
 
-   Bases: :py:obj:`abc.ABC`, :py:obj:`overrides.EnforceOverrides`
+   Bases: :py:obj:`abc.ABC`
 
    .. autoapi-inheritance-diagram:: jaxlie._base.MatrixLieGroup
       :parts: 1
@@ -76,7 +76,7 @@ Attributes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self, other: jaxlie.hints.Array) -> jax.numpy.ndarray
+               __matmul__(self, other: jaxlie.hints.Array) -> jax.Array
 
       Overload for the ``@`` operator.
 

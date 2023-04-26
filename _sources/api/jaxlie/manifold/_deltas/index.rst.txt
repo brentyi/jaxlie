@@ -60,7 +60,7 @@ Attributes
    addition will be performed for all other arrays.
 
 
-.. function:: rminus(a: GroupType, b: GroupType) -> jax.numpy.ndarray
+.. function:: rminus(a: GroupType, b: GroupType) -> jax.Array
               rminus(a: PytreeType, b: PytreeType) -> jaxlie.manifold._tree_utils.TangentPytree
 
    Manifold right minus. Computes
@@ -81,7 +81,7 @@ Attributes
 
    .. code-block::
 
-      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jnp.ndarray:
+      def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
           # Since transform objects are pytree containers, note that `jacfwd` returns a
           # transformation object itself and that the Jacobian terms corresponding to the
           # parameters are grabbed explicitly.

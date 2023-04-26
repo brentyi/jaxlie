@@ -125,7 +125,7 @@
         <span class="c1"># JIT all methods.</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">filter</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
+            <span class="ow">and</span> <span class="nb">callable</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
             <span class="ow">and</span> <span class="n">f</span> <span class="o">!=</span> <span class="s2">&quot;get_batch_axes&quot;</span><span class="p">,</span>  <span class="c1"># Avoid returning tracers.</span>
             <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>
         <span class="p">):</span>

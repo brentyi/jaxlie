@@ -117,9 +117,9 @@
 
 
 <span class="nd">@_naive_auto_vmap</span>
-<span class="k">def</span> <span class="nf">_rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span>
-    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">transform</span> <span class="o">@</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
 
 
@@ -153,13 +153,13 @@
 
 
 <span class="nd">@_naive_auto_vmap</span>
-<span class="k">def</span> <span class="nf">_rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">@</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
     <span class="o">...</span>
 
 
@@ -171,7 +171,7 @@
 <span class="c1"># Using our typevars in the overloaded signature will cause errors.</span>
 <div class="viewcode-block" id="rminus"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._deltas.rminus">[docs]</a><span class="k">def</span> <span class="nf">rminus</span><span class="p">(</span>
     <span class="n">a</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">b</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">MatrixLieGroup</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">_tree_utils</span><span class="o">.</span><span class="n">TangentPytree</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Manifold right minus. Computes</span>
 <span class="sd">    `delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()`.</span>
 
@@ -182,7 +182,7 @@
 
 
 <div class="viewcode-block" id="rplus_jacobian_parameters_wrt_delta"><a class="viewcode-back" href="../../../../api/jaxlie/manifold/#jaxlie.manifold._deltas.rplus_jacobian_parameters_wrt_delta">[docs]</a><span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-<span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytical Jacobians for `jaxlie.manifold.rplus()`, linearized around a zero</span>
 <span class="sd">    local delta.</span>
 
@@ -190,7 +190,7 @@
 
 <span class="sd">    Equivalent to --</span>
 <span class="sd">    ```</span>
-<span class="sd">    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -&gt; jnp.ndarray:</span>
+<span class="sd">    def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -&gt; jax.Array:</span>
 <span class="sd">        # Since transform objects are pytree containers, note that `jacfwd` returns a</span>
 <span class="sd">        # transformation object itself and that the Jacobian terms corresponding to the</span>
 <span class="sd">        # parameters are grabbed explicitly.</span>

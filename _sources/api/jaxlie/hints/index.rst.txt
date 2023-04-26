@@ -30,7 +30,7 @@ Attributes
 .. data:: Array
    
 
-   Type alias for ``Union[jnp.ndarray, onp.ndarray]``.
+   Type alias for ``Union[jax.Array, onp.ndarray]``.
 
 
 .. data:: Scalar

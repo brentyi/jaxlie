@@ -33,7 +33,7 @@ Classes
    vy, omega)``.
 
    .. attribute:: unit_complex_xy
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 4), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
 
       Internal parameters. ``(cos, sin, x, y)``.
 

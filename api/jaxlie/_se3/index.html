@@ -93,17 +93,17 @@
 <dt class="sig sig-object py" id="jaxlie._se3.SE3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie._se3.</span></span><span class="sig-name descname"><span class="pre">SE3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se3/#SE3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se3.SE3" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="../#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="../#jaxlie.SO3" title="jaxlie.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO3</span></code></a>]</p>
-<div class="graphviz"><img src="../../../_images/inheritance-977f522b8660de9ef4a66f7dd8fd83771b1dab5d.png" alt="Inheritance diagram of jaxlie._se3.SE3" usemap="#inheritanceeccad8684a" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../_images/inheritance-ee1eb6258efd00ba745b8110dd54061a5ce21191.png" alt="Inheritance diagram of jaxlie._se3.SE3" usemap="#inheritanceeccad8684a" class="inheritance graphviz" /></div>
 <map id="inheritanceeccad8684a" name="inheritanceeccad8684a">
-<area shape="rect" id="node5" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="188,29,311,55"/>
-<area shape="rect" id="node6" href="../#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="600,79,672,104"/>
-<area shape="rect" id="node7" href="../#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="419,53,491,79"/>
+<area shape="rect" id="node4" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node5" href="../#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="537,55,609,80"/>
+<area shape="rect" id="node6" href="../#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,29,429,55"/>
 </map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(qw,</span> <span class="pre">qx,</span> <span class="pre">qy,</span> <span class="pre">qz,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code>. Tangent parameterization
 is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <span class="pre">vy,</span> <span class="pre">vz,</span> <span class="pre">omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="jaxlie._se3.SE3.wxyz_xyz">
-<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.numpy.ndarray,</span> <span class="pre">(Ellipsis,</span> <span class="pre">7),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._se3.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">wxyz_xyz</span></span><em class="property"><span class="w"> </span><span class="pre">:typing_extensions.Annotated[jax.Array,</span> <span class="pre">(Ellipsis,</span> <span class="pre">7),</span> <span class="pre">jax.numpy.floating]</span></em><a class="headerlink" href="#jaxlie._se3.SE3.wxyz_xyz" title="Permalink to this definition"></a></dt>
 <dd><p>Internal parameters. wxyz quaternion followed by xyz translation.</p>
 </dd></dl>
 

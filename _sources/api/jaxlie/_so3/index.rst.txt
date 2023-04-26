@@ -33,7 +33,7 @@ Classes
    ``(omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 4), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 

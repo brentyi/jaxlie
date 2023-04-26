@@ -37,7 +37,7 @@ Classes
 .. class:: MatrixLieGroup(parameters)
 
 
-   Bases: :py:obj:`abc.ABC`, :py:obj:`overrides.EnforceOverrides`
+   Bases: :py:obj:`abc.ABC`
 
    .. autoapi-inheritance-diagram:: jaxlie.MatrixLieGroup
       :parts: 1
@@ -69,7 +69,7 @@ Classes
 
 
    .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self, other: jaxlie.hints.Array) -> jax.numpy.ndarray
+               __matmul__(self, other: jaxlie.hints.Array) -> jax.Array
 
       Overload for the ``@`` operator.
 
@@ -300,7 +300,7 @@ Classes
    vy, omega)``.
 
    .. attribute:: unit_complex_xy
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 4), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
 
       Internal parameters. ``(cos, sin, x, y)``.
 
@@ -427,7 +427,7 @@ Classes
    is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz_xyz
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 7), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 7), jax.numpy.floating]
 
       Internal parameters. wxyz quaternion followed by xyz translation.
 
@@ -545,7 +545,7 @@ Classes
    Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
 
    .. attribute:: unit_complex
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 2), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 2), jax.numpy.floating]
 
       Internal parameters. ``(cos, sin)``.
 
@@ -684,7 +684,7 @@ Classes
    ``(omega_x, omega_y, omega_z)``.
 
    .. attribute:: wxyz
-      :annotation: :typing_extensions.Annotated[jax.numpy.ndarray, (Ellipsis, 4), jax.numpy.floating]
+      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
 
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
