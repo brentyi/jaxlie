@@ -176,7 +176,7 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[GroupType], key: hints.KeyArray) -> GroupType:
+    def sample_uniform(cls: Type[GroupType], key: jax.Array) -> GroupType:
         """Draw a uniform sample from the group. Translations (if applicable) are in the
         range [-1, 1].
 

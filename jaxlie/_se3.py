@@ -204,7 +204,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @staticmethod
     @override
-    def sample_uniform(key: hints.KeyArray) -> SE3:
+    def sample_uniform(key: jax.Array) -> SE3:
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0),

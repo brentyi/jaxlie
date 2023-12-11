@@ -120,7 +120,7 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     @staticmethod
     @override
-    def sample_uniform(key: hints.KeyArray) -> SO2:
+    def sample_uniform(key: jax.Array) -> SO2:
         return SO2.from_radians(
             jax.random.uniform(key=key, minval=0.0, maxval=2.0 * jnp.pi)
         )
