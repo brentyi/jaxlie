@@ -72,7 +72,7 @@ master_doc = "index"
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language: Optional[str] = None
+language: Optional[str] = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -275,17 +275,7 @@ def _override_class_documenter():
         bases = obj["bases"]
         for i in range(len(bases)):
             bases[i] = _apply_name_aliases(bases[i])
-
-        args = obj["args"]
-        if args is not None:
-            for i in range(len(args)):
-                assert isinstance(args[i], tuple) and len(args[i]) == 4
-                args[i] = (
-                    args[i][0],
-                    args[i][1],
-                    _apply_name_aliases(args[i][2]),
-                    args[i][3],
-                )
+        obj["full_name"] = _apply_name_aliases(obj["full_name"])
         orig_init(self, obj, **kwargs)
 
     autoapi.mappers.python.PythonClass.__init__ = __init__
@@ -344,12 +334,12 @@ todo_include_todos = True
 
 # -- Enable Markdown -> RST conversion ----------------------------------------
 
-import m2r
+import m2r2
 
 
 def docstring(app, what, name, obj, options, lines):
     md = "\n".join(lines)
-    rst = m2r.convert(md)
+    rst = m2r2.convert(md)
     lines.clear()
     lines += rst.splitlines()
 
