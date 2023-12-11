@@ -1,5 +1,5 @@
-:mod:`jaxlie.hints`
-===================
+:py:mod:`jaxlie.hints`
+======================
 
 .. py:module:: jaxlie.hints
 
@@ -24,49 +24,41 @@ Attributes
 
    jaxlie.hints.Array
    jaxlie.hints.Scalar
-   jaxlie.hints.KeyArray
 
 
-.. data:: Array
+.. py:data:: Array
+
    
-
    Type alias for ``Union[jax.Array, onp.ndarray]``.
 
+.. py:data:: Scalar
 
-.. data:: Scalar
    
-
    Type alias for ``Union[float, Array]``.
 
+.. py:class:: RollPitchYaw
 
-.. class:: RollPitchYaw
 
    Bases: :py:obj:`NamedTuple`
 
    .. autoapi-inheritance-diagram:: jaxlie.hints.RollPitchYaw
       :parts: 1
 
-   Tuple containing roll, pitch, and yaw Euler angles.
-
-   .. attribute:: roll
-      :annotation: :Scalar
-
-      
-
-   .. attribute:: pitch
-      :annotation: :Scalar
-
-      
-
-   .. attribute:: yaw
-      :annotation: :Scalar
-
-      
-
-
-.. data:: KeyArray
    
+   Tuple containing roll, pitch, and yaw Euler angles.
+   .. py:attribute:: roll
+      :type: Scalar
 
-   Backward-compatible alias for ``jax.random.KeyArray``.
+      
+
+   .. py:attribute:: pitch
+      :type: Scalar
+
+      
+
+   .. py:attribute:: yaw
+      :type: Scalar
+
+      
 
 

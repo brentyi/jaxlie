@@ -1,5 +1,5 @@
 <map id="inheritance87ef044eaa" name="inheritance87ef044eaa">
-<area shape="rect" id="node1" title="Mixin for dataclasses containing arrays that are annotated with expected shapes" alt="" coords="205,76,634,100"/>
+<area shape="rect" id="node1" title="**Deprecated** mixin for dataclasses containing arrays that are" alt="" coords="205,76,634,100"/>
 <area shape="rect" id="node3" href="api/jaxlie/#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="680,5,762,29"/>
 <area shape="rect" id="node5" href="api/jaxlie/#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="680,52,762,76"/>
 <area shape="rect" id="node7" href="api/jaxlie/#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="680,99,763,123"/>

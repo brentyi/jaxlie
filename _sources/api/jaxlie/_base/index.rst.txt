@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie._base`
-===================
+:py:mod:`jaxlie._base`
+======================
 
 .. py:module:: jaxlie._base
 
@@ -14,9 +14,9 @@ Classes
 
 .. autoapisummary::
 
-   jaxlie._base.MatrixLieGroup
-   jaxlie._base.SOBase
-   jaxlie._base.SEBase
+   jaxlie.MatrixLieGroup
+   jaxlie.SOBase
+   jaxlie.SEBase
 
 
 
@@ -31,131 +31,130 @@ Attributes
    jaxlie._base.ContainedSOType
 
 
-.. data:: GroupType
-   
+.. py:data:: GroupType
 
    
 
-.. data:: SEGroupType
-   
+.. py:data:: SEGroupType
 
    
 
-.. class:: MatrixLieGroup(parameters)
+.. py:class:: MatrixLieGroup(parameters)
 
 
    Bases: :py:obj:`abc.ABC`
 
-   .. autoapi-inheritance-diagram:: jaxlie._base.MatrixLieGroup
+   .. autoapi-inheritance-diagram:: jaxlie.MatrixLieGroup
       :parts: 1
 
+   
    Interface definition for matrix Lie groups.
+   .. py:attribute:: matrix_dim
+      :type: ClassVar[int]
 
-   .. attribute:: matrix_dim
-      :annotation: :ClassVar[int]
-
+      
       Dimension of square matrix output from ``.as_matrix()``.
 
+   .. py:attribute:: parameters_dim
+      :type: ClassVar[int]
 
-   .. attribute:: parameters_dim
-      :annotation: :ClassVar[int]
-
+      
       Dimension of underlying parameters, ``.parameters()``.
 
+   .. py:attribute:: tangent_dim
+      :type: ClassVar[int]
 
-   .. attribute:: tangent_dim
-      :annotation: :ClassVar[int]
-
+      
       Dimension of tangent space.
 
+   .. py:attribute:: space_dim
+      :type: ClassVar[int]
 
-   .. attribute:: space_dim
-      :annotation: :ClassVar[int]
-
+      
       Dimension of coordinates that can be transformed.
 
+   .. py:method:: __matmul__(other: GroupType) -> GroupType
+                  __matmul__(other: jaxlie.hints.Array) -> jax.Array
 
-   .. method:: __matmul__(self: GroupType, other: GroupType) -> GroupType
-               __matmul__(self, other: jaxlie.hints.Array) -> jax.Array
-
+      
       Overload for the ``@`` operator.
 
       Switches between the group action (\ ``.apply()``\ ) and multiplication
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
-
-   .. method:: identity(cls)
+   .. py:method:: identity()
       :classmethod:
       :abstractmethod:
 
+      
       Returns identity element.
 
       :returns: Identity element.
 
-
-   .. method:: from_matrix(cls, matrix)
+   .. py:method:: from_matrix(matrix)
       :classmethod:
       :abstractmethod:
 
+      
       Get group member from matrix representation.
 
       :param matrix: Matrix representaiton.
 
       :returns: Group member.
 
-
-   .. method:: as_matrix(self)
+   .. py:method:: as_matrix()
       :abstractmethod:
 
+      
       Get transformation as a matrix. Homogeneous for SE groups.
 
-
-   .. method:: parameters(self)
+   .. py:method:: parameters()
       :abstractmethod:
 
+      
       Get underlying representation.
 
-
-   .. method:: apply(self, target)
+   .. py:method:: apply(target)
       :abstractmethod:
 
+      
       Applies group action to a point.
 
       :param target: Point to transform.
 
       :returns: Transformed point.
 
-
-   .. method:: multiply(self, other)
+   .. py:method:: multiply(other)
       :abstractmethod:
 
+      
       Composes this transformation with another.
 
       :returns: self @ other
 
-
-   .. method:: exp(cls, tangent)
+   .. py:method:: exp(tangent)
       :classmethod:
       :abstractmethod:
 
+      
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Tangent vector to take the exponential of.
 
       :returns: Output.
 
-
-   .. method:: log(self)
+   .. py:method:: log()
       :abstractmethod:
 
+      
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
-
-   .. method:: adjoint(self)
+   .. py:method:: adjoint()
       :abstractmethod:
 
+      
       Computes the adjoint, which transforms tangent vectors between tangent
       spaces.
 
@@ -170,27 +169,27 @@ Attributes
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
-
-   .. method:: inverse(self)
+   .. py:method:: inverse()
       :abstractmethod:
 
+      
       Computes the inverse of our transform.
 
       :returns: Output.
 
-
-   .. method:: normalize(self)
+   .. py:method:: normalize()
       :abstractmethod:
 
+      
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
-
-   .. method:: sample_uniform(cls, key)
+   .. py:method:: sample_uniform(key)
       :classmethod:
       :abstractmethod:
 
+      
       Draw a uniform sample from the group. Translations (if applicable) are in the
       range [-1, 1].
 
@@ -198,10 +197,10 @@ Attributes
 
       :returns: Sampled group member.
 
-
-   .. method:: get_batch_axes(self)
+   .. py:method:: get_batch_axes()
       :abstractmethod:
 
+      
       Return any leading batch axes in contained parameters. If an array of shape
       ``(100, 4)`` is placed in the wxyz field of an SO3 object, for example, this will
       return ``(100,)``.
@@ -209,40 +208,39 @@ Attributes
       This should generally be implemented by ``jdc.EnforcedAnnotationsMixin``.
 
 
-
-.. class:: SOBase(parameters)
+.. py:class:: SOBase(parameters)
 
 
    Bases: :py:obj:`MatrixLieGroup`
 
-   .. autoapi-inheritance-diagram:: jaxlie._base.SOBase
+   .. autoapi-inheritance-diagram:: jaxlie.SOBase
       :parts: 1
 
+   
    Base class for special orthogonal groups.
 
-
-.. data:: ContainedSOType
-   
+.. py:data:: ContainedSOType
 
    
 
-.. class:: SEBase(parameters)
+.. py:class:: SEBase(parameters)
 
 
    Bases: :py:obj:`Generic`\ [\ :py:obj:`ContainedSOType`\ ], :py:obj:`MatrixLieGroup`
 
-   .. autoapi-inheritance-diagram:: jaxlie._base.SEBase
+   .. autoapi-inheritance-diagram:: jaxlie.SEBase
       :parts: 1
 
+   
    Base class for special Euclidean groups.
 
    Each SE(N) group member contains an SO(N) rotation, as well as an N-dimensional
    translation vector.
-
-   .. method:: from_rotation_and_translation(cls, rotation, translation)
+   .. py:method:: from_rotation_and_translation(rotation, translation)
       :classmethod:
       :abstractmethod:
 
+      
       Construct a rigid transform from a rotation and a translation.
 
       :param rotation: Rotation term.
@@ -250,51 +248,50 @@ Attributes
 
       :returns: Constructed transformation.
 
-
-   .. method:: from_rotation(cls, rotation)
+   .. py:method:: from_rotation(rotation)
       :classmethod:
 
 
-   .. method:: rotation(self)
+   .. py:method:: rotation()
       :abstractmethod:
 
+      
       Returns a transform's rotation term.
 
-
-   .. method:: translation(self)
+   .. py:method:: translation()
       :abstractmethod:
 
+      
       Returns a transform's translation term.
 
+   .. py:method:: apply(target)
 
-   .. method:: apply(self, target)
-
+      
       Applies group action to a point.
 
       :param target: Point to transform.
 
       :returns: Transformed point.
 
+   .. py:method:: multiply(other)
 
-   .. method:: multiply(self, other)
-
+      
       Composes this transformation with another.
 
       :returns: self @ other
 
+   .. py:method:: inverse()
 
-   .. method:: inverse(self)
-
+      
       Computes the inverse of our transform.
 
       :returns: Output.
 
+   .. py:method:: normalize()
 
-   .. method:: normalize(self)
-
+      
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
-
 
 

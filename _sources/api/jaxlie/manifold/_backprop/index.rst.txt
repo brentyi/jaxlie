@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie.manifold._backprop`
-================================
+:py:mod:`jaxlie.manifold._backprop`
+===================================
 
 .. py:module:: jaxlie.manifold._backprop
 
@@ -30,33 +30,31 @@ Attributes
    jaxlie.manifold._backprop.P
 
 
-.. function:: zero_tangents(pytree)
+.. py:function:: zero_tangents(pytree)
 
+   
    Replace all values in a Pytree with zero vectors on the corresponding tangent
    spaces.
 
-
-.. data:: AxisName
-   
+.. py:data:: AxisName
 
    
 
-.. data:: P
-   
+.. py:data:: P
 
    
 
-.. function:: grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, jaxlie.manifold._tree_utils.TangentPytree]
-              grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]
+.. py:function:: grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, jaxlie.manifold._tree_utils.TangentPytree]
+                 grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]
 
+   
    Same as ``jax.grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
 
+.. py:function:: value_and_grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, jaxlie.manifold._tree_utils.TangentPytree]]
+                 value_and_grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]]
 
-.. function:: value_and_grad(fun: Callable[P, Any], argnums: int = 0, has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, jaxlie.manifold._tree_utils.TangentPytree]]
-              value_and_grad(fun: Callable[P, Any], argnums: Sequence[int], has_aux: bool = False, holomorphic: bool = False, allow_int: bool = False, reduce_axes: Sequence[AxisName] = ()) -> Callable[P, Tuple[Any, Tuple[jaxlie.manifold._tree_utils.TangentPytree, Ellipsis]]]
-
+   
    Same as ``jax.value_and_grad``\ , but computes gradients of Lie groups with respect to
    tangent spaces.
-
 

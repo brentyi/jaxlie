@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie.manifold._tree_utils`
-==================================
+:py:mod:`jaxlie.manifold._tree_utils`
+=====================================
 
 .. py:module:: jaxlie.manifold._tree_utils
 
@@ -28,20 +28,18 @@ Attributes
    jaxlie.manifold._tree_utils.PytreeType
 
 
-.. data:: TangentPytree
-   
+.. py:data:: TangentPytree
 
    
 
-.. data:: PytreeType
-   
+.. py:data:: PytreeType
 
    
 
-.. function:: normalize_all(pytree)
+.. py:function:: normalize_all(pytree)
 
+   
    Call ``.normalize()`` on each Lie group instance in a pytree.
 
    Results in a naive projection of each group instance to its respective manifold.
-
 

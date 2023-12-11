@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie.utils._utils`
-==========================
+:py:mod:`jaxlie.utils._utils`
+=============================
 
 .. py:module:: jaxlie.utils._utils
 
@@ -28,24 +28,23 @@ Attributes
    jaxlie.utils._utils.T
 
 
-.. data:: T
-   
+.. py:data:: T
 
    
 
-.. function:: get_epsilon(dtype)
+.. py:function:: get_epsilon(dtype)
 
+   
    Helper for grabbing type-specific precision constants.
 
    :param dtype: Datatype.
 
    :returns: Output float.
 
+.. py:function:: register_lie_group(*, matrix_dim, parameters_dim, tangent_dim, space_dim)
 
-.. function:: register_lie_group(*, matrix_dim, parameters_dim, tangent_dim, space_dim)
-
+   
    Decorator for registering Lie group dataclasses.
 
    Sets dimensionality class variables, and marks all methods for JIT compilation.
-
 

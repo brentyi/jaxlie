@@ -1,14 +1,14 @@
 :orphan:
 
-:mod:`jaxlie.manifold._deltas`
-==============================
+:py:mod:`jaxlie.manifold._deltas`
+=================================
 
 .. py:module:: jaxlie.manifold._deltas
 
 .. autoapi-nested-parse::
 
+   
    Helpers for recursively applying tangent-space deltas.
-
 
 
 Module Contents
@@ -36,42 +36,40 @@ Attributes
    jaxlie.manifold._deltas.CallableType
 
 
-.. data:: PytreeType
-   
+.. py:data:: PytreeType
 
    
 
-.. data:: GroupType
-   
+.. py:data:: GroupType
 
    
 
-.. data:: CallableType
-   
+.. py:data:: CallableType
 
    
 
-.. function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
-              rplus(transform: PytreeType, delta: jaxlie.manifold._tree_utils.TangentPytree) -> PytreeType
+.. py:function:: rplus(transform: GroupType, delta: jaxlie.hints.Array) -> GroupType
+                 rplus(transform: PytreeType, delta: jaxlie.manifold._tree_utils.TangentPytree) -> PytreeType
 
+   
    Manifold right plus. Computes ``T' = T @ exp(delta)``.
 
    Supports pytrees containing Lie group instances recursively; simple Euclidean
    addition will be performed for all other arrays.
 
+.. py:function:: rminus(a: GroupType, b: GroupType) -> jax.Array
+                 rminus(a: PytreeType, b: PytreeType) -> jaxlie.manifold._tree_utils.TangentPytree
 
-.. function:: rminus(a: GroupType, b: GroupType) -> jax.Array
-              rminus(a: PytreeType, b: PytreeType) -> jaxlie.manifold._tree_utils.TangentPytree
-
+   
    Manifold right minus. Computes
    ``delta = T_ab.log() = (T_wa.inverse() @ T_wb).log()``.
 
    Supports pytrees containing Lie group instances recursively; simple Euclidean
    subtraction will be performed for all other arrays.
 
+.. py:function:: rplus_jacobian_parameters_wrt_delta(transform)
 
-.. function:: rplus_jacobian_parameters_wrt_delta(transform)
-
+   
    Analytical Jacobians for ``jaxlie.manifold.rplus()``\ , linearized around a zero
    local delta.
 
@@ -93,5 +91,4 @@ Attributes
    :param transform: Transform to linearize around.
 
    :returns: Jacobian. Shape should be ``(Group.parameters_dim, Group.tangent_dim)``.
-
 

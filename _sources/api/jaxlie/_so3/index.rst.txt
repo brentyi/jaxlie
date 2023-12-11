@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie._so3`
-==================
+:py:mod:`jaxlie._so3`
+=====================
 
 .. py:module:: jaxlie._so3
 
@@ -14,68 +14,69 @@ Classes
 
 .. autoapisummary::
 
-   jaxlie._so3.SO3
+   jaxlie.SO3
 
 
 
 
-.. class:: SO3(parameters)
+.. py:class:: SO3(parameters)
 
 
    Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
 
-   .. autoapi-inheritance-diagram:: jaxlie._so3.SO3
+   .. autoapi-inheritance-diagram:: jaxlie.SO3
       :parts: 1
 
+   
    Special orthogonal group for 3D rotations.
 
    Internal parameterization is ``(qw, qx, qy, qz)``. Tangent parameterization is
    ``(omega_x, omega_y, omega_z)``.
+   .. py:attribute:: wxyz
+      :type: typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
 
-   .. attribute:: wxyz
-      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
-
+      
       Internal parameters. ``(w, x, y, z)`` quaternion.
 
+   .. py:method:: __repr__()
 
-   .. method:: __repr__(self)
-
+      
       Return repr(self).
 
-
-   .. method:: from_x_radians(theta)
+   .. py:method:: from_x_radians(theta)
       :staticmethod:
 
+      
       Generates a x-axis rotation.
 
       :param angle: X rotation, in radians.
 
       :returns: Output.
 
-
-   .. method:: from_y_radians(theta)
+   .. py:method:: from_y_radians(theta)
       :staticmethod:
 
+      
       Generates a y-axis rotation.
 
       :param angle: Y rotation, in radians.
 
       :returns: Output.
 
-
-   .. method:: from_z_radians(theta)
+   .. py:method:: from_z_radians(theta)
       :staticmethod:
 
+      
       Generates a z-axis rotation.
 
       :param angle: Z rotation, in radians.
 
       :returns: Output.
 
-
-   .. method:: from_rpy_radians(roll, pitch, yaw)
+   .. py:method:: from_rpy_radians(roll, pitch, yaw)
       :staticmethod:
 
+      
       Generates a transform from a set of Euler angles. Uses the ZYX mobile robot
       convention.
 
@@ -85,10 +86,10 @@ Classes
 
       :returns: Output.
 
-
-   .. method:: from_quaternion_xyzw(xyzw)
+   .. py:method:: from_quaternion_xyzw(xyzw)
       :staticmethod:
 
+      
       Construct a rotation from an ``xyzw`` quaternion.
 
       Note that ``wxyz`` quaternions can be constructed using the default dataclass
@@ -98,103 +99,103 @@ Classes
 
       :returns: Output.
 
+   .. py:method:: as_quaternion_xyzw()
 
-   .. method:: as_quaternion_xyzw(self)
-
+      
       Grab parameters as xyzw quaternion.
 
+   .. py:method:: as_rpy_radians()
 
-   .. method:: as_rpy_radians(self)
-
+      
       Computes roll, pitch, and yaw angles. Uses the ZYX mobile robot convention.
 
       :returns: Named tuple containing Euler angles in radians.
 
+   .. py:method:: compute_roll_radians()
 
-   .. method:: compute_roll_radians(self)
-
+      
       Compute roll angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
+   .. py:method:: compute_pitch_radians()
 
-   .. method:: compute_pitch_radians(self)
-
+      
       Compute pitch angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
+   .. py:method:: compute_yaw_radians()
 
-   .. method:: compute_yaw_radians(self)
-
+      
       Compute yaw angle. Uses the ZYX mobile robot convention.
 
       :returns: Euler angle in radians.
 
-
-   .. method:: identity()
+   .. py:method:: identity()
       :staticmethod:
 
+      
       Returns identity element.
 
       :returns: Identity element.
 
-
-   .. method:: from_matrix(matrix)
+   .. py:method:: from_matrix(matrix)
       :staticmethod:
 
+      
       Get group member from matrix representation.
 
       :param matrix: Matrix representaiton.
 
       :returns: Group member.
 
+   .. py:method:: as_matrix()
 
-   .. method:: as_matrix(self)
-
+      
       Get transformation as a matrix. Homogeneous for SE groups.
 
+   .. py:method:: parameters()
 
-   .. method:: parameters(self)
-
+      
       Get underlying representation.
 
+   .. py:method:: apply(target)
 
-   .. method:: apply(self, target)
-
+      
       Applies group action to a point.
 
       :param target: Point to transform.
 
       :returns: Transformed point.
 
+   .. py:method:: multiply(other)
 
-   .. method:: multiply(self, other)
-
+      
       Composes this transformation with another.
 
       :returns: self @ other
 
-
-   .. method:: exp(tangent)
+   .. py:method:: exp(tangent)
       :staticmethod:
 
+      
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Tangent vector to take the exponential of.
 
       :returns: Output.
 
+   .. py:method:: log()
 
-   .. method:: log(self)
-
+      
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
+   .. py:method:: adjoint()
 
-   .. method:: adjoint(self)
-
+      
       Computes the adjoint, which transforms tangent vectors between tangent
       spaces.
 
@@ -209,30 +210,29 @@ Classes
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
+   .. py:method:: inverse()
 
-   .. method:: inverse(self)
-
+      
       Computes the inverse of our transform.
 
       :returns: Output.
 
+   .. py:method:: normalize()
 
-   .. method:: normalize(self)
-
+      
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
-
-   .. method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key)
       :staticmethod:
 
+      
       Draw a uniform sample from the group. Translations (if applicable) are in the
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
       :returns: Sampled group member.
-
 
 

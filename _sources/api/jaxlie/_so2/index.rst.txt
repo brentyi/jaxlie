@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`jaxlie._so2`
-==================
+:py:mod:`jaxlie._so2`
+=====================
 
 .. py:module:: jaxlie._so2
 
@@ -14,108 +14,109 @@ Classes
 
 .. autoapisummary::
 
-   jaxlie._so2.SO2
+   jaxlie.SO2
 
 
 
 
-.. class:: SO2(parameters)
+.. py:class:: SO2(parameters)
 
 
    Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
 
-   .. autoapi-inheritance-diagram:: jaxlie._so2.SO2
+   .. autoapi-inheritance-diagram:: jaxlie.SO2
       :parts: 1
 
+   
    Special orthogonal group for 2D rotations.
 
    Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
+   .. py:attribute:: unit_complex
+      :type: typing_extensions.Annotated[jax.Array, (Ellipsis, 2), jax.numpy.floating]
 
-   .. attribute:: unit_complex
-      :annotation: :typing_extensions.Annotated[jax.Array, (Ellipsis, 2), jax.numpy.floating]
-
+      
       Internal parameters. ``(cos, sin)``.
 
+   .. py:method:: __repr__()
 
-   .. method:: __repr__(self)
-
+      
       Return repr(self).
 
-
-   .. method:: from_radians(theta)
+   .. py:method:: from_radians(theta)
       :staticmethod:
 
+      
       Construct a rotation object from a scalar angle.
 
+   .. py:method:: as_radians()
 
-   .. method:: as_radians(self)
-
+      
       Compute a scalar angle from a rotation object.
 
-
-   .. method:: identity()
+   .. py:method:: identity()
       :staticmethod:
 
+      
       Returns identity element.
 
       :returns: Identity element.
 
-
-   .. method:: from_matrix(matrix)
+   .. py:method:: from_matrix(matrix)
       :staticmethod:
 
+      
       Get group member from matrix representation.
 
       :param matrix: Matrix representaiton.
 
       :returns: Group member.
 
+   .. py:method:: as_matrix()
 
-   .. method:: as_matrix(self)
-
+      
       Get transformation as a matrix. Homogeneous for SE groups.
 
+   .. py:method:: parameters()
 
-   .. method:: parameters(self)
-
+      
       Get underlying representation.
 
+   .. py:method:: apply(target)
 
-   .. method:: apply(self, target)
-
+      
       Applies group action to a point.
 
       :param target: Point to transform.
 
       :returns: Transformed point.
 
+   .. py:method:: multiply(other)
 
-   .. method:: multiply(self, other)
-
+      
       Composes this transformation with another.
 
       :returns: self @ other
 
-
-   .. method:: exp(tangent)
+   .. py:method:: exp(tangent)
       :staticmethod:
 
+      
       Computes ``expm(wedge(tangent))``.
 
       :param tangent: Tangent vector to take the exponential of.
 
       :returns: Output.
 
+   .. py:method:: log()
 
-   .. method:: log(self)
-
+      
       Computes ``vee(logm(transformation matrix))``.
 
       :returns: Output. Shape should be ``(tangent_dim,)``.
 
+   .. py:method:: adjoint()
 
-   .. method:: adjoint(self)
-
+      
       Computes the adjoint, which transforms tangent vectors between tangent
       spaces.
 
@@ -130,30 +131,29 @@ Classes
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
+   .. py:method:: inverse()
 
-   .. method:: inverse(self)
-
+      
       Computes the inverse of our transform.
 
       :returns: Output.
 
+   .. py:method:: normalize()
 
-   .. method:: normalize(self)
-
+      
       Normalize/projects values and returns.
 
       :returns: *GroupType* -- Normalized group member.
 
-
-   .. method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key)
       :staticmethod:
 
+      
       Draw a uniform sample from the group. Translations (if applicable) are in the
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
 
       :returns: Sampled group member.
-
 
 
