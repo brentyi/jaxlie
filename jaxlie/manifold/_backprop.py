@@ -72,7 +72,15 @@ def grad(
         allow_int=allow_int,
         reduce_axes=reduce_axes,
     )
-    return lambda *args, **kwargs: compute_value_and_grad(*args, **kwargs)[1]  # type: ignore
+
+    def grad_fun(*args, **kwargs):
+        ret = compute_value_and_grad(*args, **kwargs)
+        if has_aux:
+            return ret[1], ret[0][1]
+        else:
+            return ret[1]
+
+    return grad_fun
 
 
 @overload
@@ -121,7 +129,7 @@ def value_and_grad(
         tangent_args = map(zero_tangents, args)
         tangent_kwargs = {k: zero_tangents(v) for k, v in kwargs.items()}
 
-        value, grad = jax.value_and_grad(
+        return jax.value_and_grad(
             fun=tangent_fun,
             argnums=argnums,
             has_aux=has_aux,
@@ -129,6 +137,5 @@ def value_and_grad(
             allow_int=allow_int,
             reduce_axes=reduce_axes,
         )(*tangent_args, **tangent_kwargs)
-        return value, grad
 
     return wrapped_grad  # type: ignore
