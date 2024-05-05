@@ -402,7 +402,7 @@ class SO3(_base.SOBase):
             ),
         )
 
-        return atan_factor * self.wxyz[..., 1:]
+        return atan_factor[..., None] * self.wxyz[..., 1:]
 
     @override
     def adjoint(self) -> jax.Array:

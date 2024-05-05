@@ -72,9 +72,11 @@ def broadcast_leading_axes(inputs: TupleOfBroadcastable) -> TupleOfBroadcastable
     from .._base import MatrixLieGroup
 
     array_inputs = [
-        (x.parameters(), (x.parameters_dim,))
-        if isinstance(x, MatrixLieGroup)
-        else (x, x.shape[-1:])
+        (
+            (x.parameters(), (x.parameters_dim,))
+            if isinstance(x, MatrixLieGroup)
+            else (x, x.shape[-1:])
+        )
         for x in inputs
     ]
     for array, shape_suffix in array_inputs:

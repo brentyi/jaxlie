@@ -180,7 +180,7 @@ class SE3(_base.SEBase[SO3]):
         half_theta_safe = theta_safe / 2.0
 
         V_inv = jnp.where(
-            use_taylor,
+            use_taylor[..., None, None],
             jnp.eye(3)
             - 0.5 * skew_omega
             + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
@@ -188,13 +188,15 @@ class SE3(_base.SEBase[SO3]):
                 jnp.eye(3)
                 - 0.5 * skew_omega
                 + (
-                    1.0
-                    - theta_safe
-                    * jnp.cos(half_theta_safe)
-                    / (2.0 * jnp.sin(half_theta_safe))
-                )
-                / theta_squared_safe
-                * (skew_omega @ skew_omega)
+                    (
+                        1.0
+                        - theta_safe
+                        * jnp.cos(half_theta_safe)
+                        / (2.0 * jnp.sin(half_theta_safe))
+                    )
+                    / theta_squared_safe
+                )[..., None, None]
+                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
             ),
         )
         return jnp.concatenate(

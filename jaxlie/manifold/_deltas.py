@@ -16,29 +16,8 @@ from . import _tree_utils
 
 PytreeType = TypeVar("PytreeType")
 GroupType = TypeVar("GroupType", bound=MatrixLieGroup)
-CallableType = TypeVar("CallableType", bound=Callable)
 
 
-def _naive_auto_vmap(f: CallableType) -> CallableType:
-    def inner(*args, **kwargs):
-        batch_axes = None
-        for arg in args + tuple(kwargs.values()):
-            if isinstance(arg, MatrixLieGroup):
-                if batch_axes is None:
-                    batch_axes = arg.get_batch_axes()
-                else:
-                    assert arg.get_batch_axes() == batch_axes
-        assert batch_axes is not None
-
-        f_vmapped: Callable = f
-        for i in range(len(batch_axes)):
-            f_vmapped = jax.vmap(f_vmapped)
-        return f_vmapped(*args, **kwargs)
-
-    return inner  # type: ignore
-
-
-@_naive_auto_vmap
 def _rplus(transform: GroupType, delta: jax.Array) -> GroupType:
     assert isinstance(transform, MatrixLieGroup)
     assert isinstance(delta, (jax.Array, onp.ndarray))
@@ -72,7 +51,6 @@ def rplus(
     return _tree_utils._map_group_trees(_rplus, jnp.add, transform, delta)
 
 
-@_naive_auto_vmap
 def _rminus(a: GroupType, b: GroupType) -> jax.Array:
     assert isinstance(a, MatrixLieGroup) and isinstance(b, MatrixLieGroup)
     return (a.inverse() @ b).log()
