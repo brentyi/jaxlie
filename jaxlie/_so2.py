@@ -50,7 +50,7 @@ class SO2(_base.SOBase):
 
     @classmethod
     @override
-    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> SO2:
+    def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SO2:
         return SO2(
             unit_complex=jnp.stack(
                 [jnp.ones(batch_axes), jnp.zeros(batch_axes)], axis=-1
@@ -60,7 +60,7 @@ class SO2(_base.SOBase):
     @classmethod
     @override
     def from_matrix(cls, matrix: hints.Array) -> SO2:
-        assert matrix.shape == (2, 2)
+        assert matrix.shape[-2:] == (2, 2)
         return SO2(unit_complex=jnp.asarray(matrix[..., :, 0]))
 
     # Accessors.
@@ -130,7 +130,7 @@ class SO2(_base.SOBase):
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> SO2:
+    def sample_uniform(cls, key: jax.Array, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SO2:
         out = SO2.from_radians(
             jax.random.uniform(
                 key=key, shape=batch_axes, minval=0.0, maxval=2.0 * jnp.pi

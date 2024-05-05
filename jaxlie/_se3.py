@@ -16,8 +16,9 @@ def _skew(omega: hints.Array) -> jax.Array:
     """Returns the skew-symmetric form of a length-3 vector."""
 
     wx, wy, wz = jnp.moveaxis(omega, -1, 0)
+    zeros = jnp.zeros_like(wx)
     return jnp.stack(
-        [0.0, -wz, wy, wz, 0.0, -wx, -wy, wx, 0.0],
+        [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
         axis=-1,
     ).reshape((*omega.shape[:-1], 3, 3))
 
@@ -71,7 +72,7 @@ class SE3(_base.SEBase[SO3]):
 
     @classmethod
     @override
-    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> SE3:
+    def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SE3:
         return SE3(
             wxyz_xyz=jnp.broadcast_to(
                 jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), (*batch_axes, 7)
@@ -92,13 +93,16 @@ class SE3(_base.SEBase[SO3]):
 
     @override
     def as_matrix(self) -> jax.Array:
-        return (
-            jnp.eye(4)
-            .at[..., :3, :3]
+        out = jnp.zeros((*self.get_batch_axes(), 4, 4))
+        out = (
+            out.at[..., :3, :3]
             .set(self.rotation().as_matrix())
             .at[..., :3, 3]
             .set(self.translation())
+            .at[..., 3, 3]
+            .set(1.0)
         )
+        return out
 
     @override
     def parameters(self) -> jax.Array:
@@ -117,7 +121,7 @@ class SE3(_base.SEBase[SO3]):
 
         rotation = SO3.exp(tangent[..., 3:])
 
-        theta_squared = jnp.sum(jnp.square(tangent[3:]), axis=-1)
+        theta_squared = jnp.sum(jnp.square(tangent[..., 3:]), axis=-1)
         use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
@@ -191,7 +195,7 @@ class SE3(_base.SEBase[SO3]):
             ),
         )
         return jnp.concatenate(
-            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), omega]
+            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), omega], axis=-1
         )
 
     @override
@@ -207,12 +211,14 @@ class SE3(_base.SEBase[SO3]):
                     [jnp.zeros((*self.get_batch_axes(), 3, 3)), R], axis=-1
                 ),
             ],
-            axis=-1,
+            axis=-2,
         )
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> SE3:
+    def sample_uniform(
+        cls, key: jax.Array, batch_axes: jdc.Static[Tuple[int, ...]] = ()
+    ) -> SE3:
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
             rotation=SO3.sample_uniform(key0, batch_axes=batch_axes),

@@ -103,17 +103,17 @@ class SO3(_base.SOBase):
         constructor.
 
         Args:
-            xyzw: xyzw quaternion. Shape should be (4,).
+            xyzw: xyzw quaternion. Shape should be (*, 4).
 
         Returns:
             Output.
         """
-        assert xyzw.shape == (4,)
-        return SO3(jnp.roll(xyzw, shift=1))
+        assert xyzw.shape[-1:] == (4,)
+        return SO3(jnp.roll(xyzw, axis=-1, shift=1))
 
     def as_quaternion_xyzw(self) -> jax.Array:
         """Grab parameters as xyzw quaternion."""
-        return jnp.roll(self.wxyz, shift=-1)
+        return jnp.roll(self.wxyz, axis=-1, shift=-1)
 
     def as_rpy_radians(self) -> hints.RollPitchYaw:
         """Computes roll, pitch, and yaw angles. Uses the ZYX mobile robot convention.
@@ -161,7 +161,7 @@ class SO3(_base.SOBase):
 
     @classmethod
     @override
-    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> SO3:
+    def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SO3:
         return SO3(
             wxyz=jnp.broadcast_to(jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4))
         )
@@ -363,7 +363,8 @@ class SO3(_base.SOBase):
                 [
                     real_factor[..., None],
                     imaginary_factor[..., None] * tangent,
-                ]
+                ],
+                axis=-1,
             )
         )
 
@@ -373,7 +374,7 @@ class SO3(_base.SOBase):
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L247
 
         w = self.wxyz[..., 0]
-        norm_sq = self.wxyz[..., 1:] @ self.wxyz[..., 1:]
+        norm_sq = jnp.sum(jnp.square(self.wxyz[..., 1:]), axis=-1)
         use_taylor = norm_sq < get_epsilon(norm_sq.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
@@ -400,7 +401,7 @@ class SO3(_base.SOBase):
             ),
         )
 
-        return atan_factor * self.wxyz[1:]
+        return atan_factor * self.wxyz[..., 1:]
 
     @override
     def adjoint(self) -> jax.Array:
@@ -417,14 +418,20 @@ class SO3(_base.SOBase):
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> SO3:
+    def sample_uniform(
+        cls, key: jax.Array, batch_axes: jdc.Static[Tuple[int, ...]] = ()
+    ) -> SO3:
         # Uniformly sample over S^3.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
-        u1, u2, u3 = jax.random.uniform(
-            key=key,
-            shape=(3, *batch_axes),
-            minval=jnp.zeros(3),
-            maxval=jnp.array([1.0, 2.0 * jnp.pi, 2.0 * jnp.pi]),
+        u1, u2, u3 = jnp.moveaxis(
+            jax.random.uniform(
+                key=key,
+                shape=(*batch_axes, 3),
+                minval=jnp.zeros(3),
+                maxval=jnp.array([1.0, 2.0 * jnp.pi, 2.0 * jnp.pi]),
+            ),
+            -1,
+            0,
         )
         a = jnp.sqrt(1.0 - u1)
         b = jnp.sqrt(u1)

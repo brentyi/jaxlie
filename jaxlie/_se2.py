@@ -73,7 +73,7 @@ class SE2(_base.SEBase[SO2]):
 
     @classmethod
     @override
-    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> "SE2":
+    def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> "SE2":
         return SE2(
             unit_complex_xy=jnp.broadcast_to(
                 jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4)
@@ -99,9 +99,21 @@ class SE2(_base.SEBase[SO2]):
     @override
     def as_matrix(self) -> jax.Array:
         cos, sin, x, y = jnp.moveaxis(self.unit_complex_xy, -1, 0)
-        return jnp.stack([cos, -sin, x, sin, cos, y, 0.0, 0.0, 1.0], axis=-1).reshape(
-            (*self.get_batch_axes(), 3, 3)
-        )
+        out = jnp.stack(
+            [
+                cos,
+                -sin,
+                x,
+                sin,
+                cos,
+                y,
+                jnp.zeros_like(x),
+                jnp.zeros_like(x),
+                jnp.ones_like(x),
+            ],
+            axis=-1,
+        ).reshape((*self.get_batch_axes(), 3, 3))
+        return out
 
     # Operations.
 
@@ -205,24 +217,34 @@ class SE2(_base.SEBase[SO2]):
             [
                 jnp.einsum("...ij,...j->...i", V_inv, self.translation()),
                 theta[..., None],
-            ]
+            ],
+            axis=-1,
         )
         return tangent
 
     @override
     def adjoint(self: "SE2") -> jax.Array:
-        cos, sin, x, y = self.unit_complex_xy
-        return jnp.array(
+        cos, sin, x, y = jnp.moveaxis(self.unit_complex_xy, -1, 0)
+        return jnp.stack(
             [
-                [cos, -sin, y],
-                [sin, cos, -x],
-                [0.0, 0.0, 1.0],
-            ]
-        )
+                cos,
+                -sin,
+                y,
+                sin,
+                cos,
+                -x,
+                jnp.zeros_like(x),
+                jnp.zeros_like(x),
+                jnp.ones_like(x),
+            ],
+            axis=-1,
+        ).reshape((*self.get_batch_axes(), 3, 3))
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> "SE2":
+    def sample_uniform(
+        cls, key: jax.Array, batch_axes: jdc.Static[Tuple[int, ...]] = ()
+    ) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(
             rotation=SO2.sample_uniform(key0, batch_axes=batch_axes),

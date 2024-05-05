@@ -49,14 +49,16 @@ def _rplus(transform: GroupType, delta: jax.Array) -> GroupType:
 def rplus(
     transform: GroupType,
     delta: hints.Array,
-) -> GroupType: ...
+) -> GroupType:
+    ...
 
 
 @overload
 def rplus(
     transform: PytreeType,
     delta: _tree_utils.TangentPytree,
-) -> PytreeType: ...
+) -> PytreeType:
+    ...
 
 
 # Using our typevars in the overloaded signature will cause errors.
@@ -79,11 +81,13 @@ def _rminus(a: GroupType, b: GroupType) -> jax.Array:
 
 
 @overload
-def rminus(a: GroupType, b: GroupType) -> jax.Array: ...
+def rminus(a: GroupType, b: GroupType) -> jax.Array:
+    ...
 
 
 @overload
-def rminus(a: PytreeType, b: PytreeType) -> _tree_utils.TangentPytree: ...
+def rminus(a: PytreeType, b: PytreeType) -> _tree_utils.TangentPytree:
+    ...
 
 
 # Using our typevars in the overloaded signature will cause errors.
@@ -129,23 +133,23 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
         # Jacobian col indices: theta
 
         transform_so2 = cast(SO2, transform)
-        J = jnp.zeros((2, 1))
+        J = jnp.zeros((*transform.get_batch_axes(), 2, 1))
 
-        cos, sin = transform_so2.unit_complex
-        J = J.at[0].set(-sin).at[1].set(cos)
+        cos, sin = jnp.moveaxis(transform_so2.unit_complex, -1, 0)
+        J = J.at[..., 0].set(-sin).at[..., 1].set(cos)
 
     elif type(transform) is SE2:
         # Jacobian row indices: cos, sin, x, y
         # Jacobian col indices: vx, vy, omega
 
         transform_se2 = cast(SE2, transform)
-        J = jnp.zeros((4, 3))
+        J = jnp.zeros((*transform.get_batch_axes(), 4, 3))
 
         # Translation terms.
-        J = J.at[2:, :2].set(transform_se2.rotation().as_matrix())
+        J = J.at[..., 2:, :2].set(transform_se2.rotation().as_matrix())
 
         # Rotation terms.
-        J = J.at[:2, 2:3].set(
+        J = J.at[..., :2, 2:3].set(
             rplus_jacobian_parameters_wrt_delta(transform_se2.rotation())
         )
 
@@ -155,18 +159,29 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
 
         transform_so3 = cast(SO3, transform)
 
-        w, x, y, z = transform_so3.wxyz
-        _unused_neg_w, neg_x, neg_y, neg_z = -transform_so3.wxyz
+        w, x, y, z = jnp.moveaxis(transform_so3.wxyz, -1, 0)
+        neg_x = -x
+        neg_y = -y
+        neg_z = -z
 
         J = (
-            jnp.array(
+            jnp.stack(
                 [
-                    [neg_x, neg_y, neg_z],
-                    [w, neg_z, y],
-                    [z, w, neg_x],
-                    [neg_y, x, w],
-                ]
-            )
+                    neg_x,
+                    neg_y,
+                    neg_z,
+                    w,
+                    neg_z,
+                    y,
+                    z,
+                    w,
+                    neg_x,
+                    neg_y,
+                    x,
+                    w,
+                ],
+                axis=-1,
+            ).reshape((*transform.get_batch_axes(), 4, 3))
             / 2.0
         )
 
@@ -175,18 +190,22 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
         # Jacobian col indices: vx, vy, vz, omega x, omega y, omega z
 
         transform_se3 = cast(SE3, transform)
-        J = jnp.zeros((7, 6))
+        J = jnp.zeros((*transform.get_batch_axes(), 7, 6))
 
         # Translation terms.
-        J = J.at[4:, :3].set(transform_se3.rotation().as_matrix())
+        J = J.at[..., 4:, :3].set(transform_se3.rotation().as_matrix())
 
         # Rotation terms.
-        J = J.at[:4, 3:6].set(
+        J = J.at[..., :4, 3:6].set(
             rplus_jacobian_parameters_wrt_delta(transform_se3.rotation())
         )
 
     else:
         assert False, f"Unsupported type: {type(transform)}"
 
-    assert J.shape == (transform.parameters_dim, transform.tangent_dim)
+    assert J.shape == (
+        *transform.get_batch_axes(),
+        transform.parameters_dim,
+        transform.tangent_dim,
+    )
     return J

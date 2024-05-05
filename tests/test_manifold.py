@@ -1,12 +1,14 @@
 """Test manifold helpers."""
 
-from typing import Type
+from typing import Tuple, Type
 
 import jax
+import jaxlie
 import numpy as onp
 import pytest
 from jax import numpy as jnp
 from jax import tree_util
+
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
@@ -15,14 +17,12 @@ from utils import (
     sample_transform,
 )
 
-import jaxlie
-
 
 @general_group_test
-def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup]):
+def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check rplus and rminus on random inputs."""
-    T_wa = sample_transform(Group)
-    T_wb = sample_transform(Group)
+    T_wa = sample_transform(Group, batch_axes)
+    T_wb = sample_transform(Group, batch_axes)
     T_ab = T_wa.inverse() @ T_wb
 
     assert_transforms_close(jaxlie.manifold.rplus(T_wa, T_ab.log()), T_wb)
@@ -30,14 +30,24 @@ def test_rplus_rminus(Group: Type[jaxlie.MatrixLieGroup]):
 
 
 @general_group_test
-def test_rplus_jacobian(Group: Type[jaxlie.MatrixLieGroup]):
+def test_rplus_jacobian(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check analytical rplus Jacobian.."""
-    T_wa = sample_transform(Group)
+    T_wa = sample_transform(Group, batch_axes)
 
     J_ours = jaxlie.manifold.rplus_jacobian_parameters_wrt_delta(T_wa)
-    J_jacfwd = _rplus_jacobian_parameters_wrt_delta(T_wa)
 
-    assert_arrays_close(J_ours, J_jacfwd)
+    if batch_axes == ():
+        J_jacfwd = _rplus_jacobian_parameters_wrt_delta(T_wa)
+        assert_arrays_close(J_ours, J_jacfwd)
+    else:
+        # Batch axes should match vmap.
+        jacfunc = jaxlie.manifold.rplus_jacobian_parameters_wrt_delta
+        for _ in batch_axes:
+            jacfunc = jax.vmap(jacfunc)
+        J_vmap = jacfunc(T_wa)
+        assert_arrays_close(J_ours, J_vmap)
 
 
 @jax.jit
@@ -51,11 +61,11 @@ def _rplus_jacobian_parameters_wrt_delta(
 
 
 @general_group_test_faster
-def test_sgd(Group: Type[jaxlie.MatrixLieGroup]):
+def test_sgd(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     def loss(transform: jaxlie.MatrixLieGroup):
         return (transform.log() ** 2).sum()
 
-    transform = Group.exp(sample_transform(Group).log())
+    transform = Group.exp(sample_transform(Group, batch_axes).log())
     original_loss = loss(transform)
 
     @jax.jit
