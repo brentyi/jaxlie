@@ -20,6 +20,7 @@ setup(
         "jax>=0.3.18",  # For jax.Array.
         "jax_dataclasses>=1.4.4",
         "numpy",
+        "typing_extensions>=4.0.0",
         "tyro",  # Only used in examples.
     ],
     extras_require={
