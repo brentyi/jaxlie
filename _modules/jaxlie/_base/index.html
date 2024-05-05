@@ -126,12 +126,10 @@
     <span class="c1"># Shared implementations.</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
-        <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
-        <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span> <span class="o">...</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.__matmul__">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.__matmul__">[docs]</a>
