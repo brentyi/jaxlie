@@ -22,7 +22,7 @@ def test_sample_uniform_valid(
 ):
     """Check that sample_uniform() returns valid group members."""
     T = sample_transform(Group, batch_axes)  # Calls sample_uniform under the hood.
-    # assert_transforms_close(T, T.normalize())
+    assert_transforms_close(T, T.normalize())
 
 
 @settings(deadline=None)

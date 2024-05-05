@@ -3,14 +3,13 @@ import random
 from typing import Any, Callable, List, Tuple, Type, TypeVar, cast
 
 import jax
+import jaxlie
 import numpy as onp
 import pytest
 import scipy.optimize
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
-
-import jaxlie
 
 # Run all tests with double-precision.
 jax.config.update("jax_enable_x64", True)
@@ -45,7 +44,7 @@ def sample_transform(Group: Type[T], batch_axes: Tuple[int, ...] = ()) -> T:
 
 def general_group_test(
     f: Callable[[Type[jaxlie.MatrixLieGroup], Tuple[int, ...]], None],
-    max_examples: int = 10,
+    max_examples: int = 30,
 ) -> Callable[[Type[jaxlie.MatrixLieGroup], Tuple[int, ...], Any], None]:
     """Decorator for defining tests that run on all group types."""
 
@@ -78,6 +77,7 @@ def general_group_test(
         [
             (),
             (1,),
+            (3, 1, 2, 1),
         ],
     )(f_wrapped)
     return f_wrapped
@@ -96,11 +96,11 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
     p1 = jnp.asarray(a.parameters())
     p2 = jnp.asarray(b.parameters())
     if isinstance(a, jaxlie.SO3):
-        p1 = p1 * jnp.sign(jnp.sum(p1, axis=-1))
-        p2 = p2 * jnp.sign(jnp.sum(p2, axis=-1))
+        p1 = p1 * jnp.sign(jnp.sum(p1, axis=-1, keepdims=True))
+        p2 = p2 * jnp.sign(jnp.sum(p2, axis=-1, keepdims=True))
     elif isinstance(a, jaxlie.SE3):
-        p1 = p1.at[..., :4].mul(jnp.sign(jnp.sum(p1[..., :4], axis=-1)))
-        p2 = p2.at[..., :4].mul(jnp.sign(jnp.sum(p2[..., :4], axis=-1)))
+        p1 = p1.at[..., :4].mul(jnp.sign(jnp.sum(p1[..., :4], axis=-1, keepdims=True)))
+        p2 = p2.at[..., :4].mul(jnp.sign(jnp.sum(p2[..., :4], axis=-1, keepdims=True)))
 
     # Make sure parameters are equal.
     assert_arrays_close(p1, p2)

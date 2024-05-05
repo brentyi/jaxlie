@@ -8,7 +8,7 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from .utils import register_lie_group
+from .utils import register_lie_group, broadcast_leading_axes
 
 
 @register_lie_group(
@@ -88,7 +88,8 @@ class SO2(_base.SOBase):
 
     @override
     def apply(self, target: hints.Array) -> jax.Array:
-        assert target.shape == (*self.get_batch_axes(), 2)
+        assert target.shape[-1:] == (2,)
+        self, target = broadcast_leading_axes((self, target))
         return jnp.einsum("...ij,...j->...i", self.as_matrix(), target)
 
     @override

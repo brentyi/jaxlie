@@ -8,7 +8,7 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from .utils import get_epsilon, register_lie_group
+from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
 @register_lie_group(
@@ -299,7 +299,8 @@ class SO3(_base.SOBase):
 
     @override
     def apply(self, target: hints.Array) -> jax.Array:
-        assert target.shape == (*self.get_batch_axes(), 3)
+        assert target.shape[-1:] == (3,)
+        self, target = broadcast_leading_axes((self, target))
 
         # Compute using quaternion multiplys.
         padded_target = jnp.concatenate(

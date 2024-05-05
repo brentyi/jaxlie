@@ -139,13 +139,16 @@ class SE3(_base.SEBase[SO3]):
 
         skew_omega = _skew(tangent[..., 3:])
         V = jnp.where(
-            use_taylor,
+            use_taylor[..., None, None],
             rotation.as_matrix(),
             (
                 jnp.eye(3)
-                + (1.0 - jnp.cos(theta_safe)) / (theta_squared_safe) * skew_omega
-                + (theta_safe - jnp.sin(theta_safe))
-                / (theta_squared_safe * theta_safe)
+                + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
+                * skew_omega
+                + (
+                    (theta_safe - jnp.sin(theta_safe))
+                    / (theta_squared_safe * theta_safe)
+                )[..., None, None]
                 * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
             ),
         )
