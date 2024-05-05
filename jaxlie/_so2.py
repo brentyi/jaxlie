@@ -50,14 +50,14 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     # Factory.
 
-    @staticmethod
+    @classmethod
     @override
-    def identity() -> SO2:
+    def identity(cls) -> SO2:
         return SO2(unit_complex=jnp.array([1.0, 0.0]))
 
-    @staticmethod
+    @classmethod
     @override
-    def from_matrix(matrix: hints.Array) -> SO2:
+    def from_matrix(cls, matrix: hints.Array) -> SO2:
         assert matrix.shape == (2, 2)
         return SO2(unit_complex=jnp.asarray(matrix[:, 0]))
 
@@ -92,9 +92,9 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     def multiply(self, other: SO2) -> SO2:
         return SO2(unit_complex=self.as_matrix() @ other.unit_complex)
 
-    @staticmethod
+    @classmethod
     @override
-    def exp(tangent: hints.Array) -> SO2:
+    def exp(cls, tangent: hints.Array) -> SO2:
         (theta,) = tangent
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
@@ -118,9 +118,9 @@ class SO2(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     def normalize(self) -> SO2:
         return SO2(unit_complex=self.unit_complex / jnp.linalg.norm(self.unit_complex))
 
-    @staticmethod
+    @classmethod
     @override
-    def sample_uniform(key: jax.Array) -> SO2:
+    def sample_uniform(cls, key: jax.Array) -> SO2:
         return SO2.from_radians(
             jax.random.uniform(key=key, minval=0.0, maxval=2.0 * jnp.pi)
         )

@@ -3,12 +3,9 @@ from typing import ClassVar, Generic, Tuple, Type, TypeVar, Union, overload
 
 import jax
 import numpy as onp
-from typing_extensions import final, override
+from typing_extensions import Self, final, override
 
 from . import hints
-
-GroupType = TypeVar("GroupType", bound="MatrixLieGroup")
-SEGroupType = TypeVar("SEGroupType", bound="SEBase")
 
 
 class MatrixLieGroup(abc.ABC):
@@ -44,14 +41,12 @@ class MatrixLieGroup(abc.ABC):
     # Shared implementations.
 
     @overload
-    def __matmul__(self: GroupType, other: GroupType) -> GroupType: ...
+    def __matmul__(self, other: Self) -> Self: ...
 
     @overload
     def __matmul__(self, other: hints.Array) -> jax.Array: ...
 
-    def __matmul__(
-        self: GroupType, other: Union[GroupType, hints.Array]
-    ) -> Union[GroupType, jax.Array]:
+    def __matmul__(self, other: Union[Self, hints.Array]) -> Union[Self, jax.Array]:
         """Overload for the `@` operator.
 
         Switches between the group action (`.apply()`) and multiplication
@@ -69,7 +64,7 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def identity(cls: Type[GroupType]) -> GroupType:
+    def identity(cls) -> Self:
         """Returns identity element.
 
         Returns:
@@ -78,7 +73,7 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def from_matrix(cls: Type[GroupType], matrix: hints.Array) -> GroupType:
+    def from_matrix(cls, matrix: hints.Array) -> Self:
         """Get group member from matrix representation.
 
         Args:
@@ -112,7 +107,7 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def multiply(self: GroupType, other: GroupType) -> GroupType:
+    def multiply(self, other: Self) -> Self:
         """Composes this transformation with another.
 
         Returns:
@@ -121,7 +116,7 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def exp(cls: Type[GroupType], tangent: hints.Array) -> GroupType:
+    def exp(cls, tangent: hints.Array) -> Self:
         """Computes `expm(wedge(tangent))`.
 
         Args:
@@ -157,7 +152,7 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def inverse(self: GroupType) -> GroupType:
+    def inverse(self) -> Self:
         """Computes the inverse of our transform.
 
         Returns:
@@ -165,16 +160,16 @@ class MatrixLieGroup(abc.ABC):
         """
 
     @abc.abstractmethod
-    def normalize(self: GroupType) -> GroupType:
+    def normalize(self) -> Self:
         """Normalize/projects values and returns.
 
         Returns:
-            GroupType: Normalized group member.
+            Normalized group member.
         """
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls: Type[GroupType], key: jax.Array) -> GroupType:
+    def sample_uniform(cls, key: jax.Array) -> Self:
         """Draw a uniform sample from the group. Translations (if applicable) are in the
         range [-1, 1].
 
@@ -213,10 +208,10 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     @classmethod
     @abc.abstractmethod
     def from_rotation_and_translation(
-        cls: Type[SEGroupType],
+        cls,
         rotation: ContainedSOType,
         translation: hints.Array,
-    ) -> SEGroupType:
+    ) -> Self:
         """Construct a rigid transform from a rotation and a translation.
 
         Args:
@@ -229,7 +224,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
 
     @final
     @classmethod
-    def from_rotation(cls: Type[SEGroupType], rotation: ContainedSOType) -> SEGroupType:
+    def from_rotation(cls, rotation: ContainedSOType) -> Self:
         return cls.from_rotation_and_translation(
             rotation=rotation,
             translation=onp.zeros(cls.space_dim, dtype=rotation.parameters().dtype),
@@ -252,7 +247,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
 
     @final
     @override
-    def multiply(self: SEGroupType, other: SEGroupType) -> SEGroupType:
+    def multiply(self, other: Self) -> Self:
         return type(self).from_rotation_and_translation(
             rotation=self.rotation() @ other.rotation(),
             translation=(self.rotation() @ other.translation()) + self.translation(),
@@ -260,7 +255,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
 
     @final
     @override
-    def inverse(self: SEGroupType) -> SEGroupType:
+    def inverse(self) -> Self:
         R_inv = self.rotation().inverse()
         return type(self).from_rotation_and_translation(
             rotation=R_inv,
@@ -269,7 +264,7 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
 
     @final
     @override
-    def normalize(self: SEGroupType) -> SEGroupType:
+    def normalize(self) -> Self:
         return type(self).from_rotation_and_translation(
             rotation=self.rotation().normalize(),
             translation=self.translation(),
