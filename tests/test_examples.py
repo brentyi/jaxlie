@@ -1,7 +1,6 @@
 """Tests with explicit examples."""
 
 import numpy as onp
-import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from utils import assert_arrays_close, assert_transforms_close, sample_transform
@@ -63,16 +62,16 @@ def test_so3_xyzw_basic():
     )
 
 
-def test_so3_xyzw_dtype_error():
-    """Check that an incorrect data-type results in an AssertionError."""
-    with pytest.raises(AssertionError):
-        jaxlie.SO3(onp.array([1, 0, 0, 0])),
-
-
-def test_so3_xyzw_shape_error():
-    """Check that an incorrect shape results in an AssertionError."""
-    with pytest.raises(AssertionError):
-        jaxlie.SO3(onp.array([1.0, 0.0, 0.0, 0.0, 0.0]))
+# def test_so3_xyzw_dtype_error():
+#     """Check that an incorrect data-type results in an AssertionError."""
+#     with pytest.raises(AssertionError):
+#         jaxlie.SO3(onp.array([1, 0, 0, 0])),
+#
+#
+# def test_so3_xyzw_shape_error():
+#     """Check that an incorrect shape results in an AssertionError."""
+#     with pytest.raises(AssertionError):
+#         jaxlie.SO3(onp.array([1.0, 0.0, 0.0, 0.0, 0.0]))
 
 
 @settings(deadline=None)

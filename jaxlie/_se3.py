@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import cast
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
-from typing_extensions import Annotated, override
+from typing_extensions import override
 
 from . import _base, hints
 from ._so3 import SO3
@@ -15,14 +15,11 @@ from .utils import get_epsilon, register_lie_group
 def _skew(omega: hints.Array) -> jax.Array:
     """Returns the skew-symmetric form of a length-3 vector."""
 
-    wx, wy, wz = omega
-    return jnp.array(
-        [
-            [0.0, -wz, wy],
-            [wz, 0.0, -wx],
-            [-wy, wx, 0.0],
-        ]
-    )
+    wx, wy, wz = jnp.moveaxis(omega, -1, 0)
+    return jnp.stack(
+        [0.0, -wz, wy, wz, 0.0, -wx, -wy, wx, 0.0],
+        axis=-1,
+    ).reshape((*omega.shape[:-1], 3, 3))
 
 
 @register_lie_group(
@@ -32,7 +29,7 @@ def _skew(omega: hints.Array) -> jax.Array:
     space_dim=3,
 )
 @jdc.pytree_dataclass
-class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
+class SE3(_base.SEBase[SO3]):
     """Special Euclidean group for proper rigid transforms in 3D.
 
     Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization
@@ -41,12 +38,8 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     # SE3-specific.
 
-    wxyz_xyz: Annotated[
-        jax.Array,
-        (..., 7),  # Shape.
-        jnp.floating,  # Data-type.
-    ]
-    """Internal parameters. wxyz quaternion followed by xyz translation."""
+    wxyz_xyz: jax.Array
+    """Internal parameters. wxyz quaternion followed by xyz translation. Shape should be `(*, 7)`."""
 
     @override
     def __repr__(self) -> str:
@@ -63,8 +56,8 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         rotation: SO3,
         translation: hints.Array,
     ) -> SE3:
-        assert translation.shape == (3,)
-        return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation]))
+        assert translation.shape[-1:] == (3,)
+        return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation], axis=-1))
 
     @override
     def rotation(self) -> SO3:
@@ -78,17 +71,21 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
     @classmethod
     @override
-    def identity(cls) -> SE3:
-        return SE3(wxyz_xyz=jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]))
+    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> SE3:
+        return SE3(
+            wxyz_xyz=jnp.broadcast_to(
+                jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), (*batch_axes, 7)
+            )
+        )
 
     @classmethod
     @override
     def from_matrix(cls, matrix: hints.Array) -> SE3:
-        assert matrix.shape == (4, 4)
+        assert matrix.shape[-2:] == (4, 4)
         # Currently assumes bottom row is [0, 0, 0, 1].
         return SE3.from_rotation_and_translation(
-            rotation=SO3.from_matrix(matrix[:3, :3]),
-            translation=matrix[:3, 3],
+            rotation=SO3.from_matrix(matrix[..., :3, :3]),
+            translation=matrix[..., :3, 3],
         )
 
     # Accessors.
@@ -97,9 +94,9 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
     def as_matrix(self) -> jax.Array:
         return (
             jnp.eye(4)
-            .at[:3, :3]
+            .at[..., :3, :3]
             .set(self.rotation().as_matrix())
-            .at[:3, 3]
+            .at[..., :3, 3]
             .set(self.translation())
         )
 
@@ -116,11 +113,11 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L761
 
         # (x, y, z, omega_x, omega_y, omega_z)
-        assert tangent.shape == (6,)
+        assert tangent.shape[-1:] == (6,)
 
-        rotation = SO3.exp(tangent[3:])
+        rotation = SO3.exp(tangent[..., 3:])
 
-        theta_squared = tangent[3:] @ tangent[3:]
+        theta_squared = jnp.sum(jnp.square(tangent[3:]), axis=-1)
         use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
@@ -129,14 +126,14 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
             jax.Array,
             jnp.where(
                 use_taylor,
-                1.0,  # Any non-zero value should do here.
+                jnp.ones_like(theta_squared),  # Any non-zero value should do here.
                 theta_squared,
             ),
         )
         del theta_squared
         theta_safe = jnp.sqrt(theta_squared_safe)
 
-        skew_omega = _skew(tangent[3:])
+        skew_omega = _skew(tangent[..., 3:])
         V = jnp.where(
             use_taylor,
             rotation.as_matrix(),
@@ -145,13 +142,13 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
                 + (1.0 - jnp.cos(theta_safe)) / (theta_squared_safe) * skew_omega
                 + (theta_safe - jnp.sin(theta_safe))
                 / (theta_squared_safe * theta_safe)
-                * (skew_omega @ skew_omega)
+                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
             ),
         )
 
         return SE3.from_rotation_and_translation(
             rotation=rotation,
-            translation=V @ tangent[:3],
+            translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :3]),
         )
 
     @override
@@ -159,7 +156,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         omega = self.rotation().log()
-        theta_squared = omega @ omega
+        theta_squared = jnp.sum(jnp.square(omega), axis=-1)
         use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
 
         skew_omega = _skew(omega)
@@ -168,7 +165,7 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
         # reverse-mode AD.
         theta_squared_safe = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here.
+            jnp.ones_like(theta_squared),  # Any non-zero value should do here.
             theta_squared,
         )
         del theta_squared
@@ -177,7 +174,9 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
 
         V_inv = jnp.where(
             use_taylor,
-            jnp.eye(3) - 0.5 * skew_omega + (skew_omega @ skew_omega) / 12.0,
+            jnp.eye(3)
+            - 0.5 * skew_omega
+            + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
             (
                 jnp.eye(3)
                 - 0.5 * skew_omega
@@ -191,25 +190,33 @@ class SE3(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO3]):
                 * (skew_omega @ skew_omega)
             ),
         )
-        return jnp.concatenate([V_inv @ self.translation(), omega])
+        return jnp.concatenate(
+            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), omega]
+        )
 
     @override
     def adjoint(self) -> jax.Array:
         R = self.rotation().as_matrix()
-        return jnp.block(
+        return jnp.concatenate(
             [
-                [R, _skew(self.translation()) @ R],
-                [jnp.zeros((3, 3)), R],
-            ]
+                jnp.concatenate(
+                    [R, jnp.einsum("...ij,...jk->...ik", _skew(self.translation()), R)],
+                    axis=-1,
+                ),
+                jnp.concatenate(
+                    [jnp.zeros((*self.get_batch_axes(), 3, 3)), R], axis=-1
+                ),
+            ],
+            axis=-1,
         )
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array) -> SE3:
+    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> SE3:
         key0, key1 = jax.random.split(key)
         return SE3.from_rotation_and_translation(
-            rotation=SO3.sample_uniform(key0),
+            rotation=SO3.sample_uniform(key0, batch_axes=batch_axes),
             translation=jax.random.uniform(
-                key=key1, shape=(3,), minval=-1.0, maxval=1.0
+                key=key1, shape=(*batch_axes, 3), minval=-1.0, maxval=1.0
             ),
         )
