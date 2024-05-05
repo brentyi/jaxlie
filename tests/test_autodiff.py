@@ -4,11 +4,11 @@ from functools import lru_cache
 from typing import Callable, Tuple, Type, cast
 
 import jax
-import jaxlie
 import numpy as onp
 from jax import numpy as jnp
-
 from utils import assert_arrays_close, general_group_test, jacnumerical
+
+import jaxlie
 
 # We cache JITed Jacobians to improve runtime.
 cached_jacfwd = lru_cache(maxsize=None)(

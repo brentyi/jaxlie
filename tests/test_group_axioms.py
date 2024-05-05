@@ -2,17 +2,18 @@
 
 https://proofwiki.org/wiki/Definition:Group_Axioms
 """
+
 from typing import Tuple, Type
 
-import jaxlie
 import numpy as onp
-
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
     general_group_test,
     sample_transform,
 )
+
+import jaxlie
 
 
 @general_group_test
@@ -58,7 +59,9 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
     assert_transforms_close(identity, Group.multiply(transform, transform.inverse()))
     assert_transforms_close(identity, Group.multiply(transform.inverse(), transform))
     assert_arrays_close(
-        onp.broadcast_to(onp.eye(Group.matrix_dim), (*batch_axes, Group.matrix_dim, Group.matrix_dim)),
+        onp.broadcast_to(
+            onp.eye(Group.matrix_dim), (*batch_axes, Group.matrix_dim, Group.matrix_dim)
+        ),
         onp.einsum(
             "...ij,...jk->...ik",
             transform.as_matrix(),
@@ -66,7 +69,9 @@ def test_inverse(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
         ),
     )
     assert_arrays_close(
-        onp.broadcast_to(onp.eye(Group.matrix_dim), (*batch_axes, Group.matrix_dim, Group.matrix_dim)),
+        onp.broadcast_to(
+            onp.eye(Group.matrix_dim), (*batch_axes, Group.matrix_dim, Group.matrix_dim)
+        ),
         onp.einsum(
             "...ij,...jk->...ik",
             transform.inverse().as_matrix(),

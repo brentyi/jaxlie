@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING, Callable, Type, TypeVar
 
-import jax_dataclasses as jdc
 from jax import numpy as jnp
 
 if TYPE_CHECKING:

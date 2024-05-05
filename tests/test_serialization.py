@@ -4,9 +4,9 @@ disk."""
 from typing import Tuple, Type
 
 import flax.serialization
-import jaxlie
-
 from utils import assert_transforms_close, general_group_test, sample_transform
+
+import jaxlie
 
 
 @general_group_test

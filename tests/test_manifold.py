@@ -3,12 +3,10 @@
 from typing import Tuple, Type
 
 import jax
-import jaxlie
 import numpy as onp
 import pytest
 from jax import numpy as jnp
 from jax import tree_util
-
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
@@ -16,6 +14,8 @@ from utils import (
     general_group_test_faster,
     sample_transform,
 )
+
+import jaxlie
 
 
 @general_group_test

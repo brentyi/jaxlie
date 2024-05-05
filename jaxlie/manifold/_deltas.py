@@ -49,16 +49,14 @@ def _rplus(transform: GroupType, delta: jax.Array) -> GroupType:
 def rplus(
     transform: GroupType,
     delta: hints.Array,
-) -> GroupType:
-    ...
+) -> GroupType: ...
 
 
 @overload
 def rplus(
     transform: PytreeType,
     delta: _tree_utils.TangentPytree,
-) -> PytreeType:
-    ...
+) -> PytreeType: ...
 
 
 # Using our typevars in the overloaded signature will cause errors.
@@ -81,13 +79,11 @@ def _rminus(a: GroupType, b: GroupType) -> jax.Array:
 
 
 @overload
-def rminus(a: GroupType, b: GroupType) -> jax.Array:
-    ...
+def rminus(a: GroupType, b: GroupType) -> jax.Array: ...
 
 
 @overload
-def rminus(a: PytreeType, b: PytreeType) -> _tree_utils.TangentPytree:
-    ...
+def rminus(a: PytreeType, b: PytreeType) -> _tree_utils.TangentPytree: ...
 
 
 # Using our typevars in the overloaded signature will cause errors.
