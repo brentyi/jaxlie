@@ -133,7 +133,7 @@ Classes
       :returns: Euler angle in radians.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -141,7 +141,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -177,7 +177,7 @@ Classes
       :returns: self @ other
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -222,10 +222,10 @@ Classes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the

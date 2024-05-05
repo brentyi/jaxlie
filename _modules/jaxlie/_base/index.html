@@ -83,12 +83,9 @@
 
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">final</span><span class="p">,</span> <span class="n">override</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Self</span><span class="p">,</span> <span class="n">final</span><span class="p">,</span> <span class="n">override</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">hints</span>
-
-<span class="n">GroupType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;GroupType&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span>
-<span class="n">SEGroupType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;SEGroupType&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;SEBase&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="MatrixLieGroup">
@@ -126,16 +123,14 @@
     <span class="c1"># Shared implementations.</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
     <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span> <span class="o">...</span>
 
 <div class="viewcode-block" id="MatrixLieGroup.__matmul__">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.__matmul__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">GroupType</span><span class="p">,</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">GroupType</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="fm">__matmul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Self</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Overload for the `@` operator.</span>
 
 <span class="sd">        Switches between the group action (`.apply()`) and multiplication</span>
@@ -156,7 +151,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.identity">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns identity element.</span>
 
 <span class="sd">        Returns:</span>
@@ -168,7 +163,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.from_matrix">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get group member from matrix representation.</span>
 
 <span class="sd">        Args:</span>
@@ -214,7 +209,7 @@
 <div class="viewcode-block" id="MatrixLieGroup.multiply">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.multiply">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Composes this transformation with another.</span>
 
 <span class="sd">        Returns:</span>
@@ -226,7 +221,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.exp">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes `expm(wedge(tangent))`.</span>
 
 <span class="sd">        Args:</span>
@@ -271,7 +266,7 @@
 <div class="viewcode-block" id="MatrixLieGroup.inverse">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.inverse">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the inverse of our transform.</span>
 
 <span class="sd">        Returns:</span>
@@ -282,11 +277,11 @@
 <div class="viewcode-block" id="MatrixLieGroup.normalize">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.normalize">[docs]</a>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Normalize/projects values and returns.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            GroupType: Normalized group member.</span>
+<span class="sd">            Normalized group member.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 
@@ -294,7 +289,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.MatrixLieGroup.sample_uniform">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">GroupType</span><span class="p">],</span> <span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Draw a uniform sample from the group. Translations (if applicable) are in the</span>
 <span class="sd">        range [-1, 1].</span>
 
@@ -343,10 +338,10 @@
     <span class="nd">@classmethod</span>
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">from_rotation_and_translation</span><span class="p">(</span>
-        <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SEGroupType</span><span class="p">],</span>
+        <span class="bp">cls</span><span class="p">,</span>
         <span class="n">rotation</span><span class="p">:</span> <span class="n">ContainedSOType</span><span class="p">,</span>
         <span class="n">translation</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a rigid transform from a rotation and a translation.</span>
 
 <span class="sd">        Args:</span>
@@ -361,7 +356,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.from_rotation">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_rotation</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">SEGroupType</span><span class="p">],</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">ContainedSOType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_rotation</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rotation</span><span class="p">:</span> <span class="n">ContainedSOType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">,</span>
             <span class="n">translation</span><span class="o">=</span><span class="n">onp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">space_dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">rotation</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
@@ -396,7 +391,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.multiply">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">SEGroupType</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">SEGroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span> <span class="o">@</span> <span class="n">other</span><span class="o">.</span><span class="n">rotation</span><span class="p">(),</span>
             <span class="n">translation</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span> <span class="o">@</span> <span class="n">other</span><span class="o">.</span><span class="n">translation</span><span class="p">())</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">(),</span>
@@ -407,7 +402,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.inverse">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">SEGroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">inverse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
         <span class="n">R_inv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="n">R_inv</span><span class="p">,</span>
@@ -419,7 +414,7 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._base.SEBase.normalize">[docs]</a>
     <span class="nd">@final</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">SEGroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SEGroupType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">from_rotation_and_translation</span><span class="p">(</span>
             <span class="n">rotation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">normalize</span><span class="p">(),</span>
             <span class="n">translation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">translation</span><span class="p">(),</span>

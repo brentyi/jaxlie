@@ -277,17 +277,17 @@
 
 <div class="viewcode-block" id="SO3.identity">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.identity">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span><span class="n">wxyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 
 <div class="viewcode-block" id="SO3.from_matrix">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.from_matrix">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
         <span class="c1"># Modified from:</span>
@@ -443,9 +443,9 @@
 
 <div class="viewcode-block" id="SO3.exp">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.exp">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
         <span class="c1"># Reference:</span>
         <span class="c1"># &gt; https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583</span>
 
@@ -550,9 +550,9 @@
 
 <div class="viewcode-block" id="SO3.sample_uniform">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.sample_uniform">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
         <span class="c1"># Uniformly sample over S^3.</span>
         <span class="c1"># &gt; Reference: http://planning.cs.uiuc.edu/node198.html</span>
         <span class="n">u1</span><span class="p">,</span> <span class="n">u2</span><span class="p">,</span> <span class="n">u3</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>

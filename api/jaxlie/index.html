@@ -168,7 +168,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.__matmul__">
-<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GroupType</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GroupType</span></span></span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.__matmul__" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">typing_extensions.Self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">typing_extensions.Self</span></span></span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.__matmul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.__matmul__" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">__matmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">jaxlie.hints.Array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">jax.Array</span></span></span></dt>
 <dd><p>Overload for the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator.</p>
@@ -185,7 +185,7 @@
 <dd class="field-odd"><p>Identity element.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>GroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -202,7 +202,7 @@
 <dd class="field-even"><p>Group member.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GroupType</p>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -255,10 +255,10 @@
 <dd class="field-odd"><p>self &#64; other</p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>other</strong> (<em>GroupType</em>) – </p>
+<dd class="field-even"><p><strong>other</strong> (<em>typing_extensions.Self</em>) – </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GroupType</p>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -275,7 +275,7 @@
 <dd class="field-even"><p>Output.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GroupType</p>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -324,7 +324,7 @@ across different reference frames.</p>
 <dd class="field-odd"><p>Output.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>GroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -335,10 +335,10 @@ across different reference frames.</p>
 <dd><p>Normalize/projects values and returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
+<dd class="field-odd"><p>Normalized group member.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>GroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -356,7 +356,7 @@ range [-1, 1].</p>
 <dd class="field-even"><p>Sampled group member.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>GroupType</p>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -422,7 +422,7 @@ translation vector.
 <dd class="field-odd"><p><strong>rotation</strong> (<em>ContainedSOType</em>) – </p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>SEGroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -475,10 +475,10 @@ translation vector.
 <dd class="field-odd"><p>self &#64; other</p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>other</strong> (<em>SEGroupType</em>) – </p>
+<dd class="field-even"><p><strong>other</strong> (<em>typing_extensions.Self</em>) – </p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>SEGroupType</p>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -492,7 +492,7 @@ translation vector.
 <dd class="field-odd"><p>Output.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>SEGroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -503,10 +503,10 @@ translation vector.
 <dd><p>Normalize/projects values and returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
+<dd class="field-odd"><p>Normalized group member.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>SEGroupType</p>
+<dd class="field-even"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -587,7 +587,7 @@ translation vector.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.from_rotation_and_translation">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rotation_and_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.from_rotation_and_translation" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rotation_and_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.from_rotation_and_translation" title="Link to this definition"></a></dt>
 <dd><p>Construct a rigid transform from a rotation and a translation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -629,7 +629,7 @@ translation vector.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.identity">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -643,7 +643,7 @@ translation vector.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.from_matrix">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.from_matrix" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.from_matrix" title="Link to this definition"></a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -682,7 +682,7 @@ translation vector.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.exp">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.exp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.exp" title="Link to this definition"></a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -734,7 +734,7 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.sample_uniform">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
@@ -791,7 +791,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.from_rotation_and_translation">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rotation_and_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.from_rotation_and_translation" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_rotation_and_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.from_rotation_and_translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.from_rotation_and_translation" title="Link to this definition"></a></dt>
 <dd><p>Construct a rigid transform from a rotation and a translation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -833,7 +833,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.identity">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -847,7 +847,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.from_matrix">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.from_matrix" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.from_matrix" title="Link to this definition"></a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -886,7 +886,7 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.exp">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.exp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.exp" title="Link to this definition"></a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -938,7 +938,7 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.sample_uniform">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
@@ -1019,7 +1019,7 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.identity">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1033,7 +1033,7 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.from_matrix">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.from_matrix" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.from_matrix" title="Link to this definition"></a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1106,7 +1106,7 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.exp">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.exp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.exp" title="Link to this definition"></a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1176,7 +1176,7 @@ across different reference frames.</p>
 <dd><p>Normalize/projects values and returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
+<dd class="field-odd"><p>Normalized group member.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a></p>
@@ -1186,7 +1186,7 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.sample_uniform">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
@@ -1411,7 +1411,7 @@ constructor.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.identity">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1425,7 +1425,7 @@ constructor.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.from_matrix">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.from_matrix" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matrix</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.from_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.from_matrix" title="Link to this definition"></a></dt>
 <dd><p>Get group member from matrix representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1498,7 +1498,7 @@ constructor.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.exp">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.exp" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tangent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.exp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.exp" title="Link to this definition"></a></dt>
 <dd><p>Computes <code class="docutils literal notranslate"><span class="pre">expm(wedge(tangent))</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1568,7 +1568,7 @@ across different reference frames.</p>
 <dd><p>Normalize/projects values and returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>GroupType</em> – Normalized group member.</p>
+<dd class="field-odd"><p>Normalized group member.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a></p>
@@ -1578,7 +1578,7 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.sample_uniform">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">

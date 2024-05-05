@@ -68,7 +68,7 @@ Classes
       
       Dimension of coordinates that can be transformed.
 
-   .. py:method:: __matmul__(other: GroupType) -> GroupType
+   .. py:method:: __matmul__(other: typing_extensions.Self) -> typing_extensions.Self
                   __matmul__(other: jaxlie.hints.Array) -> jax.Array
 
       
@@ -178,7 +178,7 @@ Classes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
    .. py:method:: sample_uniform(key)
       :classmethod:
@@ -272,7 +272,7 @@ Classes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
 
 .. py:class:: SOBase(parameters)
@@ -319,7 +319,7 @@ Classes
       Note that this is not the same as integrating over a length-3 twist.
 
    .. py:method:: from_rotation_and_translation(rotation, translation)
-      :staticmethod:
+      :classmethod:
 
       
       Construct a rigid transform from a rotation and a translation.
@@ -340,7 +340,7 @@ Classes
       Returns a transform's translation term.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -348,7 +348,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -368,7 +368,7 @@ Classes
       Get transformation as a matrix. Homogeneous for SE groups.
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -402,7 +402,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the
@@ -438,7 +438,7 @@ Classes
       Return repr(self).
 
    .. py:method:: from_rotation_and_translation(rotation, translation)
-      :staticmethod:
+      :classmethod:
 
       
       Construct a rigid transform from a rotation and a translation.
@@ -459,7 +459,7 @@ Classes
       Returns a transform's translation term.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -467,7 +467,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -487,7 +487,7 @@ Classes
       Get underlying representation.
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -521,7 +521,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the
@@ -567,7 +567,7 @@ Classes
       Compute a scalar angle from a rotation object.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -575,7 +575,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -611,7 +611,7 @@ Classes
       :returns: self @ other
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -656,10 +656,10 @@ Classes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the
@@ -784,7 +784,7 @@ Classes
       :returns: Euler angle in radians.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -792,7 +792,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -828,7 +828,7 @@ Classes
       :returns: self @ other
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -873,10 +873,10 @@ Classes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the

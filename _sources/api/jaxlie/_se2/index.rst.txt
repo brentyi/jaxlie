@@ -52,7 +52,7 @@ Classes
       Note that this is not the same as integrating over a length-3 twist.
 
    .. py:method:: from_rotation_and_translation(rotation, translation)
-      :staticmethod:
+      :classmethod:
 
       
       Construct a rigid transform from a rotation and a translation.
@@ -73,7 +73,7 @@ Classes
       Returns a transform's translation term.
 
    .. py:method:: identity()
-      :staticmethod:
+      :classmethod:
 
       
       Returns identity element.
@@ -81,7 +81,7 @@ Classes
       :returns: Identity element.
 
    .. py:method:: from_matrix(matrix)
-      :staticmethod:
+      :classmethod:
 
       
       Get group member from matrix representation.
@@ -101,7 +101,7 @@ Classes
       Get transformation as a matrix. Homogeneous for SE groups.
 
    .. py:method:: exp(tangent)
-      :staticmethod:
+      :classmethod:
 
       
       Computes ``expm(wedge(tangent))``.
@@ -135,7 +135,7 @@ Classes
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
    .. py:method:: sample_uniform(key)
-      :staticmethod:
+      :classmethod:
 
       
       Draw a uniform sample from the group. Translations (if applicable) are in the

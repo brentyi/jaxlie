@@ -26,18 +26,8 @@ Attributes
 
 .. autoapisummary::
 
-   jaxlie._base.GroupType
-   jaxlie._base.SEGroupType
    jaxlie._base.ContainedSOType
 
-
-.. py:data:: GroupType
-
-   
-
-.. py:data:: SEGroupType
-
-   
 
 .. py:class:: MatrixLieGroup(parameters)
 
@@ -73,7 +63,7 @@ Attributes
       
       Dimension of coordinates that can be transformed.
 
-   .. py:method:: __matmul__(other: GroupType) -> GroupType
+   .. py:method:: __matmul__(other: typing_extensions.Self) -> typing_extensions.Self
                   __matmul__(other: jaxlie.hints.Array) -> jax.Array
 
       
@@ -183,7 +173,7 @@ Attributes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
    .. py:method:: sample_uniform(key)
       :classmethod:
@@ -292,6 +282,6 @@ Attributes
       
       Normalize/projects values and returns.
 
-      :returns: *GroupType* -- Normalized group member.
+      :returns: Normalized group member.
 
 

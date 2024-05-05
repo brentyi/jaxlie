@@ -143,17 +143,17 @@
 
 <div class="viewcode-block" id="SO2.identity">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.identity">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">identity</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">identity</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]))</span></div>
 
 
 <div class="viewcode-block" id="SO2.from_matrix">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.from_matrix">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_matrix</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">matrix</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="p">(</span><span class="n">unit_complex</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">matrix</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span></div>
 
@@ -203,9 +203,9 @@
 
 <div class="viewcode-block" id="SO2.exp">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.exp">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">exp</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">tangent</span><span class="p">:</span> <span class="n">hints</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
         <span class="p">(</span><span class="n">theta</span><span class="p">,)</span> <span class="o">=</span> <span class="n">tangent</span>
         <span class="n">cos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
@@ -244,9 +244,9 @@
 
 <div class="viewcode-block" id="SO2.sample_uniform">
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so2.SO2.sample_uniform">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    <span class="nd">@classmethod</span>
     <span class="nd">@override</span>
-    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">sample_uniform</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO2</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SO2</span><span class="o">.</span><span class="n">from_radians</span><span class="p">(</span>
             <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
         <span class="p">)</span></div>
