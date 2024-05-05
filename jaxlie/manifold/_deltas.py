@@ -136,7 +136,7 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
         J = jnp.zeros((*transform.get_batch_axes(), 2, 1))
 
         cos, sin = jnp.moveaxis(transform_so2.unit_complex, -1, 0)
-        J = J.at[..., 0].set(-sin).at[..., 1].set(cos)
+        J = J.at[..., 0, :].set(-sin).at[..., 1, :].set(cos)
 
     elif type(transform) is SE2:
         # Jacobian row indices: cos, sin, x, y
