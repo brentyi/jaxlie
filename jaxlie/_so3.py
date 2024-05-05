@@ -160,14 +160,14 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
 
     # Factory.
 
-    @staticmethod
+    @classmethod
     @override
-    def identity() -> SO3:
+    def identity(cls) -> SO3:
         return SO3(wxyz=jnp.array([1.0, 0.0, 0.0, 0.0]))
 
-    @staticmethod
+    @classmethod
     @override
-    def from_matrix(matrix: hints.Array) -> SO3:
+    def from_matrix(cls, matrix: hints.Array) -> SO3:
         assert matrix.shape == (3, 3)
 
         # Modified from:
@@ -308,9 +308,9 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
             )
         )
 
-    @staticmethod
+    @classmethod
     @override
-    def exp(tangent: hints.Array) -> SO3:
+    def exp(cls, tangent: hints.Array) -> SO3:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/so3.hpp#L583
 
@@ -400,9 +400,9 @@ class SO3(jdc.EnforcedAnnotationsMixin, _base.SOBase):
     def normalize(self) -> SO3:
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz))
 
-    @staticmethod
+    @classmethod
     @override
-    def sample_uniform(key: jax.Array) -> SO3:
+    def sample_uniform(cls, key: jax.Array) -> SO3:
         # Uniformly sample over S^3.
         # > Reference: http://planning.cs.uiuc.edu/node198.html
         u1, u2, u3 = jax.random.uniform(
