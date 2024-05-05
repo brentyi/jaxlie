@@ -1,4 +1,5 @@
 """Tests with explicit examples."""
+
 import numpy as onp
 import pytest
 from hypothesis import given, settings

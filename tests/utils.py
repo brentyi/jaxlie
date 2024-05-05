@@ -9,12 +9,11 @@ import scipy.optimize
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
-from jax.config import config
 
 import jaxlie
 
 # Run all tests with double-precision.
-config.update("jax_enable_x64", True)
+jax.config.update("jax_enable_x64", True)
 
 T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 
@@ -101,7 +100,7 @@ def assert_arrays_close(
 
 
 def jacnumerical(
-    f: Callable[[jaxlie.hints.Array], jax.Array]
+    f: Callable[[jaxlie.hints.Array], jax.Array],
 ) -> Callable[[jaxlie.hints.Array], jax.Array]:
     """Decorator for computing numerical Jacobians of vector->vector functions."""
 

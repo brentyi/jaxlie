@@ -37,8 +37,7 @@ def grad(
     holomorphic: bool = False,
     allow_int: bool = False,
     reduce_axes: Sequence[AxisName] = (),
-) -> Callable[P, _tree_utils.TangentPytree]:
-    ...
+) -> Callable[P, _tree_utils.TangentPytree]: ...
 
 
 @overload
@@ -49,8 +48,7 @@ def grad(
     holomorphic: bool = False,
     allow_int: bool = False,
     reduce_axes: Sequence[AxisName] = (),
-) -> Callable[P, Tuple[_tree_utils.TangentPytree, ...]]:
-    ...
+) -> Callable[P, Tuple[_tree_utils.TangentPytree, ...]]: ...
 
 
 def grad(
@@ -91,8 +89,7 @@ def value_and_grad(
     holomorphic: bool = False,
     allow_int: bool = False,
     reduce_axes: Sequence[AxisName] = (),
-) -> Callable[P, Tuple[Any, _tree_utils.TangentPytree]]:
-    ...
+) -> Callable[P, Tuple[Any, _tree_utils.TangentPytree]]: ...
 
 
 @overload
@@ -103,8 +100,7 @@ def value_and_grad(
     holomorphic: bool = False,
     allow_int: bool = False,
     reduce_axes: Sequence[AxisName] = (),
-) -> Callable[P, Tuple[Any, Tuple[_tree_utils.TangentPytree, ...]]]:
-    ...
+) -> Callable[P, Tuple[Any, Tuple[_tree_utils.TangentPytree, ...]]]: ...
 
 
 def value_and_grad(
