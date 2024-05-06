@@ -6,6 +6,7 @@ vmapping."""
 
 import jax
 import numpy as onp
+
 from jaxlie import SO3
 
 N = 100
