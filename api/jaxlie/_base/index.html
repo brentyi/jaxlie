@@ -154,14 +154,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._base.MatrixLieGroup.identity">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>typing_extensions.Self</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -321,12 +324,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._base.MatrixLieGroup.sample_uniform">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>
@@ -339,11 +346,10 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._base.MatrixLieGroup.get_batch_axes">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_batch_axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.get_batch_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.get_batch_axes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_batch_axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_base/#MatrixLieGroup.get_batch_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._base.MatrixLieGroup.get_batch_axes" title="Link to this definition"></a></dt>
 <dd><p>Return any leading batch axes in contained parameters. If an array of shape
 <code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">4)</span></code> is placed in the wxyz field of an SO3 object, for example, this will
 return <code class="docutils literal notranslate"><span class="pre">(100,)</span></code>.</p>
-<p>This should generally be implemented by <code class="docutils literal notranslate"><span class="pre">jdc.EnforcedAnnotationsMixin</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[int, Ellipsis]</p>

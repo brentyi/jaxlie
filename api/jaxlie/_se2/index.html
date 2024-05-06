@@ -87,30 +87,31 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="../#jaxlie.SE2" title="jaxlie.SE2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SE2</span></code></a></p></td>
-<td><p>Special Euclidean group for proper rigid transforms in 2D.</p></td>
+<td><p>Special Euclidean group for proper rigid transforms in 2D. Broadcasting</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie._se2.SE2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie._se2.</span></span><span class="sig-name descname"><span class="pre">SE2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="../#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="../#jaxlie.SO2" title="jaxlie.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO2</span></code></a>]</p>
-<div class="graphviz"><img src="../../../_images/inheritance-33e391e5a7a8223cba05fd22fd38101545b57709.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="../#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="../#jaxlie.SO2" title="jaxlie.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO2</span></code></a>]</p>
+<div class="graphviz"><img src="../../../_images/inheritance-65769b7de41adf3b712d6e12b685aca4c634bd82.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
 <map id="inheritance181a071670" name="inheritance181a071670">
-<area shape="rect" id="node4" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node5" href="../#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="537,55,609,80"/>
-<area shape="rect" id="node6" href="../#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,29,429,55"/>
-</map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
+<area shape="rect" id="node3" href="../#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node5" href="../#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="296,31,368,56"/>
+<area shape="rect" id="node4" href="../#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D. Broadcasting" alt="" coords="416,31,488,56"/>
+</map><p>Special Euclidean group for proper rigid transforms in 2D. Broadcasting
+rules are the same as for numpy.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>. Tangent parameterization is <code class="docutils literal notranslate"><span class="pre">(vx,</span>
 <span class="pre">vy,</span> <span class="pre">omega)</span></code>.
 .. py:attribute:: unit_complex_xy</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]</p>
+<dd class="field-odd"><p>jax.Array</p>
 </dd>
 </dl>
-<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>.</p>
+<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">3)</span></code>.</p>
 </div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._se2.SE2.__repr__">
@@ -186,14 +187,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._se2.SE2.identity">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie._se2.SE2" title="jaxlie._se2.SE2">SE2</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#jaxlie._se2.SE2" title="jaxlie._se2.SE2">SE2</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -291,12 +295,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie._se2.SE2.sample_uniform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie._se2.SE2.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>

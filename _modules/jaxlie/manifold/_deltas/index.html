@@ -96,29 +96,8 @@
 
 <span class="n">PytreeType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;PytreeType&quot;</span><span class="p">)</span>
 <span class="n">GroupType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;GroupType&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">MatrixLieGroup</span><span class="p">)</span>
-<span class="n">CallableType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;CallableType&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Callable</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_naive_auto_vmap</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="n">CallableType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallableType</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">batch_axes</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">batch_axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">batch_axes</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">()</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">assert</span> <span class="n">arg</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">()</span> <span class="o">==</span> <span class="n">batch_axes</span>
-        <span class="k">assert</span> <span class="n">batch_axes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-
-        <span class="n">f_vmapped</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="n">f</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch_axes</span><span class="p">)):</span>
-            <span class="n">f_vmapped</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">f_vmapped</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">f_vmapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">inner</span>  <span class="c1"># type: ignore</span>
-
-
-<span class="nd">@_naive_auto_vmap</span>
 <span class="k">def</span> <span class="nf">_rplus</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">delta</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GroupType</span><span class="p">:</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">onp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))</span>
@@ -155,7 +134,6 @@
 
 
 
-<span class="nd">@_naive_auto_vmap</span>
 <span class="k">def</span> <span class="nf">_rminus</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">GroupType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">inverse</span><span class="p">()</span> <span class="o">@</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
@@ -212,71 +190,77 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SO2</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: cos, sin</span>
         <span class="c1"># Jacobian col indices: theta</span>
 
-        <span class="n">transform_so2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SO2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="o">*</span><span class="n">transform</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">(),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">unit_complex</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
 
-        <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span> <span class="o">=</span> <span class="n">transform_so2</span><span class="o">.</span><span class="n">unit_complex</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="o">-</span><span class="n">sin</span><span class="p">)</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cos</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE2</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SE2</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: cos, sin, x, y</span>
         <span class="c1"># Jacobian col indices: vx, vy, omega</span>
-
-        <span class="n">transform_se2</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE2</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="o">*</span><span class="n">transform</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">(),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
         <span class="c1"># Translation terms.</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms.</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se2</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
         <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SO3</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SO3</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: qw, qx, qy, qz</span>
         <span class="c1"># Jacobian col indices: omega x, omega y, omega z</span>
-
-        <span class="n">transform_so3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SO3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-
-        <span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
-        <span class="n">_unused_neg_w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span> <span class="o">=</span> <span class="o">-</span><span class="n">transform_so3</span><span class="o">.</span><span class="n">wxyz</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">neg_x</span> <span class="o">=</span> <span class="o">-</span><span class="n">x</span>
+        <span class="n">neg_y</span> <span class="o">=</span> <span class="o">-</span><span class="n">y</span>
+        <span class="n">neg_z</span> <span class="o">=</span> <span class="o">-</span><span class="n">z</span>
 
         <span class="n">J</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
                 <span class="p">[</span>
-                    <span class="p">[</span><span class="n">neg_x</span><span class="p">,</span> <span class="n">neg_y</span><span class="p">,</span> <span class="n">neg_z</span><span class="p">],</span>
-                    <span class="p">[</span><span class="n">w</span><span class="p">,</span> <span class="n">neg_z</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span>
-                    <span class="p">[</span><span class="n">z</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">neg_x</span><span class="p">],</span>
-                    <span class="p">[</span><span class="n">neg_y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">],</span>
-                <span class="p">]</span>
-            <span class="p">)</span>
+                    <span class="n">neg_x</span><span class="p">,</span>
+                    <span class="n">neg_y</span><span class="p">,</span>
+                    <span class="n">neg_z</span><span class="p">,</span>
+                    <span class="n">w</span><span class="p">,</span>
+                    <span class="n">neg_z</span><span class="p">,</span>
+                    <span class="n">y</span><span class="p">,</span>
+                    <span class="n">z</span><span class="p">,</span>
+                    <span class="n">w</span><span class="p">,</span>
+                    <span class="n">neg_x</span><span class="p">,</span>
+                    <span class="n">neg_y</span><span class="p">,</span>
+                    <span class="n">x</span><span class="p">,</span>
+                    <span class="n">w</span><span class="p">,</span>
+                <span class="p">],</span>
+                <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">*</span><span class="n">transform</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">(),</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
             <span class="o">/</span> <span class="mf">2.0</span>
         <span class="p">)</span>
 
-    <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span> <span class="ow">is</span> <span class="n">SE3</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">transform</span><span class="p">,</span> <span class="n">SE3</span><span class="p">):</span>
         <span class="c1"># Jacobian row indices: qw, qx, qy, qz, x, y, z</span>
         <span class="c1"># Jacobian col indices: vx, vy, vz, omega x, omega y, omega z</span>
-
-        <span class="n">transform_se3</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">SE3</span><span class="p">,</span> <span class="n">transform</span><span class="p">)</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="o">*</span><span class="n">transform</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">(),</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
         <span class="c1"># Translation terms.</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">4</span><span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">4</span><span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="p">()</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">())</span>
 
         <span class="c1"># Rotation terms.</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform_se3</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="n">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">rotation</span><span class="p">())</span>
         <span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unsupported type: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">assert</span> <span class="n">J</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">parameters_dim</span><span class="p">,</span> <span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">J</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span>
+        <span class="o">*</span><span class="n">transform</span><span class="o">.</span><span class="n">get_batch_axes</span><span class="p">(),</span>
+        <span class="n">transform</span><span class="o">.</span><span class="n">parameters_dim</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">.</span><span class="n">tangent_dim</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">J</span></div>
 
 </pre></div>

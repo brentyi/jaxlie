@@ -78,10 +78,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for jaxlie.utils._utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
-<span class="kn">import</span> <span class="nn">jax</span>
+<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
 <span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+
+<span class="kn">from</span> <span class="nn">jaxlie.hints</span> <span class="kn">import</span> <span class="n">Array</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
@@ -136,11 +138,53 @@
             <span class="ow">and</span> <span class="n">f</span> <span class="o">!=</span> <span class="s2">&quot;get_batch_axes&quot;</span><span class="p">,</span>  <span class="c1"># Avoid returning tracers.</span>
             <span class="nb">dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>
         <span class="p">):</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)))</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">jdc</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">f</span><span class="p">)))</span>
 
         <span class="k">return</span> <span class="bp">cls</span>
 
     <span class="k">return</span> <span class="n">_wrap</span></div>
+
+
+
+<span class="n">TupleOfBroadcastable</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span>
+    <span class="s2">&quot;TupleOfBroadcastable&quot;</span><span class="p">,</span>
+    <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;Tuple[Union[MatrixLieGroup, Array], ...]&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="broadcast_leading_axes">
+<a class="viewcode-back" href="../../../../api/jaxlie/utils/#jaxlie.utils._utils.broadcast_leading_axes">[docs]</a>
+<span class="k">def</span> <span class="nf">broadcast_leading_axes</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="n">TupleOfBroadcastable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TupleOfBroadcastable</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Broadcast leading axes of arrays. Takes tuples of either:</span>
+<span class="sd">    - an array, which we assume has shape (*, D).</span>
+<span class="sd">    - a Lie group object.&quot;&quot;&quot;</span>
+
+    <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
+
+    <span class="n">array_inputs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span>
+            <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">parameters_dim</span><span class="p">,))</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">inputs</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">array</span><span class="p">,</span> <span class="n">shape_suffix</span> <span class="ow">in</span> <span class="n">array_inputs</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">shape_suffix</span><span class="p">)</span> <span class="p">:]</span> <span class="o">==</span> <span class="n">shape_suffix</span>
+    <span class="n">batch_axes</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_shapes</span><span class="p">(</span>
+        <span class="o">*</span><span class="p">[</span><span class="n">array</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)]</span> <span class="k">for</span> <span class="n">array</span><span class="p">,</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="n">array_inputs</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">broadcasted_arrays</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">jnp</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">batch_axes</span> <span class="o">+</span> <span class="n">shape_suffix</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">shape_suffix</span><span class="p">)</span> <span class="ow">in</span> <span class="n">array_inputs</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">cast</span><span class="p">(</span>
+        <span class="n">TupleOfBroadcastable</span><span class="p">,</span>
+        <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">array</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inp</span><span class="p">,</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="k">else</span> <span class="nb">type</span><span class="p">(</span><span class="n">inp</span><span class="p">)(</span><span class="n">array</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">array</span><span class="p">,</span> <span class="n">inp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">broadcasted_arrays</span><span class="p">,</span> <span class="n">inputs</span><span class="p">)</span>
+        <span class="p">),</span>
+    <span class="p">)</span></div>
 
 </pre></div>
 

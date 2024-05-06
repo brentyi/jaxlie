@@ -22,21 +22,22 @@ Classes
 .. py:class:: SO3(parameters)
 
 
-   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie.SO3
       :parts: 1
 
    
-   Special orthogonal group for 3D rotations.
+   Special orthogonal group for 3D rotations. Broadcasting rules are the same as
+   for numpy.
 
    Internal parameterization is ``(qw, qx, qy, qz)``. Tangent parameterization is
    ``(omega_x, omega_y, omega_z)``.
    .. py:attribute:: wxyz
-      :type: typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]
+      :type: jax.Array
 
       
-      Internal parameters. ``(w, x, y, z)`` quaternion.
+      Internal parameters. ``(w, x, y, z)`` quaternion. Shape should be ``(*, 4)``.
 
    .. py:method:: __repr__()
 
@@ -95,7 +96,7 @@ Classes
       Note that ``wxyz`` quaternions can be constructed using the default dataclass
       constructor.
 
-      :param xyzw: xyzw quaternion. Shape should be (4,).
+      :param xyzw: xyzw quaternion. Shape should be (*, 4).
 
       :returns: Output.
 
@@ -132,11 +133,13 @@ Classes
 
       :returns: Euler angle in radians.
 
-   .. py:method:: identity()
+   .. py:method:: identity(batch_axes = ())
       :classmethod:
 
       
       Returns identity element.
+
+      :param batch_axes: Any leading batch axes for the output transform.
 
       :returns: Identity element.
 
@@ -224,7 +227,7 @@ Classes
 
       :returns: Normalized group member.
 
-   .. py:method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key, batch_axes = ())
       :classmethod:
 
       
@@ -232,6 +235,8 @@ Classes
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :param batch_axes: Any leading batch axes for the output transforms. Each
+                         sampled transform will be different.
 
       :returns: Sampled group member.
 

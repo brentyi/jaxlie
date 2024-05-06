@@ -17,6 +17,7 @@ Functions
 
    jaxlie.utils._utils.get_epsilon
    jaxlie.utils._utils.register_lie_group
+   jaxlie.utils._utils.broadcast_leading_axes
 
 
 
@@ -26,6 +27,7 @@ Attributes
 .. autoapisummary::
 
    jaxlie.utils._utils.T
+   jaxlie.utils._utils.TupleOfBroadcastable
 
 
 .. py:data:: T
@@ -47,4 +49,17 @@ Attributes
    Decorator for registering Lie group dataclasses.
 
    Sets dimensionality class variables, and marks all methods for JIT compilation.
+
+.. py:data:: TupleOfBroadcastable
+
+   
+
+.. py:function:: broadcast_leading_axes(inputs)
+
+   
+   Broadcast leading axes of arrays. Takes tuples of either:
+
+
+   * an array, which we assume has shape (*, D).
+   * a Lie group object.
 

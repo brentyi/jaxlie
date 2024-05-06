@@ -92,6 +92,9 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils._utils.register_lie_group" title="jaxlie.utils._utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim, parameters_dim, ...)</p></td>
 <td><p>Decorator for registering Lie group dataclasses.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils._utils.broadcast_leading_axes" title="jaxlie.utils._utils.broadcast_leading_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">broadcast_leading_axes</span></code></a>(inputs)</p></td>
+<td><p>Broadcast leading axes of arrays. Takes tuples of either:</p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -100,6 +103,9 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils._utils.T" title="jaxlie.utils._utils.T"><code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils._utils.TupleOfBroadcastable" title="jaxlie.utils._utils.TupleOfBroadcastable"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TupleOfBroadcastable</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -142,6 +148,29 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Callable[[Type[T]], Type[T]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="jaxlie.utils._utils.TupleOfBroadcastable">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></span><span class="sig-name descname"><span class="pre">TupleOfBroadcastable</span></span><a class="headerlink" href="#jaxlie.utils._utils.TupleOfBroadcastable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="jaxlie.utils._utils.broadcast_leading_axes">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.utils._utils.</span></span><span class="sig-name descname"><span class="pre">broadcast_leading_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/jaxlie/utils/_utils/#broadcast_leading_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils._utils.broadcast_leading_axes" title="Link to this definition"></a></dt>
+<dd><p>Broadcast leading axes of arrays. Takes tuples of either:</p>
+<ul class="simple">
+<li><p>an array, which we assume has shape (<a href="#id1"><span class="problematic" id="id2">*</span></a>, D).</p></li>
+<li><p>a Lie group object.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputs</strong> (<em>TupleOfBroadcastable</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TupleOfBroadcastable</p>
 </dd>
 </dl>
 </dd></dl>

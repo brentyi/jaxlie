@@ -94,14 +94,35 @@
 <h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils.get_epsilon" title="jaxlie.utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils.broadcast_leading_axes" title="jaxlie.utils.broadcast_leading_axes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">broadcast_leading_axes</span></code></a>(inputs)</p></td>
+<td><p>Broadcast leading axes of arrays. Takes tuples of either:</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils.get_epsilon" title="jaxlie.utils.get_epsilon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_epsilon</span></code></a>(dtype)</p></td>
 <td><p>Helper for grabbing type-specific precision constants.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.utils.register_lie_group" title="jaxlie.utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim, parameters_dim, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.utils.register_lie_group" title="jaxlie.utils.register_lie_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_lie_group</span></code></a>(*, matrix_dim, parameters_dim, ...)</p></td>
 <td><p>Decorator for registering Lie group dataclasses.</p></td>
 </tr>
 </tbody>
 </table>
+<dl class="py function">
+<dt class="sig sig-object py" id="jaxlie.utils.broadcast_leading_axes">
+<span class="sig-prename descclassname"><span class="pre">jaxlie.utils.</span></span><span class="sig-name descname"><span class="pre">broadcast_leading_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/utils/_utils/#broadcast_leading_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils.broadcast_leading_axes" title="Link to this definition"></a></dt>
+<dd><p>Broadcast leading axes of arrays. Takes tuples of either:</p>
+<ul class="simple">
+<li><p>an array, which we assume has shape (<a href="#id1"><span class="problematic" id="id2">*</span></a>, D).</p></li>
+<li><p>a Lie group object.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>inputs</strong> (<em>TupleOfBroadcastable</em>) – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>TupleOfBroadcastable</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="jaxlie.utils.get_epsilon">
 <span class="sig-prename descclassname"><span class="pre">jaxlie.utils.</span></span><span class="sig-name descname"><span class="pre">get_epsilon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/jaxlie/utils/_utils/#get_epsilon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.utils.get_epsilon" title="Link to this definition"></a></dt>

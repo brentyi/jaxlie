@@ -113,16 +113,16 @@
 <td><p>Base class for special orthogonal groups.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SE2</span></code></a></p></td>
-<td><p>Special Euclidean group for proper rigid transforms in 2D.</p></td>
+<td><p>Special Euclidean group for proper rigid transforms in 2D. Broadcasting</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SE3</span></code></a></p></td>
-<td><p>Special Euclidean group for proper rigid transforms in 3D.</p></td>
+<td><p>Special Euclidean group for proper rigid transforms in 3D. Broadcasting</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SO2</span></code></a></p></td>
-<td><p>Special orthogonal group for 2D rotations.</p></td>
+<td><p>Special orthogonal group for 2D rotations. Broadcasting rules are the</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SO3</span></code></a></p></td>
-<td><p>Special orthogonal group for 3D rotations.</p></td>
+<td><p>Special orthogonal group for 3D rotations. Broadcasting rules are the same as</p></td>
 </tr>
 </tbody>
 </table>
@@ -178,14 +178,17 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.identity">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>typing_extensions.Self</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>typing_extensions.Self</p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,12 +348,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.sample_uniform">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>
@@ -363,11 +370,10 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.MatrixLieGroup.get_batch_axes">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_batch_axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.get_batch_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.get_batch_axes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_batch_axes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_base/#MatrixLieGroup.get_batch_axes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.MatrixLieGroup.get_batch_axes" title="Link to this definition"></a></dt>
 <dd><p>Return any leading batch axes in contained parameters. If an array of shape
 <code class="docutils literal notranslate"><span class="pre">(100,</span> <span class="pre">4)</span></code> is placed in the wxyz field of an SO3 object, for example, this will
 return <code class="docutils literal notranslate"><span class="pre">(100,)</span></code>.</p>
-<p>This should generally be implemented by <code class="docutils literal notranslate"><span class="pre">jdc.EnforcedAnnotationsMixin</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Tuple[int, Ellipsis]</p>
@@ -532,23 +538,24 @@ translation vector.
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SE2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SE2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO2</span></code></a>]</p>
-<div class="graphviz"><img src="../../_images/inheritance-31cb1bbcf7a14cc9ea190e177284f47359677ac2.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO2</span></code></a>]</p>
+<div class="graphviz"><img src="../../_images/inheritance-c65feb2fee413fb164b63f83c0873d597e644683.png" alt="Inheritance diagram of jaxlie.SE2" usemap="#inheritance181a071670" class="inheritance graphviz" /></div>
 <map id="inheritance181a071670" name="inheritance181a071670">
-<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node5" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D." alt="" coords="537,55,609,80"/>
-<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,29,429,55"/>
-</map><p>Special Euclidean group for proper rigid transforms in 2D.</p>
+<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="296,31,368,56"/>
+<area shape="rect" id="node4" href="#jaxlie.SE2" target="_top" title="Special Euclidean group for proper rigid transforms in 2D. Broadcasting" alt="" coords="416,31,488,56"/>
+</map><p>Special Euclidean group for proper rigid transforms in 2D. Broadcasting
+rules are the same as for numpy.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>. Tangent parameterization is <code class="docutils literal notranslate"><span class="pre">(vx,</span>
 <span class="pre">vy,</span> <span class="pre">omega)</span></code>.
 .. py:attribute:: unit_complex_xy</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]</p>
+<dd class="field-odd"><p>jax.Array</p>
 </dd>
 </dl>
-<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>.</p>
+<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin,</span> <span class="pre">x,</span> <span class="pre">y)</span></code>. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">3)</span></code>.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -629,14 +636,17 @@ translation vector.
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.identity">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2">SE2</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#jaxlie.SE2" title="jaxlie.SE2">SE2</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -734,12 +744,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE2.sample_uniform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se2/#SE2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE2.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>
@@ -755,23 +769,24 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SE3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SE3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO3</span></code></a>]</p>
-<div class="graphviz"><img src="../../_images/inheritance-bb8c5ebc4813382e55f35530e231af633678bd15.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="#jaxlie.SEBase" title="jaxlie.SEBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SEBase</span></code></a>[<a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SO3</span></code></a>]</p>
+<div class="graphviz"><img src="../../_images/inheritance-6a258186138feb066f1a5dd904d973065f382398.png" alt="Inheritance diagram of jaxlie.SE3" usemap="#inheritance122bbc4208" class="inheritance graphviz" /></div>
 <map id="inheritance122bbc4208" name="inheritance122bbc4208">
-<area shape="rect" id="node4" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node5" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D." alt="" coords="537,55,609,80"/>
-<area shape="rect" id="node6" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="357,29,429,55"/>
-</map><p>Special Euclidean group for proper rigid transforms in 3D.</p>
+<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node5" href="#jaxlie.SEBase" target="_top" title="Base class for special Euclidean groups." alt="" coords="296,31,368,56"/>
+<area shape="rect" id="node4" href="#jaxlie.SE3" target="_top" title="Special Euclidean group for proper rigid transforms in 3D. Broadcasting" alt="" coords="416,31,488,56"/>
+</map><p>Special Euclidean group for proper rigid transforms in 3D. Broadcasting
+rules are the same as for numpy.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(qw,</span> <span class="pre">qx,</span> <span class="pre">qy,</span> <span class="pre">qz,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code>. Tangent parameterization
 is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <span class="pre">vy,</span> <span class="pre">vz,</span> <span class="pre">omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.
 .. py:attribute:: wxyz_xyz</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>typing_extensions.Annotated[jax.Array, (Ellipsis, 7), jax.numpy.floating]</p>
+<dd class="field-odd"><p>jax.Array</p>
 </dd>
 </dl>
-<p>Internal parameters. wxyz quaternion followed by xyz translation.</p>
+<p>Internal parameters. wxyz quaternion followed by xyz translation. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">7)</span></code>.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -833,14 +848,17 @@ is <code class="docutils literal notranslate"><span class="pre">(vx,</span> <spa
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.identity">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3">SE3</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#jaxlie.SE3" title="jaxlie.SE3">SE3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -938,12 +956,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SE3.sample_uniform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_se3/#SE3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SE3.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>
@@ -959,22 +981,23 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SO2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SO2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-6aadb0f38a549da2622ff14eb23a5c8c5888ea94.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
+<div class="graphviz"><img src="../../_images/inheritance-40ab20c6dfad33869f654f3402a704070240b55a.png" alt="Inheritance diagram of jaxlie.SO2" usemap="#inheritancea272fb6a93" class="inheritance graphviz" /></div>
 <map id="inheritancea272fb6a93" name="inheritancea272fb6a93">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node4" href="#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations." alt="" coords="537,31,609,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="357,5,429,31"/>
-</map><p>Special orthogonal group for 2D rotations.</p>
+<area shape="rect" id="node2" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node4" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="296,5,368,31"/>
+<area shape="rect" id="node3" href="#jaxlie.SO2" target="_top" title="Special orthogonal group for 2D rotations. Broadcasting rules are the" alt="" coords="416,5,488,31"/>
+</map><p>Special orthogonal group for 2D rotations. Broadcasting rules are the
+same as for <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin)</span></code>. Tangent parameterization is <code class="docutils literal notranslate"><span class="pre">(omega,)</span></code>.
 .. py:attribute:: unit_complex</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>typing_extensions.Annotated[jax.Array, (Ellipsis, 2), jax.numpy.floating]</p>
+<dd class="field-odd"><p>jax.Array</p>
 </dd>
 </dl>
-<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin)</span></code>.</p>
+<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(cos,</span> <span class="pre">sin)</span></code>. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">2)</span></code>.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1019,14 +1042,17 @@ range [-1, 1].</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.identity">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#jaxlie.SO2" title="jaxlie.SO2">SO2</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1186,12 +1212,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO2.sample_uniform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so2/#SO2.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO2.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>
@@ -1207,23 +1237,24 @@ range [-1, 1].</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="jaxlie.SO3">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">jaxlie.</span></span><span class="sig-name descname"><span class="pre">SO3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">jax_dataclasses.EnforcedAnnotationsMixin</span></code>, <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
-<div class="graphviz"><img src="../../_images/inheritance-8c98b72fcd655b078b5afa51021433040fd2ad02.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="#jaxlie.SOBase" title="jaxlie.SOBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jaxlie.SOBase</span></code></a></p>
+<div class="graphviz"><img src="../../_images/inheritance-ce365ccac63e93ac1cfd2ed863face5ad0f69ccd.png" alt="Inheritance diagram of jaxlie.SO3" usemap="#inheritance6555072674" class="inheritance graphviz" /></div>
 <map id="inheritance6555072674" name="inheritance6555072674">
-<area shape="rect" id="node3" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
-<area shape="rect" id="node4" href="#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations." alt="" coords="537,31,609,56"/>
-<area shape="rect" id="node5" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="357,5,429,31"/>
-</map><p>Special orthogonal group for 3D rotations.</p>
+<area shape="rect" id="node2" href="#jaxlie.MatrixLieGroup" target="_top" title="Interface definition for matrix Lie groups." alt="" coords="125,5,248,31"/>
+<area shape="rect" id="node4" href="#jaxlie.SOBase" target="_top" title="Base class for special orthogonal groups." alt="" coords="296,5,368,31"/>
+<area shape="rect" id="node3" href="#jaxlie.SO3" target="_top" title="Special orthogonal group for 3D rotations. Broadcasting rules are the same as" alt="" coords="416,5,488,31"/>
+</map><p>Special orthogonal group for 3D rotations. Broadcasting rules are the same as
+for numpy.</p>
 <p>Internal parameterization is <code class="docutils literal notranslate"><span class="pre">(qw,</span> <span class="pre">qx,</span> <span class="pre">qy,</span> <span class="pre">qz)</span></code>. Tangent parameterization is
 <code class="docutils literal notranslate"><span class="pre">(omega_x,</span> <span class="pre">omega_y,</span> <span class="pre">omega_z)</span></code>.
 .. py:attribute:: wxyz</p>
 <blockquote>
 <div><dl class="field-list simple">
 <dt class="field-odd">type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>typing_extensions.Annotated[jax.Array, (Ellipsis, 4), jax.numpy.floating]</p>
+<dd class="field-odd"><p>jax.Array</p>
 </dd>
 </dl>
-<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> quaternion.</p>
+<p>Internal parameters. <code class="docutils literal notranslate"><span class="pre">(w,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> quaternion. Shape should be <code class="docutils literal notranslate"><span class="pre">(*,</span> <span class="pre">4)</span></code>.</p>
 </div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1331,7 +1362,7 @@ convention.</p>
 constructor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (4,).</p>
+<dd class="field-odd"><p><strong>xyzw</strong> (<em>jaxlie.hints.Array</em>) – xyzw quaternion. Shape should be (<a href="#id1"><span class="problematic" id="id2">*</span></a>, 4).</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Output.</p>
@@ -1411,14 +1442,17 @@ constructor.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.identity">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.identity" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.identity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.identity" title="Link to this definition"></a></dt>
 <dd><p>Returns identity element.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Identity element.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transform.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a></p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Identity element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#jaxlie.SO3" title="jaxlie.SO3">SO3</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1578,12 +1612,16 @@ across different reference frames.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="jaxlie.SO3.sample_uniform">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.sample_uniform" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_axes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/jaxlie/_so3/#SO3.sample_uniform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#jaxlie.SO3.sample_uniform" title="Link to this definition"></a></dt>
 <dd><p>Draw a uniform sample from the group. Translations (if applicable) are in the
 range [-1, 1].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>jax.Array</em>) – PRNG key, as returned by <code class="docutils literal notranslate"><span class="pre">jax.random.PRNGKey()</span></code>.</p></li>
+<li><p><strong>batch_axes</strong> (<em>jax_dataclasses.Static</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>, </em><em>Ellipsis</em><em>]</em><em>]</em>) – Any leading batch axes for the output transforms. Each
+sampled transform will be different.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Sampled group member.</p>

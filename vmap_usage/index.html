@@ -81,10 +81,11 @@
              
   <section id="jax-vmap-usage">
 <h1><cite>jax.vmap</cite> Usage<a class="headerlink" href="#jax-vmap-usage" title="Link to this heading"></a></h1>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Examples of vectorizing transformations via vmap.</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;jaxlie implements numpy-style broadcasting for all operations. For more</span>
+<span class="sd">explicit vectorization, we can also use vmap function transformations.</span>
 
-<span class="sd">Omitted for brevity here, but note that in practice we usually want to JIT after</span>
-<span class="sd">vmapping!&quot;&quot;&quot;</span>
+<span class="sd">Omitted for brevity here, but in practice we usually want to JIT after</span>
+<span class="sd">vmapping.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">jax</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">onp</span>
@@ -143,6 +144,10 @@
 <span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">R_single</span><span class="p">,</span> <span class="n">p</span><span class="p">))(</span><span class="n">p_stacked</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
+<span class="c1"># We can also just rely on broadcasting.</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">R_single</span> <span class="o">@</span> <span class="n">p_stacked</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
 <span class="c1">#############################</span>
 <span class="c1"># (4) Applying N transformations to N points.</span>
 <span class="c1">#############################</span>
@@ -152,11 +157,19 @@
 <span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">)(</span><span class="n">R_stacked</span><span class="p">,</span> <span class="n">p_stacked</span><span class="p">)</span>
 <span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
+<span class="c1"># We can also just rely on broadcasting.</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">R_stacked</span> <span class="o">@</span> <span class="n">p_stacked</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
 <span class="c1">#############################</span>
 <span class="c1"># (5) Applying N transformations to 1 point.</span>
 <span class="c1">#############################</span>
 
 <span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">R</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">p_single</span><span class="p">))(</span><span class="n">R_stacked</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="c1"># We can also just rely on broadcasting.</span>
+<span class="n">p_transformed_stacked</span> <span class="o">=</span> <span class="n">R_stacked</span> <span class="o">@</span> <span class="n">p_single</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
 <span class="k">assert</span> <span class="n">p_transformed_stacked</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
 <span class="c1">#############################</span>
@@ -178,6 +191,10 @@
 
 <span class="c1"># Or N x 1 multiplication:</span>
 <span class="k">assert</span> <span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">R</span><span class="p">:</span> <span class="n">SO3</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">R_single</span><span class="p">))(</span><span class="n">R_stacked</span><span class="p">))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Again, broadcasting also works.</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">R_stacked</span> <span class="o">@</span> <span class="n">R_stacked</span><span class="p">)</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="k">assert</span> <span class="p">(</span><span class="n">R_stacked</span> <span class="o">@</span> <span class="n">SO3</span><span class="p">(</span><span class="n">R_single</span><span class="o">.</span><span class="n">wxyz</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]))</span><span class="o">.</span><span class="n">wxyz</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -72,12 +72,14 @@ Attributes
       Switches between the group action (\ ``.apply()``\ ) and multiplication
       (\ ``.multiply()``\ ) based on the type of ``other``.
 
-   .. py:method:: identity()
+   .. py:method:: identity(batch_axes = ())
       :classmethod:
       :abstractmethod:
 
       
       Returns identity element.
+
+      :param batch_axes: Any leading batch axes for the output transform.
 
       :returns: Identity element.
 
@@ -175,7 +177,7 @@ Attributes
 
       :returns: Normalized group member.
 
-   .. py:method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key, batch_axes = ())
       :classmethod:
       :abstractmethod:
 
@@ -184,18 +186,17 @@ Attributes
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :param batch_axes: Any leading batch axes for the output transforms. Each
+                         sampled transform will be different.
 
       :returns: Sampled group member.
 
    .. py:method:: get_batch_axes()
-      :abstractmethod:
 
       
       Return any leading batch axes in contained parameters. If an array of shape
       ``(100, 4)`` is placed in the wxyz field of an SO3 object, for example, this will
       return ``(100,)``.
-
-      This should generally be implemented by ``jdc.EnforcedAnnotationsMixin``.
 
 
 .. py:class:: SOBase(parameters)

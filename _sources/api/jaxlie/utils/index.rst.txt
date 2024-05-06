@@ -13,10 +13,20 @@ Functions
 
 .. autoapisummary::
 
+   jaxlie.utils.broadcast_leading_axes
    jaxlie.utils.get_epsilon
    jaxlie.utils.register_lie_group
 
 
+
+.. py:function:: broadcast_leading_axes(inputs)
+
+   
+   Broadcast leading axes of arrays. Takes tuples of either:
+
+
+   * an array, which we assume has shape (*, D).
+   * a Lie group object.
 
 .. py:function:: get_epsilon(dtype)
 

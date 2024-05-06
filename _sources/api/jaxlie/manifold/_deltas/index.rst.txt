@@ -33,7 +33,6 @@ Attributes
 
    jaxlie.manifold._deltas.PytreeType
    jaxlie.manifold._deltas.GroupType
-   jaxlie.manifold._deltas.CallableType
 
 
 .. py:data:: PytreeType
@@ -41,10 +40,6 @@ Attributes
    
 
 .. py:data:: GroupType
-
-   
-
-.. py:data:: CallableType
 
    
 

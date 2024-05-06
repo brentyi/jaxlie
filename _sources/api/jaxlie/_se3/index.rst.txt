@@ -22,21 +22,22 @@ Classes
 .. py:class:: SE3(parameters)
 
 
-   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SEBase`\ [\ :py:obj:`jaxlie.SO3`\ ]
+   Bases: :py:obj:`jaxlie.SEBase`\ [\ :py:obj:`jaxlie.SO3`\ ]
 
    .. autoapi-inheritance-diagram:: jaxlie.SE3
       :parts: 1
 
    
-   Special Euclidean group for proper rigid transforms in 3D.
+   Special Euclidean group for proper rigid transforms in 3D. Broadcasting
+   rules are the same as for numpy.
 
    Internal parameterization is ``(qw, qx, qy, qz, x, y, z)``. Tangent parameterization
    is ``(vx, vy, vz, omega_x, omega_y, omega_z)``.
    .. py:attribute:: wxyz_xyz
-      :type: typing_extensions.Annotated[jax.Array, (Ellipsis, 7), jax.numpy.floating]
+      :type: jax.Array
 
       
-      Internal parameters. wxyz quaternion followed by xyz translation.
+      Internal parameters. wxyz quaternion followed by xyz translation. Shape should be ``(*, 7)``.
 
    .. py:method:: __repr__()
 
@@ -64,11 +65,13 @@ Classes
       
       Returns a transform's translation term.
 
-   .. py:method:: identity()
+   .. py:method:: identity(batch_axes = ())
       :classmethod:
 
       
       Returns identity element.
+
+      :param batch_axes: Any leading batch axes for the output transform.
 
       :returns: Identity element.
 
@@ -126,7 +129,7 @@ Classes
 
       :returns: Output. Shape should be ``(tangent_dim, tangent_dim)``.
 
-   .. py:method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key, batch_axes = ())
       :classmethod:
 
       
@@ -134,6 +137,8 @@ Classes
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :param batch_axes: Any leading batch axes for the output transforms. Each
+                         sampled transform will be different.
 
       :returns: Sampled group member.
 

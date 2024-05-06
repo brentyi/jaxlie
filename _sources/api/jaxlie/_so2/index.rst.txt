@@ -22,20 +22,21 @@ Classes
 .. py:class:: SO2(parameters)
 
 
-   Bases: :py:obj:`jax_dataclasses.EnforcedAnnotationsMixin`, :py:obj:`jaxlie.SOBase`
+   Bases: :py:obj:`jaxlie.SOBase`
 
    .. autoapi-inheritance-diagram:: jaxlie.SO2
       :parts: 1
 
    
-   Special orthogonal group for 2D rotations.
+   Special orthogonal group for 2D rotations. Broadcasting rules are the
+   same as for ``numpy``.
 
    Internal parameterization is ``(cos, sin)``. Tangent parameterization is ``(omega,)``.
    .. py:attribute:: unit_complex
-      :type: typing_extensions.Annotated[jax.Array, (Ellipsis, 2), jax.numpy.floating]
+      :type: jax.Array
 
       
-      Internal parameters. ``(cos, sin)``.
+      Internal parameters. ``(cos, sin)``. Shape should be ``(*, 2)``.
 
    .. py:method:: __repr__()
 
@@ -53,11 +54,13 @@ Classes
       
       Compute a scalar angle from a rotation object.
 
-   .. py:method:: identity()
+   .. py:method:: identity(batch_axes = ())
       :classmethod:
 
       
       Returns identity element.
+
+      :param batch_axes: Any leading batch axes for the output transform.
 
       :returns: Identity element.
 
@@ -145,7 +148,7 @@ Classes
 
       :returns: Normalized group member.
 
-   .. py:method:: sample_uniform(key)
+   .. py:method:: sample_uniform(key, batch_axes = ())
       :classmethod:
 
       
@@ -153,6 +156,8 @@ Classes
       range [-1, 1].
 
       :param key: PRNG key, as returned by ``jax.random.PRNGKey()``.
+      :param batch_axes: Any leading batch axes for the output transforms. Each
+                         sampled transform will be different.
 
       :returns: Sampled group member.
 
