@@ -59,7 +59,7 @@ Where each group supports:
   <code>jaxlie.<strong>manifold.\*</strong></code>).
 - Compatibility with standard JAX function transformations. (see
   [./examples/vmap_example.py](./examples/vmap_example.py))
-- Broadcasting.
+- Broadcasting for leading axes.
 - (Un)flattening as pytree nodes.
 - Serialization using [flax](https://github.com/google/flax).
 

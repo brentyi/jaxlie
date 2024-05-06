@@ -31,7 +31,8 @@ def _skew(omega: hints.Array) -> jax.Array:
 )
 @jdc.pytree_dataclass
 class SE3(_base.SEBase[SO3]):
-    """Special Euclidean group for proper rigid transforms in 3D.
+    """Special Euclidean group for proper rigid transforms in 3D. Broadcasting
+    rules are the same as for numpy.
 
     Internal parameterization is `(qw, qx, qy, qz, x, y, z)`. Tangent parameterization
     is `(vx, vy, vz, omega_x, omega_y, omega_z)`.

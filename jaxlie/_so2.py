@@ -19,7 +19,8 @@ from .utils import broadcast_leading_axes, register_lie_group
 )
 @jdc.pytree_dataclass
 class SO2(_base.SOBase):
-    """Special orthogonal group for 2D rotations.
+    """Special orthogonal group for 2D rotations. Broadcasting rules are the
+    same as for `numpy`.
 
     Internal parameterization is `(cos, sin)`. Tangent parameterization is `(omega,)`.
     """

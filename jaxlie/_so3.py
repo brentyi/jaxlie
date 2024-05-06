@@ -19,7 +19,8 @@ from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 )
 @jdc.pytree_dataclass
 class SO3(_base.SOBase):
-    """Special orthogonal group for 3D rotations.
+    """Special orthogonal group for 3D rotations. Broadcasting rules are the same as
+    for numpy.
 
     Internal parameterization is `(qw, qx, qy, qz)`. Tangent parameterization is
     `(omega_x, omega_y, omega_z)`.
