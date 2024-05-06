@@ -243,6 +243,10 @@ Attributes
       :classmethod:
 
 
+   .. py:method:: from_translation(translation)
+      :classmethod:
+
+
    .. py:method:: rotation()
       :abstractmethod:
 
