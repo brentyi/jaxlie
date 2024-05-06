@@ -1,11 +1,11 @@
 """Tests with explicit examples."""
 
+import jaxlie
 import numpy as onp
 from hypothesis import given, settings
 from hypothesis import strategies as st
-from utils import assert_arrays_close, assert_transforms_close, sample_transform
 
-import jaxlie
+from utils import assert_arrays_close, assert_transforms_close, sample_transform
 
 
 @settings(deadline=None)
@@ -51,6 +51,18 @@ def test_se3_rotation():
     )
     p_b = onp.array([0.0, 1.0, 0.0])
     p_w = onp.array([0.0, 0.0, 1.0])
+    assert_arrays_close(T_w_b @ p_b, T_w_b_alt @ p_b, p_w)
+
+
+def test_se3_from_translation():
+    """Simple test for SE(3) rotation terms."""
+    T_w_b = jaxlie.SE3.from_rotation_and_translation(
+        rotation=jaxlie.SO3.identity(),
+        translation=onp.arange(3) * 1.0,
+    )
+    T_w_b_alt = jaxlie.SE3.from_translation(onp.arange(3) * 1.0)
+    p_b = onp.array([0.0, 1.0, 0.0])
+    p_w = onp.array([0.0, 2.0, 2.0])
     assert_arrays_close(T_w_b @ p_b, T_w_b_alt @ p_b, p_w)
 
 

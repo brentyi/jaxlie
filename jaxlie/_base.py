@@ -4,7 +4,7 @@ from typing import ClassVar, Generic, Tuple, TypeVar, Union, overload
 import jax
 import numpy as onp
 from jax import numpy as jnp
-from typing_extensions import Self, final, override
+from typing_extensions import Self, final, get_args, override
 
 from . import hints
 
@@ -236,6 +236,16 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
                 (*rotation.get_batch_axes(), cls.space_dim),
                 dtype=rotation.parameters().dtype,
             ),
+        )
+
+    @final
+    @classmethod
+    def from_translation(cls, translation: hints.Array) -> Self:
+        # Extract rotation class from type parameter.
+        assert len(cls.__orig_bases__) == 1  # type: ignore
+        return cls.from_rotation_and_translation(
+            rotation=get_args(cls.__orig_bases__[0])[0].identity(),  # type: ignore
+            translation=translation,
         )
 
     @abc.abstractmethod
