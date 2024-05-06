@@ -1,11 +1,11 @@
-"""Examples of vectorizing transformations via vmap.
+"""jaxlie implements numpy-style broadcasting for all operations. For more
+explicit vectorization, we can also use vmap function transformations.
 
-Omitted for brevity here, but note that in practice we usually want to JIT after
-vmapping!"""
+Omitted for brevity here, but in practice we usually want to JIT after
+vmapping."""
 
 import jax
 import numpy as onp
-
 from jaxlie import SO3
 
 N = 100
@@ -60,6 +60,10 @@ assert p_transformed_stacked.shape == (N, 3)
 p_transformed_stacked = jax.vmap(lambda p: SO3.apply(R_single, p))(p_stacked)
 assert p_transformed_stacked.shape == (N, 3)
 
+# We can also just rely on broadcasting.
+p_transformed_stacked = R_single @ p_stacked
+assert p_transformed_stacked.shape == (N, 3)
+
 #############################
 # (4) Applying N transformations to N points.
 #############################
@@ -69,11 +73,19 @@ assert p_transformed_stacked.shape == (N, 3)
 p_transformed_stacked = jax.vmap(SO3.apply)(R_stacked, p_stacked)
 assert p_transformed_stacked.shape == (N, 3)
 
+# We can also just rely on broadcasting.
+p_transformed_stacked = R_stacked @ p_stacked
+assert p_transformed_stacked.shape == (N, 3)
+
 #############################
 # (5) Applying N transformations to 1 point.
 #############################
 
 p_transformed_stacked = jax.vmap(lambda R: SO3.apply(R, p_single))(R_stacked)
+assert p_transformed_stacked.shape == (N, 3)
+
+# We can also just rely on broadcasting.
+p_transformed_stacked = R_stacked @ p_single[None, :]
 assert p_transformed_stacked.shape == (N, 3)
 
 #############################
@@ -95,3 +107,7 @@ assert (jax.vmap(SO3.multiply)(R_stacked, R_stacked)).wxyz.shape == (N, 4)
 
 # Or N x 1 multiplication:
 assert (jax.vmap(lambda R: SO3.multiply(R, R_single))(R_stacked)).wxyz.shape == (N, 4)
+
+# Again, broadcasting also works.
+assert (R_stacked @ R_stacked).wxyz.shape == (N, 4)
+assert (R_stacked @ SO3(R_single.wxyz[None, :])).wxyz.shape == (N, 4)
