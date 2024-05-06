@@ -1,6 +1,6 @@
 import functools
 import random
-from typing import Any, Callable, List, Type, TypeVar, cast
+from typing import Any, Callable, List, Tuple, Type, TypeVar, cast
 
 import jax
 import numpy as onp
@@ -18,32 +18,42 @@ jax.config.update("jax_enable_x64", True)
 T = TypeVar("T", bound=jaxlie.MatrixLieGroup)
 
 
-def sample_transform(Group: Type[T]) -> T:
+def sample_transform(Group: Type[T], batch_axes: Tuple[int, ...] = ()) -> T:
     """Sample a random transform from a group."""
     seed = random.getrandbits(32)
     strategy = random.randint(0, 2)
 
     if strategy == 0:
         # Uniform sampling.
-        return cast(T, Group.sample_uniform(key=jax.random.PRNGKey(seed=seed)))
+        return cast(
+            T,
+            Group.sample_uniform(
+                key=jax.random.PRNGKey(seed=seed), batch_axes=batch_axes
+            ),
+        )
     elif strategy == 1:
         # Sample from normally-sampled tangent vector.
-        return cast(T, Group.exp(onp.random.randn(Group.tangent_dim)))
+        return cast(T, Group.exp(onp.random.randn(*batch_axes, Group.tangent_dim)))
     elif strategy == 2:
         # Sample near identity.
-        return cast(T, Group.exp(onp.random.randn(Group.tangent_dim) * 1e-7))
+        return cast(
+            T, Group.exp(onp.random.randn(*batch_axes, Group.tangent_dim) * 1e-7)
+        )
     else:
         assert False
 
 
 def general_group_test(
-    f: Callable[[Type[jaxlie.MatrixLieGroup]], None], max_examples: int = 30
-) -> Callable[[Type[jaxlie.MatrixLieGroup], Any], None]:
+    f: Callable[[Type[jaxlie.MatrixLieGroup], Tuple[int, ...]], None],
+    max_examples: int = 30,
+) -> Callable[[Type[jaxlie.MatrixLieGroup], Tuple[int, ...], Any], None]:
     """Decorator for defining tests that run on all group types."""
 
     # Disregard unused argument.
-    def f_wrapped(Group: Type[jaxlie.MatrixLieGroup], _random_module) -> None:
-        f(Group)
+    def f_wrapped(
+        Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...], _random_module
+    ) -> None:
+        f(Group, batch_axes)
 
     # Disable timing check (first run requires JIT tracing and will be slower).
     f_wrapped = settings(deadline=None, max_examples=max_examples)(f_wrapped)
@@ -59,6 +69,16 @@ def general_group_test(
             jaxlie.SE2,
             jaxlie.SO3,
             jaxlie.SE3,
+        ],
+    )(f_wrapped)
+
+    # Parametrize tests with each group type.
+    f_wrapped = pytest.mark.parametrize(
+        "batch_axes",
+        [
+            (),
+            (1,),
+            (3, 1, 2, 1),
         ],
     )(f_wrapped)
     return f_wrapped
@@ -77,11 +97,11 @@ def assert_transforms_close(a: jaxlie.MatrixLieGroup, b: jaxlie.MatrixLieGroup):
     p1 = jnp.asarray(a.parameters())
     p2 = jnp.asarray(b.parameters())
     if isinstance(a, jaxlie.SO3):
-        p1 = p1 * jnp.sign(jnp.sum(p1))
-        p2 = p2 * jnp.sign(jnp.sum(p2))
+        p1 = p1 * jnp.sign(jnp.sum(p1, axis=-1, keepdims=True))
+        p2 = p2 * jnp.sign(jnp.sum(p2, axis=-1, keepdims=True))
     elif isinstance(a, jaxlie.SE3):
-        p1 = p1.at[:4].mul(jnp.sign(jnp.sum(p1[:4])))
-        p2 = p2.at[:4].mul(jnp.sign(jnp.sum(p2[:4])))
+        p1 = p1.at[..., :4].mul(jnp.sign(jnp.sum(p1[..., :4], axis=-1, keepdims=True)))
+        p2 = p2.at[..., :4].mul(jnp.sign(jnp.sum(p2[..., :4], axis=-1, keepdims=True)))
 
     # Make sure parameters are equal.
     assert_arrays_close(p1, p2)

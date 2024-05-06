@@ -22,6 +22,8 @@ Current functionality:
 
 - Pytree registration for all dataclasses.
 
+- Broadcasting for leading axes.
+
 - Helpers + analytical Jacobians for tangent-space optimization
   (:code:`jaxlie.manifold`).
 

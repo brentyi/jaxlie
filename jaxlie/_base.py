@@ -1,8 +1,9 @@
 import abc
-from typing import ClassVar, Generic, Tuple, Type, TypeVar, Union, overload
+from typing import ClassVar, Generic, Tuple, TypeVar, Union, overload
 
 import jax
 import numpy as onp
+from jax import numpy as jnp
 from typing_extensions import Self, final, override
 
 from . import hints
@@ -64,8 +65,11 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def identity(cls) -> Self:
+    def identity(cls, batch_axes: Tuple[int, ...] = ()) -> Self:
         """Returns identity element.
+
+        Args:
+            batch_axes: Any leading batch axes for the output transform.
 
         Returns:
             Identity element.
@@ -169,24 +173,25 @@ class MatrixLieGroup(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def sample_uniform(cls, key: jax.Array) -> Self:
+    def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> Self:
         """Draw a uniform sample from the group. Translations (if applicable) are in the
         range [-1, 1].
 
         Args:
             key: PRNG key, as returned by `jax.random.PRNGKey()`.
+            batch_axes: Any leading batch axes for the output transforms. Each
+                sampled transform will be different.
 
         Returns:
             Sampled group member.
         """
 
-    @abc.abstractmethod
+    @final
     def get_batch_axes(self) -> Tuple[int, ...]:
         """Return any leading batch axes in contained parameters. If an array of shape
         `(100, 4)` is placed in the wxyz field of an SO3 object, for example, this will
-        return `(100,)`.
-
-        This should generally be implemented by `jdc.EnforcedAnnotationsMixin`."""
+        return `(100,)`."""
+        return self.parameters().shape[:-1]
 
 
 class SOBase(MatrixLieGroup):
@@ -227,7 +232,10 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     def from_rotation(cls, rotation: ContainedSOType) -> Self:
         return cls.from_rotation_and_translation(
             rotation=rotation,
-            translation=onp.zeros(cls.space_dim, dtype=rotation.parameters().dtype),
+            translation=jnp.zeros(
+                (*rotation.get_batch_axes(), cls.space_dim),
+                dtype=rotation.parameters().dtype,
+            ),
         )
 
     @abc.abstractmethod

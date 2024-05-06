@@ -1,4 +1,4 @@
-from typing import Any, NamedTuple, Union
+from typing import NamedTuple, Union
 
 import jax
 import numpy as onp

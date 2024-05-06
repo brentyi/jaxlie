@@ -1,7 +1,7 @@
 """Compare forward- and reverse-mode Jacobians with a numerical Jacobian."""
 
 from functools import lru_cache
-from typing import Callable, Type, cast
+from typing import Callable, Tuple, Type, cast
 
 import jax
 import numpy as onp
@@ -56,16 +56,18 @@ def test_so3_nan():
 
 
 @general_group_test
-def test_exp_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_exp_random(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check that exp Jacobians are consistent, with randomly sampled transforms."""
+    del batch_axes  # Not used for autodiff tests.
     generator = onp.random.randn(Group.tangent_dim)
     _assert_jacobians_close(Group=Group, f=_exp, primal=generator)
 
 
 @general_group_test
-def test_exp_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_exp_identity(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check that exp Jacobians are consistent, with transforms close to the
     identity."""
+    del batch_axes  # Not used for autodiff tests.
     generator = onp.random.randn(Group.tangent_dim) * 1e-6
     _assert_jacobians_close(Group=Group, f=_exp, primal=generator)
 
@@ -76,14 +78,15 @@ def _log(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
 
 
 @general_group_test
-def test_log_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_log_random(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check that log Jacobians are consistent, with randomly sampled transforms."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_log, primal=params)
 
 
 @general_group_test
-def test_log_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_log_identity(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check that log Jacobians are consistent, with transforms close to the
     identity."""
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
@@ -96,16 +99,22 @@ def _adjoint(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array
 
 
 @general_group_test
-def test_adjoint_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_adjoint_random(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that adjoint Jacobians are consistent, with randomly sampled transforms."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_adjoint, primal=params)
 
 
 @general_group_test
-def test_adjoint_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_adjoint_identity(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that adjoint Jacobians are consistent, with transforms close to the
     identity."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_adjoint, primal=params)
 
@@ -116,16 +125,20 @@ def _apply(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array:
 
 
 @general_group_test
-def test_apply_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_apply_random(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check that apply Jacobians are consistent, with randomly sampled transforms."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_apply, primal=params)
 
 
 @general_group_test
-def test_apply_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_apply_identity(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that apply Jacobians are consistent, with transforms close to the
     identity."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_apply, primal=params)
 
@@ -136,17 +149,23 @@ def _multiply(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Arra
 
 
 @general_group_test
-def test_multiply_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_multiply_random(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that multiply Jacobians are consistent, with randomly sampled
     transforms."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_multiply, primal=params)
 
 
 @general_group_test
-def test_multiply_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_multiply_identity(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that multiply Jacobians are consistent, with transforms close to the
     identity."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_multiply, primal=params)
 
@@ -157,15 +176,21 @@ def _inverse(Group: Type[jaxlie.MatrixLieGroup], params: jax.Array) -> jax.Array
 
 
 @general_group_test
-def test_inverse_random(Group: Type[jaxlie.MatrixLieGroup]):
+def test_inverse_random(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that inverse Jacobians are consistent, with randomly sampled transforms."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim)).parameters()
     _assert_jacobians_close(Group=Group, f=_inverse, primal=params)
 
 
 @general_group_test
-def test_inverse_identity(Group: Type[jaxlie.MatrixLieGroup]):
+def test_inverse_identity(
+    Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
+):
     """Check that inverse Jacobians are consistent, with transforms close to the
     identity."""
+    del batch_axes  # Not used for autodiff tests.
     params = Group.exp(onp.random.randn(Group.tangent_dim) * 1e-6).parameters()
     _assert_jacobians_close(Group=Group, f=_inverse, primal=params)

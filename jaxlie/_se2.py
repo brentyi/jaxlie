@@ -1,13 +1,13 @@
-from typing import cast
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
-from typing_extensions import Annotated, override
+from typing_extensions import override
 
 from . import _base, hints
 from ._so2 import SO2
-from .utils import get_epsilon, register_lie_group
+from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
 @register_lie_group(
@@ -17,8 +17,9 @@ from .utils import get_epsilon, register_lie_group
     space_dim=2,
 )
 @jdc.pytree_dataclass
-class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
-    """Special Euclidean group for proper rigid transforms in 2D.
+class SE2(_base.SEBase[SO2]):
+    """Special Euclidean group for proper rigid transforms in 2D. Broadcasting
+    rules are the same as for numpy.
 
     Internal parameterization is `(cos, sin, x, y)`. Tangent parameterization is `(vx,
     vy, omega)`.
@@ -26,12 +27,8 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     # SE2-specific.
 
-    unit_complex_xy: Annotated[
-        jax.Array,
-        (..., 4),  # Shape.
-        jnp.floating,  # Data-type.
-    ]
-    """Internal parameters. `(cos, sin, x, y)`."""
+    unit_complex_xy: jax.Array
+    """Internal parameters. `(cos, sin, x, y)`. Shape should be `(*, 3)`."""
 
     @override
     def __repr__(self) -> str:
@@ -47,7 +44,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         """
         cos = jnp.cos(theta)
         sin = jnp.sin(theta)
-        return SE2(unit_complex_xy=jnp.array([cos, sin, x, y]))
+        return SE2(unit_complex_xy=jnp.stack([cos, sin, x, y], axis=-1))
 
     # SE-specific.
 
@@ -58,9 +55,12 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         rotation: SO2,
         translation: hints.Array,
     ) -> "SE2":
-        assert translation.shape == (2,)
+        assert translation.shape[-1:] == (2,)
+        rotation, translation = broadcast_leading_axes((rotation, translation))
         return SE2(
-            unit_complex_xy=jnp.concatenate([rotation.unit_complex, translation])
+            unit_complex_xy=jnp.concatenate(
+                [rotation.unit_complex, translation], axis=-1
+            )
         )
 
     @override
@@ -75,17 +75,21 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     @classmethod
     @override
-    def identity(cls) -> "SE2":
-        return SE2(unit_complex_xy=jnp.array([1.0, 0.0, 0.0, 0.0]))
+    def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> "SE2":
+        return SE2(
+            unit_complex_xy=jnp.broadcast_to(
+                jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4)
+            )
+        )
 
     @classmethod
     @override
     def from_matrix(cls, matrix: hints.Array) -> "SE2":
-        assert matrix.shape == (3, 3)
+        assert matrix.shape[-2:] == (3, 3)
         # Currently assumes bottom row is [0, 0, 1].
         return SE2.from_rotation_and_translation(
-            rotation=SO2.from_matrix(matrix[:2, :2]),
-            translation=matrix[:2, 2],
+            rotation=SO2.from_matrix(matrix[..., :2, :2]),
+            translation=matrix[..., :2, 2],
         )
 
     # Accessors.
@@ -96,14 +100,22 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
 
     @override
     def as_matrix(self) -> jax.Array:
-        cos, sin, x, y = self.unit_complex_xy
-        return jnp.array(
+        cos, sin, x, y = jnp.moveaxis(self.unit_complex_xy, -1, 0)
+        out = jnp.stack(
             [
-                [cos, -sin, x],
-                [sin, cos, y],
-                [0.0, 0.0, 1.0],
-            ]
-        )
+                cos,
+                -sin,
+                x,
+                sin,
+                cos,
+                y,
+                jnp.zeros_like(x),
+                jnp.zeros_like(x),
+                jnp.ones_like(x),
+            ],
+            axis=-1,
+        ).reshape((*self.get_batch_axes(), 3, 3))
+        return out
 
     # Operations.
 
@@ -115,9 +127,9 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         # Also see:
         # > http://ethaneade.com/lie.pdf
 
-        assert tangent.shape == (3,)
+        assert tangent.shape[-1:] == (3,)
 
-        theta = tangent[2]
+        theta = tangent[..., 2]
         use_taylor = jnp.abs(theta) < get_epsilon(tangent.dtype)
 
         # Shim to avoid NaNs in jnp.where branches, which cause failures for
@@ -126,7 +138,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             jax.Array,
             jnp.where(
                 use_taylor,
-                1.0,  # Any non-zero value should do here.
+                jnp.ones_like(theta),  # Any non-zero value should do here.
                 theta,
             ),
         )
@@ -149,15 +161,18 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             ),
         )
 
-        V = jnp.array(
+        V = jnp.stack(
             [
-                [sin_over_theta, -one_minus_cos_over_theta],
-                [one_minus_cos_over_theta, sin_over_theta],
-            ]
-        )
+                sin_over_theta,
+                -one_minus_cos_over_theta,
+                one_minus_cos_over_theta,
+                sin_over_theta,
+            ],
+            axis=-1,
+        ).reshape((*tangent.shape[:-1], 2, 2))
         return SE2.from_rotation_and_translation(
             rotation=SO2.from_radians(theta),
-            translation=V @ tangent[:2],
+            translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :2]),
         )
 
     @override
@@ -167,7 +182,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         # Also see:
         # > http://ethaneade.com/lie.pdf
 
-        theta = self.rotation().log()[0]
+        theta = self.rotation().log()[..., 0]
 
         cos = jnp.cos(theta)
         cos_minus_one = cos - 1.0
@@ -178,7 +193,7 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
         # reverse-mode AD.
         safe_cos_minus_one = jnp.where(
             use_taylor,
-            1.0,  # Any non-zero value should do here.
+            jnp.ones_like(cos_minus_one),  # Any non-zero value should do here.
             cos_minus_one,
         )
 
@@ -190,34 +205,58 @@ class SE2(jdc.EnforcedAnnotationsMixin, _base.SEBase[SO2]):
             -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
         )
 
-        V_inv = jnp.array(
+        V_inv = jnp.stack(
             [
-                [half_theta_over_tan_half_theta, half_theta],
-                [-half_theta, half_theta_over_tan_half_theta],
-            ]
-        )
+                half_theta_over_tan_half_theta,
+                half_theta,
+                -half_theta,
+                half_theta_over_tan_half_theta,
+            ],
+            axis=-1,
+        ).reshape((*theta.shape, 2, 2))
 
-        tangent = jnp.concatenate([V_inv @ self.translation(), theta[None]])
+        tangent = jnp.concatenate(
+            [
+                jnp.einsum("...ij,...j->...i", V_inv, self.translation()),
+                theta[..., None],
+            ],
+            axis=-1,
+        )
         return tangent
 
     @override
     def adjoint(self: "SE2") -> jax.Array:
-        cos, sin, x, y = self.unit_complex_xy
-        return jnp.array(
+        cos, sin, x, y = jnp.moveaxis(self.unit_complex_xy, -1, 0)
+        return jnp.stack(
             [
-                [cos, -sin, y],
-                [sin, cos, -x],
-                [0.0, 0.0, 1.0],
-            ]
-        )
+                cos,
+                -sin,
+                y,
+                sin,
+                cos,
+                -x,
+                jnp.zeros_like(x),
+                jnp.zeros_like(x),
+                jnp.ones_like(x),
+            ],
+            axis=-1,
+        ).reshape((*self.get_batch_axes(), 3, 3))
 
     @classmethod
     @override
-    def sample_uniform(cls, key: jax.Array) -> "SE2":
+    def sample_uniform(
+        cls, key: jax.Array, batch_axes: jdc.Static[Tuple[int, ...]] = ()
+    ) -> "SE2":
         key0, key1 = jax.random.split(key)
         return SE2.from_rotation_and_translation(
-            rotation=SO2.sample_uniform(key0),
+            rotation=SO2.sample_uniform(key0, batch_axes=batch_axes),
             translation=jax.random.uniform(
-                key=key1, shape=(2,), minval=-1.0, maxval=1.0
+                key=key1,
+                shape=(
+                    *batch_axes,
+                    2,
+                ),
+                minval=-1.0,
+                maxval=1.0,
             ),
         )

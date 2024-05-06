@@ -1,7 +1,9 @@
-from typing import TYPE_CHECKING, Callable, Type, TypeVar
+from typing import TYPE_CHECKING, Callable, Tuple, Type, TypeVar, Union, cast
 
-import jax
+import jax_dataclasses as jdc
 from jax import numpy as jnp
+
+from jaxlie.hints import Array
 
 if TYPE_CHECKING:
     from .._base import MatrixLieGroup
@@ -51,8 +53,47 @@ def register_lie_group(
             and f != "get_batch_axes",  # Avoid returning tracers.
             dir(cls),
         ):
-            setattr(cls, f, jax.jit(getattr(cls, f)))
+            setattr(cls, f, jdc.jit(getattr(cls, f)))
 
         return cls
 
     return _wrap
+
+
+TupleOfBroadcastable = TypeVar(
+    "TupleOfBroadcastable",
+    bound="Tuple[Union[MatrixLieGroup, Array], ...]",
+)
+
+
+def broadcast_leading_axes(inputs: TupleOfBroadcastable) -> TupleOfBroadcastable:
+    """Broadcast leading axes of arrays. Takes tuples of either:
+    - an array, which we assume has shape (*, D).
+    - a Lie group object."""
+
+    from .._base import MatrixLieGroup
+
+    array_inputs = [
+        (
+            (x.parameters(), (x.parameters_dim,))
+            if isinstance(x, MatrixLieGroup)
+            else (x, x.shape[-1:])
+        )
+        for x in inputs
+    ]
+    for array, shape_suffix in array_inputs:
+        assert array.shape[-len(shape_suffix) :] == shape_suffix
+    batch_axes = jnp.broadcast_shapes(
+        *[array.shape[: -len(suffix)] for array, suffix in array_inputs]
+    )
+    broadcasted_arrays = tuple(
+        jnp.broadcast_to(array, batch_axes + shape_suffix)
+        for (array, shape_suffix) in array_inputs
+    )
+    return cast(
+        TupleOfBroadcastable,
+        tuple(
+            array if not isinstance(inp, MatrixLieGroup) else type(inp)(array)
+            for array, inp in zip(broadcasted_arrays, inputs)
+        ),
+    )

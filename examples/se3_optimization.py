@@ -80,7 +80,7 @@ class ExponentialCoordinatesParameters:
 
 
 def compute_loss(
-    params: Union[Parameters, ExponentialCoordinatesParameters]
+    params: Union[Parameters, ExponentialCoordinatesParameters],
 ) -> jax.Array:
     """As our loss, we enforce (a) priors on our transforms and (b) a consistency
     constraint."""
@@ -128,11 +128,11 @@ class State:
         elif algorithm == "projected":
             # Initialize gradient statistics directly in quaternion space.
             params = global_params
-            optimizer_state = optimizer.init(params)  # type: ignore
+            optimizer_state = optimizer.init(params)
         elif algorithm == "exponential_coordinates":
             # Switch to a log-space parameterization.
             params = ExponentialCoordinatesParameters.from_global(global_params)
-            optimizer_state = optimizer.init(params)  # type: ignore
+            optimizer_state = optimizer.init(params)
         else:
             assert_never(algorithm)
 
@@ -155,7 +155,9 @@ class State:
             # the tangent space.
             loss, grads = jaxlie.manifold.value_and_grad(compute_loss)(self.params)
             updates, new_optimizer_state = self.optimizer.update(
-                grads, self.optimizer_state, self.params  # type: ignore
+                grads,
+                self.optimizer_state,
+                self.params,
             )
             new_params = jaxlie.manifold.rplus(self.params, updates)
 
@@ -163,9 +165,11 @@ class State:
             # Projection-based approach.
             loss, grads = jax.value_and_grad(compute_loss)(self.params)
             updates, new_optimizer_state = self.optimizer.update(
-                grads, self.optimizer_state, self.params  # type: ignore
+                grads,
+                self.optimizer_state,
+                self.params,
             )
-            new_params = optax.apply_updates(self.params, updates)  # type: ignore
+            new_params = optax.apply_updates(self.params, updates)
 
             # Project back to manifold.
             new_params = jaxlie.manifold.normalize_all(new_params)
@@ -174,16 +178,18 @@ class State:
             # If we parameterize with exponential coordinates, we can
             loss, grads = jax.value_and_grad(compute_loss)(self.params)
             updates, new_optimizer_state = self.optimizer.update(
-                grads, self.optimizer_state, self.params  # type: ignore
+                grads,
+                self.optimizer_state,
+                self.params,
             )
-            new_params = optax.apply_updates(self.params, updates)  # type: ignore
+            new_params = optax.apply_updates(self.params, updates)
 
         else:
             assert assert_never(self.algorithm)
 
         # Return updated structure.
         with jdc.copy_and_mutate(self, validate=True) as new_state:
-            new_state.params = new_params  # type: ignore
+            new_state.params = new_params
             new_state.optimizer_state = new_optimizer_state
 
         return loss, new_state
