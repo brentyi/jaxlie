@@ -309,7 +309,7 @@ Classes
       :type: jax.Array
 
       
-      Internal parameters. ``(cos, sin, x, y)``. Shape should be ``(*, 3)``.
+      Internal parameters. ``(cos, sin, x, y)``. Shape should be ``(*, 4)``.
 
    .. py:method:: __repr__()
 
