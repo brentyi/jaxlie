@@ -28,7 +28,7 @@ class SE2(_base.SEBase[SO2]):
     # SE2-specific.
 
     unit_complex_xy: jax.Array
-    """Internal parameters. `(cos, sin, x, y)`. Shape should be `(*, 3)`."""
+    """Internal parameters. `(cos, sin, x, y)`. Shape should be `(*, 4)`."""
 
     @override
     def __repr__(self) -> str:
