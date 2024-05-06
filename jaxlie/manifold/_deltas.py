@@ -102,38 +102,31 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
     Returns:
         Jacobian. Shape should be `(Group.parameters_dim, Group.tangent_dim)`.
     """
-    if type(transform) is SO2:
+    if isinstance(transform, SO2):
         # Jacobian row indices: cos, sin
         # Jacobian col indices: theta
 
-        transform_so2 = cast(SO2, transform)
         J = jnp.zeros((*transform.get_batch_axes(), 2, 1))
+        cos, sin = jnp.moveaxis(transform.unit_complex, -1, 0)
+        J = J.at[..., 0, 0].set(-sin).at[..., 1, 0].set(cos)
 
-        cos, sin = jnp.moveaxis(transform_so2.unit_complex, -1, 0)
-        J = J.at[..., 0, :].set(-sin).at[..., 1, :].set(cos)
-
-    elif type(transform) is SE2:
+    elif isinstance(transform, SE2):
         # Jacobian row indices: cos, sin, x, y
         # Jacobian col indices: vx, vy, omega
-
-        transform_se2 = cast(SE2, transform)
         J = jnp.zeros((*transform.get_batch_axes(), 4, 3))
 
         # Translation terms.
-        J = J.at[..., 2:, :2].set(transform_se2.rotation().as_matrix())
+        J = J.at[..., 2:, :2].set(transform.rotation().as_matrix())
 
         # Rotation terms.
         J = J.at[..., :2, 2:3].set(
-            rplus_jacobian_parameters_wrt_delta(transform_se2.rotation())
+            rplus_jacobian_parameters_wrt_delta(transform.rotation())
         )
 
-    elif type(transform) is SO3:
+    elif isinstance(transform, SO3):
         # Jacobian row indices: qw, qx, qy, qz
         # Jacobian col indices: omega x, omega y, omega z
-
-        transform_so3 = cast(SO3, transform)
-
-        w, x, y, z = jnp.moveaxis(transform_so3.wxyz, -1, 0)
+        w, x, y, z = jnp.moveaxis(transform.wxyz, -1, 0)
         neg_x = -x
         neg_y = -y
         neg_z = -z
@@ -159,19 +152,17 @@ def rplus_jacobian_parameters_wrt_delta(transform: MatrixLieGroup) -> jax.Array:
             / 2.0
         )
 
-    elif type(transform) is SE3:
+    elif isinstance(transform, SE3):
         # Jacobian row indices: qw, qx, qy, qz, x, y, z
         # Jacobian col indices: vx, vy, vz, omega x, omega y, omega z
-
-        transform_se3 = cast(SE3, transform)
         J = jnp.zeros((*transform.get_batch_axes(), 7, 6))
 
         # Translation terms.
-        J = J.at[..., 4:, :3].set(transform_se3.rotation().as_matrix())
+        J = J.at[..., 4:, :3].set(transform.rotation().as_matrix())
 
         # Rotation terms.
         J = J.at[..., :4, 3:6].set(
-            rplus_jacobian_parameters_wrt_delta(transform_se3.rotation())
+            rplus_jacobian_parameters_wrt_delta(transform.rotation())
         )
 
     else:

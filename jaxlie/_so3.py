@@ -244,7 +244,7 @@ class SO3(_base.SOBase):
             jnp.where(cond2, case2_t, case3_t),
         )
         q = jnp.where(
-            cond0,
+            cond0[..., None],
             jnp.where(cond1[..., None], case0_q, case1_q),
             jnp.where(cond2[..., None], case2_q, case3_q),
         )

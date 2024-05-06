@@ -8,7 +8,7 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from .utils import register_lie_group, broadcast_leading_axes
+from .utils import broadcast_leading_axes, register_lie_group
 
 
 @register_lie_group(

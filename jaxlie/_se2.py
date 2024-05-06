@@ -7,7 +7,7 @@ from typing_extensions import override
 
 from . import _base, hints
 from ._so2 import SO2
-from .utils import get_epsilon, register_lie_group
+from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
 @register_lie_group(
@@ -55,6 +55,7 @@ class SE2(_base.SEBase[SO2]):
         translation: hints.Array,
     ) -> "SE2":
         assert translation.shape[-1:] == (2,)
+        rotation, translation = broadcast_leading_axes((rotation, translation))
         return SE2(
             unit_complex_xy=jnp.concatenate(
                 [rotation.unit_complex, translation], axis=-1

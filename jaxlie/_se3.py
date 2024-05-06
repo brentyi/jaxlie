@@ -9,7 +9,7 @@ from typing_extensions import override
 
 from . import _base, hints
 from ._so3 import SO3
-from .utils import get_epsilon, register_lie_group
+from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
 def _skew(omega: hints.Array) -> jax.Array:
@@ -58,6 +58,7 @@ class SE3(_base.SEBase[SO3]):
         translation: hints.Array,
     ) -> SE3:
         assert translation.shape[-1:] == (3,)
+        rotation, translation = broadcast_leading_axes((rotation, translation))
         return SE3(wxyz_xyz=jnp.concatenate([rotation.wxyz, translation], axis=-1))
 
     @override
@@ -93,16 +94,15 @@ class SE3(_base.SEBase[SO3]):
 
     @override
     def as_matrix(self) -> jax.Array:
-        out = jnp.zeros((*self.get_batch_axes(), 4, 4))
-        out = (
-            out.at[..., :3, :3]
+        return (
+            jnp.zeros((*self.get_batch_axes(), 4, 4))
+            .at[..., :3, :3]
             .set(self.rotation().as_matrix())
             .at[..., :3, 3]
             .set(self.translation())
             .at[..., 3, 3]
             .set(1.0)
         )
-        return out
 
     @override
     def parameters(self) -> jax.Array:

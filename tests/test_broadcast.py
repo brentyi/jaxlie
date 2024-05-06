@@ -2,18 +2,18 @@
 
 from typing import Tuple, Type
 
-import jaxlie
 import numpy as onp
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
-
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
     general_group_test,
     sample_transform,
 )
+
+import jaxlie
 
 
 @general_group_test
@@ -27,6 +27,11 @@ def test_broadcast_multiply(
     assert T.get_batch_axes() == batch_axes
 
     T = sample_transform(Group, batch_axes) @ sample_transform(Group, batch_axes=(1,))
+    assert T.get_batch_axes() == batch_axes
+
+    T = sample_transform(Group, batch_axes) @ sample_transform(
+        Group, batch_axes=(1,) * len(batch_axes)
+    )
     assert T.get_batch_axes() == batch_axes
 
     T = sample_transform(Group) @ sample_transform(Group, batch_axes)
@@ -49,6 +54,10 @@ def test_broadcast_apply(
 
     T = sample_transform(Group, batch_axes)
     points = onp.random.randn(1, Group.space_dim)
+    assert (T @ points).shape == (*batch_axes, Group.space_dim)
+
+    T = sample_transform(Group, batch_axes)
+    points = onp.random.randn(*((1,) * len(batch_axes)), Group.space_dim)
     assert (T @ points).shape == (*batch_axes, Group.space_dim)
 
     T = sample_transform(Group)

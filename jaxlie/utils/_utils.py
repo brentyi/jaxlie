@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING, Callable, Tuple, Type, TypeVar, Union, cast
 
+import jax_dataclasses as jdc
 from jax import numpy as jnp
+
 from jaxlie.hints import Array
 
 if TYPE_CHECKING:
@@ -45,13 +47,13 @@ def register_lie_group(
         cls.space_dim = space_dim
 
         # JIT all methods.
-        # for f in filter(
-        #     lambda f: not f.startswith("_")
-        #     and callable(getattr(cls, f))
-        #     and f != "get_batch_axes",  # Avoid returning tracers.
-        #     dir(cls),
-        # ):
-        #     setattr(cls, f, jdc.jit(getattr(cls, f)))
+        for f in filter(
+            lambda f: not f.startswith("_")
+            and callable(getattr(cls, f))
+            and f != "get_batch_axes",  # Avoid returning tracers.
+            dir(cls),
+        ):
+            setattr(cls, f, jdc.jit(getattr(cls, f)))
 
         return cls
 

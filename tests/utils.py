@@ -3,13 +3,14 @@ import random
 from typing import Any, Callable, List, Tuple, Type, TypeVar, cast
 
 import jax
-import jaxlie
 import numpy as onp
 import pytest
 import scipy.optimize
 from hypothesis import given, settings
 from hypothesis import strategies as st
 from jax import numpy as jnp
+
+import jaxlie
 
 # Run all tests with double-precision.
 jax.config.update("jax_enable_x64", True)
