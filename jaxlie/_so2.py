@@ -130,6 +130,16 @@ class SO2(_base.SOBase):
             / jnp.linalg.norm(self.unit_complex, axis=-1, keepdims=True)
         )
 
+    @override
+    def jlog(self) -> jax.Array:
+        # Reference:
+        # For SO2 the jlog and right jacobians are trivially 1, 
+        # equation (126) from Micro-Lie theory:
+        # > https://arxiv.org/pdf/1812.01537
+
+        return jnp.array([1])
+
+
     @classmethod
     @override
     def sample_uniform(

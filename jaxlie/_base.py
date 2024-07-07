@@ -171,6 +171,17 @@ class MatrixLieGroup(abc.ABC):
             Normalized group member.
         """
 
+    @abc.abstractmethod
+    def jlog(self) -> jax.Array:
+        """
+        Computes the Jacobian of the logarithm of the group element.
+
+        This is equivalent to the inverse of the right Jacobian.
+
+        Returns:
+            The Jacobian of the logarithm, having the dimensions `(tangent_dim, tangent_dim,)`.
+        """
+
     @classmethod
     @abc.abstractmethod
     def sample_uniform(cls, key: jax.Array, batch_axes: Tuple[int, ...] = ()) -> Self:
@@ -244,7 +255,8 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
         # Extract rotation class from type parameter.
         assert len(cls.__orig_bases__) == 1  # type: ignore
         return cls.from_rotation_and_translation(
-            rotation=get_args(cls.__orig_bases__[0])[0].identity(),  # type: ignore
+            rotation=get_args(cls.__orig_bases__[0])[
+                0].identity(),  # type: ignore
             translation=translation,
         )
 
@@ -268,7 +280,8 @@ class SEBase(Generic[ContainedSOType], MatrixLieGroup):
     def multiply(self, other: Self) -> Self:
         return type(self).from_rotation_and_translation(
             rotation=self.rotation() @ other.rotation(),
-            translation=(self.rotation() @ other.translation()) + self.translation(),
+            translation=(self.rotation() @ other.translation()) +
+            self.translation(),
         )
 
     @final

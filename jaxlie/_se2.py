@@ -242,6 +242,46 @@ class SE2(_base.SEBase[SO2]):
             axis=-1,
         ).reshape((*self.get_batch_axes(), 3, 3))
 
+    @override
+    def jlog(self) -> jax.Array:
+        # Reference:
+        # This is inverse of matrix (163) from Micro-Lie theory:
+        # > https://arxiv.org/pdf/1812.01537
+
+        log = self.log()
+        rho1, rho2, theta = log[..., 0], log[..., 1], log[..., 2]
+
+        # Safe division function
+        def safe_div(x, y): return jnp.where(jnp.abs(y) < 1e-10, 0., x / y)
+
+        sin_theta = jnp.sin(theta)
+        cos_theta = jnp.cos(theta)
+
+        # Common terms
+        denom = 2 - 2 * cos_theta
+        theta_sin_theta_term = safe_div(theta * sin_theta, denom)
+        one_minus_cos_term = cos_theta - 1
+
+        # Matrix elements
+        a11 = theta_sin_theta_term
+        a12 = -theta / 2
+        a21 = theta / 2
+        a22 = a11  # Same as a11
+
+        a13_num = (rho1 * theta * sin_theta / 2 + rho1 * cos_theta - rho1 +
+                   rho2 * theta * cos_theta / 2 - rho2 * theta / 2)
+        a13 = safe_div(a13_num, theta * one_minus_cos_term)
+
+        a23_num = (-rho1 * theta * cos_theta / 2 + rho1 * theta / 2 +
+                   rho2 * theta * sin_theta / 2 + rho2 * cos_theta - rho2)
+        a23 = safe_div(a23_num, theta * one_minus_cos_term)
+        jlog = jnp.array([
+            [a11, a12, a13],
+            [a21, a22, a23],
+            [0., 0., 1.]
+        ])
+        return jlog
+
     @classmethod
     @override
     def sample_uniform(

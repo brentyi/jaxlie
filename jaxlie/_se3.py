@@ -77,7 +77,8 @@ class SE3(_base.SEBase[SO3]):
     def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SE3:
         return SE3(
             wxyz_xyz=jnp.broadcast_to(
-                jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), (*batch_axes, 7)
+                jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                          ), (*batch_axes, 7)
             )
         )
 
@@ -131,7 +132,8 @@ class SE3(_base.SEBase[SO3]):
             jax.Array,
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta_squared),  # Any non-zero value should do here.
+                # Any non-zero value should do here.
+                jnp.ones_like(theta_squared),
                 theta_squared,
             ),
         )
@@ -144,7 +146,8 @@ class SE3(_base.SEBase[SO3]):
             rotation.as_matrix(),
             (
                 jnp.eye(3)
-                + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
+                + ((1.0 - jnp.cos(theta_safe)) /
+                   (theta_squared_safe))[..., None, None]
                 * skew_omega
                 + (
                     (theta_safe - jnp.sin(theta_safe))
@@ -210,7 +213,8 @@ class SE3(_base.SEBase[SO3]):
         return jnp.concatenate(
             [
                 jnp.concatenate(
-                    [R, jnp.einsum("...ij,...jk->...ik", _skew(self.translation()), R)],
+                    [R, jnp.einsum("...ij,...jk->...ik",
+                                   _skew(self.translation()), R)],
                     axis=-1,
                 ),
                 jnp.concatenate(
@@ -219,6 +223,52 @@ class SE3(_base.SEBase[SO3]):
             ],
             axis=-2,
         )
+
+    @override
+    def jlog(self) -> jax.Array:
+        # Reference:
+        # Equations (179a, 179b, 180) from Micro-Lie theory:
+        # > https://arxiv.org/pdf/1812.01537
+        # and the Jlog6 implementation in Pinocchio:
+        # > https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/namespacepinocchio.html#a82e7cb47ae721d4161bbb143590096c5
+
+        rotation = self.rotation()
+        translation = self.translation()
+
+        jlog_so3 = rotation.jlog()
+
+        w = rotation.log()
+        theta = jnp.linalg.norm(w)
+
+        t2 = theta * theta
+        tinv = 1 / theta
+        t2inv = tinv * tinv
+        st, ct = jnp.sin(theta), jnp.cos(theta)
+        inv_2_2ct = 1 / (2 * (1 - ct))
+
+        beta = jnp.where(theta < 1e-6,
+                         1 / 12 + t2 / 720,
+                         t2inv - st * tinv * inv_2_2ct)
+
+        beta_dot_over_theta = jnp.where(theta < 1e-6,
+                                        1 / 360,
+                                        -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct)
+
+        wTp = w @ translation
+        v3_tmp = (beta_dot_over_theta * wTp) * w - (theta**2 *
+                                                    beta_dot_over_theta + 2 * beta) * translation
+        C = jnp.outer(v3_tmp, w) + beta * jnp.outer(w,
+                                                    translation) + wTp * beta * jnp.eye(3)
+        C = C + 0.5 * _skew(translation)
+
+        B = C @ jlog_so3
+
+        jlog = jnp.zeros((6, 6))
+        jlog = jlog.at[:3, :3].set(jlog_so3)
+        jlog = jlog.at[3:, 3:].set(jlog_so3)
+        jlog = jlog.at[:3, 3:].set(B)
+
+        return jlog
 
     @classmethod
     @override

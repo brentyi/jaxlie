@@ -9,6 +9,7 @@ from typing_extensions import override
 
 from . import _base, hints
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
+from ._se3 import _skew
 
 
 @register_lie_group(
@@ -164,7 +165,8 @@ class SO3(_base.SOBase):
     @override
     def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SO3:
         return SO3(
-            wxyz=jnp.broadcast_to(jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4))
+            wxyz=jnp.broadcast_to(
+                jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4))
         )
 
     @classmethod
@@ -342,7 +344,8 @@ class SO3(_base.SOBase):
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta_squared),  # Any constant value should do here.
+                # Any constant value should do here.
+                jnp.ones_like(theta_squared),
                 theta_squared,
             )
         )
@@ -417,6 +420,23 @@ class SO3(_base.SOBase):
     @override
     def normalize(self) -> SO3:
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz, axis=-1, keepdims=True))
+
+    @override
+    def jlog(self) -> jax.Array:
+        # Reference:
+        # Equation (144) from Micro-Lie theory:
+        # > https://arxiv.org/pdf/1812.01537
+
+        log = self.log()
+        theta = jnp.linalg.norm(log)
+        st, ct = jnp.sin(theta), jnp.cos(theta)
+        factor1 = (theta * st) / (2 * (1 - ct))
+        factor2 = 1 / (theta ** 2) - st / (2 * theta * (1 - ct))
+
+        jlog = factor1 * jnp.eye(3)
+        jlog = jlog.at[:, :].add(0.5 * _skew(log))
+        jlog = jlog.at[:, :].add(factor2 * jnp.outer(log, log))
+        return jlog
 
     @classmethod
     @override
