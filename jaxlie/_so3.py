@@ -9,7 +9,17 @@ from typing_extensions import override
 
 from . import _base, hints
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
-from ._se3 import _skew
+
+
+def _skew(omega: hints.Array) -> jax.Array:
+    """Returns the skew-symmetric form of a length-3 vector."""
+
+    wx, wy, wz = jnp.moveaxis(omega, -1, 0)
+    zeros = jnp.zeros_like(wx)
+    return jnp.stack(
+        [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
+        axis=-1,
+    ).reshape((*omega.shape[:-1], 3, 3))
 
 
 @register_lie_group(
