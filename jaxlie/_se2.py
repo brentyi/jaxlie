@@ -10,6 +10,110 @@ from ._so2 import SO2
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
+def _V(theta: jax.Array) -> jax.Array:
+    """
+    Compute the V map for the given theta and rotation matrix.
+
+    This function calculates the V map, which is used in various geometric transformations.
+    It handles both small and large theta values using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+        rotation_matrix (jax.Array): The corresponding rotation matrix.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the V map.
+    """
+    use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    safe_theta = cast(
+        jax.Array,
+        jnp.where(
+            use_taylor,
+            jnp.ones_like(theta),  # Any non-zero value should do here.
+            theta,
+        ),
+    )
+
+    theta_sq = theta**2
+    sin_over_theta = cast(
+        jax.Array,
+        jnp.where(
+            use_taylor,
+            1.0 - theta_sq / 6.0,
+            jnp.sin(safe_theta) / safe_theta,
+        ),
+    )
+    one_minus_cos_over_theta = cast(
+        jax.Array,
+        jnp.where(
+            use_taylor,
+            0.5 * theta - theta * theta_sq / 24.0,
+            (1.0 - jnp.cos(safe_theta)) / safe_theta,
+        ),
+    )
+
+    V = jnp.stack(
+        [
+            sin_over_theta,
+            -one_minus_cos_over_theta,
+            one_minus_cos_over_theta,
+            sin_over_theta,
+        ],
+        axis=-1,
+    ).reshape((*theta.shape, 2, 2))
+    return V
+
+
+def _V_inv(theta: jax.Array) -> jax.Array:
+    """
+    Compute the inverse of the V map for the given theta.
+
+    This function calculates the inverse of the V map, which is used in various
+    geometric transformations. It handles both small and large theta values
+    using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse V map.
+    """
+    cos = jnp.cos(theta)
+    cos_minus_one = cos - 1.0
+    half_theta = theta / 2.0
+    use_taylor = jnp.abs(cos_minus_one) < get_epsilon(theta.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    safe_cos_minus_one = jnp.where(
+        use_taylor,
+        jnp.ones_like(cos_minus_one),  # Any non-zero value should do here.
+        cos_minus_one,
+    )
+
+    half_theta_over_tan_half_theta = jnp.where(
+        use_taylor,
+        # Taylor approximation.
+        1.0 - theta**2 / 12.0,
+        # Default.
+        -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
+    )
+
+    V_inv = jnp.stack(
+        [
+            half_theta_over_tan_half_theta,
+            half_theta,
+            -half_theta,
+            half_theta_over_tan_half_theta,
+        ],
+        axis=-1,
+    ).reshape((*theta.shape, 2, 2))
+    return V_inv
+
+
 @register_lie_group(
     matrix_dim=3,
     parameters_dim=4,
@@ -130,46 +234,7 @@ class SE2(_base.SEBase[SO2]):
         assert tangent.shape[-1:] == (3,)
 
         theta = tangent[..., 2]
-        use_taylor = jnp.abs(theta) < get_epsilon(tangent.dtype)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        safe_theta = cast(
-            jax.Array,
-            jnp.where(
-                use_taylor,
-                jnp.ones_like(theta),  # Any non-zero value should do here.
-                theta,
-            ),
-        )
-
-        theta_sq = theta**2
-        sin_over_theta = cast(
-            jax.Array,
-            jnp.where(
-                use_taylor,
-                1.0 - theta_sq / 6.0,
-                jnp.sin(safe_theta) / safe_theta,
-            ),
-        )
-        one_minus_cos_over_theta = cast(
-            jax.Array,
-            jnp.where(
-                use_taylor,
-                0.5 * theta - theta * theta_sq / 24.0,
-                (1.0 - jnp.cos(safe_theta)) / safe_theta,
-            ),
-        )
-
-        V = jnp.stack(
-            [
-                sin_over_theta,
-                -one_minus_cos_over_theta,
-                one_minus_cos_over_theta,
-                sin_over_theta,
-            ],
-            axis=-1,
-        ).reshape((*tangent.shape[:-1], 2, 2))
+        V = _V(theta)
         return SE2.from_rotation_and_translation(
             rotation=SO2.from_radians(theta),
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :2]),
@@ -184,36 +249,7 @@ class SE2(_base.SEBase[SO2]):
 
         theta = self.rotation().log()[..., 0]
 
-        cos = jnp.cos(theta)
-        cos_minus_one = cos - 1.0
-        half_theta = theta / 2.0
-        use_taylor = jnp.abs(cos_minus_one) < get_epsilon(theta.dtype)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        safe_cos_minus_one = jnp.where(
-            use_taylor,
-            jnp.ones_like(cos_minus_one),  # Any non-zero value should do here.
-            cos_minus_one,
-        )
-
-        half_theta_over_tan_half_theta = jnp.where(
-            use_taylor,
-            # Taylor approximation.
-            1.0 - theta**2 / 12.0,
-            # Default.
-            -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
-        )
-
-        V_inv = jnp.stack(
-            [
-                half_theta_over_tan_half_theta,
-                half_theta,
-                -half_theta,
-                half_theta_over_tan_half_theta,
-            ],
-            axis=-1,
-        ).reshape((*theta.shape, 2, 2))
+        V_inv = _V_inv(theta)
 
         tangent = jnp.concatenate(
             [
@@ -251,35 +287,26 @@ class SE2(_base.SEBase[SO2]):
         log = self.log()
         rho1, rho2, theta = log[..., 0], log[..., 1], log[..., 2]
 
-        # Safe division function
-        def safe_div(x, y): return jnp.where(jnp.abs(y) < 1e-10, 0., x / y)
+        # Handle the case where theta is small to avoid division by zero
+        use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
 
-        sin_theta = jnp.sin(theta)
-        cos_theta = jnp.cos(theta)
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for reverse-mode AD.
+        safe_theta = jnp.where(use_taylor, jnp.ones_like(theta), theta)
 
-        # Common terms
-        denom = 2 - 2 * cos_theta
-        theta_sin_theta_term = safe_div(theta * sin_theta, denom)
-        one_minus_cos_term = cos_theta - 1
+        V_inv_theta_T = _V_inv(safe_theta).T
 
-        # Matrix elements
-        a11 = theta_sin_theta_term
-        a12 = -theta / 2
-        a21 = theta / 2
-        a22 = a11  # Same as a11
+        # Calculate r, handling the small theta case separately
+        A = jnp.where(
+            use_taylor[..., None],
+            jnp.array([[theta/12., 0.5], [-0.5, theta/12]]),  # Avoid division by zero
+            (jnp.eye(2) - V_inv_theta_T) / safe_theta
+        )
+        
+        r = A @ jnp.array([rho1, rho2])
 
-        a13_num = (rho1 * theta * sin_theta / 2 + rho1 * cos_theta - rho1 +
-                   rho2 * theta * cos_theta / 2 - rho2 * theta / 2)
-        a13 = safe_div(a13_num, theta * one_minus_cos_term)
-
-        a23_num = (-rho1 * theta * cos_theta / 2 + rho1 * theta / 2 +
-                   rho2 * theta * sin_theta / 2 + rho2 * cos_theta - rho2)
-        a23 = safe_div(a23_num, theta * one_minus_cos_term)
-        jlog = jnp.array([
-            [a11, a12, a13],
-            [a21, a22, a23],
-            [0., 0., 1.]
-        ])
+        jlog = jnp.zeros((3, 3))
+        jlog = jlog.at[:2, :2].set(V_inv_theta_T)
+        jlog = jlog.at[:2, 2].set(r)
         return jlog
 
     @classmethod

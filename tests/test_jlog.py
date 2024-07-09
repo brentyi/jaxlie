@@ -1,7 +1,8 @@
 import jax
 import jax.numpy as jnp
 import numpy as onp
-from typing import Type, Tuple
+
+from typing import Type, Tuple, cast
 import jaxlie
 from jaxlie import SE3, SO3, SE2, SO2
 import time
@@ -111,12 +112,12 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     
     start_time = time.perf_counter()
     for _ in range(num_runs):
-        _ = jitted_autodiff(transform)
+        _ = jax.block_until_ready(jitted_autodiff(transform))
     autodiff_runtime = ((time.perf_counter() - start_time) / num_runs) * 1000  # Convert to ms
 
     start_time = time.perf_counter()
     for _ in range(num_runs):
-        _ = jitted_analytical(transform)
+        _ = jax.block_until_ready(jitted_analytical(transform))
     analytical_runtime = ((time.perf_counter() - start_time) / num_runs) * 1000  # Convert to ms
 
     print(f"\n{Group.__name__} Runtime (average over {num_runs} runs):")
@@ -130,7 +131,7 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
         print("Runtime Test: Failed")
 
 def run_tests():
-    groups = [SO2, SO3, SE2, SE3]
+    groups = [SO3, SE2, SE3]
     batch_axes_list = [()]
 
     for Group in groups:

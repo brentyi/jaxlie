@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
@@ -20,6 +20,108 @@ def _skew(omega: hints.Array) -> jax.Array:
         [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
         axis=-1,
     ).reshape((*omega.shape[:-1], 3, 3))
+
+
+def _V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
+    """
+    Compute the V map for the given theta and rotation matrix.
+
+    This function calculates the V map, which is used in various geometric transformations.
+    It handles both small and large theta values using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+        rotation_matrix (jax.Array): The corresponding rotation matrix.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the V map.
+    """
+    theta_squared = jnp.sum(jnp.square(theta), axis=-1)
+    use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    theta_squared_safe = cast(
+        jax.Array,
+        jnp.where(
+            use_taylor,
+            # Any non-zero value should do here.
+            jnp.ones_like(theta_squared),
+            theta_squared,
+        ),
+    )
+    del theta_squared
+    theta_safe = jnp.sqrt(theta_squared_safe)
+
+    skew_omega = _skew(theta)
+    V = jnp.where(
+        use_taylor[..., None, None],
+        rotation_matrix,
+        (
+            jnp.eye(3)
+            + ((1.0 - jnp.cos(theta_safe))
+                / (theta_squared_safe))[..., None, None]
+            * skew_omega
+            + (
+                (theta_safe - jnp.sin(theta_safe))
+                / (theta_squared_safe * theta_safe)
+            )[..., None, None]
+            * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
+        ),
+    )
+    return V
+
+
+def _V_inv(theta: jax.Array) -> jax.Array:
+    """
+    Compute the inverse of the V map for the given theta.
+
+    This function calculates the inverse of the V map, which is used in various
+    geometric transformations. It handles both small and large theta values
+    using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse V map.
+    """
+    theta_squared = jnp.sum(jnp.square(theta), axis=-1)
+    use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    theta_squared_safe = jnp.where(
+        use_taylor,
+        jnp.ones_like(theta_squared),  # Any non-zero value should do here.
+        theta_squared,
+    )
+    del theta_squared
+    theta_safe = jnp.sqrt(theta_squared_safe)
+    half_theta_safe = theta_safe / 2.0
+
+    skew_omega = _skew(theta)
+    V_inv = jnp.where(
+        use_taylor[..., None, None],
+        jnp.eye(3)
+        - 0.5 * skew_omega
+        + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
+        (
+            jnp.eye(3)
+            - 0.5 * skew_omega
+            + (
+                (
+                    1.0
+                    - theta_safe
+                    * jnp.cos(half_theta_safe)
+                    / (2.0 * jnp.sin(half_theta_safe))
+                )
+                / theta_squared_safe
+            )[..., None, None]
+            * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
+        ),
+    )
+    return V_inv
 
 
 @register_lie_group(
@@ -434,19 +536,11 @@ class SO3(_base.SOBase):
     @override
     def jlog(self) -> jax.Array:
         # Reference:
-        # Equation (144) from Micro-Lie theory:
+        # Equations (144, 147, 174) from Micro-Lie theory:
         # > https://arxiv.org/pdf/1812.01537
 
         log = self.log()
-        theta = jnp.linalg.norm(log)
-        st, ct = jnp.sin(theta), jnp.cos(theta)
-        factor1 = (theta * st) / (2 * (1 - ct))
-        factor2 = 1 / (theta ** 2) - st / (2 * theta * (1 - ct))
-
-        jlog = factor1 * jnp.eye(3)
-        jlog = jlog.at[:, :].add(0.5 * _skew(log))
-        jlog = jlog.at[:, :].add(factor2 * jnp.outer(log, log))
-        return jlog
+        return _V_inv(log).T
 
     @classmethod
     @override

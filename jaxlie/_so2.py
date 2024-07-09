@@ -137,7 +137,7 @@ class SO2(_base.SOBase):
         # equation (126) from Micro-Lie theory:
         # > https://arxiv.org/pdf/1812.01537
 
-        return jnp.array([1])
+        return jnp.array([1.])
 
 
     @classmethod
