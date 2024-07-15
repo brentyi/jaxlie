@@ -179,7 +179,7 @@ class MatrixLieGroup(abc.ABC):
         This is equivalent to the inverse of the right Jacobian.
 
         Returns:
-            The Jacobian of the logarithm, having the dimensions `(tangent_dim, tangent_dim,)`.
+            The Jacobian of the logarithm, having the dimensions `(tangent_dim, tangent_dim,)` or batch of these Jacobians.
         """
 
     @classmethod

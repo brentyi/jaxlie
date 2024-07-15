@@ -286,6 +286,7 @@ class SE2(_base.SEBase[SO2]):
 
         log = self.log()
         rho1, rho2, theta = log[..., 0], log[..., 1], log[..., 2]
+        rho1, rho2, theta = broadcast_leading_axes((rho1, rho2, theta))
 
         # Handle the case where theta is small to avoid division by zero
         use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
@@ -293,20 +294,31 @@ class SE2(_base.SEBase[SO2]):
         # Shim to avoid NaNs in jnp.where branches, which cause failures for reverse-mode AD.
         safe_theta = jnp.where(use_taylor, jnp.ones_like(theta), theta)
 
-        V_inv_theta_T = _V_inv(safe_theta).T
+        V_inv_theta = _V_inv(safe_theta)
+        V_inv_theta_T = jnp.swapaxes(V_inv_theta, -2, -1)  # Transpose the last two dimensions
 
         # Calculate r, handling the small theta case separately
+        batch_shape = theta.shape
+        eye_2 = jnp.eye(2).reshape((1,) * len(batch_shape) + (2, 2))
+        
         A = jnp.where(
-            use_taylor[..., None],
-            jnp.array([[theta/12., 0.5], [-0.5, theta/12]]),  # Avoid division by zero
-            (jnp.eye(2) - V_inv_theta_T) / safe_theta
+            use_taylor[..., None, None],
+            jnp.stack([
+                jnp.stack([theta/12., jnp.full_like(theta, 0.5)], axis=-1),
+                jnp.stack([jnp.full_like(theta, -0.5), theta/12.], axis=-1)
+            ], axis=-2),
+            (eye_2 - V_inv_theta_T) / safe_theta[..., None, None]
         )
         
-        r = A @ jnp.array([rho1, rho2])
+        rho = jnp.stack([rho1, rho2], axis=-1)[..., None]
+        r = jnp.squeeze(A @ rho, axis=-1)
 
-        jlog = jnp.zeros((3, 3))
-        jlog = jlog.at[:2, :2].set(V_inv_theta_T)
-        jlog = jlog.at[:2, 2].set(r)
+        # Create the jlog matrix
+        jlog = jnp.zeros((*batch_shape, 3, 3))
+        jlog = jlog.at[..., :2, :2].set(V_inv_theta_T)
+        jlog = jlog.at[..., :2, 2].set(r)
+        jlog = jlog.at[..., 2, 2].set(1.)  # Set the bottom right element to 1
+
         return jlog
 
     @classmethod

@@ -267,24 +267,31 @@ class SE3(_base.SEBase[SO3]):
         use_taylor = theta < get_epsilon(theta.dtype)
 
         t2 = theta * theta
-        tinv = 1 / theta
+        tinv = jnp.where(use_taylor, 1.0, 1 / theta)  # Avoid division by zero
         t2inv = tinv * tinv
         st, ct = jnp.sin(theta), jnp.cos(theta)
-        inv_2_2ct = 1 / (2 * (1 - ct))
+        inv_2_2ct = jnp.where(use_taylor, 0.5, 1 / (2 * (1 - ct)))  # Avoid division by zero
 
-        beta = jnp.where(use_taylor,
-                         1 / 12 + t2 / 720,
-                         t2inv - st * tinv * inv_2_2ct)
+        # Taylor expansion for small theta
+        beta_taylor = 1 / 12 + t2 / 720
+        beta_dot_over_theta_taylor = 1 / 360
 
-        beta_dot_over_theta = jnp.where(use_taylor,
-                                        1 / 360,
-                                        -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct)
+        # Non-Taylor expressions
+        beta_non_taylor = t2inv - st * tinv * inv_2_2ct
+        beta_dot_over_theta_non_taylor = -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct
+
+        # Combine using the safe pattern
+        beta = jnp.where(use_taylor, 
+                        beta_taylor, 
+                        jnp.where(use_taylor, beta_taylor, beta_non_taylor))
+        
+        beta_dot_over_theta = jnp.where(use_taylor, 
+                                        beta_dot_over_theta_taylor, 
+                                        jnp.where(use_taylor, beta_dot_over_theta_taylor, beta_dot_over_theta_non_taylor))
 
         wTp = w @ translation
-        v3_tmp = (beta_dot_over_theta * wTp) * w - (theta**2
-                                                    * beta_dot_over_theta + 2 * beta) * translation
-        C = jnp.outer(v3_tmp, w) + beta * jnp.outer(w,
-                                                    translation) + wTp * beta * jnp.eye(3)
+        v3_tmp = (beta_dot_over_theta * wTp) * w - (t2 * beta_dot_over_theta + 2 * beta) * translation
+        C = jnp.outer(v3_tmp, w) + beta * jnp.outer(w, translation) + wTp * beta * jnp.eye(3)
         C = C + 0.5 * _skew(translation)
 
         B = C @ jlog_so3

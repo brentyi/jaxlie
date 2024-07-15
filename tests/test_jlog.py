@@ -15,6 +15,7 @@ from utils import (
     jacnumerical
 )
 
+
 @jax.jit
 def jlog(group_element) -> jnp.ndarray:
     """
@@ -40,18 +41,21 @@ def jlog(group_element) -> jnp.ndarray:
 
     return jacobian
 
+
 def test_jlog_accuracy(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check accuracy of analytical jlog against autodiff jlog."""
     transform = sample_transform(Group, batch_axes)
-    
+
     jlog_analytical = transform.jlog()
     jlog_autodiff_result = jlog(transform)
-    
+    # print(onp.array(jlog_analytical))
+    # print(onp.array(jlog_autodiff_result))
     try:
         assert_arrays_close(jlog_analytical, jlog_autodiff_result, rtol=1e-5, atol=1e-5)
         print(f"{Group.__name__} Accuracy Test: Passed")
     except AssertionError:
         print(f"{Group.__name__} Accuracy Test: Failed")
+
 
 def test_jlog_compilation_and_first_call(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Compare compilation time and first call time of analytical jlog and autodiff jlog."""
@@ -95,6 +99,7 @@ def test_jlog_compilation_and_first_call(Group: Type[jaxlie.MatrixLieGroup], bat
     else:
         print("First Call Time Test: Failed")
 
+
 def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Compare runtime of analytical jlog and autodiff jlog."""
     transform = sample_transform(Group, batch_axes)
@@ -102,14 +107,14 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     # JIT compile both functions
     jitted_autodiff = jax.jit(jlog)
     jitted_analytical = jax.jit(lambda x: x.jlog())
-    
+
     # Warm-up run
     _ = jitted_autodiff(transform)
     _ = jitted_analytical(transform)
 
     # Measure runtime
     num_runs = 1000
-    
+
     start_time = time.perf_counter()
     for _ in range(num_runs):
         _ = jax.block_until_ready(jitted_autodiff(transform))
@@ -130,9 +135,13 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     else:
         print("Runtime Test: Failed")
 
+
 def run_tests():
-    groups = [SO3, SE2, SE3]
-    batch_axes_list = [()]
+    groups = [SO2, SE2, SO3]
+    batch_axes_list = [(),
+                       (1,),
+                       (3, 1, 2, 1),
+                       ]
 
     for Group in groups:
         for batch_axes in batch_axes_list:
@@ -140,6 +149,7 @@ def run_tests():
             test_jlog_accuracy(Group, batch_axes)
             test_jlog_compilation_and_first_call(Group, batch_axes)
             test_jlog_runtime(Group, batch_axes)
+
 
 if __name__ == "__main__":
     run_tests()

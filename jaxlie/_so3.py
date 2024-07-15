@@ -540,7 +540,9 @@ class SO3(_base.SOBase):
         # > https://arxiv.org/pdf/1812.01537
 
         log = self.log()
-        return _V_inv(log).T
+        V_inv = _V_inv(log)
+
+        return jnp.swapaxes(V_inv, -1, -2)  # Transpose the last two dimensions
 
     @classmethod
     @override

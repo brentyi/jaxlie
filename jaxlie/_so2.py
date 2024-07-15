@@ -132,13 +132,9 @@ class SO2(_base.SOBase):
 
     @override
     def jlog(self) -> jax.Array:
-        # Reference:
-        # For SO2 the jlog and right jacobians are trivially 1, 
-        # equation (126) from Micro-Lie theory:
-        # > https://arxiv.org/pdf/1812.01537
-
-        return jnp.array([1.])
-
+        batch_axes = self.get_batch_axes()
+        ones = jnp.ones(batch_axes)
+        return ones[..., jnp.newaxis, jnp.newaxis]
 
     @classmethod
     @override
