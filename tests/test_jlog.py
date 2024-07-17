@@ -1,9 +1,7 @@
 import jax
 import jax.numpy as jnp
-import numpy as onp
 from typing import Type, Tuple
 import jaxlie
-from jaxlie import SE3, SO3, SE2, SO2
 import time
 from utils import sample_transform, assert_arrays_close, general_group_test
 
