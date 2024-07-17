@@ -6,8 +6,6 @@ import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
 from typing_extensions import override
-import numpy as np
-
 
 from . import _base, hints
 from ._so3 import SO3, _skew, _V, _V_inv
