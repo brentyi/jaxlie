@@ -45,11 +45,15 @@ def jlog(group_element) -> jnp.ndarray:
 def test_jlog_accuracy(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check accuracy of analytical jlog against autodiff jlog."""
     transform = sample_transform(Group, batch_axes)
-
+    print(onp.array(transform.log()))
     jlog_analytical = transform.jlog()
     jlog_autodiff_result = jlog(transform)
-    # print(onp.array(jlog_analytical))
-    # print(onp.array(jlog_autodiff_result))
+    print('Analytical')
+    print(onp.array(jlog_analytical).shape)
+    print('Autodiff')
+    print(onp.array(jlog_autodiff_result).shape)
+    # print(onp.array(jlog_autodiff_result) - onp.array(jlog_analytical))
+    
     try:
         assert_arrays_close(jlog_analytical, jlog_autodiff_result, rtol=1e-5, atol=1e-5)
         print(f"{Group.__name__} Accuracy Test: Passed")
@@ -137,18 +141,20 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
 
 
 def run_tests():
-    groups = [SO2, SE2, SO3]
-    batch_axes_list = [(),
-                       (1,),
-                       (3, 1, 2, 1),
-                       ]
-
+    groups = [SE3]
+    batch_axes_list = [
+        (),
+        (1,),
+        (2, 3,),
+        (3, 1, 2, 1),
+    ]
+    # for i in range(100):
     for Group in groups:
         for batch_axes in batch_axes_list:
             print(f"\n--- Testing {Group.__name__} with batch_axes {batch_axes} ---")
             test_jlog_accuracy(Group, batch_axes)
-            test_jlog_compilation_and_first_call(Group, batch_axes)
-            test_jlog_runtime(Group, batch_axes)
+            # test_jlog_compilation_and_first_call(Group, batch_axes)
+            # test_jlog_runtime(Group, batch_axes)
 
 
 if __name__ == "__main__":

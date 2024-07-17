@@ -285,8 +285,8 @@ class SE2(_base.SEBase[SO2]):
         # > https://arxiv.org/pdf/1812.01537
 
         log = self.log()
-        rho1, rho2, theta = log[..., 0], log[..., 1], log[..., 2]
-        rho1, rho2, theta = broadcast_leading_axes((rho1, rho2, theta))
+        # rho1, rho2, theta = 
+        rho1, rho2, theta = broadcast_leading_axes((log[..., 0], log[..., 1], log[..., 2]))
 
         # Handle the case where theta is small to avoid division by zero
         use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
@@ -317,7 +317,7 @@ class SE2(_base.SEBase[SO2]):
         jlog = jnp.zeros((*batch_shape, 3, 3))
         jlog = jlog.at[..., :2, :2].set(V_inv_theta_T)
         jlog = jlog.at[..., :2, 2].set(r)
-        jlog = jlog.at[..., 2, 2].set(1.)  # Set the bottom right element to 1
+        jlog = jlog.at[..., 2, 2].set(1)  # Set the bottom right element to 1
 
         return jlog
 
