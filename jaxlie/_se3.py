@@ -6,6 +6,8 @@ import jax
 import jax_dataclasses as jdc
 from jax import numpy as jnp
 from typing_extensions import override
+import numpy as np
+
 
 from . import _base, hints
 from ._so3 import SO3, _skew, _V, _V_inv
@@ -150,12 +152,6 @@ class SE3(_base.SEBase[SO3]):
         
     @override
     def jlog(self) -> jax.Array:
-        # Reference:
-        # Equations (179a, 179b, 180) from Micro-Lie theory:
-        # > https://arxiv.org/pdf/1812.01537
-        # and the Jlog6 implementation in Pinocchio:
-        # > https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/namespacepinocchio.html#a82e7cb47ae721d4161bbb143590096c5
-
         rotation = self.rotation()
         translation = self.translation()
 
@@ -163,25 +159,20 @@ class SE3(_base.SEBase[SO3]):
 
         w = rotation.log()
         theta = jnp.linalg.norm(w, axis=-1)
-        use_taylor = theta < get_epsilon(theta.dtype)
-
+        theta_squared = jnp.sum(jnp.square(w), axis=-1)
+        
+        
+        use_taylor = theta_squared < get_epsilon(theta.dtype)
         t2 = theta * theta
-        tinv = jnp.where(use_taylor, jnp.ones_like(theta), 1 / theta)  # Avoid division by zero
+        tinv = jnp.where(use_taylor, jnp.ones_like(theta), 1 / theta)
         t2inv = tinv * tinv
         st, ct = jnp.sin(theta), jnp.cos(theta)
-        inv_2_2ct = jnp.where(use_taylor, 0.5 * jnp.ones_like(theta), 1 / (2 * (1 - ct)))  # Avoid division by zero
+        inv_2_2ct = jnp.where(use_taylor, 0.5 * jnp.ones_like(theta), 1 / (2 * (1 - ct)))
 
-        # Taylor expansion for small theta
-        beta_taylor = 1 / 12 + t2 / 720
-        beta_dot_over_theta_taylor = 1 / 360
-
-        # Non-Taylor expressions
-        beta_non_taylor = t2inv - st * tinv * inv_2_2ct
-        beta_dot_over_theta_non_taylor = -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct
-
-        # Combine using the safe pattern
-        beta = jnp.where(use_taylor, beta_taylor, beta_non_taylor)
-        beta_dot_over_theta = jnp.where(use_taylor, beta_dot_over_theta_taylor, beta_dot_over_theta_non_taylor)
+        # Use jnp.where for beta and beta_dot_over_theta
+        beta = t2inv - st * tinv * inv_2_2ct
+        
+        beta_dot_over_theta = -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct
 
         wTp = jnp.sum(w * translation, axis=-1, keepdims=True)
         v3_tmp = (beta_dot_over_theta[..., None] * wTp) * w - (t2[..., None] * beta_dot_over_theta[..., None] + 2 * beta[..., None]) * translation
@@ -189,12 +180,15 @@ class SE3(_base.SEBase[SO3]):
         C = C + 0.5 * _skew(translation)
 
         B = jnp.einsum('...ij,...jk->...ik', C, jlog_so3)
+            # Calculate B_wh with the same shape as jlog_so3
+        B_wh = jnp.where(use_taylor[..., None, None], 
+                        0.5 * _skew(translation), 
+                        B)
 
         jlog = jnp.zeros((*theta.shape, 6, 6))
         jlog = jlog.at[..., :3, :3].set(jlog_so3)
         jlog = jlog.at[..., 3:, 3:].set(jlog_so3)
-        jlog = jlog.at[..., :3, 3:].set(B)
-
+        jlog = jlog.at[..., :3, 3:].set(B_wh)
         return jlog
 
 

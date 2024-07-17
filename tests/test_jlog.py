@@ -5,6 +5,7 @@ import numpy as onp
 from typing import Type, Tuple, cast
 import jaxlie
 from jaxlie import SE3, SO3, SE2, SO2
+from jaxlie._so3 import _skew
 import time
 
 # Assuming the utility functions are defined in a file named 'utils.py'
@@ -45,15 +46,20 @@ def jlog(group_element) -> jnp.ndarray:
 def test_jlog_accuracy(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Check accuracy of analytical jlog against autodiff jlog."""
     transform = sample_transform(Group, batch_axes)
-    print(onp.array(transform.log()))
+    # print(onp.array(transform.log()))
     jlog_analytical = transform.jlog()
     jlog_autodiff_result = jlog(transform)
-    print('Analytical')
-    print(onp.array(jlog_analytical).shape)
-    print('Autodiff')
-    print(onp.array(jlog_autodiff_result).shape)
+    # print('Analytical')
+    # print(onp.array(jlog_analytical))
+    # print('Autodiff')
+    # print(onp.array(jlog_autodiff_result))
+    # print('DIFF')
     # print(onp.array(jlog_autodiff_result) - onp.array(jlog_analytical))
-    
+    # print("SOME STUFF")
+    # print(onp.array(jlog_autodiff_result)[:3, 3:])
+    # print(onp.array(jlog_analytical)[:3, 3:])
+    # print(0.5*_skew(transform.translation()))
+
     try:
         assert_arrays_close(jlog_analytical, jlog_autodiff_result, rtol=1e-5, atol=1e-5)
         print(f"{Group.__name__} Accuracy Test: Passed")
@@ -141,7 +147,12 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
 
 
 def run_tests():
-    groups = [SE3]
+    groups = [
+        SO2,
+        SO3,
+        SE2,
+        SE3,
+    ]
     batch_axes_list = [
         (),
         (1,),
