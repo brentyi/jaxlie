@@ -1,7 +1,7 @@
 # jaxlie
 
 ![build](https://github.com/brentyi/jaxlie/workflows/build/badge.svg)
-![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg?branch=master)
+![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg)
 ![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
 [![pypi_dowlnoads](https://pepy.tech/badge/jaxlie)](https://pypi.org/project/jaxlie)
