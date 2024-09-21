@@ -8,19 +8,9 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from ._so3 import SO3
+from ._so3 import SO3, _skew, _V, _V_inv
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
-
-def _skew(omega: hints.Array) -> jax.Array:
-    """Returns the skew-symmetric form of a length-3 vector."""
-
-    wx, wy, wz = jnp.moveaxis(omega, -1, 0)
-    zeros = jnp.zeros_like(wx)
-    return jnp.stack(
-        [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
-        axis=-1,
-    ).reshape((*omega.shape[:-1], 3, 3))
 
 
 @register_lie_group(
@@ -77,7 +67,8 @@ class SE3(_base.SEBase[SO3]):
     def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SE3:
         return SE3(
             wxyz_xyz=jnp.broadcast_to(
-                jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]), (*batch_axes, 7)
+                jnp.array([1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+                          ), (*batch_axes, 7)
             )
         )
 
@@ -120,39 +111,10 @@ class SE3(_base.SEBase[SO3]):
         # (x, y, z, omega_x, omega_y, omega_z)
         assert tangent.shape[-1:] == (6,)
 
-        rotation = SO3.exp(tangent[..., 3:])
+        theta = tangent[..., 3:]
+        rotation = SO3.exp(theta)
 
-        theta_squared = jnp.sum(jnp.square(tangent[..., 3:]), axis=-1)
-        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        theta_squared_safe = cast(
-            jax.Array,
-            jnp.where(
-                use_taylor,
-                jnp.ones_like(theta_squared),  # Any non-zero value should do here.
-                theta_squared,
-            ),
-        )
-        del theta_squared
-        theta_safe = jnp.sqrt(theta_squared_safe)
-
-        skew_omega = _skew(tangent[..., 3:])
-        V = jnp.where(
-            use_taylor[..., None, None],
-            rotation.as_matrix(),
-            (
-                jnp.eye(3)
-                + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
-                * skew_omega
-                + (
-                    (theta_safe - jnp.sin(theta_safe))
-                    / (theta_squared_safe * theta_safe)
-                )[..., None, None]
-                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
-            ),
-        )
+        V = _V(theta, rotation.as_matrix())
 
         return SE3.from_rotation_and_translation(
             rotation=rotation,
@@ -163,45 +125,10 @@ class SE3(_base.SEBase[SO3]):
     def log(self) -> jax.Array:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
-        omega = self.rotation().log()
-        theta_squared = jnp.sum(jnp.square(omega), axis=-1)
-        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
-
-        skew_omega = _skew(omega)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        theta_squared_safe = jnp.where(
-            use_taylor,
-            jnp.ones_like(theta_squared),  # Any non-zero value should do here.
-            theta_squared,
-        )
-        del theta_squared
-        theta_safe = jnp.sqrt(theta_squared_safe)
-        half_theta_safe = theta_safe / 2.0
-
-        V_inv = jnp.where(
-            use_taylor[..., None, None],
-            jnp.eye(3)
-            - 0.5 * skew_omega
-            + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
-            (
-                jnp.eye(3)
-                - 0.5 * skew_omega
-                + (
-                    (
-                        1.0
-                        - theta_safe
-                        * jnp.cos(half_theta_safe)
-                        / (2.0 * jnp.sin(half_theta_safe))
-                    )
-                    / theta_squared_safe
-                )[..., None, None]
-                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
-            ),
-        )
+        theta = self.rotation().log()
+        V_inv = _V_inv(theta)
         return jnp.concatenate(
-            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), omega], axis=-1
+            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), theta], axis=-1
         )
 
     @override
@@ -210,7 +137,8 @@ class SE3(_base.SEBase[SO3]):
         return jnp.concatenate(
             [
                 jnp.concatenate(
-                    [R, jnp.einsum("...ij,...jk->...ik", _skew(self.translation()), R)],
+                    [R, jnp.einsum("...ij,...jk->...ik",
+                                   _skew(self.translation()), R)],
                     axis=-1,
                 ),
                 jnp.concatenate(
@@ -219,6 +147,49 @@ class SE3(_base.SEBase[SO3]):
             ],
             axis=-2,
         )
+        
+    @override
+    def jlog(self) -> jax.Array:
+        rotation = self.rotation()
+        translation = self.translation()
+
+        jlog_so3 = rotation.jlog()
+
+        w = rotation.log()
+        theta = jnp.linalg.norm(w, axis=-1)
+        theta_squared = jnp.sum(jnp.square(w), axis=-1)
+        
+        
+        use_taylor = theta_squared < get_epsilon(theta.dtype)
+        t2 = theta * theta
+        tinv = jnp.where(use_taylor, jnp.ones_like(theta), 1 / theta)
+        t2inv = tinv * tinv
+        st, ct = jnp.sin(theta), jnp.cos(theta)
+        inv_2_2ct = jnp.where(use_taylor, 0.5 * jnp.ones_like(theta), 1 / (2 * (1 - ct)))
+
+        # Use jnp.where for beta and beta_dot_over_theta
+        beta = t2inv - st * tinv * inv_2_2ct
+        
+        beta_dot_over_theta = -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct
+
+        wTp = jnp.sum(w * translation, axis=-1, keepdims=True)
+        v3_tmp = (beta_dot_over_theta[..., None] * wTp) * w - (t2[..., None] * beta_dot_over_theta[..., None] + 2 * beta[..., None]) * translation
+        C = jnp.einsum('...i,...j->...ij', v3_tmp, w) + beta[..., None, None] * jnp.einsum('...i,...j->...ij', w, translation) + wTp[..., None] * beta[..., None, None] * jnp.eye(3)
+        C = C + 0.5 * _skew(translation)
+
+        B = jnp.einsum('...ij,...jk->...ik', C, jlog_so3)
+            # Calculate B_wh with the same shape as jlog_so3
+        B_wh = jnp.where(use_taylor[..., None, None], 
+                        0.5 * _skew(translation), 
+                        B)
+
+        jlog = jnp.zeros((*theta.shape, 6, 6))
+        jlog = jlog.at[..., :3, :3].set(jlog_so3)
+        jlog = jlog.at[..., 3:, 3:].set(jlog_so3)
+        jlog = jlog.at[..., :3, 3:].set(B_wh)
+        return jlog
+
+
 
     @classmethod
     @override
