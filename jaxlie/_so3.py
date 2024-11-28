@@ -311,16 +311,59 @@ class SO3(_base.SOBase):
 
     @override
     def multiply(self, other: SO3) -> SO3:
-        w0, x0, y0, z0 = jnp.moveaxis(self.wxyz, -1, 0)
-        w1, x1, y1, z1 = jnp.moveaxis(other.wxyz, -1, 0)
+        # Original implementation:
+        #
+        # w0, x0, y0, z0 = jnp.moveaxis(self.wxyz, -1, 0)
+        # w1, x1, y1, z1 = jnp.moveaxis(other.wxyz, -1, 0)
+        # return SO3(
+        #     wxyz=jnp.stack(
+        #         [
+        #             -x0 * x1 - y0 * y1 - z0 * z1 + w0 * w1,
+        #             x0 * w1 + y0 * z1 - z0 * y1 + w0 * x1,
+        #             -x0 * z1 + y0 * w1 + z0 * x1 + w0 * y1,
+        #             x0 * y1 - y0 * x1 + z0 * w1 + w0 * z1,
+        #         ],
+        #         axis=-1,
+        #     )
+        # )
+        #
+        # This is great/fine/standard, but there are a lot of operations. This
+        # puts a lot of burden on the JIT compiler.
+        #
+        # Here's another implementation option. The JIT time is much faster, but the
+        # runtime is ~10% slower:
+        #
+        # inds = jnp.array([0, 1, 2, 3, 1, 0, 3, 2, 2, 3, 0, 1, 3, 2, 1, 0])
+        # signs = jnp.array([1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, 1, 1])
+        # return SO3(
+        #     wxyz=jnp.einsum(
+        #         "...ij,...j->...i",
+        #         (self.wxyz[..., inds] * signs).reshape((*self.wxyz.shape, 4)),
+        #         other.wxyz,
+        #     )
+        # )
+        #
+        # For pose graph optimization on the sphere2500 dataset, the following
+        # speeds up *overall* JIT times by over 35%, without any runtime
+        # penalties.
+
+        # Hamilton product constants.
+        terms_i = jnp.array([[0, 1, 2, 3], [0, 1, 2, 3], [0, 2, 3, 1], [0, 3, 1, 2]])
+        terms_j = jnp.array([[0, 1, 2, 3], [1, 0, 3, 2], [2, 0, 1, 3], [3, 0, 2, 1]])
+        signs = jnp.array(
+            [
+                [1, -1, -1, -1],
+                [1, 1, 1, -1],
+                [1, 1, 1, -1],
+                [1, 1, 1, -1],
+            ]
+        )
+
+        # Compute all components at once
+        q_outer = jnp.einsum("...i,...j->...ij", self.wxyz, other.wxyz)
         return SO3(
-            wxyz=jnp.stack(
-                [
-                    -x0 * x1 - y0 * y1 - z0 * z1 + w0 * w1,
-                    x0 * w1 + y0 * z1 - z0 * y1 + w0 * x1,
-                    -x0 * z1 + y0 * w1 + z0 * x1 + w0 * y1,
-                    x0 * y1 - y0 * x1 + z0 * w1 + w0 * z1,
-                ],
+            jnp.sum(
+                signs * q_outer[..., terms_i, terms_j],
                 axis=-1,
             )
         )
@@ -342,7 +385,7 @@ class SO3(_base.SOBase):
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta_squared),  # Any constant value should do here.
+                1.0,  # Any constant value should do here.
                 theta_squared,
             )
         )

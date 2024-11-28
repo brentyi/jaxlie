@@ -1,6 +1,6 @@
 """Helpers for recursively applying tangent-space deltas."""
 
-from typing import Any, Callable, TypeVar, Union, cast, overload
+from typing import Any, TypeVar, Union, overload
 
 import jax
 import numpy as onp
