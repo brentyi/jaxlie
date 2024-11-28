@@ -3,10 +3,12 @@
 from typing import Tuple, Type
 
 import jax
+import jaxlie
 import numpy as onp
 import pytest
 from jax import numpy as jnp
 from jax import tree_util
+
 from utils import (
     assert_arrays_close,
     assert_transforms_close,
@@ -14,8 +16,6 @@ from utils import (
     general_group_test_faster,
     sample_transform,
 )
-
-import jaxlie
 
 
 @general_group_test
@@ -67,6 +67,13 @@ def test_sgd(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
 
     transform = Group.exp(sample_transform(Group, batch_axes).log())
     original_loss = loss(transform)
+
+    assert_arrays_close(
+        jaxlie.manifold.grad(lambda transform: (loss(transform), None), has_aux=True)(
+            transform
+        ),
+        jaxlie.manifold.grad(loss)(transform),
+    )
 
     @jax.jit
     def step(t):
