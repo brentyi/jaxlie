@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
@@ -5,19 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>jaxlie._so3 &mdash; jaxlie  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=187304be"></script>
-        <script src="../../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex/" />
     <link rel="search" title="Search" href="../../../search/" /> 
@@ -443,16 +441,59 @@
 <a class="viewcode-back" href="../../../api/jaxlie/#jaxlie._so3.SO3.multiply">[docs]</a>
     <span class="nd">@override</span>
     <span class="k">def</span> <span class="nf">multiply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">SO3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SO3</span><span class="p">:</span>
-        <span class="n">w0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z0</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">w1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Original implementation:</span>
+        <span class="c1">#</span>
+        <span class="c1"># w0, x0, y0, z0 = jnp.moveaxis(self.wxyz, -1, 0)</span>
+        <span class="c1"># w1, x1, y1, z1 = jnp.moveaxis(other.wxyz, -1, 0)</span>
+        <span class="c1"># return SO3(</span>
+        <span class="c1">#     wxyz=jnp.stack(</span>
+        <span class="c1">#         [</span>
+        <span class="c1">#             -x0 * x1 - y0 * y1 - z0 * z1 + w0 * w1,</span>
+        <span class="c1">#             x0 * w1 + y0 * z1 - z0 * y1 + w0 * x1,</span>
+        <span class="c1">#             -x0 * z1 + y0 * w1 + z0 * x1 + w0 * y1,</span>
+        <span class="c1">#             x0 * y1 - y0 * x1 + z0 * w1 + w0 * z1,</span>
+        <span class="c1">#         ],</span>
+        <span class="c1">#         axis=-1,</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
+        <span class="c1">#</span>
+        <span class="c1"># This is great/fine/standard, but there are a lot of operations. This</span>
+        <span class="c1"># puts a lot of burden on the JIT compiler.</span>
+        <span class="c1">#</span>
+        <span class="c1"># Here&#39;s another implementation option. The JIT time is much faster, but the</span>
+        <span class="c1"># runtime is ~10% slower:</span>
+        <span class="c1">#</span>
+        <span class="c1"># inds = jnp.array([0, 1, 2, 3, 1, 0, 3, 2, 2, 3, 0, 1, 3, 2, 1, 0])</span>
+        <span class="c1"># signs = jnp.array([1, -1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, 1, 1])</span>
+        <span class="c1"># return SO3(</span>
+        <span class="c1">#     wxyz=jnp.einsum(</span>
+        <span class="c1">#         &quot;...ij,...j-&gt;...i&quot;,</span>
+        <span class="c1">#         (self.wxyz[..., inds] * signs).reshape((*self.wxyz.shape, 4)),</span>
+        <span class="c1">#         other.wxyz,</span>
+        <span class="c1">#     )</span>
+        <span class="c1"># )</span>
+        <span class="c1">#</span>
+        <span class="c1"># For pose graph optimization on the sphere2500 dataset, the following</span>
+        <span class="c1"># speeds up *overall* JIT times by over 35%, without any runtime</span>
+        <span class="c1"># penalties.</span>
+
+        <span class="c1"># Hamilton product constants.</span>
+        <span class="n">terms_i</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+        <span class="n">terms_j</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+        <span class="n">signs</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compute all components at once</span>
+        <span class="n">q_outer</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;...i,...j-&gt;...ij&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wxyz</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">wxyz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SO3</span><span class="p">(</span>
-            <span class="n">wxyz</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-                <span class="p">[</span>
-                    <span class="o">-</span><span class="n">x0</span> <span class="o">*</span> <span class="n">x1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">w1</span><span class="p">,</span>
-                    <span class="n">x0</span> <span class="o">*</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">x1</span><span class="p">,</span>
-                    <span class="o">-</span><span class="n">x0</span> <span class="o">*</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">y1</span><span class="p">,</span>
-                    <span class="n">x0</span> <span class="o">*</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">*</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">z0</span> <span class="o">*</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">w0</span> <span class="o">*</span> <span class="n">z1</span><span class="p">,</span>
-                <span class="p">],</span>
+            <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="n">signs</span> <span class="o">*</span> <span class="n">q_outer</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">terms_i</span><span class="p">,</span> <span class="n">terms_j</span><span class="p">],</span>
                 <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span></div>
@@ -477,7 +518,7 @@
         <span class="n">safe_theta</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
             <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">use_taylor</span><span class="p">,</span>
-                <span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">theta_squared</span><span class="p">),</span>  <span class="c1"># Any constant value should do here.</span>
+                <span class="mf">1.0</span><span class="p">,</span>  <span class="c1"># Any constant value should do here.</span>
                 <span class="n">theta_squared</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
