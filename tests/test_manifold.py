@@ -71,7 +71,7 @@ def test_sgd(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     assert_arrays_close(
         jaxlie.manifold.grad(lambda transform: (loss(transform), None), has_aux=True)(
             transform
-        ),
+        )[0],
         jaxlie.manifold.grad(loss)(transform),
     )
 
