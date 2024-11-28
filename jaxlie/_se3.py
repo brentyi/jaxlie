@@ -131,7 +131,7 @@ class SE3(_base.SEBase[SO3]):
             jax.Array,
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta_squared),  # Any non-zero value should do here.
+                1.0,  # Any non-zero value should do here.
                 theta_squared,
             ),
         )
@@ -173,7 +173,7 @@ class SE3(_base.SEBase[SO3]):
         # reverse-mode AD.
         theta_squared_safe = jnp.where(
             use_taylor,
-            jnp.ones_like(theta_squared),  # Any non-zero value should do here.
+            1.0,  # Any non-zero value should do here.
             theta_squared,
         )
         del theta_squared

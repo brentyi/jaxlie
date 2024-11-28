@@ -385,7 +385,7 @@ class SO3(_base.SOBase):
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta_squared),  # Any constant value should do here.
+                1.0,  # Any constant value should do here.
                 theta_squared,
             )
         )

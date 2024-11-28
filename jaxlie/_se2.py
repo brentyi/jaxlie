@@ -138,7 +138,7 @@ class SE2(_base.SEBase[SO2]):
             jax.Array,
             jnp.where(
                 use_taylor,
-                jnp.ones_like(theta),  # Any non-zero value should do here.
+                1.0,  # Any non-zero value should do here.
                 theta,
             ),
         )
@@ -193,7 +193,7 @@ class SE2(_base.SEBase[SO2]):
         # reverse-mode AD.
         safe_cos_minus_one = jnp.where(
             use_taylor,
-            jnp.ones_like(cos_minus_one),  # Any non-zero value should do here.
+            1.0,  # Any non-zero value should do here.
             cos_minus_one,
         )
 
