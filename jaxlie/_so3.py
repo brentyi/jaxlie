@@ -303,11 +303,34 @@ class SO3(_base.SOBase):
         assert target.shape[-1:] == (3,)
         self, target = broadcast_leading_axes((self, target))
 
-        # Compute using quaternion multiplys.
-        padded_target = jnp.concatenate(
-            [jnp.zeros((*self.get_batch_axes(), 1)), target], axis=-1
+        # # Naively compute using quaternion multiplys.
+        # padded_target = jnp.concatenate(
+        #     [jnp.zeros((*self.get_batch_axes(), 1)), target], axis=-1
+        # )
+        # return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[..., 1:]
+
+        # Faster, but takes longer to JIT.
+        # w0, x0, y0, z0 = jnp.moveaxis(self.wxyz, -1, 0)
+        # x1, y1, z1 = jnp.moveaxis(target, -1, 0)
+        # return jnp.stack(
+        #     [
+        #         -x0 * x1 - y0 * y1 - z0 * z1,
+        #         y0 * z1 - z0 * y1 + w0 * x1,
+        #         -x0 * z1 + z0 * x1 + w0 * y1,
+        #         x0 * y1 - y0 * x1 + w0 * z1,
+        #     ],
+        #     axis=-1,
+        # )
+
+        # A little bit slower than the above, but JITs faster. Tradeoffs...
+        terms_i = jnp.array([[1, 2, 3], [0, 2, 3], [0, 3, 1], [0, 1, 2]])
+        terms_j = jnp.array([[0, 1, 2], [0, 2, 1], [1, 0, 2], [2, 1, 0]])
+        signs = jnp.array([1, 1, -1])
+        outer = jnp.einsum("...i,...j->...ij", self.wxyz, target)
+        return jnp.sum(
+            signs * outer[..., terms_i, terms_j],
+            axis=-1,
         )
-        return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[..., 1:]
 
     @override
     def multiply(self, other: SO3) -> SO3:
