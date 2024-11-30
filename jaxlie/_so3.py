@@ -303,34 +303,80 @@ class SO3(_base.SOBase):
         assert target.shape[-1:] == (3,)
         self, target = broadcast_leading_axes((self, target))
 
-        # # Naively compute using quaternion multiplys.
+        # Naively compute using quaternion multiplication.
         # padded_target = jnp.concatenate(
         #     [jnp.zeros((*self.get_batch_axes(), 1)), target], axis=-1
         # )
         # return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[..., 1:]
 
-        # Faster, but takes longer to JIT.
-        # w0, x0, y0, z0 = jnp.moveaxis(self.wxyz, -1, 0)
-        # x1, y1, z1 = jnp.moveaxis(target, -1, 0)
-        # return jnp.stack(
+        # More direct implementation.
+        w2, x2, y2, z2 = jnp.moveaxis(self.wxyz**2, -1, 0)
+        wx, wy, wz = jnp.moveaxis(self.wxyz[..., 0:1] * self.wxyz[..., 1:4], -1, 0)
+        xy, xz = jnp.moveaxis(self.wxyz[..., 1:2] * self.wxyz[..., 2:4], -1, 0)
+        yz = self.wxyz[..., 2] * self.wxyz[..., 3]
+
+        v0, v1, v2 = jnp.moveaxis(target, -1, 0)
+        return jnp.stack(
+            [
+                v0 * (w2 + x2 - y2 - z2) + 2 * (v1 * (xy - wz) + v2 * (xz + wy)),
+                v1 * (w2 - x2 + y2 - z2) + 2 * (v0 * (xy + wz) + v2 * (yz - wx)),
+                v2 * (w2 - x2 - y2 + z2) + 2 * (v0 * (xz - wy) + v1 * (yz + wx)),
+            ],
+            axis=-1,
+        )
+
+        # # Implementation with more indexing.
+        # wxyz_sq = self.wxyz * self.wxyz
+        # a = target * jnp.sum(
+        #     wxyz_sq[..., None, :]
+        #     * jnp.array([[1, 1, -1, -1], [1, -1, 1, -1], [1, -1, -1, 1]]),
+        #     axis=-1,
+        # )
+        # w, x, y, z = jnp.moveaxis(self.wxyz, -1, 0)
+        # v0, v1, v2 = jnp.moveaxis(target, -1, 0)
+        # wx = w * x
+        # wy = w * y
+        # wz = w * z
+        # xy = x * y
+        # xz = x * z
+        # yz = y * z
+        # b = jnp.stack(
         #     [
-        #         -x0 * x1 - y0 * y1 - z0 * z1,
-        #         y0 * z1 - z0 * y1 + w0 * x1,
-        #         -x0 * z1 + z0 * x1 + w0 * y1,
-        #         x0 * y1 - y0 * x1 + w0 * z1,
+        #         (v1 * (xy - wz) + v2 * (xz + wy)),
+        #         (v0 * (xy + wz) + v2 * (yz - wx)),
+        #         (v0 * (xz - wy) + v1 * (yz + wx)),
         #     ],
         #     axis=-1,
         # )
+        # return a + 2 * b
 
-        # A little bit slower than the above, but JITs faster. Tradeoffs...
-        terms_i = jnp.array([[1, 2, 3], [0, 2, 3], [0, 3, 1], [0, 1, 2]])
-        terms_j = jnp.array([[0, 1, 2], [0, 2, 1], [1, 0, 2], [2, 1, 0]])
-        signs = jnp.array([1, 1, -1])
-        outer = jnp.einsum("...i,...j->...ij", self.wxyz, target)
-        return jnp.sum(
-            signs * outer[..., terms_i, terms_j],
-            axis=-1,
-        )
+        # # A wackier implementation...
+        # q_outer = jnp.einsum("...i,...j->...ij", self.wxyz, self.wxyz)
+        # a = target * jnp.sum(
+        #     q_outer[..., jnp.array([0, 1, 2, 3]), jnp.array([0, 1, 2, 3])][..., None, :]
+        #     * jnp.array(
+        #         [
+        #             [1, 1, -1, -1],
+        #             [1, -1, 1, -1],
+        #             [1, -1, -1, 1],
+        #         ]
+        #     ),
+        #     axis=-1,
+        # )
+        # b = jnp.sum(
+        #     target[..., jnp.array([[1, 0, 0], [2, 2, 1]])]
+        #     * jnp.sum(
+        #         q_outer[
+        #             ...,
+        #             jnp.array([[[1, 0], [1, 0], [1, 0]], [[1, 0], [2, 0], [2, 0]]]),
+        #             jnp.array([[[2, 3], [2, 3], [3, 2]], [[3, 2], [3, 1], [3, 1]]]),
+        #         ]
+        #         * jnp.array([[[1, -1], [1, 1], [1, -1]], [[1, 1], [1, -1], [1, 1]]]),
+        #         axis=-1,
+        #     ),
+        #     axis=-2,
+        # )
+        # return a + 2 * b
 
     @override
     def multiply(self, other: SO3) -> SO3:
