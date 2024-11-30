@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
@@ -304,33 +304,57 @@ class SO3(_base.SOBase):
         self, target = broadcast_leading_axes((self, target))
 
         # Naively compute using quaternion multiplication.
-        # padded_target = jnp.concatenate(
-        #     [jnp.zeros((*self.get_batch_axes(), 1)), target], axis=-1
-        # )
-        # return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[..., 1:]
+        padded_target = jnp.concatenate(
+            [jnp.zeros((*self.get_batch_axes(), 1)), target], axis=-1
+        )
+        return (self @ SO3(wxyz=padded_target) @ self.inverse()).wxyz[..., 1:]
 
         # More direct implementation.
-        w2, x2, y2, z2 = jnp.moveaxis(self.wxyz**2, -1, 0)
-        wx, wy, wz = jnp.moveaxis(self.wxyz[..., 0:1] * self.wxyz[..., 1:4], -1, 0)
-        xy, xz = jnp.moveaxis(self.wxyz[..., 1:2] * self.wxyz[..., 2:4], -1, 0)
-        yz = self.wxyz[..., 2] * self.wxyz[..., 3]
-
-        v0, v1, v2 = jnp.moveaxis(target, -1, 0)
-        return jnp.stack(
-            [
-                v0 * (w2 + x2 - y2 - z2) + 2 * (v1 * (xy - wz) + v2 * (xz + wy)),
-                v1 * (w2 - x2 + y2 - z2) + 2 * (v0 * (xy + wz) + v2 * (yz - wx)),
-                v2 * (w2 - x2 - y2 + z2) + 2 * (v0 * (xz - wy) + v1 * (yz + wx)),
-            ],
-            axis=-1,
-        )
-
-        # # Implementation with more indexing.
-        # wxyz_sq = self.wxyz * self.wxyz
-        # a = target * jnp.sum(
-        #     wxyz_sq[..., None, :]
-        #     * jnp.array([[1, 1, -1, -1], [1, -1, 1, -1], [1, -1, -1, 1]]),
+        # w2, wx, wy, wz, _, x2, xy, xz, _, _, y2, yz, _, _, _, z2 = jnp.moveaxis(
+        #     jnp.einsum("...i,...j->...ij", self.wxyz, self.wxyz).reshape(
+        #         (*target.shape[:-1], 16)
+        #     ),
+        #     -1,
+        #     0,
+        # )
+        # Here are two other options for getting the terms above.
+        #
+        # (1)
+        #
+        # w2, x2, y2, z2 = jnp.moveaxis(self.wxyz**2, -1, 0)
+        # wx, wy, wz = jnp.moveaxis(self.wxyz[..., 0:1] * self.wxyz[..., 1:4], -1, 0)
+        # xy, xz = jnp.moveaxis(self.wxyz[..., 1:2] * self.wxyz[..., 2:4], -1, 0)
+        # yz = self.wxyz[..., 2] * self.wxyz[..., 3]
+        #
+        #
+        # w, x, y, z = jnp.moveaxis(self.wxyz, -1, 0)
+        # w2 = w * w
+        # x2 = x * x
+        # y2 = y * y
+        # z2 = z * z
+        # wx = w * x
+        # wy = w * y
+        # wz = w * z
+        # xy = x * y
+        # xz = x * z
+        # yz = y * z
+        #
+        # v0, v1, v2 = jnp.moveaxis(target, -1, 0)
+        # return jnp.stack(
+        #     [
+        #         v0 * (w2 + x2 - y2 - z2) + 2 * (v1 * (xy - wz) + v2 * (xz + wy)),
+        #         v1 * (w2 - x2 + y2 - z2) + 2 * (v0 * (xy + wz) + v2 * (yz - wx)),
+        #         v2 * (w2 - x2 - y2 + z2) + 2 * (v0 * (xz - wy) + v1 * (yz + wx)),
+        #     ],
         #     axis=-1,
+        # )
+
+        # Try to be a little more clever.
+        # wxyz_sq = self.wxyz * self.wxyz
+        # a = target * jnp.einsum(
+        #     "ij,...j->...i",
+        #     jnp.array([[1, 1, -1, -1], [1, -1, 1, -1], [1, -1, -1, 1]]),
+        #     wxyz_sq,
         # )
         # w, x, y, z = jnp.moveaxis(self.wxyz, -1, 0)
         # v0, v1, v2 = jnp.moveaxis(target, -1, 0)
@@ -348,9 +372,9 @@ class SO3(_base.SOBase):
         #     ],
         #     axis=-1,
         # )
-        # return a + 2 * b
+        # return cast(jax.Array, a + 2 * b)
 
-        # # A wackier implementation...
+        # A wackier implementation...
         # q_outer = jnp.einsum("...i,...j->...ij", self.wxyz, self.wxyz)
         # a = target * jnp.sum(
         #     q_outer[..., jnp.array([0, 1, 2, 3]), jnp.array([0, 1, 2, 3])][..., None, :]
