@@ -1,7 +1,7 @@
 # jaxlie
 
 ![build](https://github.com/brentyi/jaxlie/workflows/build/badge.svg)
-![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg?branch=master)
+![mypy](https://github.com/brentyi/jaxlie/workflows/mypy/badge.svg)
 ![lint](https://github.com/brentyi/jaxlie/workflows/lint/badge.svg)
 [![codecov](https://codecov.io/gh/brentyi/jaxlie/branch/master/graph/badge.svg)](https://codecov.io/gh/brentyi/jaxlie)
 [![pypi_dowlnoads](https://pepy.tech/badge/jaxlie)](https://pypi.org/project/jaxlie)
@@ -54,6 +54,7 @@ Where each group supports:
   **`adjoint()`**, **`apply()`**, **`multiply()`**, **`inverse()`**,
   **`identity()`**, **`from_matrix()`**, and **`as_matrix()`** operations. (see
   [./examples/se3_example.py](./examples/se3_basics.py))
+- Taylor approximations near singularities.
 - Helpers for optimization on manifolds (see
   [./examples/se3_optimization.py](./examples/se3_optimization.py),
   <code>jaxlie.<strong>manifold.\*</strong></code>).
@@ -78,24 +79,10 @@ pip install jaxlie
 
 ---
 
-### In the wild
-
-- [jaxfg](https://github.com/brentyi/jaxfg) applies `jaxlie` to nonlinear least
-  squares problems with block-sparse structure. (for pose graph optimization,
-  bundle adjustment, etc)
-- [tensorf-jax](https://github.com/brentyi/tensorf-jax) is an unofficial
-  implementation of
-  [Tensorial Radiance Fields (Chen et al, ECCV 2022)](https://apchenstu.github.io/TensoRF/)
-  using `jaxlie`.
-  ![Render of a lego](https://github.com/brentyi/tensorf-jax/raw/main/lego_render.gif)
-
----
-
 ### Misc
 
-`jaxlie` was originally written for our IROS 2021 paper
-([link](https://github.com/brentyi/dfgo)). If it's useful for you, you're
-welcome to cite:
+`jaxlie` was originally written when I was learning about Lie groups for our IROS 2021 paper
+([link](https://github.com/brentyi/dfgo)):
 
 ```
 @inproceedings{yi2021iros,
