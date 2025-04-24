@@ -10,8 +10,8 @@ from ._so2 import SO2
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
-def _SE2_V(tangent: jax.Array) -> jax.Array:
-    """Compute the V map for the given SO(2) tangent vector."""
+def _SE2_jac_left(tangent: jax.Array) -> jax.Array:
+    """Compute the left jacobian for the given SO(2) tangent vector."""
     theta = tangent.squeeze(axis=-1)
     del tangent
 
@@ -55,8 +55,8 @@ def _SE2_V(tangent: jax.Array) -> jax.Array:
     return V
 
 
-def _SE2_V_inv(tangent: jax.Array) -> jax.Array:
-    """Compute the inverse of the V map for the given SO(2) tangent vector."""
+def _SE2_jac_left_inv(tangent: jax.Array) -> jax.Array:
+    """Compute the inverse of the left jacobian for the given SO(2) tangent vector."""
     theta = tangent.squeeze(axis=-1)
     del tangent
 
@@ -208,7 +208,7 @@ class SE2(_base.SEBase[SO2]):
 
         assert tangent.shape[-1:] == (3,)
         so2_tangent = cast(jax.Array, tangent[..., 2:3])
-        V = _SE2_V(so2_tangent)
+        V = _SE2_jac_left(so2_tangent)
         return SE2.from_rotation_and_translation(
             rotation=SO2.exp(so2_tangent),
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :2]),
@@ -221,7 +221,7 @@ class SE2(_base.SEBase[SO2]):
         # Also see:
         # > http://ethaneade.com/lie.pdf
         so2_tangent = self.rotation().log()
-        V_inv = _SE2_V_inv(so2_tangent)
+        V_inv = _SE2_jac_left_inv(so2_tangent)
         tangent = jnp.concatenate(
             [
                 jnp.einsum("...ij,...j->...i", V_inv, self.translation()),
@@ -258,15 +258,15 @@ class SE2(_base.SEBase[SO2]):
         tangent = self.log()
         theta = tangent[..., 2]
 
-        # Handle the case where theta is small to avoid division by zero
+        # Handle the case where theta is small to avoid division by zero.
         use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
 
-        V_inv_theta = _SE2_V_inv(theta[..., None])
+        V_inv_theta = _SE2_jac_left_inv(theta[..., None])
         V_inv_theta_T = jnp.swapaxes(
             V_inv_theta, -2, -1
         )  # Transpose the last two dimensions
 
-        # Calculate r, handling the small theta case separately
+        # Calculate r, handling the small theta case separately.
         batch_shape = self.get_batch_axes()
         eye_2 = jnp.eye(2).reshape((1,) * len(batch_shape) + (2, 2))
 
@@ -285,7 +285,7 @@ class SE2(_base.SEBase[SO2]):
         )
         r = jnp.einsum("...ij,...j->...i", A, tangent[..., :2])
 
-        # Create the jlog matrix
+        # Create the jlog matrix.
         jlog = (
             jnp.zeros((*batch_shape, 3, 3))
             .at[..., :2, :2]

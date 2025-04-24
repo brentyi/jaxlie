@@ -51,15 +51,15 @@ def test_jlog_accuracy(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int
     """Check accuracy of analytical jlog against autodiff jlog."""
     transform = sample_transform(Group, batch_axes)
 
-    # Create jitted versions of both functions
+    # Create jitted versions of both functions.
     jitted_autodiff = jax.jit(autodiff_jlog)
     jitted_analytical = jax.jit(analytical_jlog)
 
-    # Get results from both implementations
+    # Get results from both implementations.
     result_analytical = jitted_analytical(transform)
     result_autodiff = jitted_autodiff(transform)
 
-    # Compare results with appropriate tolerance
+    # Compare results with appropriate tolerance.
     assert_arrays_close(result_analytical, result_autodiff, rtol=1e-5, atol=1e-5)
 
 
@@ -72,36 +72,36 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
 
     transform = sample_transform(Group, batch_axes)
 
-    # JIT compile both functions
+    # JIT compile both functions.
     jitted_autodiff = jax.jit(autodiff_jlog)
     jitted_analytical = jax.jit(analytical_jlog)
 
-    # Warm-up run to ensure compilation happens before timing
+    # Warm-up run to ensure compilation happens before timing.
     jax.block_until_ready(jitted_autodiff(transform))
     jax.block_until_ready(jitted_analytical(transform))
 
-    # Create a new transform for timing
+    # Create a new transform for timing.
     num_runs = 30
 
-    # Time autodiff implementation
+    # Time autodiff implementation.
     times = []
     for _ in range(num_runs):
         transform = jax.block_until_ready(sample_transform(Group, batch_axes))
         start = time.perf_counter()
         result = jitted_autodiff(transform)
-        result = jax.block_until_ready(result)  # Wait for all operations to complete
+        result = jax.block_until_ready(result)  # Wait for all operations to complete.
         times.append(time.perf_counter() - start)
-    autodiff_runtime = min(times) * 1000  # Convert to ms
+    autodiff_runtime = min(times) * 1000  # Convert to ms.
 
-    # Time analytical implementation
+    # Time analytical implementation.
     times = []
     for _ in range(num_runs):
         transform = jax.block_until_ready(sample_transform(Group, batch_axes))
         start = time.perf_counter()
         result = jitted_analytical(transform)
-        result = jax.block_until_ready(result)  # Wait for all operations to complete
+        result = jax.block_until_ready(result)  # Wait for all operations to complete.
         times.append(time.perf_counter() - start)
-    analytical_runtime = min(times) * 1000  # Convert to ms
+    analytical_runtime = min(times) * 1000  # Convert to ms.
 
     assert (
         analytical_runtime <= autodiff_runtime

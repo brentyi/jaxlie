@@ -8,7 +8,7 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from ._so3 import _SO3_V, SO3, _skew, _SO3_V_inv
+from ._so3 import _SO3_jac_left as _SO3_V, SO3, _skew, _SO3_jac_left_inv as _SO3_V_inv
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
@@ -110,7 +110,7 @@ class SE3(_base.SEBase[SO3]):
         assert tangent.shape[-1:] == (6,)
         theta = tangent[..., 3:]
         rotation = SO3.exp(theta)
-        V = _SO3_V(cast(jax.Array, theta), rotation.as_matrix())
+        V = _SO3_V(cast(jax.Array, theta), rotation.as_matrix())  # Using _SO3_jac_left via import alias
         return SE3.from_rotation_and_translation(
             rotation=rotation,
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :3]),
@@ -121,7 +121,7 @@ class SE3(_base.SEBase[SO3]):
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
         theta = self.rotation().log()
-        V_inv = _SO3_V_inv(theta)
+        V_inv = _SO3_V_inv(theta)  # Using _SO3_jac_left_inv via import alias
         return jnp.concatenate(
             [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), theta], axis=-1
         )
@@ -159,7 +159,7 @@ class SE3(_base.SEBase[SO3]):
         st, ct = jnp.sin(theta), jnp.cos(theta)
         inv_2_2ct = jnp.where(use_taylor, 0.5, 1 / (2 * (1 - ct)))
 
-        # Use jnp.where for beta and beta_dot_over_theta
+        # Use jnp.where for beta and beta_dot_over_theta.
         beta = theta_squared_inv - st * theta_inv * inv_2_2ct
         beta_dot_over_theta = (
             -2 * theta_squared_inv**2

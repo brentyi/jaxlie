@@ -22,10 +22,10 @@ def _skew(omega: hints.Array) -> jax.Array:
     ).reshape((*omega.shape[:-1], 3, 3))
 
 
-def _SO3_V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
-    """Compute the V map for the given theta and rotation matrix.
+def _SO3_jac_left(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
+    """Compute the left jacobian for the given theta and rotation matrix.
 
-    This function calculates the V map, which is used in various geometric transformations.
+    This function calculates the left jacobian, which is used in various geometric transformations.
     It handles both small and large theta values using different computation methods.
 
     Args:
@@ -33,7 +33,7 @@ def _SO3_V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
         rotation_matrix (jax.Array): The corresponding rotation matrix.
 
     Returns:
-        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the V map.
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the left jacobian.
     """
     theta_squared = jnp.sum(jnp.square(theta), axis=-1)
     use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
@@ -69,11 +69,11 @@ def _SO3_V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
     return V
 
 
-def _SO3_V_inv(theta: jax.Array) -> jax.Array:
+def _SO3_jac_left_inv(theta: jax.Array) -> jax.Array:
     """
-    Compute the inverse of the V map for the given theta.
+    Compute the inverse of the left jacobian for the given theta.
 
-    This function calculates the inverse of the V map, which is used in various
+    This function calculates the inverse of the left jacobian, which is used in various
     geometric transformations. It handles both small and large theta values
     using different computation methods.
 
@@ -81,7 +81,7 @@ def _SO3_V_inv(theta: jax.Array) -> jax.Array:
         theta (jax.Array): The input angle(s) in axis-angle representation.
 
     Returns:
-        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse V map.
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse left jacobian.
     """
     theta_squared = jnp.sum(jnp.square(theta), axis=-1)
     use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
@@ -577,7 +577,7 @@ class SO3(_base.SOBase):
         # Reference:
         # Equations (144, 147, 174) from Micro-Lie theory:
         # > https://arxiv.org/pdf/1812.01537
-        V_inv = _SO3_V_inv(self.log())
+        V_inv = _SO3_jac_left_inv(self.log())
         return jnp.swapaxes(V_inv, -1, -2)  # Transpose the last two dimensions
 
     @classmethod
