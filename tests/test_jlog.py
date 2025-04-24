@@ -63,7 +63,7 @@ def test_jlog_accuracy(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int
     assert_arrays_close(result_analytical, result_autodiff, rtol=1e-5, atol=1e-5)
 
 
-@partial(general_group_test, max_examples=10)
+@partial(general_group_test, max_examples=1)
 def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]):
     """Compare runtime of analytical jlog and autodiff jlog."""
     if Group is jaxlie.SO2:
@@ -81,12 +81,12 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     jax.block_until_ready(jitted_analytical(transform))
 
     # Create a new transform for timing
-    transform = sample_transform(Group, batch_axes)
-    num_runs = 20
+    num_runs = 30
 
     # Time autodiff implementation
     times = []
     for _ in range(num_runs):
+        transform = jax.block_until_ready(sample_transform(Group, batch_axes))
         start = time.perf_counter()
         result = jitted_autodiff(transform)
         result = jax.block_until_ready(result)  # Wait for all operations to complete
@@ -95,8 +95,8 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
 
     # Time analytical implementation
     times = []
-    start_time = time.perf_counter()
     for _ in range(num_runs):
+        transform = jax.block_until_ready(sample_transform(Group, batch_axes))
         start = time.perf_counter()
         result = jitted_analytical(transform)
         result = jax.block_until_ready(result)  # Wait for all operations to complete
@@ -104,5 +104,5 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     analytical_runtime = min(times) * 1000  # Convert to ms
 
     assert (
-        analytical_runtime <= autodiff_runtime * 3.0
-    ), f"Autodiff jlog is slower than analytical jlog by more than 3x: {analytical_runtime:.2f}ms vs {autodiff_runtime:.2f}ms"
+        analytical_runtime <= autodiff_runtime
+    ), f"Autodiff jlog is slower than analytical jlog: {analytical_runtime:.2f}ms vs {autodiff_runtime:.2f}ms"
