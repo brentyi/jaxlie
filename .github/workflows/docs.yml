@@ -6,7 +6,7 @@ on:
 
 jobs:
   docs:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
       image: python:3.9
     steps:
