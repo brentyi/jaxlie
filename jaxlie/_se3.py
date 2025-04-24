@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
@@ -112,7 +112,7 @@ class SE3(_base.SEBase[SO3]):
         theta = tangent[..., 3:]
         rotation = SO3.exp(theta)
 
-        V = _SO3_V(theta, rotation.as_matrix())
+        V = _SO3_V(cast(jax.Array, theta), rotation.as_matrix())
 
         return SE3.from_rotation_and_translation(
             rotation=rotation,
