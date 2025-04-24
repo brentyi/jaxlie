@@ -10,9 +10,6 @@ import jaxlie
 
 from utils import assert_arrays_close, general_group_test, sample_transform
 
-# Run all tests with double-precision.
-jax.config.update("jax_enable_x64", True)
-
 # Dictionary mapping group classes to their corresponding left jacobian functions.
 _V_FUNCS: Dict[Type[jaxlie.MatrixLieGroup], Tuple[Callable, Callable]] = {
     jaxlie.SE2: (

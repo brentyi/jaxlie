@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="jaxlie",
-    version="1.4.2",
+    version="1.5.0",
     description="Matrix Lie groups in JAX",
     long_description=long_description,
     long_description_content_type="text/markdown",
