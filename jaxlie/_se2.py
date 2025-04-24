@@ -10,20 +10,11 @@ from ._so2 import SO2
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
-def _V(theta: jax.Array) -> jax.Array:
-    """
-    Compute the V map for the given theta and rotation matrix.
+def _SE2_V(tangent: jax.Array) -> jax.Array:
+    """Compute the V map for the given SO(2) tangent vector."""
+    theta = tangent.squeeze(axis=-1)
+    del tangent
 
-    This function calculates the V map, which is used in various geometric transformations.
-    It handles both small and large theta values using different computation methods.
-
-    Args:
-        theta (jax.Array): The input angle(s) in axis-angle representation.
-        rotation_matrix (jax.Array): The corresponding rotation matrix.
-
-    Returns:
-        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the V map.
-    """
     use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
 
     # Shim to avoid NaNs in jnp.where branches, which cause failures for
@@ -54,33 +45,25 @@ def _V(theta: jax.Array) -> jax.Array:
             (1.0 - jnp.cos(safe_theta)) / safe_theta,
         ),
     )
-
-    V = jnp.stack(
-        [
-            sin_over_theta,
-            -one_minus_cos_over_theta,
-            one_minus_cos_over_theta,
-            sin_over_theta,
-        ],
-        axis=-1,
-    ).reshape((*theta.shape, 2, 2))
+    V = (
+        jnp.zeros((*theta.shape, 2, 2))
+        .at[..., 0, 0]
+        .set(sin_over_theta)
+        .at[..., 0, 1]
+        .set(-one_minus_cos_over_theta)
+        .at[..., 1, 0]
+        .set(one_minus_cos_over_theta)
+        .at[..., 1, 1]
+        .set(sin_over_theta)
+    )
     return V
 
 
-def _V_inv(theta: jax.Array) -> jax.Array:
-    """
-    Compute the inverse of the V map for the given theta.
+def _SE2_V_inv(tangent: jax.Array) -> jax.Array:
+    """Compute the inverse of the V map for the given SO(2) tangent vector."""
+    theta = tangent.squeeze(axis=-1)
+    del tangent
 
-    This function calculates the inverse of the V map, which is used in various
-    geometric transformations. It handles both small and large theta values
-    using different computation methods.
-
-    Args:
-        theta (jax.Array): The input angle(s) in axis-angle representation.
-
-    Returns:
-        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse V map.
-    """
     cos = jnp.cos(theta)
     cos_minus_one = cos - 1.0
     half_theta = theta / 2.0
@@ -101,16 +84,17 @@ def _V_inv(theta: jax.Array) -> jax.Array:
         # Default.
         -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
     )
-
-    V_inv = jnp.stack(
-        [
-            half_theta_over_tan_half_theta,
-            half_theta,
-            -half_theta,
-            half_theta_over_tan_half_theta,
-        ],
-        axis=-1,
-    ).reshape((*theta.shape, 2, 2))
+    V_inv = (
+        jnp.zeros((*theta.shape, 2, 2))
+        .at[..., 0, 0]
+        .set(half_theta_over_tan_half_theta)
+        .at[..., 0, 1]
+        .set(half_theta)
+        .at[..., 1, 0]
+        .set(-half_theta)
+        .at[..., 1, 1]
+        .set(half_theta_over_tan_half_theta)
+    )
     return V_inv
 
 
@@ -232,11 +216,10 @@ class SE2(_base.SEBase[SO2]):
         # > http://ethaneade.com/lie.pdf
 
         assert tangent.shape[-1:] == (3,)
-
-        theta = tangent[..., 2]
-        V = _V(theta)
+        so2_tangent = cast(jax.Array, tangent[..., 2:3])
+        V = _SE2_V(so2_tangent)
         return SE2.from_rotation_and_translation(
-            rotation=SO2.from_radians(theta),
+            rotation=SO2.exp(so2_tangent),
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :2]),
         )
 
@@ -246,15 +229,12 @@ class SE2(_base.SEBase[SO2]):
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se2.hpp#L160
         # Also see:
         # > http://ethaneade.com/lie.pdf
-
-        theta = self.rotation().log()[..., 0]
-
-        V_inv = _V_inv(theta)
-
+        so2_tangent = self.rotation().log()
+        V_inv = _SE2_V_inv(so2_tangent)
         tangent = jnp.concatenate(
             [
                 jnp.einsum("...ij,...j->...i", V_inv, self.translation()),
-                theta[..., None],
+                so2_tangent,
             ],
             axis=-1,
         )
@@ -284,41 +264,41 @@ class SE2(_base.SEBase[SO2]):
         # This is inverse of matrix (163) from Micro-Lie theory:
         # > https://arxiv.org/pdf/1812.01537
 
-        log = self.log()
-        # rho1, rho2, theta = 
-        rho1, rho2, theta = broadcast_leading_axes((log[..., 0], log[..., 1], log[..., 2]))
+        tangent = self.log()
+        theta = tangent[..., 2]
 
         # Handle the case where theta is small to avoid division by zero
         use_taylor = jnp.abs(theta) < get_epsilon(theta.dtype)
 
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for reverse-mode AD.
-        safe_theta = jnp.where(use_taylor, jnp.ones_like(theta), theta)
-
-        V_inv_theta = _V_inv(safe_theta)
-        V_inv_theta_T = jnp.swapaxes(V_inv_theta, -2, -1)  # Transpose the last two dimensions
+        V_inv_theta = _SE2_V_inv(theta[..., None])
+        V_inv_theta_T = jnp.swapaxes(
+            V_inv_theta, -2, -1
+        )  # Transpose the last two dimensions
 
         # Calculate r, handling the small theta case separately
-        batch_shape = theta.shape
+        batch_shape = self.get_batch_axes()
         eye_2 = jnp.eye(2).reshape((1,) * len(batch_shape) + (2, 2))
-        
+
+        # Shim to avoid NaNs in jnp.where branches, which cause failures for reverse-mode AD.
+        safe_theta = jnp.where(use_taylor, jnp.ones_like(theta), theta)
         A = jnp.where(
             use_taylor[..., None, None],
-            jnp.stack([
-                jnp.stack([theta/12., jnp.full_like(theta, 0.5)], axis=-1),
-                jnp.stack([jnp.full_like(theta, -0.5), theta/12.], axis=-1)
-            ], axis=-2),
-            (eye_2 - V_inv_theta_T) / safe_theta[..., None, None]
+            jnp.stack(
+                [
+                    jnp.stack([theta / 12.0, jnp.full_like(theta, 0.5)], axis=-1),
+                    jnp.stack([jnp.full_like(theta, -0.5), theta / 12.0], axis=-1),
+                ],
+                axis=-2,
+            ),
+            (eye_2 - V_inv_theta_T) / safe_theta[..., None, None],
         )
-        
-        rho = jnp.stack([rho1, rho2], axis=-1)[..., None]
-        r = jnp.squeeze(A @ rho, axis=-1)
+        r = jnp.einsum("...ij,...j->...i", A, tangent[..., :2])
 
         # Create the jlog matrix
         jlog = jnp.zeros((*batch_shape, 3, 3))
         jlog = jlog.at[..., :2, :2].set(V_inv_theta_T)
         jlog = jlog.at[..., :2, 2].set(r)
         jlog = jlog.at[..., 2, 2].set(1)  # Set the bottom right element to 1
-
         return jlog
 
     @classmethod

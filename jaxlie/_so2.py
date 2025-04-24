@@ -134,7 +134,7 @@ class SO2(_base.SOBase):
     def jlog(self) -> jax.Array:
         batch_axes = self.get_batch_axes()
         ones = jnp.ones(batch_axes)
-        return ones[..., jnp.newaxis, jnp.newaxis]
+        return ones[..., None, None]
 
     @classmethod
     @override

@@ -22,9 +22,8 @@ def _skew(omega: hints.Array) -> jax.Array:
     ).reshape((*omega.shape[:-1], 3, 3))
 
 
-def _V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
-    """
-    Compute the V map for the given theta and rotation matrix.
+def _SO3_V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
+    """Compute the V map for the given theta and rotation matrix.
 
     This function calculates the V map, which is used in various geometric transformations.
     It handles both small and large theta values using different computation methods.
@@ -59,20 +58,18 @@ def _V(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
         rotation_matrix,
         (
             jnp.eye(3)
-            + ((1.0 - jnp.cos(theta_safe))
-                / (theta_squared_safe))[..., None, None]
+            + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
             * skew_omega
-            + (
-                (theta_safe - jnp.sin(theta_safe))
-                / (theta_squared_safe * theta_safe)
-            )[..., None, None]
+            + ((theta_safe - jnp.sin(theta_safe)) / (theta_squared_safe * theta_safe))[
+                ..., None, None
+            ]
             * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
         ),
     )
     return V
 
 
-def _V_inv(theta: jax.Array) -> jax.Array:
+def _SO3_V_inv(theta: jax.Array) -> jax.Array:
     """
     Compute the inverse of the V map for the given theta.
 
@@ -277,8 +274,7 @@ class SO3(_base.SOBase):
     @override
     def identity(cls, batch_axes: jdc.Static[Tuple[int, ...]] = ()) -> SO3:
         return SO3(
-            wxyz=jnp.broadcast_to(
-                jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4))
+            wxyz=jnp.broadcast_to(jnp.array([1.0, 0.0, 0.0, 0.0]), (*batch_axes, 4))
         )
 
     @classmethod
@@ -581,10 +577,7 @@ class SO3(_base.SOBase):
         # Reference:
         # Equations (144, 147, 174) from Micro-Lie theory:
         # > https://arxiv.org/pdf/1812.01537
-
-        log = self.log()
-        V_inv = _V_inv(log)
-
+        V_inv = _SO3_V_inv(self.log())
         return jnp.swapaxes(V_inv, -1, -2)  # Transpose the last two dimensions
 
     @classmethod
