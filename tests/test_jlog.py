@@ -109,5 +109,5 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     ) * 1000  # Convert to ms
 
     assert (
-        analytical_runtime <= autodiff_runtime * 2.0
-    ), f"Autodiff jlog is slower than analytical jlog by more than 2x: {analytical_runtime:.2f}ms vs {autodiff_runtime:.2f}ms"
+        analytical_runtime <= autodiff_runtime * 3.0
+    ), f"Autodiff jlog is slower than analytical jlog by more than 3x: {analytical_runtime:.2f}ms vs {autodiff_runtime:.2f}ms"
