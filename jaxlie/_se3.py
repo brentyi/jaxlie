@@ -8,19 +8,8 @@ from jax import numpy as jnp
 from typing_extensions import override
 
 from . import _base, hints
-from ._so3 import SO3
+from ._so3 import _SO3_jac_left as _SO3_V, SO3, _skew, _SO3_jac_left_inv as _SO3_V_inv
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
-
-
-def _skew(omega: hints.Array) -> jax.Array:
-    """Returns the skew-symmetric form of a length-3 vector."""
-
-    wx, wy, wz = jnp.moveaxis(omega, -1, 0)
-    zeros = jnp.zeros_like(wx)
-    return jnp.stack(
-        [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
-        axis=-1,
-    ).reshape((*omega.shape[:-1], 3, 3))
 
 
 @register_lie_group(
@@ -119,41 +108,11 @@ class SE3(_base.SEBase[SO3]):
 
         # (x, y, z, omega_x, omega_y, omega_z)
         assert tangent.shape[-1:] == (6,)
-
-        rotation = SO3.exp(tangent[..., 3:])
-
-        theta_squared = jnp.sum(jnp.square(tangent[..., 3:]), axis=-1)
-        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        theta_squared_safe = cast(
-            jax.Array,
-            jnp.where(
-                use_taylor,
-                1.0,  # Any non-zero value should do here.
-                theta_squared,
-            ),
-        )
-        del theta_squared
-        theta_safe = jnp.sqrt(theta_squared_safe)
-
-        skew_omega = _skew(tangent[..., 3:])
-        V = jnp.where(
-            use_taylor[..., None, None],
-            rotation.as_matrix(),
-            (
-                jnp.eye(3)
-                + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
-                * skew_omega
-                + (
-                    (theta_safe - jnp.sin(theta_safe))
-                    / (theta_squared_safe * theta_safe)
-                )[..., None, None]
-                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
-            ),
-        )
-
+        theta = tangent[..., 3:]
+        rotation = SO3.exp(theta)
+        V = _SO3_V(
+            cast(jax.Array, theta), rotation.as_matrix()
+        )  # Using _SO3_jac_left via import alias
         return SE3.from_rotation_and_translation(
             rotation=rotation,
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :3]),
@@ -163,45 +122,10 @@ class SE3(_base.SEBase[SO3]):
     def log(self) -> jax.Array:
         # Reference:
         # > https://github.com/strasdat/Sophus/blob/a0fe89a323e20c42d3cecb590937eb7a06b8343a/sophus/se3.hpp#L223
-        omega = self.rotation().log()
-        theta_squared = jnp.sum(jnp.square(omega), axis=-1)
-        use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
-
-        skew_omega = _skew(omega)
-
-        # Shim to avoid NaNs in jnp.where branches, which cause failures for
-        # reverse-mode AD.
-        theta_squared_safe = jnp.where(
-            use_taylor,
-            1.0,  # Any non-zero value should do here.
-            theta_squared,
-        )
-        del theta_squared
-        theta_safe = jnp.sqrt(theta_squared_safe)
-        half_theta_safe = theta_safe / 2.0
-
-        V_inv = jnp.where(
-            use_taylor[..., None, None],
-            jnp.eye(3)
-            - 0.5 * skew_omega
-            + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
-            (
-                jnp.eye(3)
-                - 0.5 * skew_omega
-                + (
-                    (
-                        1.0
-                        - theta_safe
-                        * jnp.cos(half_theta_safe)
-                        / (2.0 * jnp.sin(half_theta_safe))
-                    )
-                    / theta_squared_safe
-                )[..., None, None]
-                * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
-            ),
-        )
+        theta = self.rotation().log()
+        V_inv = _SO3_V_inv(theta)  # Using _SO3_jac_left_inv via import alias
         return jnp.concatenate(
-            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), omega], axis=-1
+            [jnp.einsum("...ij,...j->...i", V_inv, self.translation()), theta], axis=-1
         )
 
     @override
@@ -219,6 +143,56 @@ class SE3(_base.SEBase[SO3]):
             ],
             axis=-2,
         )
+
+    @override
+    def jlog(self) -> jax.Array:
+        rotation = self.rotation()
+        translation = self.translation()
+
+        jlog_so3 = rotation.jlog()
+
+        w = rotation.log()
+        theta = jnp.linalg.norm(w, axis=-1)
+        theta_squared = jnp.sum(jnp.square(w), axis=-1)
+
+        use_taylor = theta_squared < get_epsilon(theta.dtype)
+        theta_inv = cast(jax.Array, jnp.where(use_taylor, 1.0, 1.0 / theta))
+        theta_squared_inv = theta_inv**2
+        st, ct = jnp.sin(theta), jnp.cos(theta)
+        inv_2_2ct = jnp.where(use_taylor, 0.5, 1 / (2 * (1 - ct)))
+
+        # Use jnp.where for beta and beta_dot_over_theta.
+        beta = theta_squared_inv - st * theta_inv * inv_2_2ct
+        beta_dot_over_theta = (
+            -2 * theta_squared_inv**2
+            + (1 + st * theta_inv) * theta_squared_inv * inv_2_2ct
+        )
+        wTp = jnp.sum(w * translation, axis=-1, keepdims=True)
+        v3_tmp = (beta_dot_over_theta[..., None] * wTp) * w - (
+            theta_squared[..., None] * beta_dot_over_theta[..., None]
+            + 2 * beta[..., None]
+        ) * translation
+        C = (
+            jnp.einsum("...i,...j->...ij", v3_tmp, w)
+            + beta[..., None, None] * jnp.einsum("...i,...j->...ij", w, translation)
+            + wTp[..., None] * beta[..., None, None] * jnp.eye(3)
+        )
+        C = C + 0.5 * _skew(translation)
+
+        B = jnp.einsum("...ij,...jk->...ik", C, jlog_so3)
+        B_wh = jnp.where(use_taylor[..., None, None], 0.5 * _skew(translation), B)
+        assert B_wh.shape == jlog_so3.shape
+
+        jlog = (
+            jnp.zeros((*theta.shape, 6, 6))
+            .at[..., :3, :3]
+            .set(jlog_so3)
+            .at[..., 3:, 3:]
+            .set(jlog_so3)
+            .at[..., :3, 3:]
+            .set(B_wh)
+        )
+        return jlog
 
     @classmethod
     @override

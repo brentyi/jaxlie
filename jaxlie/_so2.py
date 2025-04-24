@@ -130,6 +130,12 @@ class SO2(_base.SOBase):
             / jnp.linalg.norm(self.unit_complex, axis=-1, keepdims=True)
         )
 
+    @override
+    def jlog(self) -> jax.Array:
+        batch_axes = self.get_batch_axes()
+        ones = jnp.ones(batch_axes)
+        return ones[..., None, None]
+
     @classmethod
     @override
     def sample_uniform(

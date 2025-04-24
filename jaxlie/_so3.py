@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple
+from typing import Tuple, cast
 
 import jax
 import jax_dataclasses as jdc
@@ -9,6 +9,116 @@ from typing_extensions import override
 
 from . import _base, hints
 from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
+
+
+def _skew(omega: hints.Array) -> jax.Array:
+    """Returns the skew-symmetric form of a length-3 vector."""
+
+    wx, wy, wz = jnp.moveaxis(omega, -1, 0)
+    zeros = jnp.zeros_like(wx)
+    return jnp.stack(
+        [zeros, -wz, wy, wz, zeros, -wx, -wy, wx, zeros],
+        axis=-1,
+    ).reshape((*omega.shape[:-1], 3, 3))
+
+
+def _SO3_jac_left(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
+    """Compute the left jacobian for the given theta and rotation matrix.
+
+    This function calculates the left jacobian, which is used in various geometric transformations.
+    It handles both small and large theta values using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+        rotation_matrix (jax.Array): The corresponding rotation matrix.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the left jacobian.
+    """
+    theta_squared = jnp.sum(jnp.square(theta), axis=-1)
+    use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    theta_squared_safe = cast(
+        jax.Array,
+        jnp.where(
+            use_taylor,
+            # Any non-zero value should do here.
+            jnp.ones_like(theta_squared),
+            theta_squared,
+        ),
+    )
+    del theta_squared
+    theta_safe = jnp.sqrt(theta_squared_safe)
+
+    skew_omega = _skew(theta)
+    jac_left = jnp.where(
+        use_taylor[..., None, None],
+        rotation_matrix,
+        (
+            jnp.eye(3)
+            + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
+            * skew_omega
+            + ((theta_safe - jnp.sin(theta_safe)) / (theta_squared_safe * theta_safe))[
+                ..., None, None
+            ]
+            * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
+        ),
+    )
+    return jac_left
+
+
+def _SO3_jac_left_inv(theta: jax.Array) -> jax.Array:
+    """
+    Compute the inverse of the left jacobian for the given theta.
+
+    This function calculates the inverse of the left jacobian, which is used in various
+    geometric transformations. It handles both small and large theta values
+    using different computation methods.
+
+    Args:
+        theta (jax.Array): The input angle(s) in axis-angle representation.
+
+    Returns:
+        jax.Array: A 3x3 matrix (or batch of 3x3 matrices) representing the inverse left jacobian.
+    """
+    theta_squared = jnp.sum(jnp.square(theta), axis=-1)
+    use_taylor = theta_squared < get_epsilon(theta_squared.dtype)
+
+    # Shim to avoid NaNs in jnp.where branches, which cause failures for
+    # reverse-mode AD.
+    theta_squared_safe = jnp.where(
+        use_taylor,
+        jnp.ones_like(theta_squared),  # Any non-zero value should do here.
+        theta_squared,
+    )
+    del theta_squared
+    theta_safe = jnp.sqrt(theta_squared_safe)
+    half_theta_safe = theta_safe / 2.0
+
+    skew_omega = _skew(theta)
+    jac_left_inv = jnp.where(
+        use_taylor[..., None, None],
+        jnp.eye(3)
+        - 0.5 * skew_omega
+        + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 12.0,
+        (
+            jnp.eye(3)
+            - 0.5 * skew_omega
+            + (
+                (
+                    1.0
+                    - theta_safe
+                    * jnp.cos(half_theta_safe)
+                    / (2.0 * jnp.sin(half_theta_safe))
+                )
+                / theta_squared_safe
+            )[..., None, None]
+            * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
+        ),
+    )
+    return jac_left_inv
 
 
 @register_lie_group(
@@ -385,7 +495,8 @@ class SO3(_base.SOBase):
         safe_theta = jnp.sqrt(
             jnp.where(
                 use_taylor,
-                1.0,  # Any constant value should do here.
+                # Any constant value should do here.
+                jnp.ones_like(theta_squared),
                 theta_squared,
             )
         )
@@ -460,6 +571,14 @@ class SO3(_base.SOBase):
     @override
     def normalize(self) -> SO3:
         return SO3(wxyz=self.wxyz / jnp.linalg.norm(self.wxyz, axis=-1, keepdims=True))
+
+    @override
+    def jlog(self) -> jax.Array:
+        # Reference:
+        # Equations (144, 147, 174) from Micro-Lie theory:
+        # > https://arxiv.org/pdf/1812.01537
+        V_inv = _SO3_jac_left_inv(self.log())
+        return jnp.swapaxes(V_inv, -1, -2)  # Transpose the last two dimensions
 
     @classmethod
     @override
