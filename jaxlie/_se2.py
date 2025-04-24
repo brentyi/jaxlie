@@ -21,11 +21,7 @@ def _SE2_V(tangent: jax.Array) -> jax.Array:
     # reverse-mode AD.
     safe_theta = cast(
         jax.Array,
-        jnp.where(
-            use_taylor,
-            jnp.ones_like(theta),  # Any non-zero value should do here.
-            theta,
-        ),
+        jnp.where(use_taylor, 1.0, theta),
     )
 
     theta_sq = theta**2
@@ -71,12 +67,7 @@ def _SE2_V_inv(tangent: jax.Array) -> jax.Array:
 
     # Shim to avoid NaNs in jnp.where branches, which cause failures for
     # reverse-mode AD.
-    safe_cos_minus_one = jnp.where(
-        use_taylor,
-        jnp.ones_like(cos_minus_one),  # Any non-zero value should do here.
-        cos_minus_one,
-    )
-
+    safe_cos_minus_one = jnp.where(use_taylor, 1.0, cos_minus_one)
     half_theta_over_tan_half_theta = jnp.where(
         use_taylor,
         # Taylor approximation.
@@ -295,10 +286,15 @@ class SE2(_base.SEBase[SO2]):
         r = jnp.einsum("...ij,...j->...i", A, tangent[..., :2])
 
         # Create the jlog matrix
-        jlog = jnp.zeros((*batch_shape, 3, 3))
-        jlog = jlog.at[..., :2, :2].set(V_inv_theta_T)
-        jlog = jlog.at[..., :2, 2].set(r)
-        jlog = jlog.at[..., 2, 2].set(1)  # Set the bottom right element to 1
+        jlog = (
+            jnp.zeros((*batch_shape, 3, 3))
+            .at[..., :2, :2]
+            .set(V_inv_theta_T)
+            .at[..., :2, 2]
+            .set(r)
+            .at[..., 2, 2]
+            .set(1)
+        )
         return jlog
 
     @classmethod

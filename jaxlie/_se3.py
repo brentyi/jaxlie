@@ -108,12 +108,9 @@ class SE3(_base.SEBase[SO3]):
 
         # (x, y, z, omega_x, omega_y, omega_z)
         assert tangent.shape[-1:] == (6,)
-
         theta = tangent[..., 3:]
         rotation = SO3.exp(theta)
-
         V = _SO3_V(cast(jax.Array, theta), rotation.as_matrix())
-
         return SE3.from_rotation_and_translation(
             rotation=rotation,
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :3]),
@@ -157,22 +154,21 @@ class SE3(_base.SEBase[SO3]):
         theta_squared = jnp.sum(jnp.square(w), axis=-1)
 
         use_taylor = theta_squared < get_epsilon(theta.dtype)
-        t2 = theta * theta
-        tinv = jnp.where(use_taylor, jnp.ones_like(theta), 1 / theta)
-        t2inv = tinv * tinv
+        theta_inv = cast(jax.Array, jnp.where(use_taylor, 1.0, 1.0 / theta))
+        theta_squared_inv = theta_inv**2
         st, ct = jnp.sin(theta), jnp.cos(theta)
-        inv_2_2ct = jnp.where(
-            use_taylor, 0.5 * jnp.ones_like(theta), 1 / (2 * (1 - ct))
-        )
+        inv_2_2ct = jnp.where(use_taylor, 0.5, 1 / (2 * (1 - ct)))
 
         # Use jnp.where for beta and beta_dot_over_theta
-        beta = t2inv - st * tinv * inv_2_2ct
-
-        beta_dot_over_theta = -2 * t2inv * t2inv + (1 + st * tinv) * t2inv * inv_2_2ct
-
+        beta = theta_squared_inv - st * theta_inv * inv_2_2ct
+        beta_dot_over_theta = (
+            -2 * theta_squared_inv**2
+            + (1 + st * theta_inv) * theta_squared_inv * inv_2_2ct
+        )
         wTp = jnp.sum(w * translation, axis=-1, keepdims=True)
         v3_tmp = (beta_dot_over_theta[..., None] * wTp) * w - (
-            t2[..., None] * beta_dot_over_theta[..., None] + 2 * beta[..., None]
+            theta_squared[..., None] * beta_dot_over_theta[..., None]
+            + 2 * beta[..., None]
         ) * translation
         C = (
             jnp.einsum("...i,...j->...ij", v3_tmp, w)
@@ -182,13 +178,18 @@ class SE3(_base.SEBase[SO3]):
         C = C + 0.5 * _skew(translation)
 
         B = jnp.einsum("...ij,...jk->...ik", C, jlog_so3)
-        # Calculate B_wh with the same shape as jlog_so3
         B_wh = jnp.where(use_taylor[..., None, None], 0.5 * _skew(translation), B)
+        assert B_wh.shape == jlog_so3.shape
 
-        jlog = jnp.zeros((*theta.shape, 6, 6))
-        jlog = jlog.at[..., :3, :3].set(jlog_so3)
-        jlog = jlog.at[..., 3:, 3:].set(jlog_so3)
-        jlog = jlog.at[..., :3, 3:].set(B_wh)
+        jlog = (
+            jnp.zeros((*theta.shape, 6, 6))
+            .at[..., :3, :3]
+            .set(jlog_so3)
+            .at[..., 3:, 3:]
+            .set(jlog_so3)
+            .at[..., :3, 3:]
+            .set(B_wh)
+        )
         return jlog
 
     @classmethod
