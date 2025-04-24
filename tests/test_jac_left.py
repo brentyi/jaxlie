@@ -15,8 +15,14 @@ jax.config.update("jax_enable_x64", True)
 
 # Dictionary mapping group classes to their corresponding left jacobian functions.
 _V_FUNCS: Dict[Type[jaxlie.MatrixLieGroup], Tuple[Callable, Callable]] = {
-    jaxlie.SE2: (jax.jit(jaxlie._se2._SE2_jac_left), jax.jit(jaxlie._se2._SE2_jac_left_inv)),
-    jaxlie.SO3: (jax.jit(jaxlie._so3._SO3_jac_left), jax.jit(jaxlie._so3._SO3_jac_left_inv)),
+    jaxlie.SE2: (
+        jax.jit(jaxlie._se2._SE2_jac_left),
+        jax.jit(jaxlie._se2._SE2_jac_left_inv),
+    ),
+    jaxlie.SO3: (
+        jax.jit(jaxlie._so3._SO3_jac_left),
+        jax.jit(jaxlie._so3._SO3_jac_left_inv),
+    ),
 }
 
 

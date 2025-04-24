@@ -110,7 +110,9 @@ class SE3(_base.SEBase[SO3]):
         assert tangent.shape[-1:] == (6,)
         theta = tangent[..., 3:]
         rotation = SO3.exp(theta)
-        V = _SO3_V(cast(jax.Array, theta), rotation.as_matrix())  # Using _SO3_jac_left via import alias
+        V = _SO3_V(
+            cast(jax.Array, theta), rotation.as_matrix()
+        )  # Using _SO3_jac_left via import alias
         return SE3.from_rotation_and_translation(
             rotation=rotation,
             translation=jnp.einsum("...ij,...j->...i", V, tangent[..., :3]),
