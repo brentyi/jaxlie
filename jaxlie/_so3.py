@@ -53,7 +53,7 @@ def _SO3_jac_left(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
     theta_safe = jnp.sqrt(theta_squared_safe)
 
     skew_omega = _skew(theta)
-    V = jnp.where(
+    jac_left = jnp.where(
         use_taylor[..., None, None],
         rotation_matrix,
         (
@@ -66,7 +66,7 @@ def _SO3_jac_left(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
             * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
         ),
     )
-    return V
+    return jac_left
 
 
 def _SO3_jac_left_inv(theta: jax.Array) -> jax.Array:
@@ -98,7 +98,7 @@ def _SO3_jac_left_inv(theta: jax.Array) -> jax.Array:
     half_theta_safe = theta_safe / 2.0
 
     skew_omega = _skew(theta)
-    V_inv = jnp.where(
+    jac_left_inv = jnp.where(
         use_taylor[..., None, None],
         jnp.eye(3)
         - 0.5 * skew_omega
@@ -118,7 +118,7 @@ def _SO3_jac_left_inv(theta: jax.Array) -> jax.Array:
             * jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega)
         ),
     )
-    return V_inv
+    return jac_left_inv
 
 
 @register_lie_group(

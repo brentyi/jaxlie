@@ -36,13 +36,17 @@ _V_FUNCS: Dict[Type[jaxlie.MatrixLieGroup], Tuple[Callable, Callable]] = {
 # > https://arxiv.org/pdf/1812.01537
 @jax.jit
 def compute_autodiff_jac_left(transform: jaxlie.MatrixLieGroup):
-    def wrapped_function(tau):
-        return type(transform).exp(tau).multiply(transform).log()
+    def left_plus(tangent_at_identity):
+        Group = type(transform)
+        return (Group.exp(tangent_at_identity) @ transform).log()
 
-    jacobian = jnp.linalg.inv(
-        jax.jacrev(wrapped_function)(jnp.zeros(transform.tangent_dim))
-    )
-    return jacobian
+    # Jacobian of tangent at `transform` wrt tangent at identity.
+    pullback = jax.jacrev(left_plus)(jnp.zeros(transform.tangent_dim))
+
+    # The pushforward is the left Jacobian. This transforms tangent vectors at
+    # identity to tangent vectors at `transform`.
+    pushforward = jnp.linalg.inv(pullback)
+    return pushforward
 
 
 compute_autodiff_jac_left_vmap = jax.jit(jax.vmap(compute_autodiff_jac_left))
@@ -50,11 +54,12 @@ compute_autodiff_jac_left_vmap = jax.jit(jax.vmap(compute_autodiff_jac_left))
 
 @jax.jit
 def compute_autodiff_jac_left_inv(transform: jaxlie.MatrixLieGroup):
-    def wrapped_function(tau):
-        return type(transform).exp(tau).multiply(transform).log()
+    def left_plus(tangent_at_identity):
+        Group = type(transform)
+        return (Group.exp(tangent_at_identity) @ transform).log()
 
-    jacobian = jax.jacrev(wrapped_function)(jnp.zeros(transform.tangent_dim))
-    return jacobian
+    pullback = jax.jacrev(left_plus)(jnp.zeros(transform.tangent_dim))
+    return pullback
 
 
 compute_autodiff_jac_left_inv_vmap = jax.jit(jax.vmap(compute_autodiff_jac_left_inv))
@@ -64,7 +69,7 @@ compute_autodiff_jac_left_inv_vmap = jax.jit(jax.vmap(compute_autodiff_jac_left_
 def test_jac_left_autodiff(
     Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int, ...]
 ):
-    """Test left jacobian and its inverse against automatic differentiation at identity."""
+    """Test left jacobian and its inverse against automatic differentiation."""
     # Skip groups that don't have left jacobian functions.
     if Group not in _V_FUNCS:
         return

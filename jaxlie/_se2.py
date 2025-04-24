@@ -41,7 +41,7 @@ def _SE2_jac_left(tangent: jax.Array) -> jax.Array:
             (1.0 - jnp.cos(safe_theta)) / safe_theta,
         ),
     )
-    V = (
+    jac_left = (
         jnp.zeros((*theta.shape, 2, 2))
         .at[..., 0, 0]
         .set(sin_over_theta)
@@ -52,7 +52,7 @@ def _SE2_jac_left(tangent: jax.Array) -> jax.Array:
         .at[..., 1, 1]
         .set(sin_over_theta)
     )
-    return V
+    return jac_left
 
 
 def _SE2_jac_left_inv(tangent: jax.Array) -> jax.Array:
@@ -75,7 +75,7 @@ def _SE2_jac_left_inv(tangent: jax.Array) -> jax.Array:
         # Default.
         -(half_theta * jnp.sin(theta)) / safe_cos_minus_one,
     )
-    V_inv = (
+    jac_left_inv = (
         jnp.zeros((*theta.shape, 2, 2))
         .at[..., 0, 0]
         .set(half_theta_over_tan_half_theta)
@@ -86,7 +86,7 @@ def _SE2_jac_left_inv(tangent: jax.Array) -> jax.Array:
         .at[..., 1, 1]
         .set(half_theta_over_tan_half_theta)
     )
-    return V_inv
+    return jac_left_inv
 
 
 @register_lie_group(
