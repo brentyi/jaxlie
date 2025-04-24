@@ -82,27 +82,26 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
 
     # Create a new transform for timing
     transform = sample_transform(Group, batch_axes)
-    num_runs = 10
+    num_runs = 20
 
     # Time autodiff implementation
-    start_time = time.perf_counter()
-    result = None
+    times = []
     for _ in range(num_runs):
+        start = time.perf_counter()
         result = jitted_autodiff(transform)
-    assert result is not None
-    result = jax.block_until_ready(result)  # Wait for all operations to complete
-    autodiff_runtime = (
-        (time.perf_counter() - start_time) / num_runs
-    ) * 1000  # Convert to ms
+        result = jax.block_until_ready(result)  # Wait for all operations to complete
+        times.append(time.perf_counter() - start)
+    autodiff_runtime = min(times) * 1000  # Convert to ms
 
     # Time analytical implementation
+    times = []
     start_time = time.perf_counter()
     for _ in range(num_runs):
+        start = time.perf_counter()
         result = jitted_analytical(transform)
-    result = jax.block_until_ready(result)  # Wait for all operations to complete
-    analytical_runtime = (
-        (time.perf_counter() - start_time) / num_runs
-    ) * 1000  # Convert to ms
+        result = jax.block_until_ready(result)  # Wait for all operations to complete
+        times.append(time.perf_counter() - start)
+    analytical_runtime = min(times) * 1000  # Convert to ms
 
     assert (
         analytical_runtime <= autodiff_runtime * 3.0
