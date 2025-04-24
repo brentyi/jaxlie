@@ -20,17 +20,11 @@ def autodiff_jlog(group_element) -> jnp.ndarray:
         jnp.ndarray: The Jacobian matrix.
     """
 
-    def f(element):
-        return element.log()
-
     def wrapped_function(tau):
-        perturbed_element = group_element.multiply(group_element.__class__.exp(tau))
-        result = f(perturbed_element)
-        return result
+        Group = type(group_element)
+        return (group_element @ Group.exp(tau)).log()
 
-    jacobian = jax.jacobian(wrapped_function)(jnp.zeros(group_element.tangent_dim))
-
-    return jacobian
+    return jax.jacobian(wrapped_function)(jnp.zeros(group_element.tangent_dim))
 
 
 def analytical_jlog(group_element) -> jnp.ndarray:

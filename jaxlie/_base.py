@@ -174,9 +174,16 @@ class MatrixLieGroup(abc.ABC):
     @abc.abstractmethod
     def jlog(self) -> jax.Array:
         """
-        Computes the Jacobian of the logarithm of the group element.
+        Computes the Jacobian of the logarithm of the group element when a
+        local perturbation is applied.
 
-        This is equivalent to the inverse of the right Jacobian.
+        This is equivalent to the inverse of the right Jacobian, or:
+
+        ```
+        jax.jacrev(lambda x: (T @ exp(x)).log())(jnp.zeros(tangent_dim))
+        ```
+
+        where `T` is the group element and `exp(x)` is the tangent vector.
 
         Returns:
             The Jacobian of the logarithm, having the dimensions `(tangent_dim, tangent_dim,)` or batch of these Jacobians.
