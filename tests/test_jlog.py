@@ -77,12 +77,8 @@ def test_jlog_runtime(Group: Type[jaxlie.MatrixLieGroup], batch_axes: Tuple[int,
     jitted_analytical = jax.jit(analytical_jlog)
 
     # Warm-up run to ensure compilation happens before timing
-    result_autodiff = jitted_autodiff(transform)
-    result_analytical = jitted_analytical(transform)
-
-    # Block until compilation and execution is complete
-    _ = jax.block_until_ready(result_autodiff)
-    _ = jax.block_until_ready(result_analytical)
+    jax.block_until_ready(jitted_autodiff(transform))
+    jax.block_until_ready(jitted_analytical(transform))
 
     # Create a new transform for timing
     transform = sample_transform(Group, batch_axes)
