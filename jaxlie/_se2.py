@@ -11,7 +11,9 @@ from .utils import broadcast_leading_axes, get_epsilon, register_lie_group
 
 
 def _SE2_jac_left(tangent: jax.Array) -> jax.Array:
-    """Compute the left jacobian for the given SO(2) tangent vector."""
+    """Compute the left jacobian for the given SO(2) tangent vector. This only
+    includes the translation terms (2x2), the orientation ones are less
+    useful."""
     theta = tangent.squeeze(axis=-1)
     del tangent
 
@@ -56,7 +58,9 @@ def _SE2_jac_left(tangent: jax.Array) -> jax.Array:
 
 
 def _SE2_jac_left_inv(tangent: jax.Array) -> jax.Array:
-    """Compute the inverse of the left jacobian for the given SO(2) tangent vector."""
+    """Compute the inverse of the left jacobian for the given SO(2) tangent
+    vector. This only includes the translation terms (2x2), the orientation
+    ones are less useful."""
     theta = tangent.squeeze(axis=-1)
     del tangent
 
