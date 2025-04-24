@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>jaxlie.utils._utils &mdash; jaxlie  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
 
@@ -76,15 +76,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for jaxlie.utils._utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
-<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax_dataclasses</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jdc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
 
-<span class="kn">from</span> <span class="nn">jaxlie.hints</span> <span class="kn">import</span> <span class="n">Array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jaxlie.hints</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MatrixLieGroup</span>
 
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="s2">&quot;MatrixLieGroup&quot;</span><span class="p">)</span>
@@ -92,7 +92,7 @@
 
 <div class="viewcode-block" id="get_epsilon">
 <a class="viewcode-back" href="../../../../api/jaxlie/utils/#jaxlie.utils._utils.get_epsilon">[docs]</a>
-<span class="k">def</span> <span class="nf">get_epsilon</span><span class="p">(</span><span class="n">dtype</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_epsilon</span><span class="p">(</span><span class="n">dtype</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper for grabbing type-specific precision constants.</span>
 
 <span class="sd">    Args:</span>
@@ -110,7 +110,7 @@
 
 <div class="viewcode-block" id="register_lie_group">
 <a class="viewcode-back" href="../../../../api/jaxlie/utils/#jaxlie.utils._utils.register_lie_group">[docs]</a>
-<span class="k">def</span> <span class="nf">register_lie_group</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_lie_group</span><span class="p">(</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">matrix_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">parameters_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -122,7 +122,7 @@
 <span class="sd">    Sets dimensionality class variables, and marks all methods for JIT compilation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">]:</span>
         <span class="c1"># Register dimensions as class attributes.</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">matrix_dim</span> <span class="o">=</span> <span class="n">matrix_dim</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">parameters_dim</span> <span class="o">=</span> <span class="n">parameters_dim</span>
@@ -152,12 +152,12 @@
 
 <div class="viewcode-block" id="broadcast_leading_axes">
 <a class="viewcode-back" href="../../../../api/jaxlie/utils/#jaxlie.utils._utils.broadcast_leading_axes">[docs]</a>
-<span class="k">def</span> <span class="nf">broadcast_leading_axes</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="n">TupleOfBroadcastable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TupleOfBroadcastable</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">broadcast_leading_axes</span><span class="p">(</span><span class="n">inputs</span><span class="p">:</span> <span class="n">TupleOfBroadcastable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TupleOfBroadcastable</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Broadcast leading axes of arrays. Takes tuples of either:</span>
 <span class="sd">    - an array, which we assume has shape (*, D).</span>
 <span class="sd">    - a Lie group object.&quot;&quot;&quot;</span>
 
-    <span class="kn">from</span> <span class="nn">.._base</span> <span class="kn">import</span> <span class="n">MatrixLieGroup</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.._base</span><span class="w"> </span><span class="kn">import</span> <span class="n">MatrixLieGroup</span>
 
     <span class="n">array_inputs</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span>

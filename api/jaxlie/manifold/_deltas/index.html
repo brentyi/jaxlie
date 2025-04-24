@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>jaxlie.manifold._deltas &mdash; jaxlie  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
 
@@ -147,7 +147,7 @@ subtraction will be performed for all other arrays.</p>
 local delta.</p>
 <p>Mostly useful for reducing JIT compile times for tangent-space optimization.</p>
 <p>Equivalent to –</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rplus_jacobian_parameters_wrt_delta</span><span class="p">(</span><span class="n">transform</span><span class="p">:</span> <span class="n">MatrixLieGroup</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
     <span class="c1"># Since transform objects are pytree containers, note that `jacfwd` returns a</span>
     <span class="c1"># transformation object itself and that the Jacobian terms corresponding to the</span>
     <span class="c1"># parameters are grabbed explicitly.</span>

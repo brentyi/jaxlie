@@ -7,7 +7,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SE(3) Optimization &mdash; jaxlie  documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
 
@@ -101,24 +101,24 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">import</span> <span class="nn">jax</span>
-<span class="kn">import</span> <span class="nn">jax_dataclasses</span> <span class="k">as</span> <span class="nn">jdc</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">optax</span>
-<span class="kn">import</span> <span class="nn">tyro</span>
-<span class="kn">from</span> <span class="nn">jax</span> <span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">assert_never</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax_dataclasses</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jdc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">optax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tyro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">assert_never</span>
 
-<span class="kn">import</span> <span class="nn">jaxlie</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jaxlie</span>
 
 
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
-<span class="k">class</span> <span class="nc">Parameters</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Parameters</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameters to optimize over, in their global representation. Rotations are</span>
 <span class="sd">    quaternions under the hood.</span>
 
@@ -133,7 +133,7 @@
 
 
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
-<span class="k">class</span> <span class="nc">ExponentialCoordinatesParameters</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ExponentialCoordinatesParameters</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Same as `Parameters`, but using exponential coordinates.&quot;&quot;&quot;</span>
 
     <span class="n">log_T_ab</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
@@ -141,19 +141,19 @@
     <span class="n">log_T_ca</span><span class="p">:</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">T_ab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">T_ab</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_ab</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">T_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">T_bc</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_bc</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">T_ca</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">T_ca</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jaxlie</span><span class="o">.</span><span class="n">SE3</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_T_ca</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_global</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_global</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="n">Parameters</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">(</span>
             <span class="n">params</span><span class="o">.</span><span class="n">T_ab</span><span class="o">.</span><span class="n">log</span><span class="p">(),</span>
             <span class="n">params</span><span class="o">.</span><span class="n">T_bc</span><span class="o">.</span><span class="n">log</span><span class="p">(),</span>
@@ -161,7 +161,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">compute_loss</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_loss</span><span class="p">(</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;As our loss, we enforce (a) priors on our transforms and (b) a consistency</span>
@@ -182,14 +182,14 @@
 
 
 <span class="nd">@jdc</span><span class="o">.</span><span class="n">pytree_dataclass</span>
-<span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="p">:</span>
     <span class="n">params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Parameters</span><span class="p">,</span> <span class="n">ExponentialCoordinatesParameters</span><span class="p">]</span>
     <span class="n">optimizer</span><span class="p">:</span> <span class="n">jdc</span><span class="o">.</span><span class="n">Static</span><span class="p">[</span><span class="n">optax</span><span class="o">.</span><span class="n">GradientTransformation</span><span class="p">]</span>
     <span class="n">optimizer_state</span><span class="p">:</span> <span class="n">optax</span><span class="o">.</span><span class="n">OptState</span>
     <span class="n">algorithm</span><span class="p">:</span> <span class="n">jdc</span><span class="o">.</span><span class="n">Static</span><span class="p">[</span><span class="n">Algorithm</span><span class="p">]</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the state of our optimization problem. Note that the transforms</span>
 <span class="sd">        parameters won&#39;t initially be consistent; `T_ab @ T_bc != T_ca.inverse()`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -226,7 +226,7 @@
         <span class="p">)</span>
 
     <span class="nd">@jax</span><span class="o">.</span><span class="n">jit</span>
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">State</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">State</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jax</span><span class="o">.</span><span class="n">Array</span><span class="p">,</span> <span class="n">State</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Take one ADAM optimization step.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">==</span> <span class="s2">&quot;tangent_space&quot;</span><span class="p">:</span>
@@ -277,7 +277,7 @@
         <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">new_state</span>
 
 
-<span class="k">def</span> <span class="nf">run_experiment</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_experiment</span><span class="p">(</span>
     <span class="n">algorithm</span><span class="p">:</span> <span class="n">Algorithm</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the optimization problem, either using a tangent-space approach or via</span>
@@ -304,7 +304,7 @@
     <span class="k">return</span> <span class="n">losses</span>
 
 
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">train_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">learning_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Run pose optimization experiments.</span>
 
 <span class="sd">    Args:</span>
