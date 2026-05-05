@@ -4,6 +4,7 @@ from typing import ClassVar, Generic, Tuple, TypeVar, Union, overload
 import jax
 import numpy as onp
 from jax import numpy as jnp
+import jax_dataclasses as jdc
 from typing_extensions import Self, final, get_args, override
 
 from . import hints
@@ -60,6 +61,18 @@ class MatrixLieGroup(abc.ABC):
             return self.multiply(other=other)
         else:
             assert False, f"Invalid argument type for `@` operator: {type(other)}"
+
+    def __getitem__(self, key) -> Self:
+        """Allow batch axes slicing using [] indexing operator."""
+        if isinstance(key, int):
+            key = (key,)
+        assert len(key) < len(self.shape) or key[-1] == slice(None), "ensure that the parameter dimension is included"
+        kwargs = {f.name: self.__dict__[f.name][key] for f in jdc.fields(self)}
+        return self.__class__(**kwargs)
+
+    @property
+    def shape(self) -> Tuple[int, ...]:
+        return jnp.shape(self.parameters())
 
     # Factory.
 

@@ -8,3 +8,5 @@ htmlcov
 .mypy_cache
 .dmypy.json
 .hypothesis
+.idea/
+.DS_Store
