@@ -55,7 +55,10 @@ def _SO3_jac_left(theta: jax.Array, rotation_matrix: jax.Array) -> jax.Array:
     skew_omega = _skew(theta)
     jac_left = jnp.where(
         use_taylor[..., None, None],
-        rotation_matrix,
+        # V = integral_0^1 exp(t * [theta]) dt, not the rotation matrix.
+        jnp.eye(3)
+        + 0.5 * skew_omega
+        + jnp.einsum("...ij,...jk->...ik", skew_omega, skew_omega) / 6.0,
         (
             jnp.eye(3)
             + ((1.0 - jnp.cos(theta_safe)) / (theta_squared_safe))[..., None, None]
